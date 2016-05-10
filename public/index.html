@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="/proxima-nova.css">
+      <link rel="stylesheet" href="/style.css">
+      <script type="text/javascript" src="/mustache.js"></script>
+      <script type="text/javascript" src="/main.js"></script>
+    </head>
+    <body>
+
+        <header>
+            <div class="scrub">
+                <div class="progress"></div>
+            </div>
+            <div class="page width center player flex">
+                <div class="push-children-right">
+                    <i class="fa fa-hand-peace-o fa-flip-horizontal"></i>
+                    <a class="silent" href="/music"><i class="fa fa-music"></i></a>
+                    <a class="silent" href="/playlists"><i class="fa fa-list-ul"></i></a>
+                    <a class="silent" href="/account"><i class="fa fa-gear"></i></a>
+                </div>
+                <div class="flex-strong"></div>
+                <div class="controls push-children-right">
+                    <button class="faux"><i class="fa fa-random"></i></button>
+                    <button class="faux"><i class="fa fa-step-backward"></i></button>
+                    <button class="faux"><i class="fa fa-play"></i></button>
+                    <button class="faux"><i class="fa fa-step-forward"></i></button>
+                    <button class="faux"><i class="fa fa-repeat"></i></button>
+                </div>
+            </div>
+        </header>
+        <section role="content"></section>
+
+        <script type="text/template" route="^account">
+            <div class="page width center">
+                <h1>My Account</h1>
+                <table class="form">
+                    <tbody>
+                        <tr>
+                            <th>Email</th>
+                            <td>id@somebananas.com</td>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <td>Thomas Mathews</td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td>
+                                <select>
+                                    <option disabled checked>Select</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Change Password</th>
+                            <td><input type="password" placeholder="New Password"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">
+                                <label><input type="checkbox"/> Skip Non-licensable Tracks</label>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+                <button>Update Info</button>
+            </div>
+        </script>
+
+        <script type="text/template" route="^music(\?.*)?" source="/releases.json$1">
+            <div>
+                <div class="page width center">
+                    <div class="filters pad-vertical push-children-right" data-set="music-search">
+                        <h1 class="label-header uppercase">Music</h1>
+                        <input class="round" name="filter" type="text" placeholder="Search..."/>
+                        <select name="type">
+                            <option>Show All Types</option>
+                            <option>Albums</option>
+                            <option>EPs</option>
+                            <option>Singles</option>
+                            <option>Podcasts</option>
+                        </select>
+                        <button action="searchMusic" data-set-target="music-search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-gray">
+                    {{#loading}}
+                    <i class="fa fa-fw fa-spin fa-refresh"></i>
+                    {{/loading}}
+                    {{#error}}
+                    <p>{{message}}</p>
+                    {{/error}}
+                    {{#data}}
+                    <ul class="page width center art-list">
+                        {{#results}}
+                        <li><a href="/release/{{_id}}">
+                            <img src="{{cover}}"/>
+                            <label class="title">{{title}}</label>
+                            <br/>
+                            <label>{{released}}</label></a>
+                        </li>
+                        {{/results}}
+                    </ul>
+                    {{/data}}
+                </div>
+                {{#data}}
+                <div class="page width center pagination pad-vertical text center">
+                    <a href="?offset={{previous}}">Previous</a>
+                    <label>{{offset}} - {{count}} of {{total}}</label>
+                    <a href="?offset={{next}}">Next</a>
+                </div>
+                {{/data}}
+            </div>
+        </script>
+
+        <script type="text/template" route="^release\/(.*)" source="/$1">
+            <div class="release page width center">
+                {{#loading}}
+                <i class="fa fa-spin fa-refresh">
+                {{/loading}}
+                {{#error}}
+                <p>{{message}}</p>
+                {{/error}}
+                {{#data}}
+                <img class="artwork" src="/default.png"/>
+                <h1 class="cancel-margin-bottom">{{title}}</h1>
+                <h2>{{artists}}</h2>
+                <label>Released {{released}}</label>
+                <div class="options pad-vertical push-children-right">
+                    <button class="faux"><i class="fa fa-play"></i></button>
+                    <button class="faux"><i class="fa fa-download"></i></button>
+                </div>
+                <div source="/release-tracks.json" template="release-tracks"></div>
+                {{/data}}
+            </div>
+        </script>
+
+        <script type="text/template" template-name="release-tracks">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="shrink">#</th>
+                        <th class="shrink nohpad"></th>
+                        <th>Title</th>
+                        <th>Artist</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody >
+                    {{#loading}}
+                    <tr><td><i class="fa fa-spin fa-refresh"></i></td></tr>
+                    {{/loading}}
+                    {{#error}}
+                    <tr><td><p>{{message}}</p></td></tr>
+                    {{/error}}
+                    {{#data}}
+                    {{#results}}
+                    <tr>
+                        <td class="shrink">1.</td>
+                        <td class="shrink nohpad"><button class="faux"><i class="fa fa-play-circle"></i></button>
+                        <td>{{title}}</td>
+                        <td>{{artist}}</td>
+                        <td class="push-children-right">
+                            <button class="faux"><i class="fa fa-download"></i></button>
+                            <button class="faux"><i class="fa fa-copyright"></i></button>
+                            <select>
+                                <option disabled checked>Add to Playlist</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {{/results}}
+                    {{/data}}
+                </tbody>
+            </table>
+        </script>
+
+        <script type="text/template" route="^playlists">
+            <div class="page width center">
+                <h1>My Playlists</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="/playlist/x">Sample Name</a></td>
+                            <td class="push-children-right">
+                                <button class="faux"><i class="fa fa-pencil"></i></button>
+                                <button class="faux"><i class="fa fa-times-circle"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </script>
+
+        <script type="text/template" route="^playlist\/(.*)">
+            <div class="page width center">
+                <h1>Bananas and Cream</h1>
+                <h2>Created by Tommy</h2>
+                <div class="options pad-vertical push-children-right">
+                    <label>
+                        <input type="checkbox"/>
+                        Public
+                    </label>
+                    <button class="faux"><i class="fa fa-trash-o"></i></button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th></th>
+                            <th>Title</th>
+                            <th>Release</th>
+                            <th>Artist</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1.</td>
+                            <td><button class="faux"><i class="fa fa-play-circle"></i></button>
+                            <td>Sample Title</td>
+                            <td>Bango</td>
+                            <td><a href="/artist/x">Billy</a></td>
+                            <td><button class="faux"><i class="fa fa-times-circle"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </script>
+
+    </body>
+</html>

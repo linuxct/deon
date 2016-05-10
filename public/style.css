@@ -1,0 +1,221 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*:focus {
+  outline: none;
+}
+
+body {
+  background: white;
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: normal;
+  font-size: 100%;
+  color: #383838;
+}
+
+p, label, a {
+  font-size: 18px;
+}
+
+select {
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+h1 {
+  margin: 1rem 0;
+}
+
+a.silent {
+  text-decoration: none;
+  color: #383838;
+}
+
+section.page {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+table {
+  width: 100%;
+  margin: 1em 0;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  font-weight: bold;
+}
+
+th, td {
+  padding: 0.5em 1em;
+}
+
+th.shrink, td.shrink {
+  white-space: nowrap;
+  width: 1px;
+}
+
+th.nohpad, td.nohpad {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+tr:nth-child(odd) > td {
+  background: #f5f5f5;
+}
+
+table.form td, table.form th {
+  font-size: 18px;
+  padding: 0.5em 0;
+}
+
+table.form tr:nth-child(odd) > td {
+  background: transparent;
+}
+
+table.form input {
+  padding: 0;
+  border: none;
+  font-size: 18px;
+}
+
+table.form th {
+  width: 200px;
+}
+
+button {
+  background: transparent;
+  color: dodgerblue;
+  border: solid 3px dodgerblue;
+  padding: 0.5em 1em;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+
+button.faux {
+  border: none;
+  background: transparent;
+  font-size: 100%;
+  padding: 0;
+  color: #383838;
+}
+
+input.round {
+  border: solid 3px gainsboro;
+  font-size: 16px;
+  border-radius: 22px;
+  padding: 0.5em 1em;
+}
+
+.page.width {
+  width: 80%;
+}
+
+.page.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text.center {
+  text-align: center;
+}
+
+.pad-vertical {
+  margin: 1em 0;
+}
+
+.label-header {
+  font-size: 18px;
+  display: inline;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.cancel-margin-bottom {
+  margin-bottom: 0;
+}
+
+.push-children-right > *{
+  margin-right: 1em;
+}
+
+td.push-children-right > * {
+  margin-right: 0.5em;
+}
+
+.push-children-right > *:last-child {
+  margin-right: 0;
+}
+
+.art-list {
+  list-style: none;
+  padding: 1em 0;
+  background: #f5f5f5;
+}
+
+.art-list li {
+  max-width: 200px;
+  margin: 1em 2em 1em 0;
+  display: inline-block;
+}
+
+.art-list li img {
+  max-width: 100%;
+}
+
+.art-list li label.title {
+  font-weight: bold;
+}
+
+.release img.artwork {
+  float: left;
+  max-width: 128px;
+  margin-right: 1em; 
+  margin-bottom: 1em;
+}
+
+.scrub {
+  width: 100%;
+  height: 5px;
+  background: #f5f5f5;
+}
+
+.scrub > .progress {
+  width: 70%;
+  height: 100%;
+  background: #d4d4d4;
+}
+
+.player {
+  padding: 1em 1em 0;
+}
+
+.bg-gray {
+  background: #f5f5f5;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-strong {
+  flex: 1;
+}
+
+.special-nav {
+  list-style: none;
+}

@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "_id": "release.json",
+      "title": "Bananas & Cream",
+      "artists": "Banana Bunch",
+      "released": "Tue, 10 May 2016 03:04:36 GMT",
+      "cover": "/default.png"
+    }
+  ],
+  "count": 1,
+  "total": 1,
+  "offset": 0
+}
