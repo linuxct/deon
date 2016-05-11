@@ -5,6 +5,7 @@
       <link rel="stylesheet" href="/proxima-nova.css">
       <link rel="stylesheet" href="/style.css">
       <script type="text/javascript" src="/mustache.js"></script>
+      <script type="text/javascript" src="/declare.js"></script>
       <script type="text/javascript" src="/main.js"></script>
     </head>
     <body>
@@ -68,7 +69,7 @@
             </div>
         </script>
 
-        <script type="text/template" route="^music(\?.*)?" source="/releases.json$1">
+        <script type="text/template" route="^music(\?.*)?" source="/releases.json$1" transform="transformReleases">
             <div>
                 <div class="page width center">
                     <div class="filters pad-vertical push-children-right" data-set="music-search">
@@ -116,7 +117,10 @@
             </div>
         </script>
 
-        <script type="text/template" route="^release\/(.*)" source="/$1">
+        <script type="text/template"
+                route="^release\/(.*)"
+                source="/$1"
+                transform="transformRelease">
             <div class="release page width center">
                 {{#loading}}
                 <i class="fa fa-spin fa-refresh">
@@ -180,6 +184,9 @@
         <script type="text/template" route="^playlists">
             <div class="page width center">
                 <h1>My Playlists</h1>
+                <button action="createPlaylist">
+                    <i class="fa fa-fw fa-plus"></i>
+                </button>
                 <table>
                     <thead>
                         <tr>
@@ -191,8 +198,16 @@
                         <tr>
                             <td><a href="/playlist/x">Sample Name</a></td>
                             <td class="push-children-right">
-                                <button class="faux"><i class="fa fa-pencil"></i></button>
-                                <button class="faux"><i class="fa fa-times-circle"></i></button>
+                                <button class="faux"
+                                        action="renamePlaylist"
+                                        playlist-id="{{_id}}">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button class="faux"
+                                        action="destroyPlaylist"
+                                        playlist-id="{{_id}}">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -209,7 +224,6 @@
                         <input type="checkbox"/>
                         Public
                     </label>
-                    <button class="faux"><i class="fa fa-trash-o"></i></button>
                 </div>
                 <table>
                     <thead>
