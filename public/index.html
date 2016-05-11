@@ -40,11 +40,11 @@
                     <tbody>
                         <tr>
                             <th>Email</th>
-                            <td>id@somebananas.com</td>
+                            <td><input type="text" name="email" value="id@somebananas.com"></td>
                         </tr>
                         <tr>
                             <th>Name</th>
-                            <td>Thomas Mathews</td>
+                            <td><input type="text" name="realName" value="Thomas Mathews"/></td>
                         </tr>
                         <tr>
                             <th>Country</th>
@@ -56,7 +56,9 @@
                         </tr>
                         <tr>
                             <th>Change Password</th>
-                            <td><input type="password" placeholder="New Password"></td>
+                            <td><input type="password"
+                                       name="password"
+                                       placeholder="New Password"></td>
                         </tr>
                         <tr>
                             <th colspan="2">
@@ -65,11 +67,15 @@
                         </tr>
                     </tbody>
                 </table>
-                <button>Update Info</button>
+                <button>Save</button>
             </div>
         </script>
 
-        <script type="text/template" route="^music(\?.*)?" source="/releases.json$1" transform="transformReleases">
+        <script type="text/template"
+                route="^music(\?.*)?"
+                source="https://connect.monstercat.com/api/catalog/release?limit=25"
+                ox="/releases.json$1"
+                transform="transformReleases">
             <div>
                 <div class="page width center">
                     <div class="filters pad-vertical push-children-right" data-set="music-search">
@@ -142,31 +148,35 @@
             </div>
         </script>
 
-        <script type="text/template" template-name="release-tracks">
+        <script type="text/template"
+                template-name="release-tracks"
+                transform="transformReleaseTracks">
             <table>
                 <thead>
                     <tr>
                         <th class="shrink">#</th>
                         <th class="shrink nohpad"></th>
                         <th>Title</th>
-                        <th>Artist</th>
+                        <th>Artists</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody >
                     {{#loading}}
-                    <tr><td><i class="fa fa-spin fa-refresh"></i></td></tr>
+                    <tr><td colspan="5"><i class="fa fa-spin fa-refresh"></i></td></tr>
                     {{/loading}}
                     {{#error}}
-                    <tr><td><p>{{message}}</p></td></tr>
+                    <tr><td colspan="5"><p>{{message}}</p></td></tr>
                     {{/error}}
                     {{#data}}
                     {{#results}}
                     <tr>
-                        <td class="shrink">1.</td>
-                        <td class="shrink nohpad"><button class="faux"><i class="fa fa-play-circle"></i></button>
+                        <td class="shrink">{{trackNumber}}.</td>
+                        <td class="shrink nohpad">
+                            <button class="faux"><i class="fa fa-play-circle"></i></button>
+                        </td>
                         <td>{{title}}</td>
-                        <td>{{artist}}</td>
+                        <td><a href="/artist/{{artistId}}">{{artist}}</a></td>
                         <td class="push-children-right">
                             <button class="faux"><i class="fa fa-download"></i></button>
                             <button class="faux"><i class="fa fa-copyright"></i></button>
@@ -221,7 +231,7 @@
                 <h2>Created by Tommy</h2>
                 <div class="options pad-vertical push-children-right">
                     <label>
-                        <input type="checkbox"/>
+                        <input type="checkbox" action="togglePlaylistPublic" playlist-id="x"/>
                         Public
                     </label>
                 </div>

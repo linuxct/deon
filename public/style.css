@@ -9,10 +9,15 @@
 
 body {
   background: white;
-  font-family: "Proxima Nova", sans-serif;
   font-weight: normal;
   font-size: 100%;
   color: #383838;
+}
+
+body,
+input[type="text"],
+input[type="password"] {
+  font-family: "Proxima Nova", sans-serif;
 }
 
 p, label, a {
@@ -87,6 +92,11 @@ table.form input {
   padding: 0;
   border: none;
   font-size: 18px;
+}
+
+table.form input[type="text"],
+table.form input[type="password"] {
+  width: 100%;
 }
 
 table.form th {

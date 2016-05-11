@@ -5,8 +5,9 @@
  *
  * A simple declarative library of methods for building apps.
  *
- * Requires:
+ * Assumptions:
  *  - Mustache template system.
+ *  - Use JSON as transit format.
  */
 
 function interceptClick (e) {
@@ -104,13 +105,22 @@ function requestJSON (opts, done) {
     opts.data = JSON.stringify(opts.data)
   }
   request(opts, function (err, body, xhr) {
-    if (err) return done(err, body, xhr)
     var obj
+    var parseErr
     try {
-      obj = JSON.parse(body)
+      obj = JSON.parse(xhr.responseText)
     } catch (e) {
-      err = e
+      parseErr = e
       obj = undefined
+    }
+    if (err && obj) {
+      err = Error()
+      for (var key in obj) {
+        err[key] = obj[key]
+      }
+      obj = undefined
+    } else if (!err && parseErr) {
+      err = parseErr
     }
     done(err, obj, xhr)
   })
