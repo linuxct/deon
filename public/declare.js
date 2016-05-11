@@ -1,14 +1,65 @@
 /* Declare Library
- * Author: Thomas Mathews
+ * Author:  Thomas Mathews
  * Version: Alpha
- * Date: May 10, 2016
+ * Date:    May 10, 2016
  *
  * A simple declarative library of methods for building apps.
  *
  * Assumptions:
  *  - Mustache template system.
  *  - Use JSON as transit format.
+ *  - You want to use CORS.
  */
+
+function request (opts, done) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState != 4) return
+    if (xhr.status >= 200 && xhr.status < 300) {
+      return done(null, xhr.responseText, xhr)
+    }
+    var msg = xhr.responseText || "An error occured."
+    done(Error(msg), null, xhr)
+  }
+  xhr.open(opts.method || "GET", opts.url)
+  for (var key in opts.headers) {
+    xhr.setRequestHeader(key, opts.headers[key])
+  }
+  xhr.withCredentials = !!opts.withCredentials
+  xhr.send(opts.data)
+  return xhr
+}
+
+function requestJSON (opts, done) {
+  if (typeof opts.headers != 'object') opts.headers = {}
+  opts.headers['Accept'] = 'application/json'
+  if (opts.data) {
+    opts.headers['Content-Type'] = 'application/json'
+    opts.data = JSON.stringify(opts.data)
+  }
+  return request(opts, function (err, body, xhr) {
+    var obj
+    var parseErr
+    if (xhr.responseText) {
+      try {
+        obj = JSON.parse(xhr.responseText)
+      } catch (e) {
+        parseErr = e
+        obj = undefined
+      }
+    }
+    if (err && obj) {
+      err = Error()
+      for (var key in obj) {
+        err[key] = obj[key]
+      }
+      obj = undefined
+    } else if (!err && parseErr) {
+      err = parseErr
+    }
+    done(err, obj, xhr)
+  })
+}
 
 function interceptClick (e) {
   var isAnchor = false
@@ -74,70 +125,30 @@ function stateChange (url, state) {
     source = source.replace(/\$(\d)/g, function (str, index) {
       return matches[index] || ""
     })
-    container.innerHTML = loadSource(source, container, target.textContent,
-                                     getMethod(target, 'transform'))
-  } else {
-    container.innerHTML = target.textContent
+    loadSource(source, container, target.textContent, getMethod(target, 'transform'))
+    return
   }
+  render(container, target.textContent, {})
 }
 
-function request (opts, done) {
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState != 4) return
-    if (xhr.status >= 200 && xhr.status < 300) {
-      return done(null, xhr.responseText, xhr)
-    }
-    done(Error(xhr.responseText), null, xhr)
-  }
-  xhr.open(opts.method || "GET", opts.url)
-  for (var key in opts.headers) {
-    xhr.setRequestHeader(key, opts.headers[key])
-  }
-  xhr.send(opts.data)
+function render (container, template, scope) {
+  container.innerHTML = Mustache.render(template, scope)
+  loadSubSources(container)
 }
 
-function requestJSON (opts, done) {
-  if (typeof opts.headers != 'object') opts.headers = {}
-  opts.headers['Accept'] = 'application/json'
-  if (opts.data) {
-    opts.headers['Content-Type'] = 'application/json'
-    opts.data = JSON.stringify(opts.data)
-  }
-  request(opts, function (err, body, xhr) {
-    var obj
-    var parseErr
-    try {
-      obj = JSON.parse(xhr.responseText)
-    } catch (e) {
-      parseErr = e
-      obj = undefined
-    }
-    if (err && obj) {
-      err = Error()
-      for (var key in obj) {
-        err[key] = obj[key]
-      }
-      obj = undefined
-    } else if (!err && parseErr) {
-      err = parseErr
-    }
-    done(err, obj, xhr)
-  })
-}
-
-function loadSource(source, container, template, transform) {
+function loadSource (source, container, template, transform) {
+  render(container, template, {loading: true})
   requestJSON({
-    url: source
+    url: source,
+    withCredentials: true
   }, function (err, obj, xhr) {
     if (obj && transform) obj = transform(obj)
-    container.innerHTML = Mustache.render(template, {
+    var scope = {
       error: err,
       data: obj
-    })
-    loadSubSources(container)
+    }
+    render(container, template, scope)
   })
-  return Mustache.render(template, {loading: true})
 }
 
 function loadSubSources (container) {
