@@ -9,6 +9,7 @@
  *  - Mustache template system.
  *  - Use JSON as transit format.
  *  - You want to use CORS.
+ *  - Your main content lies under [role="content"].
  */
 
 function request (opts, done) {
@@ -103,6 +104,7 @@ function runAction (e, el) {
 }
 
 function stateChange (url, state) {
+  cache()
   var str = url.substr(1)
   var els = document.querySelectorAll("script[route]")
   var target = null
@@ -136,12 +138,52 @@ function render (container, template, scope) {
   loadSubSources(container)
 }
 
-function loadSource (source, container, template, transform) {
-  render(container, template, {loading: true})
+function cache (source, obj) {
+  var _ = cache._
+  if (!_) {
+    _ = new Map()
+    cache._ = _
+  }
+  if (!arguments.length) {
+    _.clear()
+    return
+  }
+  if (source && obj) {
+    _.set(source, obj)
+    return
+  }
+  return _.get(source)
+}
+
+function loadCache (source, done, reset) {
+  var _ = loadCache._
+  if (!_) {
+    _ = new Map()
+    loadCache._ = _
+  }
+  var cached = cache(source)
+  if (!reset && cached) return done(null, cached)
+  var callbacks = _.get(source)
+  if (!callbacks) {
+    callbacks = []
+    _.set(source, callbacks)
+  }
+  callbacks.push(done)
   requestJSON({
     url: source,
     withCredentials: true
   }, function (err, obj, xhr) {
+    if (obj) cache(source, obj)
+    callbacks.forEach(function (fn) {
+      fn(err, obj)
+    })
+    _.delete(source)
+  })
+}
+
+function loadSource (source, container, template, transform, reset) {
+  render(container, template, {loading: true})
+  loadCache(source, function (err, obj) {
     if (obj && transform) {
       obj = transform(obj, function (err, obj) {
         render(container, template, {
@@ -155,10 +197,10 @@ function loadSource (source, container, template, transform) {
       error: err,
       data: obj
     })
-  })
+  }, reset)
 }
 
-function loadSubSources (container) {
+function loadSubSources (container, reset) {
   var sources = container.querySelectorAll('[source]')
   for (var i = 0; i < sources.length; i++) {
     var el       = sources[i]
@@ -167,7 +209,11 @@ function loadSubSources (container) {
                                           el.getAttribute('template') +
                                           '"]')
     if (!source || !template) continue
-    loadSource(source, el, template.textContent, getMethod(template, 'transform'))
+    loadSource(source,
+               el,
+               template.textContent,
+               getMethod(template, 'transform'),
+               reset)
   }
 }
 

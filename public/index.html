@@ -1,402 +1,422 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
-      <link rel="stylesheet" href="/proxima-nova.css">
-      <link rel="stylesheet" href="/style.css">
-      <script type="text/javascript" src="/mustache.js"></script>
-      <script type="text/javascript" src="/declare.js"></script>
-      <script type="text/javascript" src="/countries.js"></script>
-      <script type="text/javascript" src="/main.js"></script>
-    </head>
-    <body>
+<head>
+    <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/proxima-nova.css">
+    <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="/mustache.js"></script>
+    <script type="text/javascript" src="/declare.js"></script>
+    <script type="text/javascript" src="/countries.js"></script>
+    <script type="text/javascript" src="/main.js"></script>
+</head>
+<body>
 
-        <header>
-            <div class="scrub">
-                <div class="progress"></div>
-            </div>
-            <div class="page width center player flex">
-                <div class="push-children-right"
-                     id="navigation"
-                     template="navigation">
-                </div>
-                <div class="flex-strong"></div>
-                <div class="controls push-children-right">
-                    <button class="faux"><i class="fa fa-random"></i></button>
-                    <button class="faux"><i class="fa fa-step-backward"></i></button>
-                    <button class="faux"><i class="fa fa-play"></i></button>
-                    <button class="faux"><i class="fa fa-step-forward"></i></button>
-                    <button class="faux"><i class="fa fa-repeat"></i></button>
-                </div>
-            </div>
-        </header>
-        <section role="content"></section>
+<header>
+    <div class="scrub">
+        <div class="progress"></div>
+    </div>
+    <div class="page width center player flex">
+        <div class="push-children-right"
+                id="navigation"
+                template="navigation">
+        </div>
+        <div class="flex-strong"></div>
+        <div class="controls push-children-right">
+            <button class="faux"><i class="fa fa-random"></i></button>
+            <button class="faux"><i class="fa fa-step-backward"></i></button>
+            <button class="faux"><i class="fa fa-play"></i></button>
+            <button class="faux"><i class="fa fa-step-forward"></i></button>
+            <button class="faux"><i class="fa fa-repeat"></i></button>
+        </div>
+    </div>
+</header>
+<section role="content"></section>
 
-        <script type="text/template" template-name="navigation">
-            <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
-            <a class="silent" href="/music"><i class="fa fa-music"></i></a>
-            {{#user}}
-            <a class="silent" href="/playlists"><i class="fa fa-list-ul"></i></a>
-            <a class="silent" href="/account"><i class="fa fa-gear"></i></a>
-            {{/user}}
-            {{^user}}
-            <a class="silent" href="/signin">Sign In</a>
-            {{/user}}
-        </script>
+<script type="text/template" template-name="navigation">
+    <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
+    <a class="silent" href="/music"><i class="fa fa-music"></i></a>
+    {{#user}}
+    <a class="silent" href="/playlists"><i class="fa fa-list-ul"></i></a>
+    <a class="silent" href="/account"><i class="fa fa-gear"></i></a>
+    {{/user}}
+    {{^user}}
+    <a class="silent" href="/signin">Sign In</a>
+    {{/user}}
+</script>
 
-        <script type="text/template"
-                route="^signin">
-            <div class="page width center">
-                <table class="form" data-set="credentials">
-                    <tbody>
-                        <tr>
-                            <th>Email</th>
-                            <td><input type="text" name="email" placeholder="kitty@monstercat.com"/></td>
-                        </tr>
-                        <tr>
-                            <th>Password</th>
-                            <td><input type="password" name="password" placeholder="a secret"/></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button action="signIn" data-set-target="credentials">Sign In</button>
-            </div>
-        </script>
+<script type="text/template"
+        route="^signin">
+    <div class="page width center">
+        <table class="form" data-set="credentials">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td><input type="text" name="email" placeholder="kitty@monstercat.com"/></td>
+                </tr>
+                <tr>
+                    <th>Password</th>
+                    <td><input type="password" name="password" placeholder="a secret"/></td>
+                </tr>
+            </tbody>
+        </table>
+        <button action="signIn" data-set-target="credentials">Sign In</button>
+    </div>
+</script>
 
-        <script type="text/template"
-                route="^account"
-                source="https://connect.monstercat.com/api/self"
-                transform="mapAccount">
-            <div class="page width center">
-                <h1>My Account</h1>
-                {{#loading}}
-                <i class="fa fa-fw fa-refresh fa-spin"></i>
-                {{/loading}}
-                {{#error}}
-                <p>{{message}}</p>
-                {{/error}}
-                {{#data}}
-                <table class="form">
-                    <tbody data-set="account">
-                        <tr>
-                            <th>Email</th>
-                            <td>{{email}}</td>
-                        </tr>
-                        <tr>
-                            <th>Full Name</th>
-                            <td><input type="text"
-                                       name="realName"
-                                       value="{{realName}}"
-                                       initial-value="{{realName}}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Nickname</th>
-                            <td><input type="text"
-                                       name="name"
-                                       initial-value="{{name}}"
-                                       value="{{name}}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Country</th>
-                            <td>
-                                <select name="location"
-                                        initial-value="{{location}}">
-                                    <option disabled>Select One</option>
-                                    {{#countries}}
-                                    <option
-                                        value="{{name}}"
-                                        {{#selected}}selected{{/selected}}>
-                                        {{name}}
-                                    </option>
-                                    {{/countries}}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Change Password</th>
-                            <td><input type="password"
-                                       name="password"
-                                       placeholder="New Password"></td>
-                        </tr>
-                        <tr>
-                            <th colspan="2">
-                                <label>
-                                    <input type="checkbox"/>
-                                    Skip Non-licensable Tracks
-                                </label>
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
-                <button action="saveAccount"
-                        data-set-target="account">
-                    Save
-                </button>
-                <button action="signOut">Sign Out</button>
-                {{/data}}
-            </div>
-        </script>
-
-        <script type="text/template" route="^$">
-            <div class="page width center">
-                <h1>Nothing here.</h1>
-                <p>Welcome home.</p>
-            </div>
-        </script>
-
-        <script type="text/template"
-                route="^music(\?.*)?"
-                source="https://connect.monstercat.com/api/catalog/release?limit=25"
-                ox="/releases.json$1"
-                transform="transformReleases">
-            <div>
-                <div class="page width center">
-                    <div class="filters pad-vertical push-children-right" data-set="music-search">
-                        <h1 class="label-header uppercase">Music</h1>
-                        <input class="round" name="filter" type="text" placeholder="Search..."/>
-                        <select name="type">
-                            <option>Show All Types</option>
-                            <option>Albums</option>
-                            <option>EPs</option>
-                            <option>Singles</option>
-                            <option>Podcasts</option>
+<script type="text/template"
+        route="^account"
+        source="https://connect.monstercat.com/api/self"
+        transform="mapAccount">
+    <div class="page width center">
+        <h1>My Account</h1>
+        {{#loading}}
+        <i class="fa fa-fw fa-refresh fa-spin"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <table class="form">
+            <tbody data-set="account">
+                <tr>
+                    <th>Email</th>
+                    <td>{{email}}</td>
+                </tr>
+                <tr>
+                    <th>Full Name</th>
+                    <td><input type="text"
+                                name="realName"
+                                value="{{realName}}"
+                                initial-value="{{realName}}" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nickname</th>
+                    <td><input type="text"
+                                name="name"
+                                initial-value="{{name}}"
+                                value="{{name}}" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td>
+                        <select name="location"
+                                initial-value="{{location}}">
+                            <option disabled>Select One</option>
+                            {{#countries}}
+                            <option
+                                value="{{name}}"
+                                {{#selected}}selected{{/selected}}>
+                                {{name}}
+                            </option>
+                            {{/countries}}
                         </select>
-                        <button action="searchMusic" data-set-target="music-search">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="bg-gray">
-                    {{#loading}}
-                    <i class="fa fa-fw fa-spin fa-refresh"></i>
-                    {{/loading}}
-                    {{#error}}
-                    <p>{{message}}</p>
-                    {{/error}}
-                    {{#data}}
-                    <ul class="page width center art-list">
-                        {{#results}}
-                        <li><a href="/release/{{_id}}">
-                            <img src="{{cover}}"/>
-                            <label class="title">{{title}}</label>
-                            <br/>
-                            <label>{{releaseDate}}</label></a>
-                        </li>
-                        {{/results}}
-                    </ul>
-                    {{/data}}
-                </div>
-                {{#data}}
-                <div class="page width center pagination pad-vertical text center">
-                    <a href="?offset={{previous}}">Previous</a>
-                    <label>{{offset}} - {{count}} of {{total}}</label>
-                    <a href="?offset={{next}}">Next</a>
-                </div>
-                {{/data}}
-            </div>
-        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Change Password</th>
+                    <td><input type="password"
+                                name="password"
+                                placeholder="New Password"></td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <label>
+                            <input type="checkbox"/>
+                            Skip Non-licensable Tracks
+                        </label>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <button action="saveAccount"
+                data-set-target="account">
+            Save
+        </button>
+        <button action="signOut">Sign Out</button>
+        {{/data}}
+    </div>
+</script>
 
-        <script type="text/template"
-                route="^release\/(.*)"
-                source="https://connect.monstercat.com/api/catalog/release/$1"
-                transform="mapRelease">
-            <div class="release page width center">
-                {{#loading}}
-                <i class="fa fa-spin fa-refresh">
-                {{/loading}}
-                {{#error}}
-                <p>{{message}}</p>
-                {{/error}}
-                {{#data}}
-                <img class="artwork" src="{{cover}}"/>
-                <h1 class="cancel-margin-bottom">{{title}}</h1>
-                <h2>{{artists}}</h2>
-                <label>Released {{releaseDate}}</label>
-                <div class="options pad-vertical push-children-right">
-                    <button class="faux"><i class="fa fa-play"></i></button>
-                    <button class="faux"><i class="fa fa-download"></i></button>
-                </div>
-                <div source="https://connect.monstercat.com/api/catalog/release/{{_id}}/tracks"
-                     template="release-tracks"></div>
-                {{/data}}
-            </div>
-        </script>
+<script type="text/template" route="^$">
+    <div class="page width center">
+        <h1>Nothing here.</h1>
+        <p>Welcome home.</p>
+    </div>
+</script>
 
-        <script type="text/template"
-                template-name="release-tracks"
-                transform="transformReleaseTracks">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="shrink">#</th>
-                        <th class="shrink nohpad"></th>
-                        <th>Title</th>
-                        <th>Artists</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody >
-                    {{#loading}}
-                    <tr><td colspan="5"><i class="fa fa-spin fa-refresh"></i></td></tr>
-                    {{/loading}}
-                    {{#error}}
-                    <tr><td colspan="5"><p>{{message}}</p></td></tr>
-                    {{/error}}
-                    {{#data}}
-                    {{#results}}
-                    <tr>
-                        <td class="shrink">{{trackNumber}}.</td>
-                        <td class="shrink nohpad">
-                            <button class="faux"><i class="fa fa-play-circle"></i></button>
-                        </td>
-                        <td>{{title}}</td>
-                        <td><a href="/artist/{{artistId}}">{{artists}}</a></td>
-                        <td class="push-children-right">
-                            <button class="faux"><i class="fa fa-download"></i></button>
-                            <button class="faux"><i class="fa fa-copyright"></i></button>
-                            <select>
-                                <option disabled checked>Add to Playlist</option>
-                            </select>
-                        </td>
-                    </tr>
-                    {{/results}}
-                    {{/data}}
-                </tbody>
-            </table>
-        </script>
-
-        <script type="text/template"
-                route="^playlists">
-            <div class="page width center">
-                <h1>My Playlists</h1>
-                <button action="createPlaylist">
-                    <i class="fa fa-fw fa-plus"></i>
+<script type="text/template"
+        route="^music(\?.*)?"
+        source="https://connect.monstercat.com/api/catalog/release?limit=25"
+        ox="/releases.json$1"
+        transform="transformReleases">
+    <div>
+        <div class="page width center">
+            <div class="filters pad-vertical push-children-right" data-set="music-search">
+                <h1 class="label-header uppercase">Music</h1>
+                <input class="round" name="filter" type="text" placeholder="Search..."/>
+                <select name="type">
+                    <option>Show All Types</option>
+                    <option>Albums</option>
+                    <option>EPs</option>
+                    <option>Singles</option>
+                    <option>Podcasts</option>
+                </select>
+                <button action="searchMusic" data-set-target="music-search">
+                    <i class="fa fa-search"></i>
                 </button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody
-                  source="https://connect.monstercat.com/api/playlist?fields=name,public"
-                        template="playlists">
-                    </tbody>
-                </table>
             </div>
-        </script>
-
-        <script type="text/template"
-                template-name="playlists">
+        </div>
+        <div class="bg-gray">
             {{#loading}}
-            <tr><td colspan="2"><i class="fa fa-fw fa-refresh fa-spin"></i></td></tr>
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
             {{/loading}}
             {{#error}}
-            <tr><td colspan="2">{{message}}</td></tr>
+            <p>{{message}}</p>
             {{/error}}
             {{#data}}
-            {{#results}}
-            <tr>
-                <td><a href="/playlist/{{_id}}">{{name}}</a></td>
-                <td class="push-children-right">
-                    <button class="faux"
-                            action="renamePlaylist"
-                            playlist-id="{{_id}}">
-                        <i class="fa fa-pencil"></i>
-                    </button>
-                    <button class="faux"
-                            action="destroyPlaylist"
-                            playlist-id="{{_id}}">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                </td>
-            </tr>
-            {{/results}}
-            {{^results}}
-            <tr><td colspan="2">No Results.</td></tr>
-            {{/results}}
+            <ul class="page width center art-list">
+                {{#results}}
+                <li><a href="/release/{{_id}}">
+                    <img src="{{cover}}"/>
+                    <label class="title">{{title}}</label>
+                    <br/>
+                    <label>{{releaseDate}}</label></a>
+                </li>
+                {{/results}}
+            </ul>
             {{/data}}
-        </script>
+        </div>
+        {{#data}}
+        <div class="page width center pagination pad-vertical text center">
+            <a href="?offset={{previous}}">Previous</a>
+            <label>{{offset}} - {{count}} of {{total}}</label>
+            <a href="?offset={{next}}">Next</a>
+        </div>
+        {{/data}}
+    </div>
+</script>
 
-        <script type="text/template"
-                route="^playlist\/(.*)"
-                source="https://connect.monstercat.com/api/playlist/$1?fields=name,public">
-            <div class="page width center">
-                {{#loading}}
-                <i class="fa fa-fw fa-spin fa-refresh"></i>
-                {{/loading}}
-                {{#error}}
-                <p>{{message}}</p>
-                {{/error}}
-                {{#data}}
-                <h1>{{name}}</h1>
-                {{#author}}
-                <h2>Created by {{author}}</h2>
-                {{/author}}
-                <div class="options pad-vertical push-children-right">
-                    <label>
-                        <input
-                            type="checkbox"
-                            action="togglePlaylistPublic"
-                            playlist-id="{{_id}}"
-                            {{#public}}checked{{/public}} />
-                        Public
-                    </label>
-                    <button><i class="fa fa-fw fa-download"></i></button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th></th>
-                            <th>Title</th>
-                            <th>Release</th>
-                            <th>Artist</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody source="https://connect.monstercat.com/api/playlist/{{_id}}/tracks"
-                           template="playlist-tracks">
-                    </tbody>
-                </table>
-                {{/data}}
-            </div>
-        </script>
+<script type="text/template"
+        route="^release\/(.*)"
+        source="https://connect.monstercat.com/api/catalog/release/$1"
+        transform="mapRelease">
+    <div class="release page width center">
+        {{#loading}}
+        <i class="fa fa-spin fa-refresh">
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <img class="artwork" src="{{cover}}"/>
+        <h1 class="cancel-margin-bottom" release-id="{{_id}}">{{title}}</h1>
+        <h2>{{artists}}</h2>
+        <label>Released {{releaseDate}}</label>
+        <div class="options pad-vertical push-children-right">
+            <button class="faux"><i class="fa fa-play"></i></button>
+            <button class="faux"><i class="fa fa-download"></i></button>
+        </div>
+        <div source="https://connect.monstercat.com/api/catalog/release/{{_id}}/tracks"
+                template="release-tracks"></div>
+        {{/data}}
+    </div>
+</script>
 
-        <script type="text/template"
-                template-name="playlist-tracks"
-                transform="transformReleaseTracks">
+<script type="text/template"
+        template-name="release-tracks"
+        transform="transformReleaseTracks">
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink">#</th>
+                <th class="shrink nohpad"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody >
             {{#loading}}
-            <tr><td colspan="6"><i class="fa fa-fw fa-spin fa-refresh"></i></td></tr>
+            <tr><td colspan="5"><i class="fa fa-spin fa-refresh"></i></td></tr>
             {{/loading}}
             {{#error}}
-            <tr><td colspan="6">{{message}}</td></tr>
+            <tr><td colspan="5"><p>{{message}}</p></td></tr>
             {{/error}}
             {{#data}}
             {{#results}}
             <tr>
-                <td>{{trackNumber}}.</td>
-                <td>
+                <td class="shrink">{{trackNumber}}.</td>
+                <td class="shrink nohpad">
                     <button class="faux"><i class="fa fa-play-circle"></i></button>
                 </td>
                 <td>{{title}}</td>
-                <td>{{release}}</td>
-                <td><a href="/artist/x">{{artists}}</a></td>
-                <td>
-                    <button class="faux">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
+                <td><a href="/artist/{{artistId}}">{{artists}}</a></td>
+                <td class="push-children-right">
+                    <button class="faux"><i class="fa fa-download"></i></button>
+                    <button class="faux"><i class="fa fa-copyright"></i></button>
+                    <select
+                        onchange="addToPlaylist(null, this)"
+                        source="https://connect.monstercat.com/api/playlist"
+                        template="select-playlist"
+                        track-id="{{_id}}">
+                    </select>
                 </td>
             </tr>
             {{/results}}
-            {{^results}}
-            <tr><td colspan="6">No Results.</td></tr>
-            {{/results}}
             {{/data}}
-        </script>
+        </tbody>
+    </table>
+</script>
 
-    </body>
+<script type="text/template"
+        template-name="select-playlist">
+    {{#loading}}
+    <option disabled checked>Loading...</option>
+    {{/loading}}
+    {{#error}}
+    {{/error}}
+    {{#data}}
+    <option value="" checked>Add to Playlist</option>
+    {{#results}}
+    <option value="{{_id}}">{{name}}</option>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^playlists">
+    <div class="page width center">
+        <h1>My Playlists</h1>
+        <button action="createPlaylist">
+            <i class="fa fa-fw fa-plus"></i>
+        </button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody
+            source="https://connect.monstercat.com/api/playlist?fields=name,public"
+                template="playlists">
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="playlists">
+    {{#loading}}
+    <tr><td colspan="2"><i class="fa fa-fw fa-refresh fa-spin"></i></td></tr>
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="2">{{message}}</td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr>
+        <td><a href="/playlist/{{_id}}">{{name}}</a></td>
+        <td class="push-children-right">
+            <button class="faux"
+                    action="renamePlaylist"
+                    playlist-id="{{_id}}">
+                <i class="fa fa-pencil"></i>
+            </button>
+            <button class="faux"
+                    action="destroyPlaylist"
+                    playlist-id="{{_id}}">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="2">No Results.</td></tr>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^playlist\/(.*)"
+        source="https://connect.monstercat.com/api/playlist/$1?fields=name,public,tracks">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <h1 playlist-id="{{_id}}">{{name}}</h1>
+        {{#author}}
+        <h2>Created by {{author}}</h2>
+        {{/author}}
+        <div class="options pad-vertical push-children-right">
+            <label>
+                <input
+                    type="checkbox"
+                    action="togglePlaylistPublic"
+                    playlist-id="{{_id}}"
+                    {{#public}}checked{{/public}} />
+                Public
+            </label>
+            <button><i class="fa fa-fw fa-download"></i></button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Release</th>
+                    <th>Artist</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody source="https://connect.monstercat.com/api/playlist/{{_id}}/tracks"
+                    template="playlist-tracks">
+            </tbody>
+        </table>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="playlist-tracks"
+        transform="transformReleaseTracks">
+    {{#loading}}
+    <tr><td colspan="6"><i class="fa fa-fw fa-spin fa-refresh"></i></td></tr>
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="6">{{message}}</td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr>
+        <td>{{trackNumber}}.</td>
+        <td>
+            <button class="faux"><i class="fa fa-play-circle"></i></button>
+        </td>
+        <td>{{title}}</td>
+        <td>{{release}}</td>
+        <td><a href="/artist/x">{{artists}}</a></td>
+        <td>
+            <button class="faux"
+                    action="removeFromPlaylist"
+                    playlist-position="{{index}}">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="6">No Results.</td></tr>
+    {{/results}}
+    {{/data}}
+</script>
+
+</body>
 </html>

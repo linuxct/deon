@@ -3,10 +3,13 @@ var endpoint  = endhost + '/api'
 var datapoint = 'https://s3.amazonaws.com/data.monstercat.com'
 var session   = null
 var strings   = {
+  "error": "An error occured.",
   "createPlaylist": "Give a name for new playlist.",
   "renamePlaylist": "Give a new name for this playlist.",
   "destroyPlaylist": "Are you sure you want to remove this playlist?",
-  "accountUpdated": "Your account information has been saved."
+  "accountUpdated": "Your account information has been saved.",
+  "addedToPlaylist": "Song succesfully added to playlist.",
+  "removedFromPlaylist": "Song succesfully removed from playlist."
 }
 
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -108,9 +111,55 @@ function renamePlaylist (e, el) {
 }
 
 function destroyPlaylist (e, el) {
-  if (!window.confirm(strings.destroyPlaylist))
-    return
+  if (!window.confirm(strings.destroyPlaylist)) return
   destroy('playlist', el.getAttribute('playlist-id'), simpleUpdate)
+}
+
+function removeFromPlaylist (e, el) {
+  var pel   = document.querySelector('[playlist-id]')
+  var id    = pel ? pel.getAttribute('playlist-id') : ""
+  var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks'
+  var index = parseInt(el.getAttribute('playlist-position'))
+  if (!id) return window.alert(strings.error)
+  loadCache(url, function (err, obj) {
+    if (err) return window.alert(err.message)
+    var tracks = obj.tracks
+    tracks.splice(index, 1)
+    update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
+      cache(url, obj)
+      if (err) return window.alert(err)
+      loadSubSources(document.querySelector('[role="content"]'), true)
+      // TODO toast me brah
+    })
+  })
+}
+
+function addToPlaylist (e, el) {
+  var id    = el.value
+  if (!id) return
+  var url   = endpoint + '/playlist/' + id
+  var index = parseInt(el.getAttribute('playlist-position'))
+  var rel   = document.querySelector('[release-id]')
+  var item  = {
+    trackId: el.getAttribute('track-id'),
+    releaseId: rel ? rel.getAttribute('release-id') : ""
+  }
+  if (!item.releaseId || !item.trackId) return window.alert(strings.error)
+  el.disabled = true
+  loadCache(url, function (err, obj) {
+    if (err) return window.alert(err.message)
+    var tracks = obj.tracks
+    if (isNaN(index)) index = tracks.length
+    tracks.splice(index, 0, item)
+    update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
+      cache(url, obj)
+      el.disabled = false
+      el.selectedIndex = 0
+      if (err) return window.alert(err)
+      window.alert(strings.addedToPlaylist)
+      // TODO toast me brah
+    })
+  })
 }
 
 function togglePlaylistPublic (e, el) {
@@ -173,7 +222,8 @@ function transformReleaseTracks (obj) {
 
 function mapReleaseTrack (o, index, arr) {
   o.trackNumber = index + 1
-  o.artists = o.artistsTitle
+  o.index       = index
+  o.artists     = o.artistsTitle
   return o
 }
 
