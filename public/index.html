@@ -6,6 +6,7 @@
       <link rel="stylesheet" href="/style.css">
       <script type="text/javascript" src="/mustache.js"></script>
       <script type="text/javascript" src="/declare.js"></script>
+      <script type="text/javascript" src="/countries.js"></script>
       <script type="text/javascript" src="/main.js"></script>
     </head>
     <body>
@@ -64,7 +65,8 @@
 
         <script type="text/template"
                 route="^account"
-                source="https://connect.monstercat.com/api/self">
+                source="https://connect.monstercat.com/api/self"
+                transform="mapAccount">
             <div class="page width center">
                 <h1>My Account</h1>
                 {{#loading}}
@@ -75,24 +77,40 @@
                 {{/error}}
                 {{#data}}
                 <table class="form">
-                    <tbody>
+                    <tbody data-set="account">
                         <tr>
                             <th>Email</th>
-                            <td><input type="text"
-                                       name="email"
-                                       value="{{email}}"></td>
+                            <td>{{email}}</td>
                         </tr>
                         <tr>
-                            <th>Name</th>
+                            <th>Full Name</th>
                             <td><input type="text"
                                        name="realName"
-                                       value="{{realName}}"/></td>
+                                       value="{{realName}}"
+                                       initial-value="{{realName}}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Nickname</th>
+                            <td><input type="text"
+                                       name="name"
+                                       initial-value="{{name}}"
+                                       value="{{name}}" />
+                            </td>
                         </tr>
                         <tr>
                             <th>Country</th>
                             <td>
-                                <select>
-                                    <option disabled checked>Select</option>
+                                <select name="location"
+                                        initial-value="{{location}}">
+                                    <option disabled>Select One</option>
+                                    {{#countries}}
+                                    <option
+                                        value="{{name}}"
+                                        {{#selected}}selected{{/selected}}>
+                                        {{name}}
+                                    </option>
+                                    {{/countries}}
                                 </select>
                             </td>
                         </tr>
@@ -112,7 +130,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <button>Save</button>
+                <button action="saveAccount"
+                        data-set-target="account">
+                    Save
+                </button>
                 <button action="signOut">Sign Out</button>
                 {{/data}}
             </div>
@@ -180,7 +201,7 @@
         <script type="text/template"
                 route="^release\/(.*)"
                 source="https://connect.monstercat.com/api/catalog/release/$1"
-                transform="transformRelease">
+                transform="mapRelease">
             <div class="release page width center">
                 {{#loading}}
                 <i class="fa fa-spin fa-refresh">

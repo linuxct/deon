@@ -98,9 +98,8 @@ function getMethod(el, attr) {
 }
 
 function runAction (e, el) {
-  var fn
-  if (fn = getMethod(el, 'action'))
-    fn(e, el)
+  var fn = getMethod(el, 'action')
+  if (fn) fn(e, el)
 }
 
 function stateChange (url, state) {
@@ -121,14 +120,15 @@ function stateChange (url, state) {
   if (!target) return
   var container = document.querySelector('[role="content"]')
   var source = target.getAttribute('source')
+  var transform = getMethod(target, 'transform')
   if (source) {
     source = source.replace(/\$(\d)/g, function (str, index) {
       return matches[index] || ""
     })
-    loadSource(source, container, target.textContent, getMethod(target, 'transform'))
+    loadSource(source, container, target.textContent, transform)
     return
   }
-  render(container, target.textContent, {})
+  render(container, target.textContent, (transform ? transform() : {}))
 }
 
 function render (container, template, scope) {
@@ -142,12 +142,19 @@ function loadSource (source, container, template, transform) {
     url: source,
     withCredentials: true
   }, function (err, obj, xhr) {
-    if (obj && transform) obj = transform(obj)
-    var scope = {
+    if (obj && transform) {
+      obj = transform(obj, function (err, obj) {
+        render(container, template, {
+          error: err,
+          data: obj
+        })
+      })
+      if (!obj) return
+    }
+    render(container, template, {
       error: err,
       data: obj
-    }
-    render(container, template, scope)
+    })
   })
 }
 
@@ -164,21 +171,35 @@ function loadSubSources (container) {
   }
 }
 
-function getDataSet (el) {
+function getElementValue (el, value) {
+  if (value == undefined) return getElementValue(el, el.value)
+  // var tag  = el.tagName.toLowerCase()
+  var type = el.getAttribute('type')
+  if (type == 'checkbox') {
+    return value == 'on' ? true : false
+  }
+  return value
+}
+
+function getDataSet (el, checkInitial) {
+  var obj
   var target = el.getAttribute('data-set-target')
   var setel  = document.querySelector('[data-set="'+target+'"]')
   var els    = setel.querySelectorAll('[name]')
-  var obj    = {}
   for (var i = 0; i < els.length; i++) {
     var kel = els[i]
-    var key = kel.getAttribute('name')
-    if (obj[key]) {
+    var key  = kel.getAttribute('name')
+    var ival = getElementValue(kel, kel.getAttribute('initial-value'))
+    var val  = getElementValue(kel)
+    // TODO handle radio scenario
+    if (obj && obj[key]) {
       if (!(obj[key] instanceof Array)) {
         obj[key] = [obj[key]]
       }
-      obj[key].push(kel.value)
-    } else {
-      obj[key] = kel.value
+      obj[key].push(val)
+    } else if (!checkInitial || (checkInitial && val != ival)) {
+      if (!obj) obj = {}
+      obj[key] = val
     }
   }
   return obj
