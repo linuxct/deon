@@ -129,6 +129,12 @@ input.round {
   padding: 0.5em 1em;
 }
 
+hr {
+  height: 3px;
+  background: #d4d4d4;
+  border: none;
+}
+
 .page.width {
   width: 80%;
 }

@@ -34,9 +34,9 @@
 
 <script type="text/template" template-name="navigation">
     <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
-    <a class="silent" href="/music"><i class="fa fa-music"></i></a>
+    <a class="silent" href="/music"><i class="fa fa-headphones"></i></a>
     {{#user}}
-    <a class="silent" href="/playlists"><i class="fa fa-list-ul"></i></a>
+    <a class="silent" href="/playlists"><i class="fa fa-bars"></i></a>
     <a class="silent" href="/account"><i class="fa fa-gear"></i></a>
     {{/user}}
     {{^user}}
@@ -135,7 +135,144 @@
             Save
         </button>
         <button action="signOut">Sign Out</button>
+        <br/>
+        <br/>
+        <a href="/services">Manage Services</a>
+        <br/>
+        <a href="/billing">View Billing History</a>
+        <br/>
+        <a href="/faqs">FAQ's</a>
+        <br/>
+        <a href="/terms-of-service">Terms of Service</a>
+        <br/>
+        <a href="/privacy-policy">Privacy Policy</a>
         {{/data}}
+    </div>
+</script>
+
+<script type="text/template" route="^services$">
+    <div class="page width center">
+        <h1>Manage Services</h1>
+        <h2>Gold Access</h2>
+        <br/>
+        <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+        <br/>
+        <label>
+            <input type="checkbox" name="gold-access" checked>
+            Subscribe for $5.00/month
+        </label>
+        <br/>
+        <br/>
+        <h2>Licensing Services</h2>
+        <br/>
+        <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro. You can also buy a subscription and pay monthly until you pay it off.</p>
+        <br/>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vendor</th>
+                    <th>Identity</th>
+                    <th>Paid Off</th>
+                    <th>Remaining</th>
+                    <th>Monthly Cost</th>
+                    <th>Active</th>
+                    <th>License</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>YouTube</td>
+                    <td>Sample</td>
+                    <td>$20.00</td>
+                    <td>$180.00</td>
+                    <td>$5.00</td>
+                    <td>
+                        <input type="checkbox" checked/>
+                    </td>
+                    <td>
+                        <a href="#">View</a>
+                    </td>
+                    <td>
+                        <button>Buy Out</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>YouTube</td>
+                    <td>Banana X</td>
+                    <td>$200.00</td>
+                    <td>$0.00</td>
+                    <td>$0.00</td>
+                    <td>
+                        <i class="fa fa-check-circle-o">
+                    </td>
+                    <td><a href="#">View</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Twitch</td>
+                    <td>ZZZ</td>
+                    <td>$20.00</td>
+                    <td>$180.00</td>
+                    <td>$5.00</td>
+                    <td>
+                        <input type="checkbox"/>
+                    </td>
+                    <td></td>
+                    <td>
+                        <button>Buy Out</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <select>
+            <option value="">Select Vendor</option>
+            <option value="YouTube">YouTube</option>
+            <option value="Twitch">Twitch</option>
+            <option value="Beam Pro">Beam Pro</option>
+        </select>
+        <input type="text" placeholder="Identity"/>
+        <button>Add</button>
+        <br/>
+        <br/>
+        <hr/>
+        <br/>
+        <label>
+            Total: 
+            <span>$10.00</span> USD per Month
+        </label>
+        <br/>
+        <br/>
+        <label>
+            <input type="radio" name="method" value="paypal">
+            <i class="fa fa-fw fa-cc-paypal"></i>
+        </label>
+        <label>
+            <input type="radio" name="method" value="stripe">
+            <i class="fa fa-fw fa-cc-stripe"></i>
+        </label>
+        <button>Update Payments</button>
+        <br/>
+        <br/>
+        <a href="/billing">View Billing History</a>
+    </div>
+</script>
+
+<script type="text/template" route="^billing$">
+    <div class="page width center">
+        <h1>Billing History</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="3">No history.</td></tr>
+            </tbody>
+        </table>
     </div>
 </script>
 

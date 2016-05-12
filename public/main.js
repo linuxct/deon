@@ -91,10 +91,7 @@ function searchMusic (e, el) {
 }
 
 function simpleUpdate (err, obj, xhr) {
-  if (err) {
-    return console.error(err.message)
-  }
-  console.log(obj)
+  if (err) return window.alert(err.message)
   loadSubSources(document.querySelector('[role="content"]'))
 }
 
