@@ -22,6 +22,7 @@
         </div>
         <div class="flex-strong"></div>
         <div class="controls push-children-right">
+            <a href="#" class="silent">Thought Police - Mr. FijiWiji</a>
             <button class="faux"><i class="fa fa-random"></i></button>
             <button class="faux"><i class="fa fa-step-backward"></i></button>
             <button class="faux"><i class="fa fa-play"></i></button>
@@ -291,15 +292,16 @@
     <div>
         <div class="page width center">
             <div class="filters pad-vertical push-children-right" data-set="music-search">
-                <h1 class="label-header uppercase">Music</h1>
                 <input class="round" name="filter" type="text" placeholder="Search..."/>
-                <select name="type">
-                    <option>Show All Types</option>
-                    <option>Albums</option>
-                    <option>EPs</option>
-                    <option>Singles</option>
-                    <option>Podcasts</option>
-                </select>
+                <button action="hitSelect" class="select">
+                    <select name="type">
+                        <option value="">Show All Types</option>
+                        <option value="album">Albums</option>
+                        <option value="ep">EPs</option>
+                        <option value="single">Singles</option>
+                        <option value="podcast">Podcasts</option>
+                    </select>
+                </button>
                 <button action="searchMusic" data-set-target="music-search">
                     <i class="fa fa-search"></i>
                 </button>
@@ -307,10 +309,14 @@
         </div>
         <div class="bg-gray">
             {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
+            <div class="page width center">
+                <i class="fa fa-fw fa-spin fa-refresh"></i>
+            </div>
             {{/loading}}
             {{#error}}
-            <p>{{message}}</p>
+            <div class="page width center">
+                <p>{{message}}</p>
+            </div>
             {{/error}}
             {{#data}}
             <ul class="page width center art-list">
@@ -341,7 +347,7 @@
         transform="mapRelease">
     <div class="release page width center">
         {{#loading}}
-        <i class="fa fa-spin fa-refresh">
+        <i class="fa fa-spin fa-refresh"></i>
         {{/loading}}
         {{#error}}
         <p>{{message}}</p>
@@ -355,8 +361,10 @@
             <button class="faux"><i class="fa fa-play"></i></button>
             <button class="faux"><i class="fa fa-download"></i></button>
         </div>
-        <div source="https://connect.monstercat.com/api/catalog/release/{{_id}}/tracks"
-                template="release-tracks"></div>
+        <div
+            source="https://connect.monstercat.com/api/catalog/release/{{_id}}/tracks"
+            template="release-tracks">
+        </div>
         {{/data}}
     </div>
 </script>
@@ -405,6 +413,37 @@
             {{/data}}
         </tbody>
     </table>
+</script>
+
+<script type="text/template" route="^artist\/(.*)">
+    <div class="page center width">
+        <h1>{{name}}</h1>
+        <img src="{{image}}">
+        <h2>About</h2>
+        <p>{{about}}</p>
+        <h3>Booking & Managment</h3>
+        <p>{{booking}}</p>
+        <p>{{management}}</p>
+        <h2>Discography</h2>
+        <ul template="discography"></ul>
+    </div>
+</script>
+
+<script type="text/template">
+    {{#loading}}
+    <li><i class="fa fa-fw fa-spin fa-refresh"></li>
+    {{/loading}}
+    {{#error}}
+    <li>{{message}}</li>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <li>
+        <img src="{{cover}}"/>
+        <label>{{title}}</label>
+    </li>
+    {{/results}}
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -506,7 +545,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th></th>
+                    <th class="shrink nohpad"></th>
                     <th>Title</th>
                     <th>Release</th>
                     <th>Artist</th>
@@ -523,7 +562,7 @@
 
 <script type="text/template"
         template-name="playlist-tracks"
-        transform="transformReleaseTracks">
+        transform="transformPlaylistTracks">
     {{#loading}}
     <tr><td colspan="6"><i class="fa fa-fw fa-spin fa-refresh"></i></td></tr>
     {{/loading}}
@@ -534,11 +573,11 @@
     {{#results}}
     <tr>
         <td>{{trackNumber}}.</td>
-        <td>
+        <td class="shrink nohpad">
             <button class="faux"><i class="fa fa-play-circle"></i></button>
         </td>
         <td>{{title}}</td>
-        <td>{{release}}</td>
+        <td><a href="/release/{{releaseId}}">{{release}}</a></td>
         <td><a href="/artist/x">{{artists}}</a></td>
         <td>
             <button class="faux"

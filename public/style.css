@@ -107,7 +107,7 @@ button {
   background: transparent;
   color: dodgerblue;
   border: solid 3px dodgerblue;
-  padding: 0.5em 1em;
+  padding: 8px 10px 10px;
   font-size: 16px;
   font-weight: bold;
   border-radius: 0.3em;
@@ -122,11 +122,22 @@ button.faux {
   color: #383838;
 }
 
+button.select {
+  padding: 7px 10px 8px 4px;
+}
+
+button.select select {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  color: dodgerblue;
+}
+
 input.round {
   border: solid 3px gainsboro;
   font-size: 16px;
   border-radius: 22px;
-  padding: 0.5em 1em;
+  padding: 8px 18px;
 }
 
 hr {
@@ -234,4 +245,8 @@ td.push-children-right > * {
 
 .special-nav {
   list-style: none;
+}
+
+.controls a {
+  font-size: 16px;
 }

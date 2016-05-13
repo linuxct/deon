@@ -224,6 +224,39 @@ function mapReleaseTrack (o, index, arr) {
   return o
 }
 
+function uniqueArray (arr) {
+  return Array.from(new Set(arr))
+}
+
+function transformPlaylistTracks (obj, done) {
+  var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
+  var url = endpoint + '/playlist/' + id + '?fields=name,public,tracks'
+  var playlist = cache(url)
+  var ids = uniqueArray(playlist.tracks.map(function (item) {
+    return item.releaseId
+  }))
+  var url = endpoint + '/catalog/release?fields=title&ids=' + ids.join(',')
+  loadCache(url, function(err, aobj) {
+    if (err) return done(err)
+    var releaseAtlas = {}
+    var trackAtlas = {}
+    aobj.results.forEach(function (release) {
+      releaseAtlas[release._id] = release
+    })
+    obj.results.forEach(function (track) {
+      trackAtlas[track._id] = track
+    })
+    obj.results = playlist.tracks.map(function (item, index, arr) {
+      var track = mapReleaseTrack(trackAtlas[item.trackId] || {}, index, arr)
+      var release = releaseAtlas[item.releaseId] || {}
+      track.release = release.title
+      track.releaseId = release._id
+      return track
+    })
+    done(err, obj)
+  })
+}
+
 function mapAccount (o) {
   o.countries = Countries.map(function (item) {
     return {
