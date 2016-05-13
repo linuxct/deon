@@ -290,14 +290,19 @@
     <div>
         <div class="page width center">
             <div class="filters pad-vertical push-children-right" data-set="music-search">
-                <input class="round" name="filter" type="text" placeholder="Search..."/>
+                <input class="round"
+                       name="search"
+                       type="text"
+                       placeholder="Search..."
+                       value="{{search}}"/>
                 <button action="hitSelect" class="select">
                     <select name="type">
                         <option value="">Show All Types</option>
-                        <option value="album">Albums</option>
-                        <option value="ep">EPs</option>
-                        <option value="single">Singles</option>
-                        <option value="podcast">Podcasts</option>
+                        {{#types}}
+                        <option value="{{value}}" {{#selected}}selected{{/selected}}>
+                            {{name}}
+                        </option>
+                        {{/types}}
                     </select>
                 </button>
                 <button action="searchMusic" data-set-target="music-search">

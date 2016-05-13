@@ -86,10 +86,6 @@ function signOut (e, el) {
   })
 }
 
-function searchMusic (e, el) {
-  go('/music?' + objToQueryString(getDataSet(el)))
-}
-
 function simpleUpdate (err, obj, xhr) {
   if (err) return window.alert(err.message)
   loadSubSources(document.querySelector('[role="content"]'))
@@ -191,6 +187,18 @@ function renderHeader () {
   render(el, template, scope)
 }
 
+function searchMusic (e, el) {
+  var data = getDataSet(el)
+  var q = queryStringToObject(window.location.search)
+  var filter = []
+  if (data.type)
+    filter.push('type', data.type)
+  if (data.search)
+    filter.push('title', data.search)
+  q.filter = filter.join(',')
+  go('/music?' + objectToQueryString(q))
+}
+
 function formatDate (date) {
   if (!(date instanceof Date)) date = new Date(date)
   return date.toDateString() // TODO add custom method
@@ -201,7 +209,29 @@ function transformMusic () {
   q.fields = ['title', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
   q.limit  = 25
   q.skip   = parseInt(q.skip) || 0
+  var filters = (q.filter || "").split(',')
+  var search  = ""
+  var type    = ""
+  for (var i=0; i < filters.length; i+=2) {
+    var filter = filters[i]
+    var value = filters[i+1]
+    if (filter == 'title')
+      search = value
+    if (filter == 'type')
+      type = value
+  }
+  var types = [
+    { value: 'Album', name: "Albums" },
+    { value: 'EP', name: "EPs" },
+    { value: 'Single', name: "Singles" },
+    { value: 'Podcast', name: "Podcasts" }
+  ]
+  types.forEach(function (item) {
+    item.selected = type == item.value
+  })
   return {
+    search: search,
+    types: types,
     query: objectToQueryString(q)
   }
 }

@@ -274,10 +274,11 @@ function objectToQueryString (obj) {
 function queryStringToObject (str) {
   var obj = {}
   if (!str) return obj
-  var arr = str.substr(1).split("&")
+  if (str[0] == "?") str = str.substr(1)
+  var arr = str.split("&")
   arr.forEach(function (el) {
     var a = el.split("=")
-    obj[a[0]] = a[1]
+    obj[decodeURIComponent(a[0])] = decodeURIComponent(a[1])
   })
   return obj
 }
