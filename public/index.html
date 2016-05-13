@@ -406,16 +406,22 @@
                     <button class="faux"><i class="fa fa-play-circle"></i></button>
                 </td>
                 <td>{{title}}</td>
-                <td><a href="/artist/{{artistId}}">{{artists}}</a></td>
+                <td>
+                    {{#artists}}
+                    <a href="/artist/{{_id}}">{{name}}</a>
+                    {{/artists}}
+                </td>
                 <td class="push-children-right">
-                    <button class="faux"><i class="fa fa-download"></i></button>
+                    <button class="faux"><i class="fa fa-cloud-download"></i></button>
                     <button class="faux"><i class="fa fa-copyright"></i></button>
+                    {{#canPlaylist}}
                     <select
                         onchange="addToPlaylist(null, this)"
                         source="https://connect.monstercat.com/api/playlist"
                         template="select-playlist"
                         track-id="{{_id}}">
                     </select>
+                    {{/canPlaylist}}
                 </td>
             </tr>
             {{/results}}
@@ -424,18 +430,79 @@
     </table>
 </script>
 
-<script type="text/template" route="^artist\/(.*)">
+<script type="text/template"
+        route="^artist\/(.*)"
+        source="https://connect.monstercat.com/api/catalog/artist/$1?fields=name,websiteDetailsId">
     <div class="page center width">
+        {{#data}}
         <h1>{{name}}</h1>
-        <img src="{{image}}">
+        {{#websiteDetailsId}}
+        <div source="https://connect.monstercat.com/api/website/{{websiteDetailsId}}"
+             template="user-details"></div>
+        {{/websiteDetailsId}}
+        {{^websiteDetailsId}}
         <h2>About</h2>
-        <p>{{about}}</p>
-        <h3>Booking & Managment</h3>
-        <p>{{booking}}</p>
-        <p>{{management}}</p>
+        <p>There are no details.</p>
+        {{/websiteDetailsId}}
+        <br/>
+        <br/>
         <h2>Discography</h2>
-        <ul template="discography"></ul>
+        <br/>
+        <div source="https://connect.monstercat.com/api/catalog/artist/{{_id}}/releases"
+             template="user-releases">
+        </div>
+        {{/data}}
     </div>
+</script>
+
+<script type="text/template"
+        template-name="user-releases"
+        transform="transformReleases">
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <ul>
+        {{#results}}
+        <li>
+            <a href="/release/{{_id}}">
+                <img src="{{cover}}">
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="user-details"
+        transform="mapWebsiteDetails">
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <img src="{{image}}">
+    <h2>About</h2>
+    {{#about}}
+    <p>{{about}}</p>
+    {{/about}}
+    <h3>Booking & Managment</h3>
+    {{#booking}}
+    <p>{{booking}}</p>
+    {{/booking}}
+    {{#management}}
+    <p>{{management}}</p>
+    {{/management}}
+    {{#urls}}
+    <a href="{{.}}">{{.}}</a><br/>
+    {{/urls}}
+    {{/data}}
 </script>
 
 <script type="text/template">
@@ -548,7 +615,7 @@
                     {{#public}}checked{{/public}} />
                 Public
             </label>
-            <button><i class="fa fa-fw fa-download"></i></button>
+            <button><i class="fa fa-fw fa-cloud-download"></i></button>
         </div>
         <table>
             <thead>
@@ -587,7 +654,11 @@
         </td>
         <td>{{title}}</td>
         <td><a href="/release/{{releaseId}}">{{release}}</a></td>
-        <td><a href="/artist/x">{{artists}}</a></td>
+        <td>
+            {{#artists}}
+            <a href="/artist/{{_id}}">{{name}}</a>
+            {{/artists}}
+        </td>
         <td>
             <button class="faux"
                     action="removeFromPlaylist"

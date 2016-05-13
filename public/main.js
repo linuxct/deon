@@ -274,15 +274,50 @@ function mapRelease (o) {
   return o
 }
 
-function transformReleaseTracks (obj) {
-  obj.results = obj.results.map(mapReleaseTrack)
-  return obj
+function toAtlas (arr, key) {
+  var atlas = {}
+  arr.forEach(function (item) {
+    atlas[item[key]] = item
+  })
+  return atlas
+}
+
+function getArtistsAtlas (tks, done) {
+  var ids = []
+  tks.forEach(function(track) {
+    ids = ids.concat(track.artists.map(function (artist) {
+      return artist.artistId
+    }))
+  })
+  ids = uniqueArray(ids)
+  url = endpoint + '/catalog/artist?fields=name,websiteDetailsId&ids=' + ids.join(',')
+  loadCache(url, function (err, aobj) {
+    if (err) return done(err)
+    return done(err, toAtlas(aobj.results, '_id'))
+  })
+}
+
+function mapTrackArtists (track, atlas) {
+  return track.artists.map(function (artist) {
+    return atlas[artist.artistId]
+  })
+}
+
+function transformReleaseTracks (obj, done) {
+  getArtistsAtlas(obj.results, function (err, atlas) {
+    if (!atlas) atlas = {}
+    obj.results.forEach(function (track, index, arr) {
+      mapReleaseTrack(track, index, arr)
+      track.artists = mapTrackArtists(track, atlas)
+    })
+    done(null, obj)
+  })
 }
 
 function mapReleaseTrack (o, index, arr) {
   o.trackNumber = index + 1
   o.index       = index
-  o.artists     = o.artistsTitle
+  o.canPlaylist = session ? session.user : null
   return o
 }
 
@@ -300,22 +335,20 @@ function transformPlaylistTracks (obj, done) {
   var url = endpoint + '/catalog/release?fields=title&ids=' + ids.join(',')
   loadCache(url, function(err, aobj) {
     if (err) return done(err)
-    var releaseAtlas = {}
-    var trackAtlas = {}
-    aobj.results.forEach(function (release) {
-      releaseAtlas[release._id] = release
+    var releaseAtlas = toAtlas(aobj.results, '_id')
+    var trackAtlas = toAtlas(obj.results, '_id')
+    getArtistsAtlas(obj.results, function (err, artistAtlas) {
+      if (!artistAtlas) artistAtlas = {}
+      obj.results = playlist.tracks.map(function (item, index, arr) {
+        var track = mapReleaseTrack(trackAtlas[item.trackId] || {}, index, arr)
+        var release = releaseAtlas[item.releaseId] || {}
+        track.release = release.title
+        track.releaseId = release._id
+        track.artists = mapTrackArtists(track, artistAtlas)
+        return track
+      })
+      done(null, obj)
     })
-    obj.results.forEach(function (track) {
-      trackAtlas[track._id] = track
-    })
-    obj.results = playlist.tracks.map(function (item, index, arr) {
-      var track = mapReleaseTrack(trackAtlas[item.trackId] || {}, index, arr)
-      var release = releaseAtlas[item.releaseId] || {}
-      track.release = release.title
-      track.releaseId = release._id
-      return track
-    })
-    done(err, obj)
   })
 }
 
@@ -326,5 +359,12 @@ function mapAccount (o) {
       selected: item.name == o.location
     }
   })
+  return o
+}
+
+function mapWebsiteDetails (o) {
+  o.image = datapoint + '/blobs/' + o.profileImageBlobId
+  o.booking = o.bookings
+  o.managment = o.managementDetail
   return o
 }
