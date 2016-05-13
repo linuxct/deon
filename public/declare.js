@@ -10,6 +10,7 @@
  *  - Use JSON as transit format.
  *  - You want to use CORS.
  *  - Your main content lies under [role="content"].
+ *  - Uses Maps
  */
 
 function request (opts, done) {
@@ -251,7 +252,20 @@ function getDataSet (el, checkInitial) {
   return obj
 }
 
-function objToQueryString (obj) {
+function cloneObject (obj) {
+  var type = typeof obj
+  if (!obj || type == 'function' || type == 'string' || type == 'number') return obj
+  if (obj instanceof Date) return new Date(obj)
+  if (obj instanceof RegExp) return new RegExp(obj)
+  if (obj instanceof Array) return obj.slice()
+  var nobj = {}
+  for (var key in obj) {
+    nobj[key] = cloneObject(obj[key])
+  }
+  return nobj
+}
+
+function objectToQueryString (obj) {
   return Object.keys(obj).map(function (key) {
     return encodeURIComponent(key) + '=' + encodeURIComponent(obj[key])
   }).join("&")

@@ -67,7 +67,7 @@ function signIn (e, el) {
     getSession(function (err, sess) {
       if (err) return window.alert(err.message)
       session = sess
-      renderHeader(true)
+      renderHeader()
       go("/")
     })
   })
@@ -183,11 +183,10 @@ function saveAccount (e, el) {
 
 function renderHeader () {
   el = document.querySelector('#navigation')
-  template = document.querySelector('[template-name="' +
-                                    el.getAttribute('template') +
-                                    '"]').textContent
+  var target = '[template-name="' + el.getAttribute('template') + '"]'
+  template = document.querySelector(target).textContent
   scope = {
-    user: session.user
+    user: session ? session.user : null
   }
   render(el, template, scope)
 }
@@ -197,10 +196,43 @@ function formatDate (date) {
   return date.toDateString() // TODO add custom method
 }
 
+function transformMusic () {
+  var q    = queryStringToObject(window.location.search)
+  q.fields = ['title', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
+  q.limit  = 25
+  q.skip   = parseInt(q.skip) || 0
+  return {
+    query: objectToQueryString(q)
+  }
+}
+
+function transformMusicReleases (obj) {
+  var q = queryStringToObject(window.location.search)
+  if (!q.limit)
+    q.limit  = 25
+  q.limit = parseInt(q.limit)
+  if (!q.skip)
+    q.skip= 0
+  q.skip = parseInt(q.skip)
+  var next = q.skip + q.limit
+  var prev = q.skip - q.limit
+  if (prev < 0)
+    prev = null
+  if (next > obj.total)
+    next = null
+  var nq    = cloneObject(q)
+  nq.skip   = next
+  var pq    = cloneObject(q)
+  pq.skip   = prev
+  if (next != null) obj.next     = objectToQueryString(nq)
+  if (prev != null) obj.previous = objectToQueryString(pq)
+  return transformReleases(obj)
+}
+
 function transformReleases (obj) {
   obj.results = obj.results.map(mapRelease)
-  obj.count = obj.results.length
-  obj.offset = (parseInt(obj.offset) || 0) + 1
+  obj.skip  = (parseInt(obj.skip) || 0) + 1
+  obj.count = obj.skip + obj.results.length - 1
   return obj
 }
 

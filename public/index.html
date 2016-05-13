@@ -286,9 +286,7 @@
 
 <script type="text/template"
         route="^music(\?.*)?"
-        source="https://connect.monstercat.com/api/catalog/release?limit=25"
-        ox="/releases.json$1"
-        transform="transformReleases">
+        transform="transformMusic">
     <div>
         <div class="page width center">
             <div class="filters pad-vertical push-children-right" data-set="music-search">
@@ -307,38 +305,44 @@
                 </button>
             </div>
         </div>
-        <div class="bg-gray">
-            {{#loading}}
-            <div class="page width center">
-                <i class="fa fa-fw fa-spin fa-refresh"></i>
-            </div>
-            {{/loading}}
-            {{#error}}
-            <div class="page width center">
-                <p>{{message}}</p>
-            </div>
-            {{/error}}
-            {{#data}}
-            <ul class="page width center art-list">
-                {{#results}}
-                <li><a href="/release/{{_id}}">
-                    <img src="{{cover}}"/>
-                    <label class="title">{{title}}</label>
-                    <br/>
-                    <label>{{releaseDate}}</label></a>
-                </li>
-                {{/results}}
-            </ul>
-            {{/data}}
+        <div source="https://connect.monstercat.com/api/catalog/release?{{query}}"
+             template="music-releases">
         </div>
-        {{#data}}
-        <div class="page width center pagination pad-vertical text center">
-            <a href="?offset={{previous}}">Previous</a>
-            <label>{{offset}} - {{count}} of {{total}}</label>
-            <a href="?offset={{next}}">Next</a>
-        </div>
-        {{/data}}
     </div>
+</script>
+
+<script type="text/template"
+        template-name="music-releases"
+        transform="transformMusicReleases">
+    {{#loading}}
+    <div class="page width center">
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+    </div>
+    {{/loading}}
+    {{#error}}
+    <div class="page width center">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <ul class="page width center art-list">
+        {{#results}}
+        <li>
+            <a href="/release/{{_id}}">
+                <img src="{{cover}}"/>
+                <label class="title">{{title}}</label>
+                <br/>
+                <label>{{releaseDate}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    <div class="page width center pagination pad-vertical text center">
+        <a href="?{{previous}}">Previous</a>
+        <label>{{skip}} - {{count}} of {{total}}</label>
+        <a href="?{{next}}">Next</a>
+    </div>
+    {{/data}}
 </script>
 
 <script type="text/template"
