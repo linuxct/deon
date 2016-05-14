@@ -487,18 +487,18 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <img src="{{image}}">
-    <h2>About</h2>
+    {{#image}}
+    <img src="{{image}}"/>
+    {{/image}}
     {{#about}}
+    <h2>About</h2>
     <p>{{about}}</p>
     {{/about}}
+    {{#contact}}
     <h3>Booking & Managment</h3>
-    {{#booking}}
     <p>{{booking}}</p>
-    {{/booking}}
-    {{#management}}
     <p>{{management}}</p>
-    {{/management}}
+    {{/contact}}
     {{#urls}}
     <a href="{{.}}">{{.}}</a><br/>
     {{/urls}}
@@ -672,6 +672,13 @@
     <tr><td colspan="6">No Results.</td></tr>
     {{/results}}
     {{/data}}
+</script>
+
+<script type="text/template" template-name="404">
+    <div class="page width center">
+        <h1>Page Not Found</h1>
+        <p>The page you are looking for is not here.</p>
+    </div>
 </script>
 
 </body>

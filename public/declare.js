@@ -10,7 +10,7 @@
  *  - Use JSON as transit format.
  *  - You want to use CORS.
  *  - Your main content lies under [role="content"].
- *  - Uses Maps
+ *  - Useing ES6 tech (Maps, etc.)
  */
 
 function request (opts, done) {
@@ -120,6 +120,7 @@ function stateChange (url, state) {
     target = el
     break
   }
+  if (!target) target = document.querySelector('script[template-name="404"]')
   if (!target) return
   var container = document.querySelector('[role="content"]')
   var source = target.getAttribute('source')
@@ -220,7 +221,6 @@ function loadSubSources (container, reset) {
 
 function getElementValue (el, value) {
   if (value == undefined) return getElementValue(el, el.value)
-  // var tag  = el.tagName.toLowerCase()
   var type = el.getAttribute('type')
   if (type == 'checkbox') {
     return value == 'on' ? true : false

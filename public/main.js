@@ -195,13 +195,31 @@ function searchMusic (e, el) {
     filter.push('type', data.type)
   if (data.search)
     filter.push('title', data.search)
-  q.filter = filter.join(',')
+  q.filters = filter.join(',')
   go('/music?' + objectToQueryString(q))
 }
 
 function formatDate (date) {
+  if (!formatDate.months) {
+    formatDate.months = [
+      "January",
+      "Feburary",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
+  }
   if (!(date instanceof Date)) date = new Date(date)
-  return date.toDateString() // TODO add custom method
+  return formatDate.months[date.getMonth()] + ' ' +
+    date.getDate() + ', ' +
+    date.getFullYear()
 }
 
 function transformMusic () {
@@ -363,8 +381,12 @@ function mapAccount (o) {
 }
 
 function mapWebsiteDetails (o) {
-  o.image = datapoint + '/blobs/' + o.profileImageBlobId
-  o.booking = o.bookings
-  o.managment = o.managementDetail
+  o.image = o.profileImageBlobId ? datapoint + '/blobs/' + o.profileImageBlobId : undefined
+  if (o.bookings || o.managementDetail) {
+    o.contact = {
+      booking: o.bookings,
+      management: o.managementDetail
+    }
+  }
   return o
 }
