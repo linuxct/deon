@@ -308,7 +308,7 @@ function toAtlas (arr, key) {
 function getArtistsAtlas (tks, done) {
   var ids = []
   tks.forEach(function(track) {
-    ids = ids.concat(track.artists.map(function (artist) {
+    ids = ids.concat((track.artists || []).map(function (artist) {
       return artist.artistId
     }))
   })
@@ -321,7 +321,7 @@ function getArtistsAtlas (tks, done) {
 }
 
 function mapTrackArtists (track, atlas) {
-  return track.artists.map(function (artist) {
+  return (track.artists || []).map(function (artist) {
     return atlas[artist.artistId]
   })
 }
@@ -340,7 +340,8 @@ function transformReleaseTracks (obj, done) {
 function mapReleaseTrack (o, index, arr) {
   o.trackNumber = index + 1
   o.index       = index
-  o.canPlaylist = session ? session.user : null
+  // TODO make method
+  o.canPlaylist = session && session.user ? { _id: o._id } : null
   return o
 }
 
