@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
     <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
     <script type="text/javascript" src="/countries.js"></script>
@@ -681,6 +682,57 @@
     <div class="page width center">
         <h1>Page Not Found</h1>
         <p>The page you are looking for is not here.</p>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^faqs\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{{data}}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^privacy-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Privacy%20Policy.md">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{{data}}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^terms-of-service\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{{data}}}
+        {{/data}}
     </div>
 </script>
 

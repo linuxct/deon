@@ -157,6 +157,17 @@ function cache (source, obj) {
   return _.get(source)
 }
 
+function requestDetect (opts, done, fallback) {
+  var url    = opts.url
+  var method = fallback || request
+  var ext    = url.substring(url.lastIndexOf('.')+1, url.length)
+  if (ext == 'md' || ext == 'markdown') {
+    method = request
+    opts.withCredentials = false // TODO Remove hack
+  }
+  method(opts, done)
+}
+
 function loadCache (source, done, reset) {
   var _ = loadCache._
   if (!_) {
@@ -171,7 +182,7 @@ function loadCache (source, done, reset) {
     _.set(source, callbacks)
   }
   callbacks.push(done)
-  requestJSON({
+  requestDetect({
     url: source,
     withCredentials: true
   }, function (err, obj, xhr) {
@@ -180,7 +191,7 @@ function loadCache (source, done, reset) {
       fn(err, obj)
     })
     _.delete(source)
-  })
+  }, requestJSON)
 }
 
 function loadSource (source, container, template, transform, reset) {

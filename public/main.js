@@ -395,3 +395,7 @@ function mapWebsiteDetails (o) {
   }
   return o
 }
+
+function transformMarkdown (obj) {
+  return marked(obj)
+}
