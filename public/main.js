@@ -13,6 +13,7 @@ var strings   = {
 }
 
 document.addEventListener("DOMContentLoaded", function (e) {
+  renderHeader()
   getSession(function (err, obj, xhr) {
     if (err) console.warn(err.message)
     session = obj
@@ -181,10 +182,14 @@ function renderHeader () {
   el = document.querySelector('#navigation')
   var target = '[template-name="' + el.getAttribute('template') + '"]'
   template = document.querySelector(target).textContent
-  scope = {
-    user: session ? session.user : null
+  var data = null
+  if (session) {
+    data = {}
+    data.user = session ? session.user : null
   }
-  render(el, template, scope)
+  render(el, template, {
+    data: data
+  })
 }
 
 function searchMusic (e, el) {

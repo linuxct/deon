@@ -36,6 +36,7 @@
 <script type="text/template" template-name="navigation">
     <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
     <a class="silent" href="/music"><i class="fa fa-headphones"></i></a>
+    {{#data}}
     {{#user}}
     <a class="silent" href="/playlists"><i class="fa fa-bars"></i></a>
     <a class="silent" href="/account"><i class="fa fa-gear"></i></a>
@@ -43,6 +44,7 @@
     {{^user}}
     <a class="silent" href="/signin">Sign In</a>
     {{/user}}
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -615,6 +617,7 @@
                     {{#public}}checked{{/public}} />
                 Public
             </label>
+            <button><i class="fa fa-fw fa-play"></i></button>
             <button><i class="fa fa-fw fa-cloud-download"></i></button>
         </div>
         <table>
