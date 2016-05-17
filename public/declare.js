@@ -139,6 +139,8 @@ function stateChange (url, state) {
   render(opts.container,
          opts.template,
          opts.transform ? opts.transform() : {})
+  if (typeof opts.completed == 'function')
+    opts.completed()
 }
 
 function render (container, template, scope) {
@@ -239,16 +241,18 @@ function loadSubSources (container, reset) {
   var sources = container.querySelectorAll('[source]')
   for (var i = 0; i < sources.length; i++) {
     var el       = sources[i]
-    var source   = el.getAttribute('source')
-    var template = document.querySelector('[template-name="' +
+    var tel      = document.querySelector('[template-name="' +
                                           el.getAttribute('template') +
                                           '"]')
-    if (!source || !template) continue
-    loadSource(source,
-               el,
-               template.textContent,
-               getMethod(template, 'transform'),
-               reset)
+    if (!tel) continue
+    loadSource({
+      source:    el.getAttribute('source'),
+      container: el,
+      template:  tel.textContent,
+      transform: getMethod(tel, 'transform'),
+      completed: getMethod(tel, 'completed'),
+      reset:     reset
+    })
   }
 }
 
