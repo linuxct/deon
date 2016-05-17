@@ -66,6 +66,67 @@
             </tbody>
         </table>
         <button action="signIn" data-set-target="credentials">Sign In</button>
+        <br/>
+        <br/>
+        <a href="/forgot-password">Forgot your password?</a>
+        <br/>
+        <a href="/sign-up">Don't have an account? Sign up!</a>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^forgot-password">
+    <div class="page width center">
+        <table class="form" data-set="credentials">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td><input type="text" name="email" placeholder="kitty@monstercat.com"/></td>
+                </tr>
+            </tbody>
+        </table>
+        <button action="recoverPassword" data-set-target="credentials">Send Reset Link</button>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^sign-up"
+        transform="mapSignup">
+    <div class="page width center">
+        <table class="form" data-set="credentials">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input type="text"
+                               name="email"
+                               placeholder="kitty@monstercat.com"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Password</th>
+                    <td>
+                        <input type="text"
+                               name="password"
+                               placeholder="a secret"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td>
+                        <select name="location">
+                            <option disabled selected>Select One</option>
+                            {{#countries}}
+                            <optionvalue="{{name}}">
+                                {{name}}
+                            </option>
+                            {{/countries}}
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button action="signUp" data-set-target="credentials">Sign Up</button>
     </div>
 </script>
 
@@ -126,14 +187,6 @@
                                 name="password"
                                 placeholder="New Password"></td>
                 </tr>
-                <tr>
-                    <th colspan="2">
-                        <label>
-                            <input type="checkbox"/>
-                            Skip Non-licensable Tracks
-                        </label>
-                    </th>
-                </tr>
             </tbody>
         </table>
         <button action="saveAccount"
@@ -142,6 +195,41 @@
         </button>
         <button action="signOut">Sign Out</button>
         <br/>
+        <br/>
+        <h2>Settings</h2>
+        <table class="form">
+            <tbody data-set="account">
+                <tr>
+                    <th>Prefered Download Format</th>
+                    <td>
+                        <select>
+                            <option>MP3 V0 (High Quality)</option>
+                            <option>MP3 V2 (Low Quality)</option>
+                            <option>MP3 320kbps</option>
+                            <option>MP3 128kbps</option>
+                            <option>FLAC</option>
+                            <option>WAV</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <label>
+                            <input type="checkbox"
+                                   name="hideNonLicensableTracks"/>
+                            Skip Non-licensable Tracks
+                        </label>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <button action="saveAccountSettings"
+                data-set-target="settings">
+            Update Settings
+        </button>
+        <br/>
+        <br/>
+        <hr/>
         <br/>
         <a href="/services">Manage Services</a>
         <br/>

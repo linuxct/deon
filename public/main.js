@@ -390,13 +390,23 @@ function transformPlaylistTracks (obj, done) {
   })
 }
 
-function mapAccount (o) {
-  o.countries = Countries.map(function (item) {
+function getAccountCountries (current) {
+  return Countries.map(function (item) {
     return {
       name: item.name,
-      selected: item.name == o.location
+      selected: item.name == current
     }
   })
+}
+
+function mapSignup () {
+  return {
+    countries: getAccountCountries()
+  }
+}
+
+function mapAccount (o) {
+  o.countries = getAccountCountries(o.location)
   return o
 }
 
