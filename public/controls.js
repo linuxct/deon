@@ -4,12 +4,14 @@ var sel = {
   play: '[role="play"]',
   playPlaylist: '[role="play-playlist"]',
   playRelease: '[role="play-release"]',
+  scrub: '[role="scrub-progress"]',
   title: '[role="track-title"]'
 }
 
 var playerEvents = {
   statechange: updateControls,
-  play: onNewSong
+  play: onNewSong,
+  timeupdate: onPlayerProgress
 }
 
 document.addEventListener('DOMContentLoaded', function(e) {
@@ -57,7 +59,10 @@ function loadAndPlayTracks(index) {
   }
   else {
     player.set(tracks)
-    player.play(0)
+    player.play(index)
+
+    var el = document.querySelector(sel.title)
+    if (el) el.setAttribute('href', window.location.pathname)
   }
 
   updateControls()
@@ -112,7 +117,7 @@ function updateControls() {
 
   var rel = document.querySelector(sel.playRelease)
   if (rel) {
-    rel.classList.toggle('active', playing && !isReleaseLoaded(rel.getAttribute('release-id')))
+    rel.classList.toggle('active', playing && isReleaseLoaded(rel.getAttribute('release-id')))
   }
 }
 
@@ -121,7 +126,7 @@ function isPlaylistLoaded(id) {
 }
 
 function isReleaseLoaded(id) {
-  return player.items.length && !!player.items[0].releaseId == id
+  return player.items.length && player.items[0].releaseId == id
 }
 
 function mapTrackElToPlayer(el) {
@@ -131,4 +136,12 @@ function mapTrackElToPlayer(el) {
     playlistId: el.getAttribute('playlist-id'),
     releaseId: el.getAttribute('release-id')
   }
+}
+
+function scrub(e, el) {
+  player.seek(e.clientX / el.offsetWidth)
+}
+
+function onPlayerProgress(e) {
+  document.querySelector(sel.scrub).style.width = Math.floor(player.progress * 100) + '%'
 }

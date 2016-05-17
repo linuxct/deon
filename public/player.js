@@ -6,6 +6,7 @@ class MusicPlayer {
     this.audio.addEventListener('error', onError.bind(this))
     this.audio.addEventListener('stalled', onStalled.bind(this))
     this.audio.addEventListener('ended', onEnded.bind(this))
+    this.audio.addEventListener('timeupdate', onTimeUpdate.bind(this))
 
     this.audio.addEventListener('loadedmetadata', onStateChange.bind(this))
     this.audio.addEventListener('loadeddata', onStateChange.bind(this))
@@ -176,6 +177,10 @@ class MusicPlayer {
   set loop(value) {
     this.audio.loop = value
   }
+
+  get progress() {
+    return this.audio.duration ? this.audio.currentTime / this.audio.duration : 0
+  }
 }
 
 function onError(e) {
@@ -204,6 +209,10 @@ function clamp(a, min, max) {
 
 function onStateChange(e) {
   this.dispatchEvent(new CustomEvent('statechange'), {details: { player: this }})
+}
+
+function onTimeUpdate(e) {
+  cloneAndDispatch.call(this, e)
 }
 
 function constructEmitter(obj) {

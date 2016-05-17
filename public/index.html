@@ -15,8 +15,8 @@
 <body>
 
 <header>
-    <div class="scrub">
-        <div class="progress"></div>
+    <div class="scrub" action="scrub">
+        <div class="progress" role="scrub-progress"></div>
     </div>
     <div class="page width center player flex">
         <div class="push-children-right"
@@ -25,7 +25,7 @@
         </div>
         <div class="flex-strong"></div>
         <div class="controls push-children-right">
-            <a href="#" class="silent" action="goToSong" role="track-title">Thought Police - Mr. FijiWiji</a>
+            <a href="#" class="silent" role="track-title">Thought Police - Mr. FijiWiji</a>
             <button class="faux" action="toggleShuffle" role="mode"><i class="fa fa-random"></i></button>
             <button class="faux" action="previous" role="previous"><i class="fa fa-step-backward"></i></button>
             <button class="faux" action="togglePlay"><i class="fa fa-play" role="play"></i></button>
@@ -446,8 +446,7 @@
 <script type="text/template"
         route="^release\/(.*)"
         source="https://connect.monstercat.com/api/catalog/release/$1"
-        transform="mapRelease"
-        completed="completedStub">
+        transform="mapRelease">
     <div class="release page width center">
         {{#loading}}
         <i class="fa fa-spin fa-refresh"></i>
@@ -477,7 +476,8 @@
 
 <script type="text/template"
         template-name="release-tracks"
-        transform="transformReleaseTracks">
+        transform="transformReleaseTracks"
+        completed="completedReleaseTracks">
     <table>
         <thead>
             <tr>
@@ -731,7 +731,7 @@
                 </tr>
             </thead>
             <tbody source="https://connect.monstercat.com/api/playlist/{{_id}}/tracks"
-                    template="playlist-tracks">
+                template="playlist-tracks">
             </tbody>
         </table>
         {{/data}}
@@ -740,7 +740,8 @@
 
 <script type="text/template"
         template-name="playlist-tracks"
-        transform="transformPlaylistTracks">
+        transform="transformPlaylistTracks"
+        completed="completedPlaylistTracks">
     {{#loading}}
     <tr><td colspan="6"><i class="fa fa-fw fa-spin fa-refresh"></i></td></tr>
     {{/loading}}

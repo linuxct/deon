@@ -425,7 +425,7 @@ function mapWebsiteDetails (o) {
   return o
 }
 
-function updatePlayerPlaylist(playlistId, ptracks) {
+function updatePlayerPlaylist (playlistId, ptracks) {
   var url = endpoint + "/playlist/" + playlistId + "/tracks"
   loadCache(url, function(err, obj) {
     if (err) return window.alert(err) // TODO handle this error better
@@ -441,7 +441,10 @@ function transformMarkdown (obj) {
   return marked(obj)
 }
 
-// TODO Remove me, I am a sample
-function completedStub (source, err, obj) {
-  console.log("Page completed.")
+function completedReleaseTracks (source, err, obj) {
+  updateControls()
+}
+
+function completedPlaylistTracks (source, err, obj) {
+  updateControls()
 }
