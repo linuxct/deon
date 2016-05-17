@@ -9,6 +9,8 @@
     <script type="text/javascript" src="/declare.js"></script>
     <script type="text/javascript" src="/countries.js"></script>
     <script type="text/javascript" src="/main.js"></script>
+    <script type="text/javascript" src="/player.js"></script>
+    <script type="text/javascript" src="/controls.js"></script>
 </head>
 <body>
 
@@ -23,12 +25,12 @@
         </div>
         <div class="flex-strong"></div>
         <div class="controls push-children-right">
-            <a href="#" class="silent">Thought Police - Mr. FijiWiji</a>
-            <button class="faux"><i class="fa fa-random"></i></button>
-            <button class="faux"><i class="fa fa-step-backward"></i></button>
-            <button class="faux"><i class="fa fa-play"></i></button>
-            <button class="faux"><i class="fa fa-step-forward"></i></button>
-            <button class="faux"><i class="fa fa-repeat"></i></button>
+            <a href="#" class="silent" action="goToSong" role="track-title">Thought Police - Mr. FijiWiji</a>
+            <button class="faux" action="toggleShuffle" role="mode"><i class="fa fa-random"></i></button>
+            <button class="faux" action="previous" role="previous"><i class="fa fa-step-backward"></i></button>
+            <button class="faux" action="togglePlay"><i class="fa fa-play" role="play"></i></button>
+            <button class="faux" action="next" role=""><i class="fa fa-step-forward"></i></button>
+            <button class="faux" action="toggleRepeat"><i class="fa fa-repeat"></i></button>
         </div>
     </div>
 </header>
@@ -370,7 +372,10 @@
         <h2>{{artists}}</h2>
         <label>Released {{releaseDate}}</label>
         <div class="options pad-vertical push-children-right">
-            <button class="faux"><i class="fa fa-play"></i></button>
+            <button class="faux" action="playSongs" role="play-release" release-id="{{_id}}">
+                <i class="fa fa-play inactive"></i>
+                <i class="fa fa-pause active"></i>
+            </button>
             <button class="faux"><i class="fa fa-download"></i></button>
         </div>
         <div
@@ -406,7 +411,11 @@
             <tr>
                 <td class="shrink">{{trackNumber}}.</td>
                 <td class="shrink nohpad">
-                    <button class="faux"><i class="fa fa-play-circle"></i></button>
+                    <button class="faux" action="playSong" role="play-song" play-link="{{playUrl}}"
+                            title="{{title}}" index="{{index}}" release-id="{{releaseId}}">
+                       <i class="fa fa-play-circle inactive"></i>
+                       <i class="fa fa-pause-circle active"></i>
+                    </button>
                 </td>
                 <td>{{title}}</td>
                 <td>
@@ -618,7 +627,7 @@
                     {{#public}}checked{{/public}} />
                 Public
             </label>
-            <button><i class="fa fa-fw fa-play"></i></button>
+            <button><i class="fa fa-fw fa-play" action="playSongs" role="play-playlist"></i></button>
             <button><i class="fa fa-fw fa-cloud-download"></i></button>
         </div>
         <table>
@@ -654,7 +663,11 @@
     <tr>
         <td>{{trackNumber}}.</td>
         <td class="shrink nohpad">
-            <button class="faux"><i class="fa fa-play-circle"></i></button>
+            <button class="faux" action="playSong" role="play-song" play-link="{{playUrl}}"
+                    title="{{title}}" index="{{index}}" playlist-id="{{playlistId}}">
+                <i class="fa fa-play-circle inactive"></i>
+                <i class="fa fa-pause-circle active"></i>
+            </button>
         </td>
         <td>{{title}}</td>
         <td><a href="/release/{{releaseId}}">{{release}}</a></td>

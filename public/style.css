@@ -250,3 +250,22 @@ td.push-children-right > * {
 .controls a {
   font-size: 16px;
 }
+
+.controls button > i {
+  color: inherit;
+}
+
+.controls button.active > i,
+.controls button:hover {
+  color: dodgerblue;
+}
+
+button.active > i.active,
+button > i.inactive {
+  display: inherit;
+}
+
+button.active > i.inactive,
+button > i.active {
+  display: none;
+}

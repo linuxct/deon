@@ -123,6 +123,7 @@ function removeFromPlaylist (e, el) {
       cache(url, obj)
       if (err) return window.alert(err)
       loadSubSources(document.querySelector('[role="content"]'), true)
+      updatePlayerPlaylist(id, tracks)
       // TODO toast me brah
     })
   })
@@ -151,6 +152,7 @@ function addToPlaylist (e, el) {
       el.selectedIndex = 0
       if (err) return window.alert(err)
       window.alert(strings.addedToPlaylist)
+      updatePlayerPlaylist(id, tracks)
       // TODO toast me brah
     })
   })
@@ -179,9 +181,9 @@ function saveAccount (e, el) {
 }
 
 function renderHeader () {
-  el = document.querySelector('#navigation')
+  var el = document.querySelector('#navigation')
   var target = '[template-name="' + el.getAttribute('template') + '"]'
-  template = document.querySelector(target).textContent
+  var template = document.querySelector(target).textContent
   var data = null
   if (session) {
     data = {}
@@ -313,7 +315,7 @@ function getArtistsAtlas (tks, done) {
     }))
   })
   ids = uniqueArray(ids)
-  url = endpoint + '/catalog/artist?fields=name,websiteDetailsId&ids=' + ids.join(',')
+  var url = endpoint + '/catalog/artist?fields=name,websiteDetailsId&ids=' + ids.join(',')
   loadCache(url, function (err, aobj) {
     if (err) return done(err)
     return done(err, toAtlas(aobj.results, '_id'))
@@ -329,8 +331,11 @@ function mapTrackArtists (track, atlas) {
 function transformReleaseTracks (obj, done) {
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
+    var releaseId = location.pathname.substr(location.pathname.lastIndexOf('/') + 1)
     obj.results.forEach(function (track, index, arr) {
       mapReleaseTrack(track, index, arr)
+      track.releaseId = releaseId
+      track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
     })
     done(null, obj)
@@ -343,6 +348,13 @@ function mapReleaseTrack (o, index, arr) {
   // TODO make method
   o.canPlaylist = session && session.user ? { _id: o._id } : null
   return o
+}
+
+function getPlayUrl (albums, releaseId) {
+  var album = (albums || []).find(function(album) {
+    return album.albumId == releaseId
+  })
+  return album ? datapoint + '/blobs/' + album.streamHash : undefined
 }
 
 function uniqueArray (arr) {
@@ -369,6 +381,8 @@ function transformPlaylistTracks (obj, done) {
         track.release = release.title
         track.releaseId = release._id
         track.artists = mapTrackArtists(track, artistAtlas)
+        track.playlistId = id
+        track.playUrl = getPlayUrl(track.albums, track.releaseId)
         return track
       })
       done(null, obj)
@@ -395,6 +409,19 @@ function mapWebsiteDetails (o) {
     }
   }
   return o
+}
+
+function updatePlayerPlaylist(playlistId, ptracks) {
+  var url = endpoint + "/playlist/" + playlistId + "/tracks"
+  loadCache(url, function(err, obj) {
+    if (err) return window.alert(err)
+    var tracks = obj.results.map(function (item, index) {
+      var track = mapReleaseTrack(item, ptracks[index].releaseId, index)
+      track.playlistId = playlistId
+      return track
+    })
+
+  }, true)
 }
 
 function transformMarkdown (obj) {
