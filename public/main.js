@@ -9,7 +9,10 @@ var strings   = {
   "destroyPlaylist": "Are you sure you want to remove this playlist?",
   "accountUpdated": "Your account information has been saved.",
   "addedToPlaylist": "Song succesfully added to playlist.",
-  "removedFromPlaylist": "Song succesfully removed from playlist."
+  "removedFromPlaylist": "Song succesfully removed from playlist.",
+  "passwordMismatch": "Passwords do not match.",
+  "passwordReset": "Your password has been reset. Please sign in.",
+  "passwordResetEmail": "Check your email for a link to reset your password."
 }
 
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -84,6 +87,40 @@ function signOut (e, el) {
     session.user = null
     renderHeader()
     go("/")
+  })
+}
+
+function recoverPassword (e, el) {
+  var data = getDataSet(el)
+  data.returnUrl = location.protocol + '//' + location.host + '/new-password/:code'
+  requestJSON({
+    url: endhost + '/password/send-verification',
+    method: 'POST',
+    withCredentials: true,
+    data: data
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    window.alert(strings.passwordResetEmail)
+  })
+}
+
+function updatePassword (e, el) {
+  var password = document.querySelector('[role="password"]').value
+  var confirmPassword = document.querySelector('[role="confirm-password"]').value
+  if (!password || password != confirmPassword)
+    return window.alert(strings.passwordMismatch)
+
+  var data = getDataSet(el)
+  data.code = getLastPathnameComponent()
+  requestJSON({
+    url: endhost + '/password/reset',
+    method: 'POST',
+    withCredentials: true,
+    data: data
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    window.alert(strings.passwordReset)
+    go('/signin')
   })
 }
 
@@ -338,7 +375,7 @@ function mapTrackArtists (track, atlas) {
 function transformReleaseTracks (obj, done) {
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
-    var releaseId = location.pathname.substr(location.pathname.lastIndexOf('/') + 1)
+    var releaseId = getLastPathnameComponent()
     obj.results.forEach(function (track, index, arr) {
       mapReleaseTrack(track, index, arr)
       track.releaseId = releaseId
@@ -455,4 +492,8 @@ function completedReleaseTracks (source, err, obj) {
 
 function completedPlaylistTracks (source, err, obj) {
   updateControls()
+}
+
+function getLastPathnameComponent() {
+  return location.pathname.substr(location.pathname.lastIndexOf('/') + 1)
 }

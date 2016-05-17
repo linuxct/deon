@@ -96,6 +96,25 @@
 </script>
 
 <script type="text/template"
+        route="^new-password\/(.*)">
+    <div class="page width center">
+        <table class="form" data-set="password">
+            <tbody>
+                <tr>
+                    <th>Password</th>
+                    <td><input type="password" role="password" name="password" placeholder="New Password"/></td>
+                </tr>
+                <tr>
+                    <th>Confirm Password</th>
+                    <td><input type="password" role="confirm-password" placeholder="Confirm Password"/></td>
+                </tr>
+            </tbody>
+        </table>
+        <button action="updatePassword" data-set-target="password">Update Password</button>
+    </div>
+</script>
+
+<script type="text/template"
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
