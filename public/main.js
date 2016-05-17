@@ -198,11 +198,13 @@ function searchMusic (e, el) {
   var data = getDataSet(el)
   var q = queryStringToObject(window.location.search)
   var filter = []
+  var fuzzy  = []
   if (data.type)
     filter.push('type', data.type)
   if (data.search)
-    filter.push('title', data.search)
+    fuzzy.push('title', data.search)
   q.filters = filter.join(',')
+  q.fuzzy   = fuzzy.join(',')
   go('/music?' + objectToQueryString(q))
 }
 
@@ -229,23 +231,24 @@ function formatDate (date) {
     date.getFullYear()
 }
 
+function commaStringToObject (str) {
+  var obj = {}
+  var arr = (str || "").split(',')
+  for (var i = 0; i < arr.length; i += 2) {
+    obj[arr[i]] = arr[i+1]
+  }
+  return obj
+}
+
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
   q.fields = ['title', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
   q.limit  = 25
   q.skip   = parseInt(q.skip) || 0
-  var filters = (q.filter || "").split(',')
-  var search  = ""
-  var type    = ""
-  for (var i=0; i < filters.length; i+=2) {
-    var filter = filters[i]
-    var value = filters[i+1]
-    if (filter == 'title')
-      search = value
-    if (filter == 'type')
-      type = value
-  }
-  var types = [
+  var fuzzy   = commaStringToObject(q.fuzzy)
+  var filters = commaStringToObject(q.filters)
+  var type    = filters.type || ""
+  var types   = [
     { value: 'Album', name: "Albums" },
     { value: 'EP', name: "EPs" },
     { value: 'Single', name: "Singles" },
@@ -255,9 +258,9 @@ function transformMusic () {
     item.selected = type == item.value
   })
   return {
-    search: search,
-    types: types,
-    query: objectToQueryString(q)
+    search: fuzzy.title || "",
+    types:  types,
+    query:  objectToQueryString(q)
   }
 }
 
