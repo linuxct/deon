@@ -180,6 +180,10 @@ function saveAccount (e, el) {
   })
 }
 
+function buyOutLicense (e, el) {
+  go('/buy-license?' + objectToQueryString(getDataSet(el)))
+}
+
 function renderHeader () {
   var el = document.querySelector('#navigation')
   var target = '[template-name="' + el.getAttribute('template') + '"]'
@@ -439,6 +443,10 @@ function updatePlayerPlaylist (playlistId, ptracks) {
 
 function transformMarkdown (obj) {
   return marked(obj)
+}
+
+function transformBuyOut () {
+  return queryStringToObject(window.location.search)
 }
 
 function completedReleaseTracks (source, err, obj) {

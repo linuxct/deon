@@ -34,7 +34,13 @@
         </div>
     </div>
 </header>
-<section role="content"></section>
+
+<section role="content">
+    <div class="page center width">
+        Loading kitty bits... 
+        <i class="fa fa-fw fa-spin fa-gear"></i>
+    </div>
+</section>
 
 <script type="text/template" template-name="navigation">
     <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
@@ -275,9 +281,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>YouTube</td>
-                    <td>Sample</td>
+                <tr data-set="y">
+                    <td>
+                        <input type="hidden" name="vendor" value="YouTube"/>
+                        YouTube
+                    </td>
+                    <td>
+                        <input type="hidden" name="identity" value="Sample"/>
+                        Sample
+                    </td>
                     <td>$20.00</td>
                     <td>$180.00</td>
                     <td>$5.00</td>
@@ -288,7 +300,8 @@
                         <a href="#">View</a>
                     </td>
                     <td>
-                        <button>Buy Out</button>
+                        <button action="buyOutLicense"
+                                data-set-target="y">Buy Out</button>
                     </td>
                 </tr>
                 <tr>
@@ -303,9 +316,15 @@
                     <td><a href="#">View</a></td>
                     <td></td>
                 </tr>
-                <tr>
-                    <td>Twitch</td>
-                    <td>ZZZ</td>
+                <tr data-set="x">
+                    <td>
+                        <input type="hidden" name="vendor" value="Twitch"/>
+                        Twitch
+                    </td>
+                    <td>
+                        <input type="hidden" name="identity" value="ZZZ"/>
+                        ZZZ
+                    </td>
                     <td>$20.00</td>
                     <td>$180.00</td>
                     <td>$5.00</td>
@@ -314,19 +333,31 @@
                     </td>
                     <td></td>
                     <td>
-                        <button>Buy Out</button>
+                        <button action="buyOutLicense"
+                                data-set-target="x">Buy Out</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <select>
-            <option value="">Select Vendor</option>
-            <option value="YouTube">YouTube</option>
-            <option value="Twitch">Twitch</option>
-            <option value="Beam Pro">Beam Pro</option>
-        </select>
-        <input type="text" placeholder="Identity"/>
-        <button>Add</button>
+        <div data-set="new-license">
+            <select name="vendor">
+                <option value="">Select Vendor</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Twitch">Twitch</option>
+                <option value="Beam Pro">Beam Pro</option>
+            </select>
+            <input type="text" name="identity" placeholder="Identity"/>
+            <button
+                action="addLicenseSubscription"
+                data-set-target="new-license">
+                Add
+            </button>
+            <button
+                action="buyOutLicense"
+                data-set-target="new-license">
+                Buy Out
+            </button>
+        </div>
         <br/>
         <br/>
         <hr/>
@@ -349,6 +380,30 @@
         <br/>
         <br/>
         <a href="/billing">View Billing History</a>
+    </div>
+</script>
+
+<script type="text/template" route="^buy-license" transform="transformBuyOut">
+    <div class="page center width">
+        <h1>Purchase Whitelist License</h1>
+        <p>Buy purchasing a license you will be whitelisted on the desired service under by the identity chosen.</p>
+        <table class="form">
+            <tbody>
+                <tr>
+                    <th>Vendor</th>
+                    <td>{{vendor}}</td>
+                </tr>
+                <tr>
+                    <th>Identity</th>
+                    <td>{{identity}}</td>
+                </tr>
+                <tr>
+                    <th>Total Cost</th>
+                    <td>$--.--</td>
+                </tr>
+            </tbody>
+        </table>
+        <button>Purchase License</button>
     </div>
 </script>
 
@@ -731,7 +786,7 @@
                 </tr>
             </thead>
             <tbody source="https://connect.monstercat.com/api/playlist/{{_id}}/tracks"
-                template="playlist-tracks">
+                    template="playlist-tracks">
             </tbody>
         </table>
         {{/data}}

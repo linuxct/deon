@@ -269,6 +269,8 @@ function getDataSet (el, checkInitial) {
   var obj
   var target = el.getAttribute('data-set-target')
   var setel  = document.querySelector('[data-set="'+target+'"]')
+  if (!setel)
+    return {}
   var els    = setel.querySelectorAll('[name]')
   for (var i = 0; i < els.length; i++) {
     var kel = els[i]
