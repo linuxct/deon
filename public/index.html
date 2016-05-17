@@ -446,7 +446,8 @@
 <script type="text/template"
         route="^release\/(.*)"
         source="https://connect.monstercat.com/api/catalog/release/$1"
-        transform="mapRelease">
+        transform="mapRelease"
+        completed="completedStub">
     <div class="release page width center">
         {{#loading}}
         <i class="fa fa-spin fa-refresh"></i>

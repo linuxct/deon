@@ -122,17 +122,23 @@ function stateChange (url, state) {
   }
   if (!target) target = document.querySelector('script[template-name="404"]')
   if (!target) return
-  var container = document.querySelector('[role="content"]')
   var source = target.getAttribute('source')
-  var transform = getMethod(target, 'transform')
+  var opts = {
+    container: document.querySelector('[role="content"]'),
+    transform: getMethod(target, 'transform'),
+    template:  target.textContent,
+    completed: getMethod(target, 'completed')
+  }
   if (source) {
-    source = source.replace(/\$(\d)/g, function (str, index) {
+    opts.source = source.replace(/\$(\d)/g, function (str, index) {
       return matches[index] || ""
     })
-    loadSource(source, container, target.textContent, transform)
+    loadSource(opts)
     return
   }
-  render(container, target.textContent, (transform ? transform() : {}))
+  render(opts.container,
+         opts.template,
+         opts.transform ? opts.transform() : {})
 }
 
 function render (container, template, scope) {
@@ -194,22 +200,38 @@ function loadCache (source, done, reset) {
   }, requestJSON)
 }
 
-function loadSource (source, container, template, transform, reset) {
+function loadSource () {
+  var opts = arguments[0] || {}
+  if (arguments.length > 1) {
+    opts = {
+      source:    arguments[0],
+      container: arguments[1],
+      template:  arguments[2],
+      transform: arguments[3],
+      reset:     arguments[4]
+    }
+  }
+  var source    = opts.source
+  var container = opts.container
+  var template  = opts.template
+  var transform = opts.transform
+  var completed = opts.completed
+  var reset     = opts.reset
   render(container, template, {loading: true})
   loadCache(source, function (err, obj) {
-    if (obj && transform) {
-      obj = transform(obj, function (err, obj) {
-        render(container, template, {
-          error: err,
-          data: obj
-        })
+    var fn = function (err, obj) {
+      render(container, template, {
+        error: err,
+        data: obj
       })
+      if (typeof completed == 'function')
+        completed(source, err, obj)
+    }
+    if (obj && transform) {
+      obj = transform(obj, fn)
       if (!obj) return
     }
-    render(container, template, {
-      error: err,
-      data: obj
-    })
+    fn(err, obj)
   }, reset)
 }
 

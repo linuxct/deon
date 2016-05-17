@@ -437,3 +437,8 @@ function updatePlayerPlaylist(playlistId, ptracks) {
 function transformMarkdown (obj) {
   return marked(obj)
 }
+
+// TODO Remove me, I am a sample
+function completedStub (source, err, obj) {
+  console.log("Page completed.")
+}
