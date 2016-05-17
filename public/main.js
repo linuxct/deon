@@ -414,7 +414,8 @@ function mapAccount (o) {
 }
 
 function mapWebsiteDetails (o) {
-  o.image = o.profileImageBlobId ? datapoint + '/blobs/' + o.profileImageBlobId : undefined
+  if (o.profileImageBlobId)
+    o.image = datapoint + '/blobs/' + o.profileImageBlobId
   if (o.bookings || o.managementDetail) {
     o.contact = {
       booking: o.bookings,
@@ -427,13 +428,12 @@ function mapWebsiteDetails (o) {
 function updatePlayerPlaylist(playlistId, ptracks) {
   var url = endpoint + "/playlist/" + playlistId + "/tracks"
   loadCache(url, function(err, obj) {
-    if (err) return window.alert(err)
+    if (err) return window.alert(err) // TODO handle this error better
     var tracks = obj.results.map(function (item, index) {
       var track = mapReleaseTrack(item, ptracks[index].releaseId, index)
       track.playlistId = playlistId
       return track
     })
-
   }, true)
 }
 
