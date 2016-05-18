@@ -122,7 +122,7 @@ function updatePassword (e, el) {
 
 function signUp (e, el) {
   requestJSON({
-    url: endhost + '/signup',
+    url: endpoint + '/signup',
     method: 'POST',
     withCredentials: true,
     data: getDataSet(el)
