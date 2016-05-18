@@ -63,11 +63,27 @@
             <tbody>
                 <tr>
                     <th>Email</th>
-                    <td><input type="text" name="email" placeholder="kitty@monstercat.com"/></td>
+                    <td>
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="kitty@monstercat.com"/>
+                    </td>
                 </tr>
                 <tr>
                     <th>Password</th>
-                    <td><input type="password" name="password" placeholder="a secret"/></td>
+                    <td>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="a secret"/>
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -110,12 +126,13 @@
                     <td>
                         <input
                             type="password"
-                            role="password"
                             name="password"
                             placeholder="New Password"/>
                         <button
+                            class="faux"
                             action="togglePassword"
                             toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
                         </button>
                     </td>
                 </tr>
@@ -149,6 +166,12 @@
                         <input type="text"
                                name="password"
                                placeholder="a secret"/>
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
                     </td>
                 </tr>
                 <tr>
@@ -223,9 +246,17 @@
                 </tr>
                 <tr>
                     <th>Change Password</th>
-                    <td><input type="password"
-                                name="password"
-                                placeholder="New Password"></td>
+                    <td>
+                        <input type="password"
+                               name="password"
+                               placeholder="New Password">
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

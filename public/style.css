@@ -94,10 +94,11 @@ table.form input {
   font-size: 18px;
 }
 
+/*
 table.form input[type="text"],
 table.form input[type="password"] {
   width: 100%;
-}
+}*/
 
 table.form th {
   width: 270px;

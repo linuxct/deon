@@ -105,10 +105,8 @@ function recoverPassword (e, el) {
 }
 
 function updatePassword (e, el) {
-  var password = document.querySelector('[role="password"]').value
-  if (!password) return window.alert(strings.passwordMissing)
-
   var data = getDataSet(el)
+  if (!data.password) return window.alert(strings.passwordMissing)
   data.code = queryStringToObject(window.location.search).key
   requestJSON({
     url: endhost + '/password/reset',
@@ -521,7 +519,14 @@ function getLastPathnameComponent() {
 
 function togglePassword (e, el) {
   var target = 'input[name="' + el.getAttribute('toggle-target') + '"]'
-  var tel = document.querySelector(target)
+  var tel    = document.querySelector(target)
   if (!tel) return
-  tel.setAttribute('type', tel.getAttribute('type') == 'password' ? 'text' : 'password')
+  var type   = tel.getAttribute('type') == 'password' ? 'text' : 'password'
+  var cls    = type == 'password' ? 'eye-slash' : 'eye'
+  tel.setAttribute('type', type)
+  var iel    = el.children[0]
+  if (!iel) return
+  iel.classList.remove('fa-eye')
+  iel.classList.remove('fa-eye-slash')
+  iel.classList.add('fa-' + cls)
 }
