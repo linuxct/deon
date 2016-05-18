@@ -10,8 +10,7 @@ var sel = {
 
 var playerEvents = {
   statechange: updateControls,
-  play: onNewSong,
-  timeupdate: onPlayerProgress
+  play: onNewSong
 }
 
 document.addEventListener('DOMContentLoaded', function(e) {
@@ -19,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
   for (var i = 0; i < events.length; i++) {
     player.addEventListener(events[i], playerEvents[events[i]])
   }
+  requestAnimationFrame(updatePlayerProgress)
 })
 
 function togglePlay(e, el) {
@@ -142,6 +142,7 @@ function scrub(e, el) {
   player.seek(e.clientX / el.offsetWidth)
 }
 
-function onPlayerProgress(e) {
-  document.querySelector(sel.scrub).style.width = Math.floor(player.progress * 100) + '%'
+function updatePlayerProgress() {
+  requestAnimationFrame(updatePlayerProgress)
+  document.querySelector(sel.scrub).style.width = player.progress * 100 + '%'
 }
