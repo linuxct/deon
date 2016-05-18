@@ -10,7 +10,7 @@ var strings   = {
   "accountUpdated": "Your account information has been saved.",
   "addedToPlaylist": "Song succesfully added to playlist.",
   "removedFromPlaylist": "Song succesfully removed from playlist.",
-  "passwordMismatch": "Passwords do not match.",
+  "passwordMissing": "You must enter a password.",
   "passwordReset": "Your password has been reset. Please sign in.",
   "passwordResetEmail": "Check your email for a link to reset your password."
 }
@@ -92,7 +92,7 @@ function signOut (e, el) {
 
 function recoverPassword (e, el) {
   var data = getDataSet(el)
-  data.returnUrl = location.protocol + '//' + location.host + '/new-password/:code'
+  data.returnUrl = location.protocol + '//' + location.host + '/reset-password?key=:code'
   requestJSON({
     url: endhost + '/password/send-verification',
     method: 'POST',
@@ -106,12 +106,10 @@ function recoverPassword (e, el) {
 
 function updatePassword (e, el) {
   var password = document.querySelector('[role="password"]').value
-  var confirmPassword = document.querySelector('[role="confirm-password"]').value
-  if (!password || password != confirmPassword)
-    return window.alert(strings.passwordMismatch)
+  if (!password) return window.alert(strings.passwordMissing)
 
   var data = getDataSet(el)
-  data.code = getLastPathnameComponent()
+  data.code = queryStringToObject(window.location.search).key
   requestJSON({
     url: endhost + '/password/reset',
     method: 'POST',
@@ -496,4 +494,11 @@ function completedPlaylistTracks (source, err, obj) {
 
 function getLastPathnameComponent() {
   return location.pathname.substr(location.pathname.lastIndexOf('/') + 1)
+}
+
+function togglePassword (e, el) {
+  var target = 'input[name="' + el.getAttribute('toggle-target') + '"]'
+  var tel = document.querySelector(target)
+  if (!tel) return
+  tel.setAttribute('type', tel.getAttribute('type') == 'password' ? 'text' : 'password')
 }

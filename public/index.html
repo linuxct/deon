@@ -96,17 +96,16 @@
 </script>
 
 <script type="text/template"
-        route="^new-password\/(.*)">
+        route="^reset-password">
     <div class="page width center">
         <table class="form" data-set="password">
             <tbody>
                 <tr>
                     <th>Password</th>
-                    <td><input type="password" role="password" name="password" placeholder="New Password"/></td>
-                </tr>
-                <tr>
-                    <th>Confirm Password</th>
-                    <td><input type="password" role="confirm-password" placeholder="Confirm Password"/></td>
+                    <td>
+                        <input type="password" role="password" name="password" placeholder="New Password"/>
+                        <button action="togglePassword" toggle-target="password"></button>
+                    </td>
                 </tr>
             </tbody>
         </table>
