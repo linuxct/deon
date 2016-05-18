@@ -42,6 +42,11 @@
     </div>
 </section>
 
+<div class="toasts">
+    <div role="toasts">
+    </div>
+</div>
+
 <script type="text/template" template-name="navigation">
     <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
     <a class="silent" href="/music"><i class="fa fa-headphones"></i></a>
@@ -972,6 +977,12 @@
         {{#data}}
         {{{data}}}
         {{/data}}
+    </div>
+</script>
+
+<script type="text/template" template-name="toast">
+    <div class="toast{{#error}} error{{/error}}" >
+        <p>{{message}}</p>
     </div>
 </script>
 

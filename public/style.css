@@ -270,3 +270,32 @@ button.active > i.inactive,
 button > i.active {
   display: none;
 }
+
+.toasts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  pointer-events: none;
+}
+
+.toasts > div {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.toast {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background: dodgerblue;
+  color: white;
+}
+
+.toast.error {
+  background: red;
+}

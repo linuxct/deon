@@ -171,10 +171,14 @@ function removeFromPlaylist (e, el) {
     tracks.splice(index, 1)
     update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
       cache(url, obj)
-      if (err) return window.alert(err)
+      if (err) {
+        toast({
+          message: err.message,
+          error: true
+        })
+      }
       loadSubSources(document.querySelector('[role="content"]'), true)
       updatePlayerPlaylist(id, tracks)
-      // TODO toast me brah
     })
   })
 }
@@ -200,10 +204,16 @@ function addToPlaylist (e, el) {
       cache(url, obj)
       el.disabled = false
       el.selectedIndex = 0
-      if (err) return window.alert(err)
-      window.alert(strings.addedToPlaylist)
+      if (err) {
+        toast({
+          error: true,
+          message: err.message
+        })
+      }
       updatePlayerPlaylist(id, tracks)
-      // TODO toast me brah
+      toast({
+        message: strings.addedToPlaylist
+      })
     })
   })
 }
@@ -386,8 +396,10 @@ function getArtistsAtlas (tks, done) {
 }
 
 function mapTrackArtists (track, atlas) {
-  return (track.artists || []).map(function (artist) {
-    return atlas[artist.artistId]
+  return (track.artists || []).filter(function (obj) {
+    return !!obj
+  }).map(function (artist) {
+    return atlas[artist.artistId] || {}
   })
 }
 
@@ -524,9 +536,23 @@ function togglePassword (e, el) {
   var type   = tel.getAttribute('type') == 'password' ? 'text' : 'password'
   var cls    = type == 'password' ? 'eye-slash' : 'eye'
   tel.setAttribute('type', type)
-  var iel    = el.children[0]
+  var iel    = el.firstElementChild
   if (!iel) return
   iel.classList.remove('fa-eye')
   iel.classList.remove('fa-eye-slash')
   iel.classList.add('fa-' + cls)
+}
+
+function toast (opts) {
+  var container = document.querySelector('[role="toasts"]')
+  if (!container) return
+  var div = document.createElement('div')
+  var template = document.querySelector('[template-name="toast"]')
+  if (!template) return
+  render(div, template.textContent, opts)
+  var el = div.firstElementChild
+  container.appendChild(el)
+  setTimeout(function () {
+    container.removeChild(el)
+  }, opts.time || 3000)
 }
