@@ -122,6 +122,23 @@ function updatePassword (e, el) {
   })
 }
 
+function signUp (e, el) {
+  requestJSON({
+    url: endhost + '/signup',
+    method: 'POST',
+    withCredentials: true,
+    data: getDataSet(el)
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    getSession(function (err, sess) {
+      if (err) return window.alert(err.message)
+      session = sess
+      renderHeader()
+      go("/")
+    })
+  })
+}
+
 function simpleUpdate (err, obj, xhr) {
   if (err) return window.alert(err.message)
   loadSubSources(document.querySelector('[role="content"]'))
