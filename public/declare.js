@@ -13,6 +13,23 @@
  *  - Useing ES6 tech (Maps, etc.)
  */
 
+function cache (source, obj) {
+  var _ = cache._
+  if (!_) {
+    _ = new Map()
+    cache._ = _
+  }
+  if (!arguments.length) {
+    _.clear()
+    return
+  }
+  if (source && obj) {
+    _.set(source, obj)
+    return
+  }
+  return _.get(source)
+}
+
 function request (opts, done) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
@@ -30,6 +47,17 @@ function request (opts, done) {
   xhr.withCredentials = !!opts.withCredentials
   xhr.send(opts.data)
   return xhr
+}
+
+function requestDetect (opts, done, fallback) {
+  var url    = opts.url
+  var method = fallback || request
+  var ext    = url.substring(url.lastIndexOf('.')+1, url.length)
+  if (ext == 'md' || ext == 'markdown') {
+    method = request
+    opts.withCredentials = false // TODO Remove hack
+  }
+  method(opts, done)
 }
 
 function requestJSON (opts, done) {
@@ -61,6 +89,32 @@ function requestJSON (opts, done) {
     }
     done(err, obj, xhr)
   })
+}
+
+function loadCache (source, done, reset) {
+  var _ = loadCache._
+  if (!_) {
+    _ = new Map()
+    loadCache._ = _
+  }
+  var cached = cache(source)
+  if (!reset && cached) return done(null, cached)
+  var callbacks = _.get(source)
+  if (!callbacks) {
+    callbacks = []
+    _.set(source, callbacks)
+  }
+  callbacks.push(done)
+  requestDetect({
+    url: source,
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (obj) cache(source, obj)
+    callbacks.forEach(function (fn) {
+      fn(err, obj)
+    })
+    _.delete(source)
+  }, requestJSON)
 }
 
 function interceptClick (e) {
@@ -143,65 +197,6 @@ function stateChange (url, state) {
     opts.completed()
 }
 
-function render (container, template, scope) {
-  container.innerHTML = Mustache.render(template, scope)
-  loadSubSources(container)
-}
-
-function cache (source, obj) {
-  var _ = cache._
-  if (!_) {
-    _ = new Map()
-    cache._ = _
-  }
-  if (!arguments.length) {
-    _.clear()
-    return
-  }
-  if (source && obj) {
-    _.set(source, obj)
-    return
-  }
-  return _.get(source)
-}
-
-function requestDetect (opts, done, fallback) {
-  var url    = opts.url
-  var method = fallback || request
-  var ext    = url.substring(url.lastIndexOf('.')+1, url.length)
-  if (ext == 'md' || ext == 'markdown') {
-    method = request
-    opts.withCredentials = false // TODO Remove hack
-  }
-  method(opts, done)
-}
-
-function loadCache (source, done, reset) {
-  var _ = loadCache._
-  if (!_) {
-    _ = new Map()
-    loadCache._ = _
-  }
-  var cached = cache(source)
-  if (!reset && cached) return done(null, cached)
-  var callbacks = _.get(source)
-  if (!callbacks) {
-    callbacks = []
-    _.set(source, callbacks)
-  }
-  callbacks.push(done)
-  requestDetect({
-    url: source,
-    withCredentials: true
-  }, function (err, obj, xhr) {
-    if (obj) cache(source, obj)
-    callbacks.forEach(function (fn) {
-      fn(err, obj)
-    })
-    _.delete(source)
-  }, requestJSON)
-}
-
 function loadSource () {
   var opts = arguments[0] || {}
   if (arguments.length > 1) {
@@ -219,6 +214,13 @@ function loadSource () {
   var transform = opts.transform
   var completed = opts.completed
   var reset     = opts.reset
+
+  // Allow using global vars in source.
+  // TODO use a dot lens
+  source = source.replace(/\$(\w+)/g, function (str, name) {
+    return window[name] ? window[name].toString() : name
+  })
+
   render(container, template, {loading: true})
   loadCache(source, function (err, obj) {
     var fn = function (err, obj) {
@@ -254,6 +256,11 @@ function loadSubSources (container, reset) {
       reset:     reset
     })
   }
+}
+
+function render (container, template, scope) {
+  container.innerHTML = Mustache.render(template, scope)
+  loadSubSources(container)
 }
 
 function getElementValue (el, value) {

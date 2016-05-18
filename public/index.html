@@ -87,7 +87,12 @@
             <tbody>
                 <tr>
                     <th>Email</th>
-                    <td><input type="text" name="email" placeholder="kitty@monstercat.com"/></td>
+                    <td>
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="kitty@monstercat.com"/>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -103,13 +108,24 @@
                 <tr>
                     <th>Password</th>
                     <td>
-                        <input type="password" role="password" name="password" placeholder="New Password"/>
-                        <button action="togglePassword" toggle-target="password"></button>
+                        <input
+                            type="password"
+                            role="password"
+                            name="password"
+                            placeholder="New Password"/>
+                        <button
+                            action="togglePassword"
+                            toggle-target="password">
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button action="updatePassword" data-set-target="password">Update Password</button>
+        <button
+            action="updatePassword"
+            data-set-target="password">
+            Update Password
+        </button>
     </div>
 </script>
 
@@ -141,7 +157,7 @@
                         <select name="location">
                             <option disabled selected>Select One</option>
                             {{#countries}}
-                            <optionvalue="{{name}}">
+                            <option value="{{name}}">
                                 {{name}}
                             </option>
                             {{/countries}}
@@ -156,7 +172,7 @@
 
 <script type="text/template"
         route="^account"
-        source="https://connect.monstercat.com/api/self"
+        source="$endpoint/self"
         transform="mapAccount">
     <div class="page width center">
         <h1>My Account</h1>
@@ -245,6 +261,15 @@
                         </label>
                     </th>
                 </tr>
+                <tr>
+                    <th colspan="2">
+                        <label>
+                            <input type="checkbox"
+                                   name="playlistPublicByDefault"/>
+                            Make Playlists Public By Default
+                        </label>
+                    </th>
+                </tr>
             </tbody>
         </table>
         <button action="saveAccountSettings"
@@ -268,7 +293,8 @@
     </div>
 </script>
 
-<script type="text/template" route="^services$">
+<script type="text/template"
+        route="^services$">
     <div class="page width center">
         <h1>Manage Services</h1>
         <h2>Gold Access</h2>
@@ -476,7 +502,7 @@
                 </button>
             </div>
         </div>
-        <div source="https://connect.monstercat.com/api/catalog/release?{{query}}"
+        <div source="$endpoint/catalog/release?{{query}}"
              template="music-releases">
         </div>
     </div>
@@ -518,7 +544,7 @@
 
 <script type="text/template"
         route="^release\/(.*)"
-        source="https://connect.monstercat.com/api/catalog/release/$1"
+        source="$endpoint/catalog/release/$1"
         transform="mapRelease">
     <div class="release page width center">
         {{#loading}}
@@ -540,7 +566,7 @@
             <button class="faux"><i class="fa fa-download"></i></button>
         </div>
         <div
-            source="https://connect.monstercat.com/api/catalog/release/{{_id}}/tracks"
+            source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
         {{/data}}
@@ -573,8 +599,14 @@
             <tr>
                 <td class="shrink">{{trackNumber}}.</td>
                 <td class="shrink nohpad">
-                    <button class="faux" action="playSong" role="play-song" play-link="{{playUrl}}"
-                            title="{{title}}" index="{{index}}" release-id="{{releaseId}}">
+                    <button
+                        class="faux"
+                        action="playSong"
+                        role="play-song"
+                        play-link="{{playUrl}}"
+                        title="{{title}}"
+                        index="{{index}}"
+                        release-id="{{releaseId}}">
                        <i class="fa fa-play-circle inactive"></i>
                        <i class="fa fa-pause-circle active"></i>
                     </button>
@@ -591,7 +623,7 @@
                     {{#canPlaylist}}
                     <select
                         onchange="addToPlaylist(null, this)"
-                        source="https://connect.monstercat.com/api/playlist"
+                        source="$endpoint/playlist"
                         template="select-playlist"
                         track-id="{{_id}}">
                     </select>
@@ -606,12 +638,12 @@
 
 <script type="text/template"
         route="^artist\/(.*)"
-        source="https://connect.monstercat.com/api/catalog/artist/$1?fields=name,websiteDetailsId">
+        source="$endpoint/catalog/artist/$1?fields=name,websiteDetailsId">
     <div class="page center width">
         {{#data}}
         <h1>{{name}}</h1>
         {{#websiteDetailsId}}
-        <div source="https://connect.monstercat.com/api/website/{{websiteDetailsId}}"
+        <div source="$endpoint/website/{{websiteDetailsId}}"
              template="user-details"></div>
         {{/websiteDetailsId}}
         {{^websiteDetailsId}}
@@ -622,7 +654,7 @@
         <br/>
         <h2>Discography</h2>
         <br/>
-        <div source="https://connect.monstercat.com/api/catalog/artist/{{_id}}/releases"
+        <div source="$endpoint/catalog/artist/{{_id}}/releases"
              template="user-releases">
         </div>
         {{/data}}
@@ -726,7 +758,7 @@
                 </tr>
             </thead>
             <tbody
-            source="https://connect.monstercat.com/api/playlist?fields=name,public"
+                source="$endpoint/playlist?fields=name,public"
                 template="playlists">
             </tbody>
         </table>
@@ -767,7 +799,7 @@
 
 <script type="text/template"
         route="^playlist\/(.*)"
-        source="https://connect.monstercat.com/api/playlist/$1?fields=name,public,tracks">
+        source="$endpoint/playlist/$1?fields=name,public,tracks">
     <div class="page width center">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
@@ -803,8 +835,8 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody source="https://connect.monstercat.com/api/playlist/{{_id}}/tracks"
-                    template="playlist-tracks">
+            <tbody source="$endpoint/playlist/{{_id}}/tracks"
+                   template="playlist-tracks">
             </tbody>
         </table>
         {{/data}}

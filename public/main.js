@@ -232,6 +232,12 @@ function saveAccount (e, el) {
   })
 }
 
+function saveAccountSettings (e, el) {
+  var data = getDataSet(el, true)
+  if (!data) return
+  // TODO finish me!
+}
+
 function buyOutLicense (e, el) {
   go('/buy-license?' + objectToQueryString(getDataSet(el)))
 }
