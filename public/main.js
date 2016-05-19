@@ -15,30 +15,30 @@ var strings   = {
   "passwordResetEmail": "Check your email for a link to reset your password."
 }
 var downloadOptions = [
-    {
-      type: "wav",
-      name: "WAV (Original)"
-    }, {
-      type: 'flac',
-      name: 'FLAC'
-    }, {
-      type: "mp3",
-      quality: 320,
-      name: "MP3 320"
-    }, {
-      type: "mp3",
-      quality: 0,
-      name: "MP3 V0"
-    }, {
-      type: "mp3",
-      quality: 2,
-      name: "MP3 V2"
-    }, {
-      type: "mp3",
-      quality: 128,
-      name: "MP3 128"
-    }
-  ];
+  {
+    type: "wav",
+    name: "WAV (Original)"
+  }, {
+    type: 'flac',
+    name: 'FLAC'
+  }, {
+    type: "mp3",
+    quality: 320,
+    name: "MP3 320"
+  }, {
+    type: "mp3",
+    quality: 0,
+    name: "MP3 V0"
+  }, {
+    type: "mp3",
+    quality: 2,
+    name: "MP3 V2"
+  }, {
+    type: "mp3",
+    quality: 128,
+    name: "MP3 128"
+  }
+]
 
 document.addEventListener("DOMContentLoaded", function (e) {
   renderHeader()
@@ -247,8 +247,8 @@ function buyOutLicense (e, el) {
 }
 
 function searchMusic (e, el) {
-  var data = getDataSet(el)
-  var q = queryStringToObject(window.location.search)
+  var data   = getDataSet(el)
+  var q      = queryStringToObject(window.location.search)
   var filter = []
   var fuzzy  = []
   if (data.type)
@@ -406,14 +406,6 @@ function updatePlayerPlaylist (playlistId, ptracks) {
       return track
     })
   }, true)
-}
-
-function completedReleaseTracks (source, err, obj) {
-  updateControls()
-}
-
-function completedPlaylistTracks (source, err, obj) {
-  updateControls()
 }
 
 // TODO rename to getTrackArtistsByAtlas

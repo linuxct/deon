@@ -630,7 +630,9 @@
         <h2>{{artists}}</h2>
         <label>Released {{releaseDate}}</label>
         <div class="options pad-vertical push-children-right">
-            <button class="faux" release-id="{{_id}}"><i class="fa fa-download"></i></button>
+            <button class="faux" release-id="{{_id}}">
+                <i class="fa fa-cloud-download"></i>
+            </button>
             <button class="faux" action="playSongs" role="play-release" release-id="{{_id}}">
                 <i class="fa fa-play inactive"></i>
                 <i class="fa fa-pause active"></i>
@@ -647,7 +649,7 @@
 <script type="text/template"
         template-name="release-tracks"
         transform="transformReleaseTracks"
-        completed="completedReleaseTracks">
+        completed="updateControls">
     <table>
         <thead>
             <tr>
@@ -923,7 +925,7 @@
 <script type="text/template"
         template-name="playlist-tracks"
         transform="transformPlaylistTracks"
-        completed="completedPlaylistTracks">
+        completed="updateControls">
     {{#loading}}
     <tr><td colspan="6"><i class="fa fa-fw fa-spin fa-refresh"></i></td></tr>
     {{/loading}}
@@ -935,8 +937,13 @@
     <tr>
         <td>{{trackNumber}}.</td>
         <td class="shrink nohpad">
-            <button class="faux" action="playSong" role="play-song" play-link="{{playUrl}}"
-                    title="{{title}}" index="{{index}}" playlist-id="{{playlistId}}">
+            <button class="faux"
+                    action="playSong"
+                    role="play-song"
+                    play-link="{{playUrl}}"
+                    title="{{title}}"
+                    index="{{index}}"
+                    playlist-id="{{playlistId}}">
                 <i class="fa fa-play-circle inactive"></i>
                 <i class="fa fa-pause-circle active"></i>
             </button>
@@ -949,12 +956,16 @@
             {{/artists}}
         </td>
         <td>
-            <button class="faux" track-id="{{_id}}" release-id="{{releaseId}}"><i class="fa fa-cloud-download"></i></button>
-            <button 
-              class="faux" 
-              action="openTrackCopyCredits" 
-              release-id="{{releaseId}}"" 
-              track-id="{{_id}}"><i class="fa fa-copyright"></i></button>
+            <button class="faux" track-id="{{_id}}" release-id="{{releaseId}}">
+                <i class="fa fa-cloud-download"></i>
+            </button>
+            <button
+                class="faux"
+                action="openTrackCopyCredits"
+                release-id="{{releaseId}}"
+                track-id="{{_id}}">
+                <i class="fa fa-copyright"></i>
+            </button>
 
             <button class="faux"
                     action="removeFromPlaylist"
