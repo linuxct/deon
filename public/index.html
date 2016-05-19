@@ -47,6 +47,17 @@
     </div>
 </div>
 
+<div role="modals"></div>
+
+<script type="text/template" template-name="subscription-required-modal">
+    <div class="modal-window">
+        <h1>Sign Up!</h1>
+        <p>You need a subscription to do that!</p>
+        <a href="/sign-up">Sign Up Here</a>
+        <button action="closeModal"></button>
+    </div>
+</script>
+
 <script type="text/template" template-name="navigation">
     <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
     <a class="silent" href="/music"><i class="fa fa-headphones"></i></a>
@@ -59,6 +70,30 @@
     <a class="silent" href="/signin">Sign In</a>
     {{/user}}
     {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="track-copycredits-modal"
+        transform="loadReleaseAndTrack">
+  <div class="modal-window">
+    {{#loading}}
+    ...
+    {{/loading}}
+    {{#err}}
+    <div class="modal-body">
+      <p>Error: {{message}}</p>
+    </div>
+    {{/err}}
+    {{#data}}
+    <div class="modal-header">
+      <button type="button" action="closeModal" class="modal-x"><i class="fa fa-remove"></i></button>
+      <h2>{{track.title}} by {{track.artistsTitle}}</h2>
+    </div>
+    <div class="modal-body">
+      <textarea class="copycredits">{{track.copycredit}}</textarea>
+    </div>
+    {{/data}}
+  </div>
 </script>
 
 <script type="text/template"
@@ -320,7 +355,7 @@
         <br/>
         <a href="/billing">View Billing History</a>
         <br/>
-        <a href="/faqs">FAQ's</a>
+        <a href="/faqs">FAQs</a>
         <br/>
         <a href="/terms-of-service">Terms of Service</a>
         <br/>
@@ -595,11 +630,11 @@
         <h2>{{artists}}</h2>
         <label>Released {{releaseDate}}</label>
         <div class="options pad-vertical push-children-right">
+            <button class="faux" release-id="{{_id}}"><i class="fa fa-download"></i></button>
             <button class="faux" action="playSongs" role="play-release" release-id="{{_id}}">
                 <i class="fa fa-play inactive"></i>
                 <i class="fa fa-pause active"></i>
             </button>
-            <button class="faux"><i class="fa fa-download"></i></button>
         </div>
         <div
             source="$endpoint/catalog/release/{{_id}}/tracks"
@@ -654,8 +689,14 @@
                     {{/artists}}
                 </td>
                 <td class="push-children-right">
-                    <button class="faux"><i class="fa fa-cloud-download"></i></button>
-                    <button class="faux"><i class="fa fa-copyright"></i></button>
+                    <button class="faux" track-id="{{_id}}" release-id="{{releaseId}}"><i class="fa fa-cloud-download"></i></button>
+                    <button
+                        class="faux"
+                        action="openTrackCopyCredits"
+                        release-id="{{releaseId}}"
+                        track-id="{{_id}}">
+                        <i class="fa fa-copyright"></i>
+                    </button>
                     {{#canPlaylist}}
                     <select
                         onchange="addToPlaylist(null, this)"
@@ -908,6 +949,13 @@
             {{/artists}}
         </td>
         <td>
+            <button class="faux" track-id="{{_id}}" release-id="{{releaseId}}"><i class="fa fa-cloud-download"></i></button>
+            <button 
+              class="faux" 
+              action="openTrackCopyCredits" 
+              release-id="{{releaseId}}"" 
+              track-id="{{_id}}"><i class="fa fa-copyright"></i></button>
+
             <button class="faux"
                     action="removeFromPlaylist"
                     playlist-position="{{index}}">

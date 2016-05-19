@@ -1,7 +1,7 @@
 var express = require('express')
 var path    = require('path')
 
-var dir = process.env.PUBLIC_DIR || ''
+var dir = process.env.PUBLIC_DIR || process.cwd() + '/public'
 if (!path.isAbsolute(dir)) dir = path.resolve(process.cwd(), dir)
 var app = express()
 app.use(express.static(dir))

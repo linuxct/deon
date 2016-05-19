@@ -14,6 +14,31 @@ var strings   = {
   "passwordReset": "Your password has been reset. Please sign in.",
   "passwordResetEmail": "Check your email for a link to reset your password."
 }
+var downloadOptions = [
+    {
+      type: "wav",
+      name: "WAV (Original)"
+    }, {
+      type: 'flac',
+      name: 'FLAC'
+    }, {
+      type: "mp3",
+      quality: 320,
+      name: "MP3 320"
+    }, {
+      type: "mp3",
+      quality: 0,
+      name: "MP3 V0"
+    }, {
+      type: "mp3",
+      quality: 2,
+      name: "MP3 V2"
+    }, {
+      type: "mp3",
+      quality: 128,
+      name: "MP3 128"
+    }
+  ];
 
 document.addEventListener("DOMContentLoaded", function (e) {
   renderHeader()
@@ -364,11 +389,29 @@ function transformReleases (obj) {
   return obj
 }
 
+function createCopycredit (title, urls) {
+  var credit = 'Title: ' + title + "\n";
+  var prefixes = {
+    'youtube' : 'Video Link: ',
+    'itunes' : 'iTunes Download Link: ',
+    'spotify': 'Listen on Spotify: '
+  };
+  urls.forEach(function (url) {
+    for(var site in prefixes) {
+      if(url.indexOf(site) > 0) {
+        credit += prefixes[site] + url + "\n";
+      }
+    }
+  })
+  return credit;
+}
+
 function mapRelease (o) {
   o.releaseDate = formatDate(o.releaseDate)
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
   o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
+  o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
   return o
 }
 
@@ -382,6 +425,7 @@ function toAtlas (arr, key) {
 
 function getArtistsAtlas (tks, done) {
   var ids = []
+  tks = tks || [];
   tks.forEach(function(track) {
     ids = ids.concat((track.artists || []).map(function (artist) {
       return artist.artistId
@@ -403,6 +447,39 @@ function mapTrackArtists (track, atlas) {
   })
 }
 
+function getArtistsTitle(artists) {
+  if(artists.length == 0) {
+    return '';
+  }
+
+  if(artists.length == 1) {
+    return artists[0].name
+  }
+
+  var names = artists.map(function(artist) { return artist.name});
+  var last = names.pop();
+  return names.join(', ') + ' & ' + last;
+}
+
+//Takes in {releaseId: '12321', trackId: '23tj23'} for obj
+function loadReleaseAndTrack (obj, done) {
+  loadCache(endpoint + '/track/' + obj.trackId, function(err, res) {
+    if(err) {
+      return done(err);
+    }
+    var track = res;
+    loadCache(endpoint + '/release/' + obj.releaseId, function(err, res2) {
+      if(err) {
+        return done(err);
+      }
+      var release = res2;
+      track.copycredit = createCopycredit(track.title + ' by ' + track.artistsTitle + ' from ' + release.title, release.urls)
+      done(null, {track: track, release: release});
+    });
+  });
+  return;
+}
+
 function transformReleaseTracks (obj, done) {
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
@@ -412,6 +489,7 @@ function transformReleaseTracks (obj, done) {
       track.releaseId = releaseId
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
+      track.artsistsTitle = getArtistsTitle(track.artists)
     })
     done(null, obj)
   })
@@ -458,6 +536,7 @@ function transformPlaylistTracks (obj, done) {
         track.artists = mapTrackArtists(track, artistAtlas)
         track.playlistId = id
         track.playUrl = getPlayUrl(track.albums, track.releaseId)
+        track.artsistsTitle = getArtistsTitle(track.artists)
         return track
       })
       done(null, obj)
@@ -497,6 +576,70 @@ function mapWebsiteDetails (o) {
   return o
 }
 
+function getTrackDownloadLinks(trackId, releaseId, done) {
+  loadCache(endpoint + '/catalog/track/' + trackId, function(err, track) {
+    if(err) done(err)
+    var dlLinks = []
+    var opts = downloadOptions
+    for(var i in opts) {
+      var option = opts[i]
+      var query = {
+        method: 'download',
+        format: option.type,
+        track: trackId
+      }
+      if(option.quality) {
+        var quality = parseInt(option.quality);
+        if(quality >= 10) {
+          query.bitRate = quality;
+        }
+        else {
+          query.quality = quality;
+        }
+      }
+      dlLinks.push({
+        downloadLink: endpoint + '/release/' + releaseId +
+          '/download?' + objectToQueryString(query),
+        download: track.artistsTitle + ' - ' + track.title +
+          '.' + option.type,
+        name: option.name
+      });
+    }
+    done(null, dlLinks);
+  });
+}
+
+function requireSubOrModal() {
+  if(isSubbed()) {
+    return true;
+  }
+  openModal('subscription-required-modal')
+  return false;
+}
+
+var subbed = true;
+function isSubbed() {
+  if(session == null) {
+    return false;
+  }
+
+  if(!session.user) {
+    return false;
+  }
+
+  //TODO: Remove this, it's just for testing
+  subbed = !subbed;
+  return subbed;
+
+  return session.user.subscribed;
+}
+
+
+//TODO: have this actually do something
+function subscriptionGo() {
+  alert('Go to connect.monstercat.com to buy a subscription');
+}
+
 function updatePlayerPlaylist (playlistId, ptracks) {
   var url = endpoint + "/playlist/" + playlistId + "/tracks"
   loadCache(url, function(err, obj) {
@@ -525,7 +668,7 @@ function completedPlaylistTracks (source, err, obj) {
   updateControls()
 }
 
-function getLastPathnameComponent() {
+function getLastPathnameComponent () {
   return location.pathname.substr(location.pathname.lastIndexOf('/') + 1)
 }
 
@@ -555,4 +698,32 @@ function toast (opts) {
   setTimeout(function () {
     container.removeChild(el)
   }, opts.time || 3000)
+}
+
+function openTrackCopyCredits (e, el) {
+  openModal('track-copycredits-modal', {
+    trackId:   el.getAttribute('track-id'),
+    releaseId: el.getAttribute('release-id')
+  })
+}
+
+function openModal (name, data) {
+  var el         = getTemplateEl(name)
+  var opts       = getElementSourceOptions(el)
+  var container  = document.querySelector('[role="modals"]')
+  opts.container = container
+  opts.data      = data
+  if (opts.source) {
+    loadSource(opts)
+  }
+  else {
+    renderTemplateOptions(opts)
+  }
+  container.classList.add('open')
+}
+
+function closeModal () {
+  var container = document.querySelector('[role="modals"]')
+  container.classList.remove('open')
+  container.removeChild(container.firstElementChild)
 }

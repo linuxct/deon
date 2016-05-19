@@ -174,11 +174,16 @@ function stateChange (url, state) {
     target = el
     break
   }
-  if (!target) target = document.querySelector('script[template-name="404"]')
+  if (!target) target = getTemplateEl('404')
   if (!target) return
+  var container = document.querySelector('[role="content"]')
+  openRoute(target, container, matches)
+}
+
+function openRoute (target, container, matches) {
   var source = target.getAttribute('source')
   var opts = {
-    container: document.querySelector('[role="content"]'),
+    container: container,
     transform: getMethod(target, 'transform'),
     template:  target.textContent,
     completed: getMethod(target, 'completed')
@@ -190,29 +195,13 @@ function stateChange (url, state) {
     loadSource(opts)
     return
   }
-  render(opts.container,
-         opts.template,
-         opts.transform ? opts.transform() : {})
-  if (typeof opts.completed == 'function')
-    opts.completed()
+  renderTemplateOptions(opts)
 }
 
-function loadSource () {
-  var opts = arguments[0] || {}
-  if (arguments.length > 1) {
-    opts = {
-      source:    arguments[0],
-      container: arguments[1],
-      template:  arguments[2],
-      transform: arguments[3],
-      reset:     arguments[4]
-    }
-  }
+function loadSource (opts) {
   var source    = opts.source
   var container = opts.container
   var template  = opts.template
-  var transform = opts.transform
-  var completed = opts.completed
   var reset     = opts.reset
 
   // Allow using global vars in source.
@@ -224,43 +213,78 @@ function loadSource () {
   render(container, template, {loading: true})
   loadCache(source, function (err, obj) {
     var fn = function (err, obj) {
-      render(container, template, {
-        error: err,
+      delete opts.transform
+      opts.data = {
+        err: err,
         data: obj
-      })
-      if (typeof completed == 'function')
-        completed(source, err, obj)
+      }
+      renderTemplateOptions(opts)
     }
-    if (obj && transform) {
-      obj = transform(obj, fn)
-      if (!obj) return
-    }
-    fn(err, obj)
+    if (err) return fn(err, obj)
+    applyTransform(opts.transform, obj, fn)
   }, reset)
 }
 
 function loadSubSources (container, reset) {
   var sources = container.querySelectorAll('[source]')
   for (var i = 0; i < sources.length; i++) {
-    var el       = sources[i]
-    var tel      = document.querySelector('[template-name="' +
-                                          el.getAttribute('template') +
-                                          '"]')
-    if (!tel) continue
-    loadSource({
-      source:    el.getAttribute('source'),
-      container: el,
-      template:  tel.textContent,
-      transform: getMethod(tel, 'transform'),
-      completed: getMethod(tel, 'completed'),
-      reset:     reset
+    var opts = getElementSourceOptions(sources[i])
+    opts.reset = reset
+    loadSource(opts)
+  }
+}
+
+function getElementSourceOptions (el) {
+  var tel = getTemplateEl(el.getAttribute('template')) || el;
+  return {
+    source:    el.getAttribute('source'),
+    container: el,
+    template:  tel.textContent,
+    transform: getMethod(tel, 'transform'),
+    completed: getMethod(tel, 'completed'),
+  }
+}
+
+function applyTransform (transform, data, done) {
+  if (typeof transform == 'function') {
+    data = transform(data, done)
+    if (!data) return
+  }
+  done(null, data)
+}
+
+function renderTemplateOptions (opts) {
+  var container = opts.container
+  var template  = opts.template
+  var transform = opts.transform
+  var completed = opts.completed
+  var data      = opts.data
+
+  var fa = function (data) {
+    render(container, template, data)
+    if (typeof completed == 'function')
+      completed(opts.source, err, obj)
+  }
+  var fn = function (err, obj) {
+    fa({
+      err: err,
+      data: obj
     })
   }
+  if (transform)
+    return applyTransform(transform, data, fn)
+  render(container, template, data)
+  if (typeof completed == 'function')
+    completed(opts.source, null, data)
 }
 
 function render (container, template, scope) {
   container.innerHTML = Mustache.render(template, scope)
   loadSubSources(container)
+}
+
+function getTemplateEl(name) {
+  return document.querySelector('[template-name="' + name + '"]');
 }
 
 function getElementValue (el, value) {
