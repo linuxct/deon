@@ -290,7 +290,7 @@ function getElementValue (el, value) {
   if (value == undefined) return getElementValue(el, el.value)
   var type = el.getAttribute('type')
   if (type == 'checkbox') {
-    return value == 'on' ? true : false
+    return el.checked
   }
   return value
 }

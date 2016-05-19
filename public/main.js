@@ -251,7 +251,7 @@ function saveAccountSettings (e, el) {
   if (!data) return
 
   var id = session && session.user ? session.user.userSettingsId : undefined
-  update('user-settings', id, data, function (err, settings) {
+  update('self/settings', id, data, function (err, settings) {
     if (err) return window.alert(err.message)
     window.alert(strings.settingsUpdated)
     session.settings = settings
