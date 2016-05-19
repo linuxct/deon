@@ -46,37 +46,13 @@ document.addEventListener("DOMContentLoaded", function (e) {
     if (err) console.warn(err.message)
     session = obj
     renderHeader()
-    window.addEventListener("popstate", popState)
+    window.addEventListener("popstate", function popState (e) {
+      stateChange(location.pathname + location.search, e.state)
+    })
     document.addEventListener("click", interceptClick)
     stateChange(location.pathname + location.search)
   })
 })
-
-function popState(e) {
-  stateChange(location.pathname + location.search, e.state)
-}
-
-function requestSimple (method, what, obj, done) {
-  requestJSON({
-    url: endpoint + '/' + what,
-    method: method,
-    data: obj,
-    withCredentials: true
-  }, done)
-}
-
-function create (what, obj, done) {
-  requestSimple("POST", what, obj, done)
-}
-
-function update (what, id, obj, done) {
-  var path = id ? what + '/' + id : what
-  requestSimple("PATCH", path, obj, done)
-}
-
-function destroy (what, id, done) {
-  requestSimple("DELETE", what + '/' + id, null, done)
-}
 
 function getSession (done) {
   requestJSON({
@@ -160,11 +136,6 @@ function signUp (e, el) {
       go("/")
     })
   })
-}
-
-function simpleUpdate (err, obj, xhr) {
-  if (err) return window.alert(err.message)
-  loadSubSources(document.querySelector('[role="content"]'))
 }
 
 function createPlaylist (e, el) {
@@ -275,20 +246,6 @@ function buyOutLicense (e, el) {
   go('/buy-license?' + objectToQueryString(getDataSet(el)))
 }
 
-function renderHeader () {
-  var el = document.querySelector('#navigation')
-  var target = '[template-name="' + el.getAttribute('template') + '"]'
-  var template = document.querySelector(target).textContent
-  var data = null
-  if (session) {
-    data = {}
-    data.user = session ? session.user : null
-  }
-  render(el, template, {
-    data: data
-  })
-}
-
 function searchMusic (e, el) {
   var data = getDataSet(el)
   var q = queryStringToObject(window.location.search)
@@ -333,6 +290,215 @@ function commaStringToObject (str) {
     obj[arr[i]] = arr[i+1]
   }
   return obj
+}
+
+function createCopycredit (title, urls) {
+  var credit = 'Title: ' + title + "\n";
+  var prefixes = {
+    'youtube' : 'Video Link: ',
+    'itunes' : 'iTunes Download Link: ',
+    'spotify': 'Listen on Spotify: '
+  };
+  urls.forEach(function (url) {
+    for(var site in prefixes) {
+      if(url.indexOf(site) > 0) {
+        credit += prefixes[site] + url + "\n";
+      }
+    }
+  })
+  return credit;
+}
+
+function getArtistsAtlas (tks, done) {
+  var ids = []
+  tks = tks || [];
+  tks.forEach(function(track) {
+    ids = ids.concat((track.artists || []).map(function (artist) {
+      return artist.artistId
+    }))
+  })
+  ids = uniqueArray(ids)
+  var url = endpoint + '/catalog/artist?fields=name,websiteDetailsId&ids=' + ids.join(',')
+  loadCache(url, function (err, aobj) {
+    if (err) return done(err)
+    return done(err, toAtlas(aobj.results, '_id'))
+  })
+}
+
+function getArtistsTitle(artists) {
+  if (artists.length == 0)
+    return '';
+  if (artists.length == 1)
+    return artists[0].name
+  var names = artists.map(function(artist) {
+    return artist.name
+  })
+  return names.join(', ') + ' & ' + names.pop()
+}
+
+/* Loads the required release and track data specified by the object.
+ * Object Requirments:
+ *   releaseId
+ *   trackId
+ */
+function loadReleaseAndTrack (obj, done) {
+  loadCache(endpoint + '/track/' + obj.trackId, function(err, track) {
+    if (err) return done(err);
+    loadCache(endpoint + '/release/' + obj.releaseId, function(err, release) {
+      if (err) return done(err)
+      var title = track.title + ' by ' + track.artistsTitle + ' from ' + release.title
+      track.copycredit = createCopycredit(title, release.urls)
+      done(null, {
+        track: track,
+        release: release
+      })
+    })
+  })
+}
+
+function getPlayUrl (albums, releaseId) {
+  var album = (albums || []).find(function(album) {
+    return album.albumId == releaseId
+  })
+  return album ? datapoint + '/blobs/' + album.streamHash : undefined
+}
+
+function getTrackDownloadLinks(trackId, releaseId, done) {
+  loadCache(endpoint + '/catalog/track/' + trackId, function(err, track) {
+    if(err) done(err)
+    var dlLinks = []
+    var opts = downloadOptions
+    for(var i in opts) {
+      var option = opts[i]
+      var query = {
+        method: 'download',
+        format: option.type,
+        track: trackId
+      }
+      if(option.quality) {
+        var quality = parseInt(option.quality);
+        if(quality >= 10) {
+          query.bitRate = quality;
+        }
+        else {
+          query.quality = quality;
+        }
+      }
+      dlLinks.push({
+        downloadLink: endpoint + '/release/' + releaseId +
+          '/download?' + objectToQueryString(query),
+        download: track.artistsTitle + ' - ' + track.title +
+          '.' + option.type,
+        name: option.name
+      });
+    }
+    done(null, dlLinks);
+  });
+}
+
+function updatePlayerPlaylist (playlistId, ptracks) {
+  var url = endpoint + "/playlist/" + playlistId + "/tracks"
+  loadCache(url, function(err, obj) {
+    if (err) return window.alert(err) // TODO handle this error better
+    var tracks = obj.results.map(function (item, index) {
+      var track = mapReleaseTrack(item, ptracks[index].releaseId, index)
+      track.playlistId = playlistId
+      return track
+    })
+  }, true)
+}
+
+function completedReleaseTracks (source, err, obj) {
+  updateControls()
+}
+
+function completedPlaylistTracks (source, err, obj) {
+  updateControls()
+}
+
+// TODO rename to getTrackArtistsByAtlas
+function mapTrackArtists (track, atlas) {
+  return (track.artists || []).filter(function (obj) {
+    return !!obj
+  }).map(function (artist) {
+    return atlas[artist.artistId] || {}
+  })
+}
+
+/* Map Methods
+ * Should conform to the array map method parameters.
+ */
+
+function mapReleaseTrack (o, index, arr) {
+  o.trackNumber = index + 1
+  o.index       = index
+  // TODO make method
+  o.canPlaylist = session && session.user ? { _id: o._id } : null
+  return o
+}
+
+function mapRelease (o) {
+  o.releaseDate = formatDate(o.releaseDate)
+  o.preReleaseDate = formatDate(o.preReleaseDate)
+  o.artists = o.renderedArtists
+  o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
+  o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
+  return o
+}
+
+function mapSignup () {
+  return {
+    countries: getAccountCountries()
+  }
+}
+
+function mapAccount (o) {
+  o.countries = getAccountCountries(o.location)
+  return o
+}
+
+function mapWebsiteDetails (o) {
+  if (o.profileImageBlobId)
+    o.image = datapoint + '/blobs/' + o.profileImageBlobId
+  if (o.bookings || o.managementDetail) {
+    o.contact = {
+      booking: o.bookings,
+      management: o.managementDetail
+    }
+  }
+  return o
+}
+
+/* Transform Methods */
+
+function transformPlaylistTracks (obj, done) {
+  var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
+  var url = endpoint + '/playlist/' + id + '?fields=name,public,tracks'
+  var playlist = cache(url)
+  var ids = uniqueArray(playlist.tracks.map(function (item) {
+    return item.releaseId
+  }))
+  var url = endpoint + '/catalog/release?fields=title&ids=' + ids.join(',')
+  loadCache(url, function(err, aobj) {
+    if (err) return done(err)
+    var releaseAtlas = toAtlas(aobj.results, '_id')
+    var trackAtlas = toAtlas(obj.results, '_id')
+    getArtistsAtlas(obj.results, function (err, artistAtlas) {
+      if (!artistAtlas) artistAtlas = {}
+      obj.results = playlist.tracks.map(function (item, index, arr) {
+        var track = mapReleaseTrack(trackAtlas[item.trackId] || {}, index, arr)
+        var release = releaseAtlas[item.releaseId] || {}
+        track.release = release.title
+        track.releaseId = release._id
+        track.artists = mapTrackArtists(track, artistAtlas)
+        track.playlistId = id
+        track.playUrl = getPlayUrl(track.albums, track.releaseId)
+        track.artsistsTitle = getArtistsTitle(track.artists)
+        return track
+      })
+      done(null, obj)
+    })
+  })
 }
 
 function transformMusic () {
@@ -389,95 +555,12 @@ function transformReleases (obj) {
   return obj
 }
 
-function createCopycredit (title, urls) {
-  var credit = 'Title: ' + title + "\n";
-  var prefixes = {
-    'youtube' : 'Video Link: ',
-    'itunes' : 'iTunes Download Link: ',
-    'spotify': 'Listen on Spotify: '
-  };
-  urls.forEach(function (url) {
-    for(var site in prefixes) {
-      if(url.indexOf(site) > 0) {
-        credit += prefixes[site] + url + "\n";
-      }
-    }
-  })
-  return credit;
+function transformMarkdown (obj) {
+  return marked(obj)
 }
 
-function mapRelease (o) {
-  o.releaseDate = formatDate(o.releaseDate)
-  o.preReleaseDate = formatDate(o.preReleaseDate)
-  o.artists = o.renderedArtists
-  o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
-  o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
-  return o
-}
-
-function toAtlas (arr, key) {
-  var atlas = {}
-  arr.forEach(function (item) {
-    atlas[item[key]] = item
-  })
-  return atlas
-}
-
-function getArtistsAtlas (tks, done) {
-  var ids = []
-  tks = tks || [];
-  tks.forEach(function(track) {
-    ids = ids.concat((track.artists || []).map(function (artist) {
-      return artist.artistId
-    }))
-  })
-  ids = uniqueArray(ids)
-  var url = endpoint + '/catalog/artist?fields=name,websiteDetailsId&ids=' + ids.join(',')
-  loadCache(url, function (err, aobj) {
-    if (err) return done(err)
-    return done(err, toAtlas(aobj.results, '_id'))
-  })
-}
-
-function mapTrackArtists (track, atlas) {
-  return (track.artists || []).filter(function (obj) {
-    return !!obj
-  }).map(function (artist) {
-    return atlas[artist.artistId] || {}
-  })
-}
-
-function getArtistsTitle(artists) {
-  if(artists.length == 0) {
-    return '';
-  }
-
-  if(artists.length == 1) {
-    return artists[0].name
-  }
-
-  var names = artists.map(function(artist) { return artist.name});
-  var last = names.pop();
-  return names.join(', ') + ' & ' + last;
-}
-
-//Takes in {releaseId: '12321', trackId: '23tj23'} for obj
-function loadReleaseAndTrack (obj, done) {
-  loadCache(endpoint + '/track/' + obj.trackId, function(err, res) {
-    if(err) {
-      return done(err);
-    }
-    var track = res;
-    loadCache(endpoint + '/release/' + obj.releaseId, function(err, res2) {
-      if(err) {
-        return done(err);
-      }
-      var release = res2;
-      track.copycredit = createCopycredit(track.title + ' by ' + track.artistsTitle + ' from ' + release.title, release.urls)
-      done(null, {track: track, release: release});
-    });
-  });
-  return;
+function transformBuyOut () {
+  return queryStringToObject(window.location.search)
 }
 
 function transformReleaseTracks (obj, done) {
@@ -495,53 +578,18 @@ function transformReleaseTracks (obj, done) {
   })
 }
 
-function mapReleaseTrack (o, index, arr) {
-  o.trackNumber = index + 1
-  o.index       = index
-  // TODO make method
-  o.canPlaylist = session && session.user ? { _id: o._id } : null
-  return o
-}
-
-function getPlayUrl (albums, releaseId) {
-  var album = (albums || []).find(function(album) {
-    return album.albumId == releaseId
-  })
-  return album ? datapoint + '/blobs/' + album.streamHash : undefined
-}
+/* Helpers */
 
 function uniqueArray (arr) {
   return Array.from(new Set(arr))
 }
 
-function transformPlaylistTracks (obj, done) {
-  var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
-  var url = endpoint + '/playlist/' + id + '?fields=name,public,tracks'
-  var playlist = cache(url)
-  var ids = uniqueArray(playlist.tracks.map(function (item) {
-    return item.releaseId
-  }))
-  var url = endpoint + '/catalog/release?fields=title&ids=' + ids.join(',')
-  loadCache(url, function(err, aobj) {
-    if (err) return done(err)
-    var releaseAtlas = toAtlas(aobj.results, '_id')
-    var trackAtlas = toAtlas(obj.results, '_id')
-    getArtistsAtlas(obj.results, function (err, artistAtlas) {
-      if (!artistAtlas) artistAtlas = {}
-      obj.results = playlist.tracks.map(function (item, index, arr) {
-        var track = mapReleaseTrack(trackAtlas[item.trackId] || {}, index, arr)
-        var release = releaseAtlas[item.releaseId] || {}
-        track.release = release.title
-        track.releaseId = release._id
-        track.artists = mapTrackArtists(track, artistAtlas)
-        track.playlistId = id
-        track.playUrl = getPlayUrl(track.albums, track.releaseId)
-        track.artsistsTitle = getArtistsTitle(track.artists)
-        return track
-      })
-      done(null, obj)
-    })
+function toAtlas (arr, key) {
+  var atlas = {}
+  arr.forEach(function (item) {
+    atlas[item[key]] = item
   })
+  return atlas
 }
 
 function getAccountCountries (current) {
@@ -553,138 +601,33 @@ function getAccountCountries (current) {
   })
 }
 
-function mapSignup () {
-  return {
-    countries: getAccountCountries()
-  }
-}
-
-function mapAccount (o) {
-  o.countries = getAccountCountries(o.location)
-  return o
-}
-
-function mapWebsiteDetails (o) {
-  if (o.profileImageBlobId)
-    o.image = datapoint + '/blobs/' + o.profileImageBlobId
-  if (o.bookings || o.managementDetail) {
-    o.contact = {
-      booking: o.bookings,
-      management: o.managementDetail
-    }
-  }
-  return o
-}
-
-function getTrackDownloadLinks(trackId, releaseId, done) {
-  loadCache(endpoint + '/catalog/track/' + trackId, function(err, track) {
-    if(err) done(err)
-    var dlLinks = []
-    var opts = downloadOptions
-    for(var i in opts) {
-      var option = opts[i]
-      var query = {
-        method: 'download',
-        format: option.type,
-        track: trackId
-      }
-      if(option.quality) {
-        var quality = parseInt(option.quality);
-        if(quality >= 10) {
-          query.bitRate = quality;
-        }
-        else {
-          query.quality = quality;
-        }
-      }
-      dlLinks.push({
-        downloadLink: endpoint + '/release/' + releaseId +
-          '/download?' + objectToQueryString(query),
-        download: track.artistsTitle + ' - ' + track.title +
-          '.' + option.type,
-        name: option.name
-      });
-    }
-    done(null, dlLinks);
-  });
-}
-
-function requireSubOrModal() {
-  if(isSubbed()) {
-    return true;
-  }
-  openModal('subscription-required-modal')
-  return false;
-}
-
-var subbed = true;
-function isSubbed() {
-  if(session == null) {
-    return false;
-  }
-
-  if(!session.user) {
-    return false;
-  }
-
-  //TODO: Remove this, it's just for testing
-  subbed = !subbed;
-  return subbed;
-
-  return session.user.subscribed;
-}
-
-
-//TODO: have this actually do something
-function subscriptionGo() {
-  alert('Go to connect.monstercat.com to buy a subscription');
-}
-
-function updatePlayerPlaylist (playlistId, ptracks) {
-  var url = endpoint + "/playlist/" + playlistId + "/tracks"
-  loadCache(url, function(err, obj) {
-    if (err) return window.alert(err) // TODO handle this error better
-    var tracks = obj.results.map(function (item, index) {
-      var track = mapReleaseTrack(item, ptracks[index].releaseId, index)
-      track.playlistId = playlistId
-      return track
-    })
-  }, true)
-}
-
-function transformMarkdown (obj) {
-  return marked(obj)
-}
-
-function transformBuyOut () {
-  return queryStringToObject(window.location.search)
-}
-
-function completedReleaseTracks (source, err, obj) {
-  updateControls()
-}
-
-function completedPlaylistTracks (source, err, obj) {
-  updateControls()
-}
-
 function getLastPathnameComponent () {
   return location.pathname.substr(location.pathname.lastIndexOf('/') + 1)
 }
 
-function togglePassword (e, el) {
-  var target = 'input[name="' + el.getAttribute('toggle-target') + '"]'
-  var tel    = document.querySelector(target)
-  if (!tel) return
-  var type   = tel.getAttribute('type') == 'password' ? 'text' : 'password'
-  var cls    = type == 'password' ? 'eye-slash' : 'eye'
-  tel.setAttribute('type', type)
-  var iel    = el.firstElementChild
-  if (!iel) return
-  iel.classList.remove('fa-eye')
-  iel.classList.remove('fa-eye-slash')
-  iel.classList.add('fa-' + cls)
+function requestSimple (method, what, obj, done) {
+  requestJSON({
+    url: endpoint + '/' + what,
+    method: method,
+    data: obj,
+    withCredentials: true
+  }, done)
 }
+
+function create (what, obj, done) {
+  requestSimple("POST", what, obj, done)
+}
+
+function update (what, id, obj, done) {
+  var path = id ? what + '/' + id : what
+  requestSimple("PATCH", path, obj, done)
+}
+
+function destroy (what, id, done) {
+  requestSimple("DELETE", what + '/' + id, null, done)
+}
+
+/* UI Stuff */
 
 function toast (opts) {
   var container = document.querySelector('[role="toasts"]')
@@ -698,13 +641,6 @@ function toast (opts) {
   setTimeout(function () {
     container.removeChild(el)
   }, opts.time || 3000)
-}
-
-function openTrackCopyCredits (e, el) {
-  openModal('track-copycredits-modal', {
-    trackId:   el.getAttribute('track-id'),
-    releaseId: el.getAttribute('release-id')
-  })
 }
 
 function openModal (name, data) {
@@ -726,4 +662,45 @@ function closeModal () {
   var container = document.querySelector('[role="modals"]')
   container.classList.remove('open')
   container.removeChild(container.firstElementChild)
+}
+
+function renderHeader () {
+  var el = document.querySelector('#navigation')
+  var target = '[template-name="' + el.getAttribute('template') + '"]'
+  var template = document.querySelector(target).textContent
+  var data = null
+  if (session) {
+    data = {}
+    data.user = session ? session.user : null
+  }
+  render(el, template, {
+    data: data
+  })
+}
+
+function togglePassword (e, el) {
+  var target = 'input[name="' + el.getAttribute('toggle-target') + '"]'
+  var tel    = document.querySelector(target)
+  if (!tel) return
+  var type   = tel.getAttribute('type') == 'password' ? 'text' : 'password'
+  var cls    = type == 'password' ? 'eye-slash' : 'eye'
+  tel.setAttribute('type', type)
+  var iel    = el.firstElementChild
+  if (!iel) return
+  iel.classList.remove('fa-eye')
+  iel.classList.remove('fa-eye-slash')
+  iel.classList.add('fa-' + cls)
+}
+
+function openTrackCopyCredits (e, el) {
+  openModal('track-copycredits-modal', {
+    trackId:   el.getAttribute('track-id'),
+    releaseId: el.getAttribute('release-id')
+  })
+}
+
+// TODO don't use this...
+function simpleUpdate (err, obj, xhr) {
+  if (err) return window.alert(err.message)
+  loadSubSources(document.querySelector('[role="content"]'))
 }
