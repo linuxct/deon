@@ -308,40 +308,9 @@
         <br/>
         <br/>
         <h2>Settings</h2>
-        <table class="form">
-            <tbody data-set="account">
-                <tr>
-                    <th>Prefered Download Format</th>
-                    <td>
-                        <select>
-                            <option>MP3 V0 (High Quality)</option>
-                            <option>MP3 V2 (Low Quality)</option>
-                            <option>MP3 320kbps</option>
-                            <option>MP3 128kbps</option>
-                            <option>FLAC</option>
-                            <option>WAV</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th colspan="2">
-                        <label>
-                            <input type="checkbox"
-                                   name="hideNonLicensableTracks"/>
-                            Skip Non-licensable Tracks
-                        </label>
-                    </th>
-                </tr>
-                <tr>
-                    <th colspan="2">
-                        <label>
-                            <input type="checkbox"
-                                   name="playlistPublicByDefault"/>
-                            Make Playlists Public By Default
-                        </label>
-                    </th>
-                </tr>
-            </tbody>
+        <table class="form"
+               source="$endpoint/user-settings/{{userSettingsId}}"
+               template="account-settings">
         </table>
         <button action="saveAccountSettings"
                 data-set-target="settings">
@@ -362,6 +331,55 @@
         <a href="/privacy-policy">Privacy Policy</a>
         {{/data}}
     </div>
+</script>
+
+<script type="text/template"
+        template-name="account-settings"
+        transform="transformAccountSettings">
+    {{#loading}}
+    <div class="page width center">
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+    </div>
+    {{/loading}}
+    {{#error}}
+    <div class="page width center">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <tbody data-set="settings">
+        <tr>
+            <th>Prefered Download Format</th>
+            <td>
+                <select name="preferredDownloadFormat">
+                    {{#downloadOptions}}
+                        <option value="{{value}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+                    {{/downloadOptions}}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <label>
+                    <input type="checkbox"
+                           name="hideNonLicensableTracks"
+                           {{#hideNonLicensableTracks}}checked{{/hideNonLicensableTracks}}/>
+                    Skip Non-licensable Tracks
+                </label>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <label>
+                    <input type="checkbox"
+                           name="playlistPublicByDefault"
+                           {{#playlistPublicByDefault}}checked{{/playlistPublicByDefault}}/>
+                    Make Playlists Public By Default
+                </label>
+            </th>
+        </tr>
+    </tbody>
+    {{/data}}
 </script>
 
 <script type="text/template"

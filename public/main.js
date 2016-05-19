@@ -8,6 +8,7 @@ var strings   = {
   "renamePlaylist": "Give a new name for this playlist.",
   "destroyPlaylist": "Are you sure you want to remove this playlist?",
   "accountUpdated": "Your account information has been saved.",
+  "settingsUpdated": "Your preferred settings have been updated.",
   "addedToPlaylist": "Song succesfully added to playlist.",
   "removedFromPlaylist": "Song succesfully removed from playlist.",
   "passwordMissing": "You must enter a password.",
@@ -17,26 +18,32 @@ var strings   = {
 var downloadOptions = [
   {
     type: "wav",
-    name: "WAV (Original)"
+    name: "WAV (Original)",
+    value: "wav"
   }, {
-    type: 'flac',
-    name: 'FLAC'
+    type: "flac",
+    name: "FLAC",
+    value: "flac"
   }, {
     type: "mp3",
     quality: 320,
-    name: "MP3 320"
+    name: "MP3 320",
+    value: "mp3_320"
   }, {
     type: "mp3",
     quality: 0,
-    name: "MP3 V0"
+    name: "MP3 V0",
+    value: "mp3_v0"
   }, {
     type: "mp3",
     quality: 2,
-    name: "MP3 V2"
+    name: "MP3 V2",
+    value: "mp3_v2"
   }, {
     type: "mp3",
     quality: 128,
-    name: "MP3 128"
+    name: "MP3 128",
+    value: "mp3_128"
   }
 ]
 
@@ -237,9 +244,15 @@ function saveAccount (e, el) {
 }
 
 function saveAccountSettings (e, el) {
-  var data = getDataSet(el, true)
+  var data = getDataSet(el)
   if (!data) return
-  // TODO finish me!
+
+  var id = session && session.user ? session.user.userSettingsId : undefined
+  update('user-settings', id, data, function (err, settings) {
+    if (err) return window.alert(err.message)
+    window.alert(strings.settingsUpdated)
+    session.settings = settings
+  })
 }
 
 function buyOutLicense (e, el) {
@@ -695,4 +708,13 @@ function openTrackCopyCredits (e, el) {
 function simpleUpdate (err, obj, xhr) {
   if (err) return window.alert(err.message)
   loadSubSources(document.querySelector('[role="content"]'))
+}
+
+function transformAccountSettings(obj) {
+  obj.downloadOptions = downloadOptions.map(function (opt) {
+    opt = cloneObject(opt)
+    opt.selected = opt.value == obj.preferredDownloadFormat
+    return opt;
+  })
+  return obj
 }
