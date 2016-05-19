@@ -17,31 +17,21 @@ var strings   = {
 }
 var downloadOptions = [
   {
-    type: "wav",
     name: "WAV (Original)",
     value: "wav"
   }, {
-    type: "flac",
     name: "FLAC",
     value: "flac"
   }, {
-    type: "mp3",
-    quality: 320,
     name: "MP3 320",
     value: "mp3_320"
   }, {
-    type: "mp3",
-    quality: 0,
     name: "MP3 V0",
     value: "mp3_v0"
   }, {
-    type: "mp3",
-    quality: 2,
     name: "MP3 V2",
     value: "mp3_v2"
   }, {
-    type: "mp3",
-    quality: 128,
     name: "MP3 128",
     value: "mp3_128"
   }
@@ -50,7 +40,10 @@ var downloadOptions = [
 document.addEventListener("DOMContentLoaded", function (e) {
   renderHeader()
   getSession(function (err, obj, xhr) {
-    if (err) console.warn(err.message)
+    if (err) {
+      // TODO handle this!
+      console.warn(err.message)
+    }
     session = obj
     renderHeader()
     window.addEventListener("popstate", function popState (e) {
@@ -60,6 +53,16 @@ document.addEventListener("DOMContentLoaded", function (e) {
     stateChange(location.pathname + location.search)
   })
 })
+
+function isSignedIn () {
+  return session && session.user
+}
+
+function hasGoldAccess () {
+  if (!isSignedIn()) return false
+  // TODO finish me
+  return false
+}
 
 function getSession (done) {
   requestJSON({
@@ -296,15 +299,6 @@ function formatDate (date) {
     date.getFullYear()
 }
 
-function commaStringToObject (str) {
-  var obj = {}
-  var arr = (str || "").split(',')
-  for (var i = 0; i < arr.length; i += 2) {
-    obj[arr[i]] = arr[i+1]
-  }
-  return obj
-}
-
 function createCopycredit (title, urls) {
   var credit = 'Title: ' + title + "\n";
   var prefixes = {
@@ -376,37 +370,20 @@ function getPlayUrl (albums, releaseId) {
   return album ? datapoint + '/blobs/' + album.streamHash : undefined
 }
 
-function getTrackDownloadLinks(trackId, releaseId, done) {
-  loadCache(endpoint + '/catalog/track/' + trackId, function(err, track) {
-    if(err) done(err)
-    var dlLinks = []
-    var opts = downloadOptions
-    for(var i in opts) {
-      var option = opts[i]
-      var query = {
-        method: 'download',
-        format: option.type,
-        track: trackId
-      }
-      if(option.quality) {
-        var quality = parseInt(option.quality);
-        if(quality >= 10) {
-          query.bitRate = quality;
-        }
-        else {
-          query.quality = quality;
-        }
-      }
-      dlLinks.push({
-        downloadLink: endpoint + '/release/' + releaseId +
-          '/download?' + objectToQueryString(query),
-        download: track.artistsTitle + ' - ' + track.title +
-          '.' + option.type,
-        name: option.name
-      });
-    }
-    done(null, dlLinks);
-  });
+function getMyPreferedDownloadOption () {
+  var f = "mp3_320"
+  if (isSignedIn() && session.settings)
+    return session.settings.preferredDownloadFormat || f
+  return f
+}
+
+function getDownloadLink (releaseId, trackId) {
+  var opts = {
+    method: 'download',
+    type: getMyPreferedDownloadOption()
+  }
+  if (trackId) opts.track = trackId
+  return endpoint + '/release/' + releaseId + '/download?' + objectToQueryString(opts)
 }
 
 function updatePlayerPlaylist (playlistId, ptracks) {
@@ -430,6 +407,11 @@ function mapTrackArtists (track, atlas) {
   })
 }
 
+function isMyPlaylist (playlist) {
+  if (!isSignedIn()) return false
+  return playlist.userId == session.user._id
+}
+
 /* Map Methods
  * Should conform to the array map method parameters.
  */
@@ -437,8 +419,7 @@ function mapTrackArtists (track, atlas) {
 function mapReleaseTrack (o, index, arr) {
   o.trackNumber = index + 1
   o.index       = index
-  // TODO make method
-  o.canPlaylist = session && session.user ? { _id: o._id } : null
+  o.canPlaylist = isSignedIn() ? { _id: o._id } : null
   return o
 }
 
@@ -447,7 +428,9 @@ function mapRelease (o) {
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
   o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
-  o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
+  if (o.urls instanceof Array)
+    o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
+  o.downloadLink = getDownloadLink(o._id)
   return o
 }
 
@@ -476,9 +459,21 @@ function mapWebsiteDetails (o) {
 
 /* Transform Methods */
 
+function transformPlaylist (obj) {
+  if (isMyPlaylist(obj)) {
+    obj.canPublic = {
+      _id:    obj._id,
+      public: obj.public
+    }
+  }
+  if (isSignedIn())
+    obj.canDownload = true
+  return obj
+}
+
 function transformPlaylistTracks (obj, done) {
   var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
-  var url = endpoint + '/playlist/' + id + '?fields=name,public,tracks'
+  var url = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
   var playlist = cache(url)
   var ids = uniqueArray(playlist.tracks.map(function (item) {
     return item.releaseId
@@ -499,6 +494,8 @@ function transformPlaylistTracks (obj, done) {
         track.playlistId = id
         track.playUrl = getPlayUrl(track.albums, track.releaseId)
         track.artsistsTitle = getArtistsTitle(track.artists)
+        track.canRemove = isMyPlaylist(playlist) ? { index: track.index } : undefined
+        track.downloadLink = getDownloadLink(release._id, track._id)
         return track
       })
       done(null, obj)
@@ -578,9 +575,19 @@ function transformReleaseTracks (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.artsistsTitle = getArtistsTitle(track.artists)
+      track.downloadLink = getDownloadLink(releaseId, track._id)
     })
     done(null, obj)
   })
+}
+
+function transformAccountSettings(obj) {
+  obj.downloadOptions = downloadOptions.map(function (opt) {
+    opt = cloneObject(opt)
+    opt.selected = opt.value == obj.preferredDownloadFormat
+    return opt;
+  })
+  return obj
 }
 
 /* Helpers */
@@ -608,6 +615,15 @@ function getAccountCountries (current) {
 
 function getLastPathnameComponent () {
   return location.pathname.substr(location.pathname.lastIndexOf('/') + 1)
+}
+
+function commaStringToObject (str) {
+  var obj = {}
+  var arr = (str || "").split(',')
+  for (var i = 0; i < arr.length; i += 2) {
+    obj[arr[i]] = arr[i+1]
+  }
+  return obj
 }
 
 function requestSimple (method, what, obj, done) {
@@ -710,11 +726,8 @@ function simpleUpdate (err, obj, xhr) {
   loadSubSources(document.querySelector('[role="content"]'))
 }
 
-function transformAccountSettings(obj) {
-  obj.downloadOptions = downloadOptions.map(function (opt) {
-    opt = cloneObject(opt)
-    opt.selected = opt.value == obj.preferredDownloadFormat
-    return opt;
-  })
-  return obj
+function canAccessGold (e, el) {
+  if (hasGoldAccess()) return
+  e.preventDefault()
+  openModal('subscription-required-modal')
 }

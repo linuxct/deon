@@ -53,8 +53,10 @@
     <div class="modal-window">
         <h1>Sign Up!</h1>
         <p>You need a subscription to do that!</p>
-        <a href="/sign-up">Sign Up Here</a>
-        <button action="closeModal"></button>
+        <a href="/sign-up">Sign Up Here</a> or 
+        <a href="/services">Update Your Subscription</a>
+        <br/>
+        <button action="closeModal">Close</button>
     </div>
 </script>
 
@@ -353,7 +355,10 @@
             <td>
                 <select name="preferredDownloadFormat">
                     {{#downloadOptions}}
-                        <option value="{{value}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+                    <option value="{{value}}"
+                            {{#selected}}selected{{/selected}}>
+                        {{name}}
+                    </option>
                     {{/downloadOptions}}
                 </select>
             </td>
@@ -568,33 +573,33 @@
 <script type="text/template"
         route="^music(\?.*)?"
         transform="transformMusic">
-    <div>
-        <div class="page width center">
-            <div class="filters pad-vertical push-children-right" data-set="music-search">
-                <input class="round"
-                       name="search"
-                       type="text"
-                       placeholder="Search..."
-                       value="{{search}}"/>
-                <button action="hitSelect" class="select">
-                    <select name="type">
-                        <option value="">Show All Types</option>
-                        {{#types}}
-                        <option value="{{value}}" {{#selected}}selected{{/selected}}>
-                            {{name}}
-                        </option>
-                        {{/types}}
-                    </select>
-                </button>
-                <button action="searchMusic" data-set-target="music-search">
-                    <i class="fa fa-search"></i>
-                </button>
-            </div>
-        </div>
-        <div source="$endpoint/catalog/release?{{query}}"
-             template="music-releases">
+    {{#data}}
+    <div class="page width center">
+        <div class="filters pad-vertical push-children-right" data-set="music-search">
+            <input class="round"
+                    name="search"
+                    type="text"
+                    placeholder="Search..."
+                    value="{{search}}"/>
+            <button action="hitSelect" class="select">
+                <select name="type">
+                    <option value="">Show All Types</option>
+                    {{#types}}
+                    <option value="{{value}}" {{#selected}}selected{{/selected}}>
+                        {{name}}
+                    </option>
+                    {{/types}}
+                </select>
+            </button>
+            <button action="searchMusic" data-set-target="music-search">
+                <i class="fa fa-search"></i>
+            </button>
         </div>
     </div>
+    <div source="$endpoint/catalog/release?{{query}}"
+            template="music-releases">
+    </div>
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -648,9 +653,12 @@
         <h2>{{artists}}</h2>
         <label>Released {{releaseDate}}</label>
         <div class="options pad-vertical push-children-right">
-            <button class="faux" release-id="{{_id}}">
+            <a class="silent"
+               href="{{downloadLink}}"
+               target="_blank"
+               action="canAccessGold">
                 <i class="fa fa-cloud-download"></i>
-            </button>
+            </a>
             <button class="faux" action="playSongs" role="play-release" release-id="{{_id}}">
                 <i class="fa fa-play inactive"></i>
                 <i class="fa fa-pause active"></i>
@@ -709,7 +717,12 @@
                     {{/artists}}
                 </td>
                 <td class="push-children-right">
-                    <button class="faux" track-id="{{_id}}" release-id="{{releaseId}}"><i class="fa fa-cloud-download"></i></button>
+                    <a class="silent"
+                       target="_blank"
+                       action="canAccessGold"
+                       href="{{downloadLink}}">
+                        <i class="fa fa-cloud-download"></i>
+                    </a>
                     <button
                         class="faux"
                         action="openTrackCopyCredits"
@@ -896,7 +909,8 @@
 
 <script type="text/template"
         route="^playlist\/(.*)"
-        source="$endpoint/playlist/$1?fields=name,public,tracks">
+        source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
+        transform="transformPlaylist">
     <div class="page width center">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
@@ -906,10 +920,8 @@
         {{/error}}
         {{#data}}
         <h1 playlist-id="{{_id}}">{{name}}</h1>
-        {{#author}}
-        <h2>Created by {{author}}</h2>
-        {{/author}}
         <div class="options pad-vertical push-children-right">
+            {{#canPublic}}
             <label>
                 <input
                     type="checkbox"
@@ -918,8 +930,19 @@
                     {{#public}}checked{{/public}} />
                 Public
             </label>
-            <button><i class="fa fa-fw fa-play" action="playSongs" role="play-playlist"></i></button>
-            <button><i class="fa fa-fw fa-cloud-download"></i></button>
+            {{/canPublic}}
+            {{#canDownload}}
+            <button class="faux"
+                    title="Download Playlist"
+                    action="downloadPlaylist">
+                <i class="fa fa-fw fa-cloud-download"></i>
+            </button>
+            {{/canDownload}}
+            <button class="faux">
+                <i class="fa fa-fw fa-play"
+                   action="playSongs"
+                   role="play-playlist"></i>
+            </button>
         </div>
         <table>
             <thead>
@@ -973,28 +996,34 @@
             <a href="/artist/{{_id}}">{{name}}</a>
             {{/artists}}
         </td>
-        <td>
-            <button class="faux" track-id="{{_id}}" release-id="{{releaseId}}">
+        <td class="push-children-right">
+            <a class="silent"
+               href="{{downloadLink}}"
+               target="_blank"
+               title="Download Track"
+               action="canAccessGold">
                 <i class="fa fa-cloud-download"></i>
-            </button>
-            <button
-                class="faux"
-                action="openTrackCopyCredits"
-                release-id="{{releaseId}}"
-                track-id="{{_id}}">
+            </a>
+            <button class="faux"
+                    action="openTrackCopyCredits"
+                    release-id="{{releaseId}}"
+                    track-id="{{_id}}">
                 <i class="fa fa-copyright"></i>
             </button>
-
+            {{#canRemove}}
             <button class="faux"
                     action="removeFromPlaylist"
                     playlist-position="{{index}}">
                 <i class="fa fa-trash-o"></i>
             </button>
+            {{/canRemove}}
         </td>
     </tr>
     {{/results}}
     {{^results}}
-    <tr><td colspan="6">No Results.</td></tr>
+    <tr>
+        <td colspan="6">No Results.</td>
+    </tr>
     {{/results}}
     {{/data}}
 </script>

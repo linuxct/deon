@@ -123,12 +123,11 @@ function interceptClick (e) {
   var t = null
   for (var i = 0; i < e.path.length; i++) {
     t = e.path[i]
+    if (t.hasAttribute && t.hasAttribute('action'))
+      isAction = t
     if (t.tagName == "A") {
       isAnchor = true
       break
-    }
-    if (t.hasAttribute && t.hasAttribute('action')) {
-      isAction = t
     }
   }
   if (isAction) {
