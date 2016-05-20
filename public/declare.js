@@ -117,6 +117,16 @@ function loadCache (source, done, reset) {
   }, requestJSON)
 }
 
+function interceptKeyPress (e) {
+  var which = e.which || e.keyCode
+  var isAction = null
+  if(which == 13) {
+    if(e.target.hasAttribute && e.target.getAttribute('action-enter')) {
+      runEnterAction(e, e.target)
+    }
+  }
+}
+
 function interceptClick (e) {
   var isAnchor = false
   var isAction = null
@@ -154,6 +164,11 @@ function getMethod(el, attr) {
 
 function runAction (e, el) {
   var fn = getMethod(el, 'action')
+  if (fn) fn(e, el)
+}
+
+function runEnterAction (e, el) {
+  var fn = getMethod(el, 'action-enter')
   if (fn) fn(e, el)
 }
 
