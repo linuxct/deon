@@ -433,6 +433,7 @@ function mapRelease (o) {
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
   o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
+  o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
   if (o.urls instanceof Array)
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
   o.downloadLink = getDownloadLink(o._id)
@@ -471,7 +472,7 @@ function transformPlaylist (obj) {
       public: obj.public
     }
   }
-  if (isSignedIn())
+  if (hasGoldAccess())
     obj.canDownload = true
   return obj
 }
@@ -501,6 +502,19 @@ function transformPlaylistTracks (obj, done) {
         track.artsistsTitle = getArtistsTitle(track.artists)
         track.canRemove = isMyPlaylist(playlist) ? { index: track.index } : undefined
         track.downloadLink = getDownloadLink(release._id, track._id)
+        if (isMyPlaylist(playlist)) {
+          track.edit = {
+            releaseId: release._id,
+            _id: track._id,
+            title: track.title,
+            trackNumber: track.trackNumber,
+            index: track.index
+          }
+        } else {
+          track.noEdit = {
+            trackNumber: track.trackNumber
+          }
+        }
         return track
       })
       done(null, obj)
