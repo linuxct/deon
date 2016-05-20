@@ -298,7 +298,7 @@ function getElementInitialValue (el) {
 }
 
 function parseElementValue (el, value) {
-  var type  = el.getAttribute('type').toLowerCase()
+  var type  = (el.getAttribute('type') || "").toLowerCase()
   if (type == 'checkbox') {
     return value == 'on' || value == 'true' || value === true ? true : false
   }
