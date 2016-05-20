@@ -50,7 +50,7 @@ class MusicPlayer {
     if (!this.items || !this.items.length || ((index != null) && (!this.items[index] || !this.items[index].source)))
       return
 
-    index = index == undefined ? this.index : index
+    index = index == undefined ? +this.index : +index
     this.index = index
     if (this.audio.src != this.items[index].source) {
       this.audio.src = this.items[index].source
