@@ -76,7 +76,7 @@ function signIn (e, el) {
     url: endhost + '/signin',
     method: 'POST',
     withCredentials: true,
-    data: getDataSet(el)
+    data: getTargetDataSet(el)
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     getSession(function (err, sess) {
@@ -102,7 +102,7 @@ function signOut (e, el) {
 }
 
 function recoverPassword (e, el) {
-  var data = getDataSet(el)
+  var data = getTargetDataSet(el)
   data.returnUrl = location.protocol + '//' + location.host + '/reset-password?key=:code'
   requestJSON({
     url: endhost + '/password/send-verification',
@@ -116,7 +116,7 @@ function recoverPassword (e, el) {
 }
 
 function updatePassword (e, el) {
-  var data = getDataSet(el)
+  var data = getTargetDataSet(el)
   if (!data.password) return window.alert(strings.passwordMissing)
   data.code = queryStringToObject(window.location.search).key
   requestJSON({
@@ -136,7 +136,7 @@ function signUp (e, el) {
     url: endpoint + '/signup',
     method: 'POST',
     withCredentials: true,
-    data: getDataSet(el)
+    data: getTargetDataSet(el)
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     getSession(function (err, sess) {
@@ -237,31 +237,33 @@ function togglePlaylistPublic (e, el) {
 }
 
 function saveAccount (e, el) {
-  var data = getDataSet(el, true)
+  var data = getTargetDataSet(el, true, true)
   if (!data) return
-  update('self', null, data, function (err) {
+  update('self', null, data, function (err, obj) {
     if (err) return window.alert(err.message)
     window.alert(strings.accountUpdated)
     document.querySelector('[name="password"]').value = ""
+    resetTargetInitialValues(el, obj)
   })
 }
 
 function saveAccountSettings (e, el) {
-  var data = getDataSet(el, true)
+  var data = getTargetDataSet(el, true, true)
   if (!data) return
-  update('self/settings', null, data, function (err, settings) {
+  update('self/settings', null, data, function (err, obj) {
     if (err) return window.alert(err.message)
     window.alert(strings.settingsUpdated)
-    session.settings = settings
+    session.settings = obj
+    resetTargetInitialValues(el, obj)
   })
 }
 
 function buyOutLicense (e, el) {
-  go('/buy-license?' + objectToQueryString(getDataSet(el)))
+  go('/buy-license?' + objectToQueryString(getTargetDataSet(el)))
 }
 
 function searchMusic (e, el) {
-  var data   = getDataSet(el)
+  var data   = getTargetDataSet(el, false, true)
   var q      = queryStringToObject(window.location.search)
   var filter = []
   var fuzzy  = []

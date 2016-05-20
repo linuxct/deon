@@ -294,6 +294,7 @@ function getElementValue (el) {
 }
 
 function getElementInitialValue (el) {
+  if (!el.hasAttribute('initial-value')) return
   return parseElementValue(el, el.getAttribute('initial-value'))
 }
 
@@ -302,26 +303,24 @@ function parseElementValue (el, value) {
   if (type == 'checkbox') {
     return value == 'on' || value == 'true' || value === true ? true : false
   }
-  if (typeof value == 'string' && !isNaN(value)) {
+  if (typeof value == 'string' && value && !isNaN(value)) {
     return Number(value)
   }
   return value
 }
 
-function getDataSet (el, checkInitial) {
+function getDataSet (el, checkInitial, ignoreEmpty) {
   var obj
-  var target = el.getAttribute('data-set-target')
-  var setel  = document.querySelector('[data-set="'+target+'"]')
-  if (!setel)
-    return {}
-  var els    = setel.querySelectorAll('[name]')
+  var els = el.querySelectorAll('[name]')
   for (var i = 0; i < els.length; i++) {
     var kel = els[i]
     var key  = kel.getAttribute('name')
     var ival = getElementInitialValue(kel)
     var val  = getElementValue(kel)
-    // TODO handle radio scenario
-    if (obj && obj[key]) {
+    // TODO handle radio
+    if (ignoreEmpty && val == "") {
+      continue
+    } else if (obj && obj[key]) {
       if (!(obj[key] instanceof Array)) {
         obj[key] = [obj[key]]
       }
@@ -332,6 +331,35 @@ function getDataSet (el, checkInitial) {
     }
   }
   return obj
+}
+
+function getTargetDataSet (el, checkInitial, ignoreEmpty) {
+  var target = getDataSetTargetElement(el)
+  if (!target) return
+  return getDataSet(target, checkInitial, ignoreEmpty)
+}
+
+function getDataSetTargetElement (el) {
+  var target = el.getAttribute('data-set-target')
+  return document.querySelector('[data-set="' + target + '"]')
+}
+
+function resetTargetInitialValues (el, obj) {
+  var target = getDataSetTargetElement(el)
+  if (!target) return
+  resetInitialValues(target, obj)
+}
+
+function resetInitialValues (el, obj) {
+  els = el.querySelectorAll('[initial-value]')
+  for (var i = 0; i < els.length; i++) {
+    var el    = els[i]
+    var value = obj[el.getAttribute('name')]
+    // TODO handle radio
+    if (value == undefined || value == null)
+      value = ""
+    el.setAttribute('initial-value', value)
+  }
 }
 
 function cloneObject (obj) {
