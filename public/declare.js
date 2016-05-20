@@ -320,7 +320,7 @@ function getDataSet (el, checkInitial, ignoreEmpty) {
     var ival = getElementInitialValue(kel)
     var val  = getElementValue(kel)
     // TODO handle radio
-    if (ignoreEmpty && val == "") {
+    if (ignoreEmpty && val === "") {
       continue
     } else if (obj && obj[key]) {
       if (!(obj[key] instanceof Array)) {
