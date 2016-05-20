@@ -261,8 +261,13 @@ td.push-children-right > * {
 }
 
 .controls button.active > i,
-.controls button:hover {
+.controls button:hover,
+.controls button.repeat-all > i {
   color: dodgerblue;
+}
+
+.controls button.repeat-one > i {
+  color: orange;
 }
 
 button.active > i.active,

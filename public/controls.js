@@ -37,8 +37,12 @@ function previous(e, el) {
 }
 
 function toggleRepeat(e, el) {
-  player.loop = !player.loop
-  el.classList.toggle('active', player.loop)
+  var options = ['none', 'one', 'all']
+  var i = (options.indexOf(player.repeat) + 1) % options.length
+  player.repeat = options[i]
+
+  el.classList.toggle('repeat-one', player.repeat == 'one')
+  el.classList.toggle('repeat-all', player.repeat == 'all')
 }
 
 function toggleShuffle(e, el) {

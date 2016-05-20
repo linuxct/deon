@@ -1,4 +1,5 @@
-var endhost   = 'https://connect.monstercat.com'
+// var endhost   = 'https://connect.monstercat.com'
+var endhost   = 'http://localhost:8889'
 var endpoint  = endhost + '/api'
 var datapoint = 'https://s3.amazonaws.com/data.monstercat.com'
 var session   = null

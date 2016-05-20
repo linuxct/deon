@@ -16,7 +16,7 @@ class MusicPlayer {
     this.audio.addEventListener('progress', onStateChange.bind(this))
     this.audio.addEventListener('pause', onStateChange.bind(this))
 
-    this.continuous = true
+    this.repeatMode = 'none'
     this.shuffle = false
 
     this.clear()
@@ -170,16 +170,22 @@ class MusicPlayer {
     return this.audio.readyState >= 1 && this.audio.seekable
   }
 
-  get loop() {
-    return this.audio.loop
-  }
-
-  set loop(value) {
-    this.audio.loop = value
-  }
-
   get progress() {
     return this.audio.duration ? this.audio.currentTime / this.audio.duration : 0
+  }
+
+  get finished() {
+    return this.repeat == 'none' && ((!this.shuffle && this.index >= this.items.length - 1) ||
+            this.played.length >= this.items.length - 1)
+  }
+
+  get repeat() {
+    return this.repeatMode
+  }
+
+  set repeat(value) {
+    this.repeatMode = value
+    this.audio.loop = value == 'one'
   }
 }
 
@@ -195,8 +201,11 @@ function onStalled(e) {
 
 function onEnded(e) {
   cloneAndDispatch.call(this, e)
-  if (this.continuous)
-    this.next()
+  if (this.finished)
+    return
+  if (this.repeat == 'one')
+    return this.play()
+  this.next()
 }
 
 function cloneAndDispatch(e) {
