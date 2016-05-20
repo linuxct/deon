@@ -423,6 +423,7 @@ function mapReleaseTrack (o, index, arr) {
   o.trackNumber = index + 1
   o.index       = index
   o.canPlaylist = isSignedIn() ? { _id: o._id } : null
+  o.bpm         = Math.round(o.bpm)
   return o
 }
 
@@ -593,6 +594,19 @@ function transformAccountSettings(obj) {
   return obj
 }
 
+/* Completed Methods */
+
+function completedRelease (source, obj) {
+  if (obj.error) return
+  var r = obj.data
+  setMetaData({
+    "og:title": r.title,
+    "og:image": r.cover,
+    "og:url": location.toString(),
+    "og:type": "music.album"
+  })
+}
+
 /* Helpers */
 
 function uniqueArray (arr) {
@@ -649,6 +663,28 @@ function update (what, id, obj, done) {
 
 function destroy (what, id, done) {
   requestSimple("DELETE", what + '/' + id, null, done)
+}
+
+function addMetaElement (el, key, value) {
+  var mel = document.createElement('meta')
+  mel.setAttribute('property', key)
+  mel.setAttribute('content', value)
+  el.insertBefore(mel, el.firstElementChild)
+}
+
+function removeMetaElement (el, key) {
+  var target = el.querySelector('[property="' + key + '"]')
+  if (target)
+    target.parentElement.removeChild(target)
+}
+
+function setMetaData (obj) {
+  var head = document.querySelector('head')
+  if (!head) return
+  for (var key in obj) {
+    removeMetaElement(head, key)
+    addMetaElement(head, key, obj[key])
+  }
 }
 
 /* UI Stuff */

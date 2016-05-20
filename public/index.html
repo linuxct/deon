@@ -649,7 +649,8 @@
 <script type="text/template"
         route="^release\/(.*)"
         source="$endpoint/catalog/release/$1"
-        transform="mapRelease">
+        transform="mapRelease"
+        completed="completedRelease">
     <div class="release page width center">
         {{#loading}}
         <i class="fa fa-spin fa-refresh"></i>
@@ -693,10 +694,12 @@
                 <th class="shrink nohpad"></th>
                 <th>Title</th>
                 <th>Artists</th>
+                <th>Genre</th>
+                <th>BPM</th>
                 <th></th>
             </tr>
         </thead>
-        <tbody >
+        <tbody>
             {{#loading}}
             <tr><td colspan="5"><i class="fa fa-spin fa-refresh"></i></td></tr>
             {{/loading}}
@@ -726,6 +729,8 @@
                     <a href="/artist/{{_id}}">{{name}}</a>
                     {{/artists}}
                 </td>
+                <td>{{genre}}</td>
+                <td>{{bpm}}</td>
                 <td class="push-children-right">
                     <a class="silent"
                        target="_blank"
@@ -962,6 +967,8 @@
                     <th>Title</th>
                     <th>Release</th>
                     <th>Artist</th>
+                    <th>Genre</th>
+                    <th>BPM</th>
                     <th></th>
                 </tr>
             </thead>
@@ -1006,6 +1013,8 @@
             <a href="/artist/{{_id}}">{{name}}</a>
             {{/artists}}
         </td>
+        <td>{{genre}}</td>
+        <td>{{bpm}}</td>
         <td class="push-children-right">
             <a class="silent"
                href="{{downloadLink}}"

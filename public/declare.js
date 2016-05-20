@@ -262,7 +262,7 @@ function renderTemplateOptions (opts) {
   var fa = function (data) {
     render(container, template, data)
     if (typeof completed == 'function')
-      completed(opts.source, err, obj)
+      completed(opts.source, data)
   }
   var fn = function (err, obj) {
     fa({
@@ -274,7 +274,7 @@ function renderTemplateOptions (opts) {
     return applyTransform(transform, data, fn)
   render(container, template, data)
   if (typeof completed == 'function')
-    completed(opts.source, null, data)
+    completed(opts.source, data)
 }
 
 function render (container, template, scope) {
