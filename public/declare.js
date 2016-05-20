@@ -209,7 +209,8 @@ function loadSource (opts) {
     return window[name] ? window[name].toString() : name
   })
 
-  render(container, template, {loading: true})
+  if (!opts.disableLoadingRender)
+    render(container, template, {loading: true})
   loadCache(source, function (err, obj) {
     var fn = function (err, obj) {
       delete opts.transform
@@ -224,11 +225,12 @@ function loadSource (opts) {
   }, reset)
 }
 
-function loadSubSources (container, reset) {
+function loadSubSources (container, reset, disableLoadingRender) {
   var sources = container.querySelectorAll('[source]')
   for (var i = 0; i < sources.length; i++) {
     var opts = getElementSourceOptions(sources[i])
     opts.reset = reset
+    opts.disableLoadingRender = disableLoadingRender
     loadSource(opts)
   }
 }
