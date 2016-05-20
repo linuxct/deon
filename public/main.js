@@ -721,7 +721,7 @@ function openTrackCopyCredits (e, el) {
 // TODO don't use this...
 function simpleUpdate (err, obj, xhr) {
   if (err) return window.alert(err.message)
-  loadSubSources(document.querySelector('[role="content"]'))
+  loadSubSources(document.querySelector('[role="content"]'), true)
 }
 
 function canAccessGold (e, el) {
