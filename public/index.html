@@ -946,6 +946,9 @@
                 Public
             </label>
             {{/canPublic}}
+            <button action="reorderPlaylistFromInputs"><i class="fa fa-fw fa-save" role="save-playlist-order"></i> Save Order</button>
+            <button><i class="fa fa-fw fa-play" action="playSongs" role="play-playlist"></i></button>
+            <button><i class="fa fa-fw fa-cloud-download"></i></button>
             {{#canDownload}}
             <button class="faux"
                     title="Download Playlist"
@@ -959,7 +962,7 @@
                    role="play-playlist"></i>
             </button>
         </div>
-        <table>
+        <table class="drag-sortable">
             <thead>
                 <tr>
                     <th>#</th>
@@ -972,7 +975,7 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody source="$endpoint/playlist/{{_id}}/tracks"
+            <tbody role="playlist-tracks" source="$endpoint/playlist/{{_id}}/tracks"
                    template="playlist-tracks">
             </tbody>
         </table>
@@ -992,8 +995,16 @@
     {{/error}}
     {{#data}}
     {{#results}}
-    <tr>
-        <td>{{trackNumber}}.</td>
+    <tr role="playlist-track" track-id="{{_id}}" release-id="{{releaseId}}" draggable="true" ondrop="playlistDrop(event)" ondragover="playlistAllowDrop(event)" ondragleave="playlistDragLeave(event)" ondragstart="playlistDragStart(event, '{{_id}}', '{{releaseId}}')">
+        <td>
+            <input  type="text" 
+                    onfocus="playlistTrackOrderFocus(event, this)"
+                    onblur="playlistTrackOrderBlur(event, this)"
+                    track-id="{{_id}}"
+                    release-id="{{releaseId}}"
+                    track-title="{{title}}"
+                    name="trackOrder[]"
+                    value="{{trackNumber}}" size="2" /></td>
         <td class="shrink nohpad">
             <button class="faux"
                     action="playSong"
