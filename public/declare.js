@@ -286,11 +286,24 @@ function getTemplateEl(name) {
   return document.querySelector('[template-name="' + name + '"]');
 }
 
-function getElementValue (el, value) {
-  if (value == undefined) return getElementValue(el, el.value)
+function getElementValue (el) {
   var type = el.getAttribute('type')
-  if (type == 'checkbox') {
+  if (type == 'checkbox')
     return el.checked
+  return parseElementValue(el, el.value)
+}
+
+function getElementInitialValue (el) {
+  return parseElementValue(el, el.getAttribute('initial-value'))
+}
+
+function parseElementValue (el, value) {
+  var type  = el.getAttribute('type').toLowerCase()
+  if (type == 'checkbox') {
+    return value == 'on' || value == 'true' || value === true ? true : false
+  }
+  if (typeof value == 'string' && !isNaN(value)) {
+    return Number(value)
   }
   return value
 }
@@ -305,7 +318,7 @@ function getDataSet (el, checkInitial) {
   for (var i = 0; i < els.length; i++) {
     var kel = els[i]
     var key  = kel.getAttribute('name')
-    var ival = getElementValue(kel, kel.getAttribute('initial-value'))
+    var ival = getElementInitialValue(kel)
     var val  = getElementValue(kel)
     // TODO handle radio scenario
     if (obj && obj[key]) {
