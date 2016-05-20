@@ -214,7 +214,7 @@ function loadSource (opts) {
     var fn = function (err, obj) {
       delete opts.transform
       opts.data = {
-        err: err,
+        error: err,
         data: obj
       }
       renderTemplateOptions(opts)
@@ -266,7 +266,7 @@ function renderTemplateOptions (opts) {
   }
   var fn = function (err, obj) {
     fa({
-      err: err,
+      error: err,
       data: obj
     })
   }
