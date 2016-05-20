@@ -242,16 +242,14 @@ function saveAccount (e, el) {
   update('self', null, data, function (err) {
     if (err) return window.alert(err.message)
     window.alert(strings.accountUpdated)
-    // TODO clear password
+    document.querySelector('[name="password"]').value = ""
   })
 }
 
 function saveAccountSettings (e, el) {
-  var data = getDataSet(el)
+  var data = getDataSet(el, true)
   if (!data) return
-
-  var id = session && session.user ? session.user.userSettingsId : undefined
-  update('self/settings', id, data, function (err, settings) {
+  update('self/settings', null, data, function (err, settings) {
     if (err) return window.alert(err.message)
     window.alert(strings.settingsUpdated)
     session.settings = settings
