@@ -151,7 +151,10 @@ function signUp (e, el) {
 function createPlaylist (e, el) {
   var name = window.prompt(strings.createPlaylist)
   if (!name) return
-  create('playlist', {name: name}, simpleUpdate)
+  create('playlist', {
+    name: name,
+    public: session.settings.playlistPublicByDefault
+  }, simpleUpdate)
 }
 
 function renamePlaylist (e, el) {
