@@ -57,10 +57,10 @@
     </div>
 </div>
 
-<div role="modals"></div>
+<div role="modals" class="modal-layer"></div>
 
 <script type="text/template" template-name="subscription-required-modal">
-    <div class="modal-window">
+    <div class="modal">
         <h1>Sign Up!</h1>
         <p>You need a subscription to do that!</p>
         <a href="/sign-up">Sign Up Here</a> or 
@@ -87,25 +87,20 @@
 <script type="text/template"
         template-name="track-copycredits-modal"
         transform="loadReleaseAndTrack">
-  <div class="modal-window">
-    {{#loading}}
-    ...
-    {{/loading}}
-    {{#err}}
-    <div class="modal-body">
-      <p>Error: {{message}}</p>
+    <div class="modal">
+        {{#loading}}
+        ...
+        {{/loading}}
+        {{#err}}
+        <p>Error: {{message}}</p>
+        {{/err}}
+        {{#data}}
+        <textarea class="copycredits">{{track.copycredit}}</textarea>
+        <button action="closeModal">
+            <i class="fa fa-remove"></i>
+        </button>
+        {{/data}}
     </div>
-    {{/err}}
-    {{#data}}
-    <div class="modal-header">
-      <button type="button" action="closeModal" class="modal-x"><i class="fa fa-remove"></i></button>
-      <h2>{{track.title}} by {{track.artistsTitle}}</h2>
-    </div>
-    <div class="modal-body">
-      <textarea class="copycredits">{{track.copycredit}}</textarea>
-    </div>
-    {{/data}}
-  </div>
 </script>
 
 <script type="text/template"
@@ -364,6 +359,11 @@
                         </option>
                         {{/downloadOptions}}
                     </select>
+                    <span class="note">
+                    See more about MP3 quality
+                    <a href="http://wiki.hydrogenaud.io/index.php?title=LAME#Recommended_encoder_settings"
+                       target="_blank">here</a>.
+                    </span>
                 </td>
             </tr>
             <tr>

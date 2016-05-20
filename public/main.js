@@ -17,14 +17,11 @@ var strings   = {
 }
 var downloadOptions = [
   {
-    name: "WAV (Original)",
-    value: "wav"
-  }, {
-    name: "FLAC",
-    value: "flac"
-  }, {
-    name: "MP3 320",
+    name: "MP3 320kbps",
     value: "mp3_320"
+  }, {
+    name: "MP3 128kbps",
+    value: "mp3_128"
   }, {
     name: "MP3 V0",
     value: "mp3_v0"
@@ -32,9 +29,12 @@ var downloadOptions = [
     name: "MP3 V2",
     value: "mp3_v2"
   }, {
-    name: "MP3 128",
-    value: "mp3_128"
-  }
+    name: "WAV",
+    value: "wav"
+  }, {
+    name: "FLAC",
+    value: "flac"
+  },
 ]
 
 document.addEventListener("DOMContentLoaded", function (e) {
