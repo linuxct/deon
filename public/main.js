@@ -1,4 +1,5 @@
 var endhost   = 'https://connect.monstercat.com'
+var facebookAppId = '282352068773785'
 var endpoint  = endhost + '/api'
 var datapoint = 'https://s3.amazonaws.com/data.monstercat.com'
 var session   = null
@@ -80,12 +81,16 @@ function signIn (e, el) {
     data: getTargetDataSet(el)
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
-    getSession(function (err, sess) {
-      if (err) return window.alert(err.message)
-      session = sess
-      renderHeader()
-      go("/")
-    })
+    onSignIn()
+  })
+}
+
+function onSignIn() {
+  getSession(function (err, sess) {
+    if (err) return window.alert(err.message)
+    session = sess
+    renderHeader()
+    go("/")
   })
 }
 
@@ -955,4 +960,92 @@ function playlistDrop (e) {
   droppedTr.classList.remove('drag-active', 'drag-active-bottom', 'drag-active-top')
   resetPlaylistInputs()
   savePlaylistOrder()
+}
+
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: facebookAppId,
+    cookie: true,
+    version: 'v2.5'
+  })
+}
+
+function transformSocialSettings (obj) {
+  obj.facebookEnabled = !!obj.facebookId
+  obj.googleEnabled = !!obj.googleId
+  return obj
+}
+
+function sendAccessToken(where, done) {
+  function handle(res) {
+    if (res.status != 'connected' || !res.authResponse)
+      return done(Error('User did not authorize.'))
+
+    var data = {
+      accessToken: res.authResponse.accessToken
+    }
+    requestJSON({
+      url: endpoint + where,
+      method: 'POST',
+      data: data,
+      withCredentials: true
+    }, function (err, obj, xhr) {
+      done(err)
+    })
+  }
+
+  FB.login(handle)
+}
+
+function sendIdToken(token, where, done) {
+  var data = {
+    idToken: token
+  }
+  requestJSON({
+    url: endpoint + where,
+    method: 'POST',
+    data: data,
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    done(err)
+  })
+}
+
+function enableGoogleSignin (e, el) {
+  if (!gapi.auth2) return
+
+  var auth = gapi.auth2.getAuthInstance()
+  auth.signIn()
+  .then(function (user) {
+    sendIdToken(user.getAuthResponse().id_token, '/self/google/signin/enable', function (err) {
+      if (err) return window.alert(err.message)
+      window.location.reload()
+    })
+  })
+}
+
+function signInGoogle (e, el) {
+  if (!gapi.auth2) return
+  var auth = gapi.auth2.getAuthInstance()
+  auth.signIn()
+  .then(function (user) {
+    sendIdToken(user.getAuthResponse().id_token, '/self/google/signin', function (err) {
+      if (err) return window.alert(err.message)
+      onSignIn()
+    })
+  })
+}
+
+function signInFacebook (e, el) {
+  sendAccessToken('/self/facebook/signin', function (err) {
+    if (err) return window.alert(err.message)
+    onSignIn()
+  })
+}
+
+function enableFacebookSignin (e, el) {
+  sendAccessToken('/self/facebook/signin/enable', function (err) {
+    if (err) return window.alert(err.message)
+    window.location.reload()
+  })
 }

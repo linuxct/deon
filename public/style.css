@@ -138,6 +138,10 @@ button.select select {
   cursor: pointer;
 }
 
+button[disabled] {
+  cursor: not-allowed;
+}
+
 input.round {
   border: solid 3px #d4d4d4;
   font-size: 16px;
@@ -282,7 +286,8 @@ button > i.inactive {
 }
 
 button.active > i.inactive,
-button > i.active {
+button > i.active,
+.hide {
   display: none;
 }
 
