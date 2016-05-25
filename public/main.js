@@ -1198,4 +1198,3 @@ function enableFacebookSignin (e, el) {
     window.location.reload()
   })
 }
->>>>>>> origin/master

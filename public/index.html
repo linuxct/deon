@@ -1069,11 +1069,6 @@
     {{/error}}
     {{#data}}
     {{#results}}
-<<<<<<< HEAD
-    <tr role="playlist-track" track-id="{{_id}}" release-id="{{releaseId}}" draggable="true" ondrop="playlistDrop(event)" ondragover="playlistAllowDrop(event)" ondragleave="playlistDragLeave(event)" ondragstart="playlistDragStart(event, '{{_id}}', '{{releaseId}}')">
-        <td>
-            <input  type="text" 
-=======
     <tr role="playlist-track"
         track-id="{{_id}}"
         release-id="{{releaseId}}"
@@ -1087,23 +1082,18 @@
         <td>
             {{#edit}}
             <input  type="text"
->>>>>>> origin/master
                     onfocus="playlistTrackOrderFocus(event, this)"
                     onblur="playlistTrackOrderBlur(event, this)"
                     track-id="{{_id}}"
                     release-id="{{releaseId}}"
                     track-title="{{title}}"
                     name="trackOrder[]"
-<<<<<<< HEAD
-                    value="{{trackNumber}}" size="2" /></td>
-=======
                     value="{{trackNumber}}" size="2" />
             {{/edit}}
             {{#noEdit}}
             {{trackNumber}}.
             {{/noEdit}}
         </td>
->>>>>>> origin/master
         <td class="shrink nohpad">
             <button class="faux"
                     action="playSong"
