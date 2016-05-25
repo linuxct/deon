@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="google-signin-client_id" content="1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com">
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
     <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js" defer async></script>
+    <script type="text/javascript" src="https://apis.google.com/js/platform.js" defer async></script>
     <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
@@ -15,6 +18,7 @@
 <body>
 
 <header>
+    <div class="g-signin2 hide"></div>
     <div class="scrub" action="scrub">
         <div class="progress" role="scrub-progress"></div>
     </div>
@@ -135,6 +139,8 @@
             </tbody>
         </table>
         <button action="signIn" data-set-target="credentials">Sign In</button>
+        <button action="signInFacebook">Sign In With Facebook</button>
+        <button action="signInGoogle">Sign In With Google</button>
         <br/>
         <br/>
         <a href="/forgot-password">Forgot your password?</a>
@@ -390,10 +396,42 @@
             </tr>
         </tbody>
     </table>
+    <div source="$endpoint/self/social-signins"
+         template="social-settings">
+    </div>
+    <br/>
     <button action="saveAccountSettings"
             data-set-target="settings">
         Update Settings
     </button>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="social-settings"
+        transform="transformSocialSettings">
+    {{#data}}
+    {{#facebookEnabled}}
+    <button disabled>
+        Facebook enabled
+    </button>
+    {{/facebookEnabled}}
+    {{^facebookEnabled}}
+    <button action="enableFacebookSignin">
+        Enable Facebook signin
+    </button>
+    {{/facebookEnabled}}
+
+    {{#googleEnabled}}
+    <button disabled>
+        Google Login enabled
+    </button>
+    {{/googleEnabled}}
+    {{^googleEnabled}}
+    <button action="enableGoogleSignin">
+        Enable Google signin
+    </button>
+    {{/googleEnabled}}
     {{/data}}
 </script>
 
