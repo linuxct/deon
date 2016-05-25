@@ -427,17 +427,31 @@ function getSocials (urls) {
     twitter: /twitter\.com/,
     facebook: /facebook\.com/,
     soundcloud: /soundcloud\.com/,
-    youtube: /youtube\.com/
+    "youtube-play": /youtube\.com/
   }
-  var obj = {}
+  var arr = []
   urls.forEach(function (url) {
     for (var tag in socials) {
       if (socials[tag].test(url)) {
-        obj[tag] = url
+        arr.push({
+          link: url,
+          icon: tag
+        })
       }
     }
   })
-  return obj
+  return arr
+}
+
+function getReleaseShareLink(urls) {
+  var link
+  var re = /spotify\.com/
+  urls.forEach(function (url) {
+    if (re.test(url)) {
+      link = url
+    }
+  })
+  return link
 }
 
 /* Map Methods
@@ -458,8 +472,11 @@ function mapRelease (o) {
   o.artists = o.renderedArtists
   o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
   o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
-  if (o.urls instanceof Array)
+  if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
+    o.share = getReleaseShareLink(o.urls)
+    o.purchase = !!o.urls.length
+  }
   o.downloadLink = getDownloadLink(o._id)
   return o
 }
@@ -488,6 +505,14 @@ function mapWebsiteDetails (o) {
     o.socials = getSocials(o.urls)
   }
   return o
+}
+
+function sortRelease (a, b) {
+  var a = new Date(a.preReleaseDate || a.releaseDate)
+  var b = new Date(b.preReleaseDate || b.releaseDate)
+  if (a > b) return -1
+  if (a < b) return 1
+  return 0
 }
 
 /* Transform Methods */
@@ -597,7 +622,7 @@ function transformMusicReleases (obj) {
 }
 
 function transformReleases (obj) {
-  obj.results = obj.results.map(mapRelease)
+  obj.results = obj.results.sort(sortRelease).map(mapRelease)
   obj.skip  = (parseInt(obj.skip) || 0) + 1
   obj.count = obj.skip + obj.results.length - 1
   return obj

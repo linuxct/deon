@@ -689,21 +689,31 @@
         source="$endpoint/catalog/release/$1"
         transform="mapRelease"
         completed="completedRelease">
-    <div class="release page width center">
-        {{#loading}}
-        <i class="fa fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <div class="bgbox" style="background-image: url('{{coverBig}}')">
-            <div class="bgbox-blanket cl-white">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <div class="bgbox" style="background-image: url('{{coverBig}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box page width center clearfix">
                 <img class="artwork" src="{{cover}}"/>
-                <h1 class="cancel-margin-bottom" release-id="{{_id}}">{{title}}</h1>
+                <h1 release-id="{{_id}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
                 <label>Released {{releaseDate}}</label>
                 <div class="options push-children-right">
+                    {{#purchase}}
+                    <button class="faux" action="openPurchaseRelease">
+                        <i class="fa fa-shopping-bag"></i>
+                    </button>
+                    {{/purchase}}
+                    {{#share}}
+                    <a class="silent" href="{{share}}" target="_blank">
+                        <i class="fa fa-spotify"></i>
+                    </a>
+                    {{/share}}
                     <a class="silent"
                     href="{{downloadLink}}"
                     target="_blank"
@@ -720,12 +730,14 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="release page width center">
         <div
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
-        {{/data}}
     </div>
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -817,8 +829,10 @@
         {{/websiteDetailsId}}
         <div class="page center width">
             {{^websiteDetailsId}}
+            <br/>
             <h2>About</h2>
             <p>There are no details.</p>
+            <br/>
             {{/websiteDetailsId}}
             <br/>
             <br/>
@@ -841,7 +855,7 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <ul>
+    <ul class="discography">
         {{#results}}
         <li>
             <a href="/release/{{_id}}">
@@ -866,43 +880,31 @@
     {{#data}}
     <div class="bgbox" style="background-image: url('{{image}}')">
         <div class="bgbox-blanket cl-white">
-            <div class="page center width flex">
-                <div class="flex-strong artist-details">
-                    <h1>{{name}}</h1>
+            <div class="details-box page width center clearfix">
+                {{#image}}
+                <img class="artwork" src="{{image}}"/>
+                {{/image}}
+                <h1>{{name}}</h1>
+                <div class="options push-children-right">
                     {{#socials}}
-                    <div class="push-children-right">
-                        {{#twitter}}
-                        <a href="{{twitter}}"><i class="fa fa-twitter"></i></a>
-                        {{/twitter}}
-                        {{#facebook}}
-                        <a href="{{facebook}}"><i class="fa fa-facebook-official"></i></a>
-                        {{/facebook}}
-                        {{#soundcloud}}
-                        <a href="{{soundcloud}}"><i class="fa fa-soundcloud"></i></a>
-                        {{/soundcloud}}
-                        {{#youtube}}
-                        <a href="{{youtube}}"><i class="fa fa-youtube-play"></i></a>
-                        {{/youtube}}
-                        {{/socials}}
-                    </div>
-                </div>
-                <div>
-                    {{#image}}
-                    <img class="artist-image" src="{{image}}" title="Artist profile image."/>
-                    {{/image}}
+                    <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
+                    {{/socials}}
                 </div>
             </div>
         </div>
     </div>
     <div class="page width center">
-        
         {{#about}}
+        <br/>
         <h2>About</h2>
         <p>{{about}}</p>
         {{/about}}
         {{#contact}}
-        <h3>Booking & Managment</h3>
+        <br/>
+        <h2>Booking & Managment</h2>
+        <br/>
         <p>{{booking}}</p>
+        <br/>
         <p>{{management}}</p>
         {{/contact}}
     </div>
