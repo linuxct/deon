@@ -267,7 +267,7 @@ function buyOutLicense (e, el) {
 }
 
 function searchMusic (e, el) {
-  var data   = getTargetDataSet(el, false, true)
+  var data   = getTargetDataSet(el)
   var q      = queryStringToObject(window.location.search)
   var filter = []
   var fuzzy  = []
@@ -277,6 +277,7 @@ function searchMusic (e, el) {
     fuzzy.push('title', data.search)
   q.filters = filter.join(',')
   q.fuzzy   = fuzzy.join(',')
+  q.skip    = 0
   go('/music?' + objectToQueryString(q))
 }
 
@@ -416,6 +417,24 @@ function isMyPlaylist (playlist) {
   return playlist.userId == session.user._id
 }
 
+function getSocials (urls) {
+  var socials = {
+    twitter: /twitter\.com/,
+    facebook: /facebook\.com/,
+    soundcloud: /soundcloud\.com/,
+    youtube: /youtube\.com/
+  }
+  var obj = {}
+  urls.forEach(function (url) {
+    for (var tag in socials) {
+      if (socials[tag].test(url)) {
+        obj[tag] = url
+      }
+    }
+  })
+  return obj
+}
+
 /* Map Methods
  * Should conform to the array map method parameters.
  */
@@ -459,6 +478,9 @@ function mapWebsiteDetails (o) {
       booking: o.bookings,
       management: o.managementDetail
     }
+  }
+  if (o.urls) {
+    o.socials = getSocials(o.urls)
   }
   return o
 }

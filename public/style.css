@@ -151,6 +151,10 @@ hr {
   border: none;
 }
 
+.flex {
+  display: flex;
+}
+
 .page.width {
   width: 80%;
 }
@@ -353,7 +357,6 @@ span.note a {
 }
 
 .bgbox-blanket {
-  padding: 1em;
   background-color: rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
@@ -369,4 +372,22 @@ table.drag-sortable tr.drag-active-top {
 
 table.drag-sortable tr.drag-active-bottom {
   border-bottom: 2px solid #000;
+}
+
+.artist-details {
+  padding-top: 2em;
+}
+
+.artist-details h1 {
+  font-size: 70px;
+  margin: 0;
+}
+
+.artist-details i.fa {
+  font-size: 26px;
+}
+
+.artist-image {
+  height: 310px;
+  display: block;
 }
