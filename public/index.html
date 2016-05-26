@@ -200,6 +200,67 @@
 </script>
 
 <script type="text/template"
+        route="^confirm-sign-up"
+        transform="mapConfirmSignup">
+    <div class="page width center">
+        {{#data}}
+        <h1>Confirm Sign-Up</h1>
+        <table class="form" data-set="credentials">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input type="text"
+                               name="email"
+                               placeholder="kitty@monstercat.com"
+                               value="{{email}}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Password (Optional)</th>
+                    <td>
+                        <input type="text"
+                               name="password"
+                               placeholder="a secret"/>
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td>
+                        <select name="location">
+                            <option disabled selected>Select One</option>
+                            {{#countries}}
+                            <option value="{{name}}">
+                                {{name}}
+                            </option>
+                            {{/countries}}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="hidden" name="token" value="{{token}}"/>
+                        <input type="hidden" name="submitWhere" value="{{submitWhere}}"/>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <button action="signUpSocial" data-set-target="credentials">Sign Up</button>
+        {{/data}}
+
+        {{^data}}
+        <p>Nothing here.</p>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
@@ -243,6 +304,8 @@
             </tbody>
         </table>
         <button action="signUp" data-set-target="credentials">Sign Up</button>
+        <button action="signUpFacebook">Sign up With Facebook</button>
+        <button action="signUpGoogle">Sign up With Google</button>
     </div>
 </script>
 
@@ -412,24 +475,24 @@
         transform="transformSocialSettings">
     {{#data}}
     {{#facebookEnabled}}
-    <button disabled>
-        Facebook enabled
+    <button action="unlinkFacebook">
+        Unlink Facebook Account
     </button>
     {{/facebookEnabled}}
     {{^facebookEnabled}}
     <button action="enableFacebookSignin">
-        Enable Facebook signin
+        Enable Facebook Signin
     </button>
     {{/facebookEnabled}}
 
     {{#googleEnabled}}
-    <button disabled>
-        Google Login enabled
+    <button action="unlinkGoogle">
+        Unlink Google Account
     </button>
     {{/googleEnabled}}
     {{^googleEnabled}}
     <button action="enableGoogleSignin">
-        Enable Google signin
+        Enable Google Signin
     </button>
     {{/googleEnabled}}
     {{/data}}

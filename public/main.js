@@ -15,7 +15,8 @@ var strings   = {
   "removedFromPlaylist": "Song succesfully removed from playlist.",
   "passwordMissing": "You must enter a password.",
   "passwordReset": "Your password has been reset. Please sign in.",
-  "passwordResetEmail": "Check your email for a link to reset your password."
+  "passwordResetEmail": "Check your email for a link to reset your password.",
+  "noAccount": "You do not have an account, would you like to create one?"
 }
 var downloadOptions = [
   {
@@ -137,9 +138,10 @@ function updatePassword (e, el) {
   })
 }
 
-function signUp (e, el) {
+
+function signUpAt (e, el, where) {
   requestJSON({
-    url: endpoint + '/signup',
+    url: endpoint + where,
     method: 'POST',
     withCredentials: true,
     data: getTargetDataSet(el)
@@ -152,6 +154,16 @@ function signUp (e, el) {
       go("/")
     })
   })
+}
+
+function signUp (e, el) {
+  signUpAt(e, el, '/signup')
+}
+
+function signUpSocial (e, el) {
+  var data = getTargetDataSet(el)
+  var where = data.submitWhere
+  signUpAt(e, el, where)
 }
 
 function createPlaylist (e, el) {
@@ -490,6 +502,14 @@ function mapSignup () {
 function mapAccount (o) {
   o.countries = getAccountCountries(o.location)
   return o
+}
+
+function mapConfirmSignup () {
+  var obj = queryStringToObject(window.location.search)
+  if (!Object.keys(obj).length) return
+
+  obj.countries = getAccountCountries()
+  return obj
 }
 
 function mapWebsiteDetails (o) {
@@ -1131,7 +1151,7 @@ function sendAccessToken(where, done) {
       return done(Error('User did not authorize.'))
 
     var data = {
-      accessToken: res.authResponse.accessToken
+      token: res.authResponse.accessToken
     }
     requestJSON({
       url: endpoint + where,
@@ -1139,7 +1159,7 @@ function sendAccessToken(where, done) {
       data: data,
       withCredentials: true
     }, function (err, obj, xhr) {
-      done(err)
+      done(err, xhr ? xhr.status : null)
     })
   }
 
@@ -1148,7 +1168,7 @@ function sendAccessToken(where, done) {
 
 function sendIdToken(token, where, done) {
   var data = {
-    idToken: token
+    token: token
   }
   requestJSON({
     url: endpoint + where,
@@ -1156,7 +1176,7 @@ function sendIdToken(token, where, done) {
     data: data,
     withCredentials: true
   }, function (err, obj, xhr) {
-    done(err)
+    done(err, xhr ? xhr.status : null)
   })
 }
 
@@ -1166,7 +1186,7 @@ function enableGoogleSignin (e, el) {
   var auth = gapi.auth2.getAuthInstance()
   auth.signIn()
   .then(function (user) {
-    sendIdToken(user.getAuthResponse().id_token, '/self/google/signin/enable', function (err) {
+    sendIdToken(user.getAuthResponse().id_token, '/self/google/enable', function (err) {
       if (err) return window.alert(err.message)
       window.location.reload()
     })
@@ -1178,22 +1198,76 @@ function signInGoogle (e, el) {
   var auth = gapi.auth2.getAuthInstance()
   auth.signIn()
   .then(function (user) {
-    sendIdToken(user.getAuthResponse().id_token, '/self/google/signin', function (err) {
-      if (err) return window.alert(err.message)
-      onSignIn()
-    })
+    sendIdToken(user.getAuthResponse().id_token, '/google/signin', onSocialSignIn)
   })
 }
 
 function signInFacebook (e, el) {
-  sendAccessToken('/self/facebook/signin', function (err) {
-    if (err) return window.alert(err.message)
-    onSignIn()
-  })
+  sendAccessToken('/facebook/signin', onSocialSignIn)
+}
+
+function onSocialSignIn (err, status) {
+  if (err) return window.alert(err.message)
+  if (status === 303)
+    return window.confirm(strings.noAccount) ? go('/sign-up') : ''
+
+  onSignIn()
 }
 
 function enableFacebookSignin (e, el) {
-  sendAccessToken('/self/facebook/signin/enable', function (err) {
+  sendAccessToken('/self/facebook/enable', function (err) {
+    if (err) return window.alert(err.message)
+    if (status === 303) return go('/sign-up')
+    window.location.reload()
+  })
+}
+
+function signUpGoogle (e, el) {
+  if (!gapi.auth2) return
+  var auth = gapi.auth2.getAuthInstance()
+  auth.signIn()
+  .then(function (user) {
+    var obj = {
+      email: user.getBasicProfile().getEmail(),
+      token: user.getAuthResponse().id_token,
+      submitWhere: '/google/signup'
+    }
+    go('/confirm-sign-up?' + objectToQueryString(obj))
+  })
+}
+
+function signUpFacebook (e, el) {
+  function handle(res) {
+    if (res.status != 'connected' || !res.authResponse)
+      return done(Error('User did not authorize.'))
+
+    FB.api('/me?fields=name,email', function (ares) {
+      var obj = {
+        email: ares.email,
+        token: res.authResponse.accessToken,
+        submitWhere: '/facebook/signup'
+      }
+      go('/confirm-sign-up?' + objectToQueryString(obj))
+    })
+  }
+
+  FB.login(handle, {scope: 'public_profile,email'})
+}
+
+function unlinkFacebook (e, el) {
+  unlinkAccount('facebook')
+}
+
+function unlinkGoogle (e, el) {
+  unlinkAccount('google')
+}
+
+function unlinkAccount (which) {
+  requestJSON({
+    url: endpoint + '/self/' + which + '/unlink',
+    method: 'POST',
+    withCredentials: true
+  }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     window.location.reload()
   })

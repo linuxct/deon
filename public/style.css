@@ -138,10 +138,6 @@ button.select select {
   cursor: pointer;
 }
 
-button[disabled] {
-  cursor: not-allowed;
-}
-
 input.round {
   border: solid 3px #d4d4d4;
   font-size: 16px;
