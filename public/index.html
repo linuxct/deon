@@ -269,6 +269,7 @@
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
+        {{#data}}
         <table class="form" data-set="credentials">
             <tbody>
                 <tr>
@@ -311,6 +312,7 @@
         <button action="signUp" data-set-target="credentials">Sign Up</button>
         <button action="signUpFacebook">Sign up With Facebook</button>
         <button action="signUpGoogle">Sign up With Google</button>
+        {{/data}}
     </div>
 </script>
 
