@@ -56,6 +56,11 @@
     </div>
 </section>
 
+<footer class="page center width push-children-right">
+    <label>2016 &copy; Monstercat</label>
+    <a href="/help" title="Help"><i class="fa fa-question-circle"></i></a>
+</footer>
+
 <div class="toasts">
     <div role="toasts">
     </div>
@@ -667,11 +672,11 @@
     <ul class="page width center art-list">
         {{#results}}
         <li>
-            <a href="/release/{{_id}}">
+            <a class="silent" href="/release/{{_id}}" title="{{title}} / {{artists}}">
                 <img src="{{cover}}"/>
-                <label class="title">{{title}}</label>
+                <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
-                <label>{{releaseDate}}</label>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
             </a>
         </li>
         {{/results}}

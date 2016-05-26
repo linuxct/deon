@@ -576,7 +576,7 @@ function transformPlaylistTracks (obj, done) {
 
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
-  q.fields = ['title', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
+  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
   q.limit  = 25
   q.skip   = parseInt(q.skip) || 0
   var fuzzy   = commaStringToObject(q.fuzzy)

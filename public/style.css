@@ -228,6 +228,22 @@ td.push-children-right > * {
   font-weight: bold;
 }
 
+.art-list li label.artist {
+  font-size: 16px;
+}
+
+.art-list li label{
+  cursor: pointer;
+}
+
+.one-line-ellipsis {
+  display: inline-block;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .details-box {
   padding: 2em 0;
 }
@@ -428,4 +444,13 @@ table.drag-sortable tr.drag-active-bottom {
 .discography li img {
   max-width: 147px;
   display: block;
+}
+
+footer {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+footer > * {
+  font-size: 14px;
 }
