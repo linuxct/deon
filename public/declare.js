@@ -34,7 +34,7 @@ function request (opts, done) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState != 4) return
-    if (xhr.status >= 200 && xhr.status < 300) {
+    if (xhr.status >= 200 && xhr.status < 400) {
       return done(null, xhr.responseText, xhr)
     }
     var msg = xhr.responseText || "An error occured."

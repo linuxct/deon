@@ -20,10 +20,6 @@ input[type="password"] {
   font-family: "Proxima Nova", sans-serif;
 }
 
-ul {
-  list-style-position: inside;
-}
-
 p, label, a {
   font-size: 18px;
 }
@@ -33,11 +29,15 @@ select {
 }
 
 h1 {
-  font-size: 2em;
+  font-size: 42px;
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 26px;
 }
 
 h1 {
@@ -56,7 +56,6 @@ section.page {
 
 table {
   width: 100%;
-  margin: 1em 0;
   border-collapse: collapse;
 }
 
@@ -152,6 +151,10 @@ hr {
   border: none;
 }
 
+.flex {
+  display: flex;
+}
+
 .page.width {
   width: 80%;
 }
@@ -167,6 +170,14 @@ hr {
 
 .pad-vertical {
   margin: 1em 0;
+}
+
+.clearfix:after { 
+   content: "."; 
+   visibility: hidden; 
+   display: block; 
+   height: 0; 
+   clear: both;
 }
 
 .label-header {
@@ -213,11 +224,52 @@ td.push-children-right > * {
   font-weight: bold;
 }
 
-.release img.artwork {
-  float: left;
-  max-width: 128px;
-  margin-right: 1em; 
-  margin-bottom: 1em;
+.art-list li label.artist {
+  font-size: 16px;
+}
+
+.art-list li label{
+  cursor: pointer;
+}
+
+.one-line-ellipsis {
+  display: inline-block;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.details-box {
+  padding: 2em 0;
+}
+
+.details-box h1,
+.details-box h2,
+.details-box label,
+.details-box .options {
+  margin: 20px 0;
+  line-height: 1;
+  display: block;
+}
+
+.details-box h1 {
+  font-size: 48px;
+  margin: 0;
+}
+
+.details-box h2 {
+  font-size: 32px;
+  margin-top: 0;
+}
+
+.details-box img.artwork {
+  float: right;
+  max-height: 256px;
+}
+
+.details-box .options i {
+  font-size: 20px;
 }
 
 .scrub {
@@ -232,12 +284,20 @@ td.push-children-right > * {
   background: #d4d4d4;
 }
 
+header:hover .scrub > .progress {
+  background: dodgerblue;
+}
+
 .player {
   padding: 1em 1em 0;
 }
 
 .bg-gray {
   background: #f5f5f5;
+}
+
+.cl-white * {
+  color: white;
 }
 
 .flex {
@@ -276,7 +336,8 @@ button > i.inactive {
 }
 
 button.active > i.inactive,
-button > i.active {
+button > i.active,
+.hide {
   display: none;
 }
 
@@ -339,6 +400,18 @@ span.note a {
   padding: 20px;
   background: white;
 }
+
+.bgbox {
+  margin-top: 1em;
+  background-size: 110%;
+  background-position: center 60%;
+}
+
+.bgbox-blanket {
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
 table.drag-sortable tr {
   border-top: 2px solid transparent;
   border-bottom: 1px solid transparent;
@@ -350,4 +423,30 @@ table.drag-sortable tr.drag-active-top {
 
 table.drag-sortable tr.drag-active-bottom {
   border-bottom: 2px solid #000;
+}
+
+.discography {
+  list-style: none;
+  margin-left: -1em;
+  margin-top: -1em;
+}
+
+.discography li {
+  display: inline-block;
+  margin: 1em 0 0 1em;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.discography li img {
+  max-width: 147px;
+  display: block;
+}
+
+footer {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+footer > * {
+  font-size: 14px;
 }

@@ -51,7 +51,7 @@ function toggleShuffle(e, el) {
 }
 
 function playSong(e, el) {
-  var index = el.hasAttribute('index') ?  el.getAttribute('index') : undefined
+  var index = el.hasAttribute('index') ? +el.getAttribute('index') : undefined
   if (index != undefined)
     loadAndPlayTracks(index)
 }

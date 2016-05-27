@@ -1,4 +1,5 @@
 var endhost   = 'https://connect.monstercat.com'
+var facebookAppId = '282352068773785'
 var endpoint  = endhost + '/api'
 var datapoint = 'https://s3.amazonaws.com/data.monstercat.com'
 var session   = null
@@ -14,7 +15,8 @@ var strings   = {
   "removedFromPlaylist": "Song succesfully removed from playlist.",
   "passwordMissing": "You must enter a password.",
   "passwordReset": "Your password has been reset. Please sign in.",
-  "passwordResetEmail": "Check your email for a link to reset your password."
+  "passwordResetEmail": "Check your email for a link to reset your password.",
+  "noAccount": "You do not have an account, would you like to create one?"
 }
 var downloadOptions = [
   {
@@ -81,12 +83,16 @@ function signIn (e, el) {
     data: getTargetDataSet(el)
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
-    getSession(function (err, sess) {
-      if (err) return window.alert(err.message)
-      session = sess
-      renderHeader()
-      go("/")
-    })
+    onSignIn()
+  })
+}
+
+function onSignIn() {
+  getSession(function (err, sess) {
+    if (err) return window.alert(err.message)
+    session = sess
+    renderHeader()
+    go("/")
   })
 }
 
@@ -133,9 +139,10 @@ function updatePassword (e, el) {
   })
 }
 
-function signUp (e, el) {
+
+function signUpAt (e, el, where) {
   requestJSON({
-    url: endpoint + '/signup',
+    url: endpoint + where,
     method: 'POST',
     withCredentials: true,
     data: getTargetDataSet(el)
@@ -148,6 +155,16 @@ function signUp (e, el) {
       go("/")
     })
   })
+}
+
+function signUp (e, el) {
+  signUpAt(e, el, '/signup')
+}
+
+function signUpSocial (e, el) {
+  var data = getTargetDataSet(el)
+  var where = data.submitWhere
+  signUpAt(e, el, where)
 }
 
 function createPlaylist (e, el) {
@@ -278,6 +295,7 @@ function searchMusic (e, el) {
     fuzzy.push('title', data.search)
   q.filters = filter.join(',')
   q.fuzzy   = fuzzy.join(',')
+  q.skip    = 0
   go('/music?' + objectToQueryString(q))
 }
 
@@ -417,6 +435,38 @@ function isMyPlaylist (playlist) {
   return playlist.userId == session.user._id
 }
 
+function getSocials (urls) {
+  var socials = {
+    twitter: /twitter\.com/,
+    facebook: /facebook\.com/,
+    soundcloud: /soundcloud\.com/,
+    "youtube-play": /youtube\.com/
+  }
+  var arr = []
+  urls.forEach(function (url) {
+    for (var tag in socials) {
+      if (socials[tag].test(url)) {
+        arr.push({
+          link: url,
+          icon: tag
+        })
+      }
+    }
+  })
+  return arr
+}
+
+function getReleaseShareLink(urls) {
+  var link
+  var re = /spotify\.com/
+  urls.forEach(function (url) {
+    if (re.test(url)) {
+      link = url
+    }
+  })
+  return link
+}
+
 /* Map Methods
  * Should conform to the array map method parameters.
  */
@@ -434,8 +484,12 @@ function mapRelease (o) {
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
   o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
-  if (o.urls instanceof Array)
+  o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
+  if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
+    o.share = getReleaseShareLink(o.urls)
+    o.purchase = !!o.urls.length
+  }
   o.downloadLink = getDownloadLink(o._id)
   return o
 }
@@ -451,6 +505,14 @@ function mapAccount (o) {
   return o
 }
 
+function mapConfirmSignup () {
+  var obj = queryStringToObject(window.location.search)
+  if (!Object.keys(obj).length) return
+
+  obj.countries = getAccountCountries()
+  return obj
+}
+
 function mapWebsiteDetails (o) {
   if (o.profileImageBlobId)
     o.image = datapoint + '/blobs/' + o.profileImageBlobId
@@ -460,7 +522,18 @@ function mapWebsiteDetails (o) {
       management: o.managementDetail
     }
   }
+  if (o.urls) {
+    o.socials = getSocials(o.urls)
+  }
   return o
+}
+
+function sortRelease (a, b) {
+  var a = new Date(a.preReleaseDate || a.releaseDate)
+  var b = new Date(b.preReleaseDate || b.releaseDate)
+  if (a > b) return -1
+  if (a < b) return 1
+  return 0
 }
 
 /* Transform Methods */
@@ -472,7 +545,7 @@ function transformPlaylist (obj) {
       public: obj.public
     }
   }
-  if (isSignedIn())
+  if (hasGoldAccess())
     obj.canDownload = true
   return obj
 }
@@ -502,6 +575,19 @@ function transformPlaylistTracks (obj, done) {
         track.artsistsTitle = getArtistsTitle(track.artists)
         track.canRemove = isMyPlaylist(playlist) ? { index: track.index } : undefined
         track.downloadLink = getDownloadLink(release._id, track._id)
+        if (isMyPlaylist(playlist)) {
+          track.edit = {
+            releaseId: release._id,
+            _id: track._id,
+            title: track.title,
+            trackNumber: track.trackNumber,
+            index: track.index
+          }
+        } else {
+          track.noEdit = {
+            trackNumber: track.trackNumber
+          }
+        }
         return track
       })
       done(null, obj)
@@ -511,7 +597,7 @@ function transformPlaylistTracks (obj, done) {
 
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
-  q.fields = ['title', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
+  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
   q.limit  = 25
   q.skip   = parseInt(q.skip) || 0
   var fuzzy   = commaStringToObject(q.fuzzy)
@@ -557,7 +643,7 @@ function transformMusicReleases (obj) {
 }
 
 function transformReleases (obj) {
-  obj.results = obj.results.map(mapRelease)
+  obj.results = obj.results.sort(sortRelease).map(mapRelease)
   obj.skip  = (parseInt(obj.skip) || 0) + 1
   obj.count = obj.skip + obj.results.length - 1
   return obj
@@ -858,6 +944,108 @@ function renderHeader () {
   })
 }
 
+function reorderPlaylistFromInputs() {
+  var inputs = document.querySelectorAll('[name="trackOrder\\[\\]"')
+  //This is a kinda hacky way for not letting them accidentally delete all their tracks
+  //by spam clicking while the track list is reloading
+  if(inputs.length == 0) {
+    return
+  }
+  var trackOrdering = []
+  var trackEls = []
+  var changed = false
+  for(var i = 0; i < inputs.length; i++) {
+    var input = inputs[i]
+    var trackId = input.getAttribute('track-id')
+    var releaseId = input.getAttribute('release-id')
+    var to = parseInt(input.value)
+    var from = i + 1
+    if(!changed) {
+      changed = to != from
+    }
+    trackOrdering.push({trackId: trackId, releaseId: releaseId, from: from, to: to})
+  }
+  if(!changed) return
+  trackOrdering.sort(function(a, b) {
+    //If you change #1 to #6 and leave #6 at #6 then track 1 should be after #6
+    //If you move #7 to #3 and leave #3 unchanged, then #7 should be before #3
+    if(a.to == b.to) {
+      if(a.to > a.from) {
+        return 1
+      }
+      if(a.to < a.from) {
+        return -1
+      }
+      if(b.to > b.from) {
+        return -1
+      }
+      if(b.to < b.from) {
+        return 1
+      }
+      return 0
+    }
+    return a.to > b.to ? 1 : -1
+  })
+  trackEls = trackOrdering.map(function (item) {
+    return document.querySelector('tr[role="playlist-track"][track-id="' + item.trackId + '"][release-id="' + item.releaseId + '"]')
+  })
+  var tracksNode = document.querySelector('[role="playlist-tracks"]')
+  for(var i = trackEls.length - 1; i >= 0; i--) {
+    var before = i == (trackEls.length - 1) ? null : trackEls[i+1]
+    tracksNode.insertBefore(tracksNode.removeChild(trackEls[i]), before)
+  }
+  resetPlaylistInputs()
+  savePlaylistOrder();
+}
+
+function resetPlaylistInputs() {
+  var trackEls = document.querySelectorAll('[role="playlist-track"]')
+  for(var i = 0; i < trackEls.length; i++) {
+    trackEls[i].querySelector('input[name="trackOrder\[\]"]').value = (i + 1)
+  }
+}
+
+function savePlaylistOrder() {
+  var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
+  var trackEls = document.querySelectorAll('[role="playlist-track"]')
+  var trackSaves = []
+  for(var i = 0; i < trackEls.length; i++) {
+    trackSaves.push({
+      trackId: trackEls[i].getAttribute('track-id'),
+      releaseId: trackEls[i].getAttribute('release-id')
+    })
+  }
+  var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
+  update('playlist', id, {tracks: trackSaves}, function (err, obj, xhr) {
+    if (err) {
+      toast({
+        error: true,
+        message: err.message
+      })
+      return
+    }
+    cache(url, obj)
+    simpleUpdate()
+    toast({
+      message: strings.reorderedPlaylist
+    })
+  })
+}
+
+function renderHeader () {
+  var el = document.querySelector('#navigation')
+  var target = '[template-name="' + el.getAttribute('template') + '"]'
+  var template = document.querySelector(target).textContent
+  var data = null
+  if (session) {
+    data = {}
+    data.user = session ? session.user : null
+  }
+  render(el, template, {
+    data: data
+  })
+}
+
 function canAccessGold (e, el) {
   if (hasGoldAccess()) return
   e.preventDefault()
@@ -944,4 +1132,146 @@ function playlistDrop (e) {
   droppedTr.classList.remove('drag-active', 'drag-active-bottom', 'drag-active-top')
   resetPlaylistInputs()
   savePlaylistOrder()
+}
+
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: facebookAppId,
+    cookie: true,
+    version: 'v2.5'
+  })
+}
+
+function transformSocialSettings (obj) {
+  obj.facebookEnabled = !!obj.facebookId
+  obj.googleEnabled = !!obj.googleId
+  return obj
+}
+
+function sendAccessToken(where, done) {
+  function handle(res) {
+    if (res.status != 'connected' || !res.authResponse)
+      return done(Error('User did not authorize.'))
+
+    var data = {
+      token: res.authResponse.accessToken
+    }
+    requestJSON({
+      url: endpoint + where,
+      method: 'POST',
+      data: data,
+      withCredentials: true
+    }, function (err, obj, xhr) {
+      done(err, xhr ? xhr.status : null)
+    })
+  }
+
+  FB.login(handle)
+}
+
+function sendIdToken(token, where, done) {
+  var data = {
+    token: token
+  }
+  requestJSON({
+    url: endpoint + where,
+    method: 'POST',
+    data: data,
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    done(err, xhr ? xhr.status : null)
+  })
+}
+
+function enableGoogleSignin (e, el) {
+  if (!gapi.auth2) return
+
+  var auth = gapi.auth2.getAuthInstance()
+  auth.signIn()
+  .then(function (user) {
+    sendIdToken(user.getAuthResponse().id_token, '/self/google/enable', function (err) {
+      if (err) return window.alert(err.message)
+      window.location.reload()
+    })
+  })
+}
+
+function signInGoogle (e, el) {
+  if (!gapi.auth2) return
+  var auth = gapi.auth2.getAuthInstance()
+  auth.signIn()
+  .then(function (user) {
+    sendIdToken(user.getAuthResponse().id_token, '/google/signin', onSocialSignIn)
+  })
+}
+
+function signInFacebook (e, el) {
+  sendAccessToken('/facebook/signin', onSocialSignIn)
+}
+
+function onSocialSignIn (err, status) {
+  if (err) return window.alert(err.message)
+  if (status === 303)
+    return window.confirm(strings.noAccount) ? go('/sign-up') : ''
+
+  onSignIn()
+}
+
+function enableFacebookSignin (e, el) {
+  sendAccessToken('/self/facebook/enable', function (err) {
+    if (err) return window.alert(err.message)
+    if (status === 303) return go('/sign-up')
+    window.location.reload()
+  })
+}
+
+function signUpGoogle (e, el) {
+  if (!gapi.auth2) return
+  var auth = gapi.auth2.getAuthInstance()
+  auth.signIn()
+  .then(function (user) {
+    var obj = {
+      email: user.getBasicProfile().getEmail(),
+      token: user.getAuthResponse().id_token,
+      submitWhere: '/google/signup'
+    }
+    go('/confirm-sign-up?' + objectToQueryString(obj))
+  })
+}
+
+function signUpFacebook (e, el) {
+  function handle(res) {
+    if (res.status != 'connected' || !res.authResponse)
+      return done(Error('User did not authorize.'))
+
+    FB.api('/me?fields=name,email', function (ares) {
+      var obj = {
+        email: ares.email,
+        token: res.authResponse.accessToken,
+        submitWhere: '/facebook/signup'
+      }
+      go('/confirm-sign-up?' + objectToQueryString(obj))
+    })
+  }
+
+  FB.login(handle, {scope: 'public_profile,email'})
+}
+
+function unlinkFacebook (e, el) {
+  unlinkAccount('facebook')
+}
+
+function unlinkGoogle (e, el) {
+  unlinkAccount('google')
+}
+
+function unlinkAccount (which) {
+  requestJSON({
+    url: endpoint + '/self/' + which + '/unlink',
+    method: 'POST',
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    window.location.reload()
+  })
 }

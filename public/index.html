@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="google-signin-client_id" content="1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com">
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
     <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js" defer async></script>
+    <script type="text/javascript" src="https://apis.google.com/js/platform.js" defer async></script>
     <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
@@ -15,6 +18,7 @@
 <body>
 
 <header>
+    <div class="g-signin2 hide"></div>
     <div class="scrub" action="scrub">
         <div class="progress" role="scrub-progress"></div>
     </div>
@@ -51,6 +55,11 @@
         <i class="fa fa-fw fa-spin fa-gear"></i>
     </div>
 </section>
+
+<footer class="page center width push-children-right">
+    <label>2016 &copy; Monstercat</label>
+    <a href="/help" title="Help"><i class="fa fa-question-circle"></i></a>
+</footer>
 
 <div class="toasts">
     <div role="toasts">
@@ -135,6 +144,8 @@
             </tbody>
         </table>
         <button action="signIn" data-set-target="credentials">Sign In</button>
+        <button action="signInFacebook">Sign In With Facebook</button>
+        <button action="signInGoogle">Sign In With Google</button>
         <br/>
         <br/>
         <a href="/forgot-password">Forgot your password?</a>
@@ -194,9 +205,71 @@
 </script>
 
 <script type="text/template"
+        route="^confirm-sign-up"
+        transform="mapConfirmSignup">
+    <div class="page width center">
+        {{#data}}
+        <h1>Confirm Sign-Up</h1>
+        <table class="form" data-set="credentials">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input type="text"
+                               name="email"
+                               placeholder="kitty@monstercat.com"
+                               value="{{email}}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Password (Optional)</th>
+                    <td>
+                        <input type="text"
+                               name="password"
+                               placeholder="a secret"/>
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td>
+                        <select name="location">
+                            <option disabled selected>Select One</option>
+                            {{#countries}}
+                            <option value="{{name}}">
+                                {{name}}
+                            </option>
+                            {{/countries}}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="hidden" name="token" value="{{token}}"/>
+                        <input type="hidden" name="submitWhere" value="{{submitWhere}}"/>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <button action="signUpSocial" data-set-target="credentials">Sign Up</button>
+        {{/data}}
+
+        {{^data}}
+        <p>Nothing here.</p>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
+        {{#data}}
         <table class="form" data-set="credentials">
             <tbody>
                 <tr>
@@ -237,6 +310,9 @@
             </tbody>
         </table>
         <button action="signUp" data-set-target="credentials">Sign Up</button>
+        <button action="signUpFacebook">Sign up With Facebook</button>
+        <button action="signUpGoogle">Sign up With Google</button>
+        {{/data}}
     </div>
 </script>
 
@@ -393,10 +469,42 @@
             </tr>
         </tbody>
     </table>
+    <div source="$endpoint/self/social-signins"
+         template="social-settings">
+    </div>
+    <br/>
     <button action="saveAccountSettings"
             data-set-target="settings">
         Update Settings
     </button>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="social-settings"
+        transform="transformSocialSettings">
+    {{#data}}
+    {{#facebookEnabled}}
+    <button action="unlinkFacebook">
+        Unlink Facebook Account
+    </button>
+    {{/facebookEnabled}}
+    {{^facebookEnabled}}
+    <button action="enableFacebookSignin">
+        Enable Facebook Signin
+    </button>
+    {{/facebookEnabled}}
+
+    {{#googleEnabled}}
+    <button action="unlinkGoogle">
+        Unlink Google Account
+    </button>
+    {{/googleEnabled}}
+    {{^googleEnabled}}
+    <button action="enableGoogleSignin">
+        Enable Google Signin
+    </button>
+    {{/googleEnabled}}
     {{/data}}
 </script>
 
@@ -634,11 +742,11 @@
     <ul class="page width center art-list">
         {{#results}}
         <li>
-            <a href="/release/{{_id}}">
+            <a class="silent" href="/release/{{_id}}" title="{{title}} / {{artists}}">
                 <img src="{{cover}}"/>
-                <label class="title">{{title}}</label>
+                <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
-                <label>{{releaseDate}}</label>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
             </a>
         </li>
         {{/results}}
@@ -656,36 +764,55 @@
         source="$endpoint/catalog/release/$1"
         transform="mapRelease"
         completed="completedRelease">
-    <div class="release page width center">
-        {{#loading}}
-        <i class="fa fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <img class="artwork" src="{{cover}}"/>
-        <h1 class="cancel-margin-bottom" release-id="{{_id}}">{{title}}</h1>
-        <h2>{{artists}}</h2>
-        <label>Released {{releaseDate}}</label>
-        <div class="options pad-vertical push-children-right">
-            <a class="silent"
-               href="{{downloadLink}}"
-               target="_blank"
-               action="canAccessGold">
-                <i class="fa fa-cloud-download"></i>
-            </a>
-            <button class="faux" action="playSongs" role="play-release" release-id="{{_id}}">
-                <i class="fa fa-play inactive"></i>
-                <i class="fa fa-pause active"></i>
-            </button>
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <div class="bgbox" style="background-image: url('{{coverBig}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box page width center clearfix">
+                <img class="artwork" src="{{cover}}"/>
+                <h1 release-id="{{_id}}">{{title}}</h1>
+                <h2>{{artists}}</h2>
+                <label>Released {{releaseDate}}</label>
+                <div class="options push-children-right">
+                    {{#purchase}}
+                    <button class="faux" action="openPurchaseRelease">
+                        <i class="fa fa-shopping-bag"></i>
+                    </button>
+                    {{/purchase}}
+                    {{#share}}
+                    <a class="silent" href="{{share}}" target="_blank">
+                        <i class="fa fa-spotify"></i>
+                    </a>
+                    {{/share}}
+                    <a class="silent"
+                    href="{{downloadLink}}"
+                    target="_blank"
+                    action="canAccessGold">
+                        <i class="fa fa-cloud-download"></i>
+                    </a>
+                    <button class="faux"
+                            action="playSongs"
+                            role="play-release"
+                            release-id="{{_id}}">
+                        <i class="fa fa-play inactive"></i>
+                        <i class="fa fa-pause active"></i>
+                    </button>
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="release page width center">
         <div
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
-        {{/data}}
     </div>
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -769,26 +896,28 @@
 <script type="text/template"
         route="^artist\/(.*)"
         source="$endpoint/catalog/artist/$1?fields=name,websiteDetailsId">
-    <div class="page center width">
         {{#data}}
-        <h1>{{name}}</h1>
         {{#websiteDetailsId}}
         <div source="$endpoint/website/{{websiteDetailsId}}"
-             template="user-details"></div>
+             template="user-details">
+        </div>
         {{/websiteDetailsId}}
-        {{^websiteDetailsId}}
-        <h2>About</h2>
-        <p>There are no details.</p>
-        {{/websiteDetailsId}}
-        <br/>
-        <br/>
-        <h2>Discography</h2>
-        <br/>
-        <div source="$endpoint/catalog/artist/{{_id}}/releases"
-             template="user-releases">
+        <div class="page center width">
+            {{^websiteDetailsId}}
+            <br/>
+            <h2>About</h2>
+            <p>There are no details.</p>
+            <br/>
+            {{/websiteDetailsId}}
+            <br/>
+            <br/>
+            <h2>Discography</h2>
+            <br/>
+            <div source="$endpoint/catalog/artist/{{_id}}/releases"
+                 template="user-releases">
+            </div>
         </div>
         {{/data}}
-    </div>
 </script>
 
 <script type="text/template"
@@ -801,7 +930,7 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <ul>
+    <ul class="discography">
         {{#results}}
         <li>
             <a href="/release/{{_id}}">
@@ -815,7 +944,8 @@
 
 <script type="text/template"
         template-name="user-details"
-        transform="mapWebsiteDetails">
+        transform="mapWebsiteDetails"
+        completed="completedWebsiteDetails">
     {{#loading}}
     <i class="fa fa-fw fa-spin fa-refresh"></i>
     {{/loading}}
@@ -823,21 +953,36 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    {{#image}}
-    <img src="{{image}}"/>
-    {{/image}}
-    {{#about}}
-    <h2>About</h2>
-    <p>{{about}}</p>
-    {{/about}}
-    {{#contact}}
-    <h3>Booking & Managment</h3>
-    <p>{{booking}}</p>
-    <p>{{management}}</p>
-    {{/contact}}
-    {{#urls}}
-    <a href="{{.}}">{{.}}</a><br/>
-    {{/urls}}
+    <div class="bgbox" style="background-image: url('{{image}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box page width center clearfix">
+                {{#image}}
+                <img class="artwork" src="{{image}}"/>
+                {{/image}}
+                <h1>{{name}}</h1>
+                <div class="options push-children-right">
+                    {{#socials}}
+                    <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
+                    {{/socials}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page width center">
+        {{#about}}
+        <br/>
+        <h2>About</h2>
+        <p>{{about}}</p>
+        {{/about}}
+        {{#contact}}
+        <br/>
+        <h2>Booking & Managment</h2>
+        <br/>
+        <p>{{booking}}</p>
+        <br/>
+        <p>{{management}}</p>
+        {{/contact}}
+    </div>
     {{/data}}
 </script>
 
@@ -952,7 +1097,6 @@
             </label>
             {{/canPublic}}
             <button action="reorderPlaylistFromInputs"><i class="fa fa-fw fa-save" role="save-playlist-order"></i> Save Order</button>
-            <button><i class="fa fa-fw fa-play" action="playSongs" role="play-playlist"></i></button>
             <button><i class="fa fa-fw fa-cloud-download"></i></button>
             {{#canDownload}}
             <button class="faux"
@@ -1000,9 +1144,20 @@
     {{/error}}
     {{#data}}
     {{#results}}
-    <tr role="playlist-track" track-id="{{_id}}" release-id="{{releaseId}}" draggable="true" ondrop="playlistDrop(event)" ondragover="playlistAllowDrop(event)" ondragleave="playlistDragLeave(event)" ondragstart="playlistDragStart(event, '{{_id}}', '{{releaseId}}')">
+    <tr role="playlist-track"
+        track-id="{{_id}}"
+        release-id="{{releaseId}}"
+        {{#edit}}
+        draggable="true"
+        ondrop="playlistDrop(event)"
+        ondragover="playlistAllowDrop(event)"
+        ondragleave="playlistDragLeave(event)"
+        ondragstart="playlistDragStart(event, '{{_id}}', '{{releaseId}}')"
+        {{/edit}}>
         <td>
+            {{#edit}}
             <input  type="text"
+                    action-enter="reorderPlaylistFromInputs"
                     action-enter="reorderPlaylistFromInputs"
                     onfocus="playlistTrackOrderFocus(event, this)"
                     onblur="playlistTrackOrderBlur(event, this)"
@@ -1011,7 +1166,12 @@
                     track-title="{{title}}"
                     name="trackOrder[]"
                     tabIndex="{{trackNumber}}"
-                    value="{{trackNumber}}" size="2" /></td>
+                    value="{{trackNumber}}" size="2" />
+            {{/edit}}
+            {{#noEdit}}
+            {{trackNumber}}.
+            {{/noEdit}}
+        </td>
         <td class="shrink nohpad">
             <button class="faux"
                     action="playSong"
@@ -1047,13 +1207,13 @@
                     track-id="{{_id}}">
                 <i class="fa fa-copyright"></i>
             </button>
-            {{#canRemove}}
+            {{#edit}}
             <button class="faux"
                     action="removeFromPlaylist"
                     playlist-position="{{index}}">
                 <i class="fa fa-trash-o"></i>
             </button>
-            {{/canRemove}}
+            {{/edit}}
         </td>
     </tr>
     {{/results}}
