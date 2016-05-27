@@ -283,6 +283,22 @@ function buyOutLicense (e, el) {
   go('/buy-license?' + objectToQueryString(getTargetDataSet(el)))
 }
 
+function buyNewLicense (e, el) {
+  var data = getTargetDataSet(el)
+}
+
+function addNewLicense (e, el) {
+  var data = getTargetDataSet(el)
+}
+
+function subscribeGold (e, el) {
+  var data = getTagetDataSet(el)
+}
+
+function unsubscribeGold (e, el) {
+  
+}
+
 function searchMusic (e, el) {
   var data   = getTargetDataSet(el)
   var q      = queryStringToObject(window.location.search)
@@ -537,6 +553,10 @@ function sortRelease (a, b) {
 
 /* Transform Methods */
 
+function transformServices () {
+  return {}
+}
+
 function transformPlaylist (obj) {
   if (isMyPlaylist(obj)) {
     obj.canPublic = {
@@ -695,6 +715,14 @@ function completedRelease (source, obj) {
 }
 
 /* Helpers */
+
+function toArray (nl) {
+  var arr = []
+  for (var i = 0, ref = arr.length = nl.length; i < ref; i++) {
+    arr[i] = nl[i]
+  }
+  return arr
+}
 
 function uniqueArray (arr) {
   return Array.from(new Set(arr))

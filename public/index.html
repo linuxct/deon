@@ -5,8 +5,12 @@
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
     <link rel="stylesheet" href="/style.css">
-    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js" defer async></script>
-    <script type="text/javascript" src="https://apis.google.com/js/platform.js" defer async></script>
+    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
+            defer async></script>
+    <script type="text/javascript" src="https://apis.google.com/js/platform.js"
+            defer async></script>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"
+            defer async></script>
     <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
@@ -506,22 +510,67 @@
 </script>
 
 <script type="text/template"
-        route="^services$">
+        route="^services$"
+        transform="transformServices">
     <div class="page width center">
         <h1>Manage Services</h1>
         <h2>Gold Access</h2>
         <br/>
         <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
         <br/>
-        <label>
-            <input type="checkbox" name="gold-access" checked>
-            Subscribe for $5.00/month
-        </label>
+        {{#goldSubscribed}}
+        <label>Gold Subscription Active</label>
+        <p>You are subscribed for $5.00 USD a month.</p>
+        <button action="unsubscribeGold">Cancel Subscription</button>
+        {{/goldSubscribed}}
+        {{^goldSubscribed}}
+        <div data-set="subscribe-gold">
+            <button action="subscribeGold"
+                    target-data-set="subscribe-gold">
+                Subscribe for $5.00/month
+            </button>
+            <label>
+                <input type="radio" name="g-method" value="paypal">
+                <i class="fa fa-fw fa-cc-paypal"></i>
+            </label>
+            <label>
+                <input type="radio" name="g-method" value="stripe">
+                <i class="fa fa-fw fa-cc-stripe"></i>
+            </label>
+        </div>
+        {{/goldSubscribed}}
         <br/>
         <br/>
         <h2>Licensing Services</h2>
         <br/>
         <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro. You can also buy a subscription and pay monthly until you pay it off.</p>
+        <br/>
+        <div data-set="new-license">
+            <select name="vendor">
+                <option value="">Select Vendor</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Twitch">Twitch</option>
+            </select>
+            <input type="text" name="identity" placeholder="Identity"/>
+            <label>
+                <input type="radio" name="method" value="paypal">
+                <i class="fa fa-fw fa-cc-paypal"></i>
+            </label>
+            <label>
+                <input type="radio" name="method" value="stripe">
+                <i class="fa fa-fw fa-cc-stripe"></i>
+            </label>
+            <button
+                action="addLicenseSubscription"
+                data-set-target="new-license">
+                Subscribe
+            </button>
+            <button
+                action="buyNewLicense"
+                data-set-target="new-license">
+                Purchase
+            </button>
+        </div>
         <br/>
         <table>
             <thead>
@@ -536,107 +585,86 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr data-set="y">
-                    <td>
-                        <input type="hidden" name="vendor" value="YouTube"/>
-                        YouTube
-                    </td>
-                    <td>
-                        <input type="hidden" name="identity" value="Sample"/>
-                        Sample
-                    </td>
-                    <td>$20.00</td>
-                    <td>$180.00</td>
-                    <td>$5.00</td>
-                    <td>
-                        <input type="checkbox" checked/>
-                    </td>
-                    <td>
-                        <a href="#">View</a>
-                    </td>
-                    <td>
-                        <button action="buyOutLicense"
-                                data-set-target="y">Buy Out</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>YouTube</td>
-                    <td>Banana X</td>
-                    <td>$200.00</td>
-                    <td>$0.00</td>
-                    <td>$0.00</td>
-                    <td>
-                        <i class="fa fa-check-circle-o">
-                    </td>
-                    <td><a href="#">View</a></td>
-                    <td></td>
-                </tr>
-                <tr data-set="x">
-                    <td>
-                        <input type="hidden" name="vendor" value="Twitch"/>
-                        Twitch
-                    </td>
-                    <td>
-                        <input type="hidden" name="identity" value="ZZZ"/>
-                        ZZZ
-                    </td>
-                    <td>$20.00</td>
-                    <td>$180.00</td>
-                    <td>$5.00</td>
-                    <td>
-                        <input type="checkbox"/>
-                    </td>
-                    <td></td>
-                    <td>
-                        <button action="buyOutLicense"
-                                data-set-target="x">Buy Out</button>
-                    </td>
-                </tr>
+            <tbody source="$endpoint/self/whitelist-licenses"
+                   template="whitelist-licenses"
+                   role="whitelists">
             </tbody>
         </table>
-        <div data-set="new-license">
-            <select name="vendor">
-                <option value="">Select Vendor</option>
-                <option value="YouTube">YouTube</option>
-                <option value="Twitch">Twitch</option>
-                <option value="Beam Pro">Beam Pro</option>
-            </select>
-            <input type="text" name="identity" placeholder="Identity"/>
-            <button
-                action="addLicenseSubscription"
-                data-set-target="new-license">
-                Add
-            </button>
-            <button
-                action="buyOutLicense"
-                data-set-target="new-license">
-                Buy Out
-            </button>
-        </div>
-        <br/>
-        <br/>
-        <hr/>
-        <br/>
-        <label>
-            Total: 
-            <span>$10.00</span> USD per Month
-        </label>
-        <br/>
-        <br/>
-        <label>
-            <input type="radio" name="method" value="paypal">
-            <i class="fa fa-fw fa-cc-paypal"></i>
-        </label>
-        <label>
-            <input type="radio" name="method" value="stripe">
-            <i class="fa fa-fw fa-cc-stripe"></i>
-        </label>
-        <button>Update Payments</button>
-        <br/>
-        <br/>
-        <a href="/billing">View Billing History</a>
     </div>
+</script>
+
+<script type="text/template" template-name="whitelist-licenses">
+    {{#loading}}
+    <tr><td colspan="8"><i class="fa fa-refresh fa-spin"></i></td></tr>
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="8"><p>{{message}}</p></td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr s-data-set data-set="{{_id}}">
+        <td>
+            <input type="hidden" name="vendor" value="{{vendor}}"/>
+            {{vendor}}
+        </td>
+        <td>
+            <input type="hidden" name="identity" value="{{identity}}"/>
+            {{identity}}
+        </td>
+        <td>${{paid}}</td>
+        <td>${{remaining}}</td>
+        <td t-cost="{{monthlyCost}}">${{cost}}</td>
+        <td>
+            <input
+                type="checkbox"
+                name="activelyPaying"
+                {{#activelyPaying}}checked{{/activelyPaying}}
+                {{#paid}}disabled{{/paid}}/>
+        </td>
+        <td>
+            {{#licenseUrl}}
+            <a href="{{licenseUrl}}" title="Open license document.">View</a>
+            {{/licenseUrl}}
+        </td>
+        <td>
+            {{^paid}}
+            <button action="buyOutLicense"
+                    data-set-target="{{_id}}">Buy Out</button>
+            {{/paid}}
+        </td>
+    </tr>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template" template-name="new-whitelist-license">
+    <tr s-data-set>
+        <td>
+            <input type="hidden" name="vendor" value="{{vendor}}"/>
+            {{vendor}}
+        </td>
+        <td>
+            <input type="hidden" name="identity" value="{{identity}}"/>
+            {{identity}}
+        </td>
+        <td>$0.00</td>
+        <td>$200.00</td>
+        <td t-cost="500">$5.00</td>
+        <td>
+            <input
+                action="updateServicesTotalCost"
+                type="checkbox"
+                name="activelyPaying"
+                checked
+                disabled/>
+        </td>
+        <td></td>
+        <td>
+            <button action="removeNewService">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
 </script>
 
 <script type="text/template" route="^buy-license" transform="transformBuyOut">
