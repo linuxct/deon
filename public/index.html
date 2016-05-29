@@ -513,18 +513,22 @@
 <script type="text/template"
         route="^services$"
         transform="transformServices">
+    {{#data}}
     <div class="page width center">
         <h1>Manage Services</h1>
         <h2>Gold Access</h2>
         <br/>
         <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
         <br/>
-        {{#goldSubscribed}}
+        {{#hasGoldPermanent}}
+        <p>You have Gold Membership.</p>
+        {{/hasGoldPermanent}}
+        {{#goldUnsubscribe}}
         <label>Gold Subscription Active</label>
         <p>You are subscribed for $5.00 USD a month.</p>
         <button action="unsubscribeGold">Cancel Subscription</button>
-        {{/goldSubscribed}}
-        {{^goldSubscribed}}
+        {{/goldUnsubscribe}}
+        {{#goldSubscribe}}
         <div data-set="subscribe-gold">
             <button action="subscribeGold"
                     data-set-target="subscribe-gold">
@@ -539,7 +543,7 @@
                 <i class="fa fa-fw fa-cc-stripe"></i>
             </label>
         </div>
-        {{/goldSubscribed}}
+        {{/goldSubscribe}}
         <br/>
         <br/>
         <h2>Licensing Services</h2>
@@ -564,12 +568,12 @@
             <button
                 action="subscribeNewLicense"
                 data-set-target="new-license">
-                Subscribe
+                Subscribe $5/month
             </button>
             <button
                 action="buyNewLicense"
                 data-set-target="new-license">
-                Purchase
+                Purchase $200
             </button>
         </div>
         <br/>
@@ -586,12 +590,13 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody source="$endpoint/self/whitelist-licenses"
+            <tbody source="$endpoint/self/whitelist"
                    template="whitelist-licenses"
                    role="whitelists">
             </tbody>
         </table>
     </div>
+    {{/data}}
 </script>
 
 <script type="text/template" template-name="whitelist-licenses">
@@ -634,6 +639,9 @@
             {{/paid}}
         </td>
     </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="8">You have no licenses.</td></tr>
     {{/results}}
     {{/data}}
 </script>

@@ -63,8 +63,7 @@ function isSignedIn () {
 
 function hasGoldAccess () {
   if (!isSignedIn()) return false
-  // TODO finish me
-  return false
+  return !!session.user.goldService
 }
 
 function getSession (done) {
@@ -534,7 +533,12 @@ function sortRelease (a, b) {
 /* Transform Methods */
 
 function transformServices () {
-  return {}
+  var user = isSignedIn() ? session.user : {}
+  return {
+    hasGoldPermanent: !!user.goldService && !user.goldSubscriptionId,
+    goldSubscribe: !(!!user.goldService && !!user.goldSubscriptionId),
+    goldUnsubscribe: (!!user.goldService && !!user.goldSubscriptionId)
+  }
 }
 
 function transformPlaylist (obj) {
