@@ -9,13 +9,14 @@
             defer async></script>
     <script type="text/javascript" src="https://apis.google.com/js/platform.js"
             defer async></script>
-    <script type="text/javascript" src="https://js.stripe.com/v2/"
+    <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"
             defer async></script>
     <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
     <script type="text/javascript" src="/countries.js"></script>
     <script type="text/javascript" src="/main.js"></script>
+    <script type="text/javascript" src="/pay.js"></script>
     <script type="text/javascript" src="/player.js"></script>
     <script type="text/javascript" src="/controls.js"></script>
 </head>
@@ -526,15 +527,15 @@
         {{^goldSubscribed}}
         <div data-set="subscribe-gold">
             <button action="subscribeGold"
-                    target-data-set="subscribe-gold">
+                    data-set-target="subscribe-gold">
                 Subscribe for $5.00/month
             </button>
             <label>
-                <input type="radio" name="g-method" value="paypal">
+                <input type="radio" name="payMethod" value="paypal">
                 <i class="fa fa-fw fa-cc-paypal"></i>
             </label>
             <label>
-                <input type="radio" name="g-method" value="stripe">
+                <input type="radio" name="payMethod" value="stripe" checked>
                 <i class="fa fa-fw fa-cc-stripe"></i>
             </label>
         </div>
@@ -553,15 +554,15 @@
             </select>
             <input type="text" name="identity" placeholder="Identity"/>
             <label>
-                <input type="radio" name="method" value="paypal">
+                <input type="radio" name="licensePayMethod" value="paypal">
                 <i class="fa fa-fw fa-cc-paypal"></i>
             </label>
             <label>
-                <input type="radio" name="method" value="stripe">
+                <input type="radio" name="licensePayMethod" value="stripe" checked>
                 <i class="fa fa-fw fa-cc-stripe"></i>
             </label>
             <button
-                action="addLicenseSubscription"
+                action="subscribeNewLicense"
                 data-set-target="new-license">
                 Subscribe
             </button>
@@ -635,36 +636,6 @@
     </tr>
     {{/results}}
     {{/data}}
-</script>
-
-<script type="text/template" template-name="new-whitelist-license">
-    <tr s-data-set>
-        <td>
-            <input type="hidden" name="vendor" value="{{vendor}}"/>
-            {{vendor}}
-        </td>
-        <td>
-            <input type="hidden" name="identity" value="{{identity}}"/>
-            {{identity}}
-        </td>
-        <td>$0.00</td>
-        <td>$200.00</td>
-        <td t-cost="500">$5.00</td>
-        <td>
-            <input
-                action="updateServicesTotalCost"
-                type="checkbox"
-                name="activelyPaying"
-                checked
-                disabled/>
-        </td>
-        <td></td>
-        <td>
-            <button action="removeNewService">
-                <i class="fa fa-trash-o"></i>
-            </button>
-        </td>
-    </tr>
 </script>
 
 <script type="text/template" route="^buy-license" transform="transformBuyOut">

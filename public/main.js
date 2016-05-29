@@ -279,26 +279,6 @@ function saveAccountSettings (e, el) {
   })
 }
 
-function buyOutLicense (e, el) {
-  go('/buy-license?' + objectToQueryString(getTargetDataSet(el)))
-}
-
-function buyNewLicense (e, el) {
-  var data = getTargetDataSet(el)
-}
-
-function addNewLicense (e, el) {
-  var data = getTargetDataSet(el)
-}
-
-function subscribeGold (e, el) {
-  var data = getTagetDataSet(el)
-}
-
-function unsubscribeGold (e, el) {
-  
-}
-
 function searchMusic (e, el) {
   var data   = getTargetDataSet(el)
   var q      = queryStringToObject(window.location.search)

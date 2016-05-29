@@ -302,6 +302,10 @@ function getElementInitialValue (el) {
 
 function parseElementValue (el, value) {
   var type  = (el.getAttribute('type') || "").toLowerCase()
+  if (type == 'radio') {
+    if (el.checked) return value
+    return ''
+  }
   if (type == 'checkbox') {
     return value == 'on' || value == 'true' || value === true ? true : false
   }
@@ -315,21 +319,22 @@ function getDataSet (el, checkInitial, ignoreEmpty) {
   var obj
   var els = el.querySelectorAll('[name]')
   for (var i = 0; i < els.length; i++) {
-    var kel = els[i]
-    var key  = kel.getAttribute('name')
-    var ival = getElementInitialValue(kel)
-    var val  = getElementValue(kel)
+    var kel     = els[i]
+    var key     = kel.getAttribute('name')
+    var ival    = getElementInitialValue(kel)
+    var val     = getElementValue(kel)
+    var isRadio = kel.getAttribute('type') == 'radio'
 
-    // TODO handle radio
     if (ignoreEmpty && val === '') {
       continue
-    } else if (obj && obj[key]) {
+    } else if (obj && obj[key] && !isRadio) {
       if (!(obj[key] instanceof Array)) {
         obj[key] = [obj[key]]
       }
       obj[key].push(val)
     } else if (!checkInitial || (checkInitial && val != ival)) {
       if (!obj) obj = {}
+      if (obj[key] && isRadio) continue
       obj[key] = val
     }
   }
