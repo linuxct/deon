@@ -839,6 +839,21 @@
 </script>
 
 <script type="text/template"
+        mustache-name="playSong">
+<button class="faux"
+        action="playSong"
+        role="play-song"
+        play-link="{{playUrl}}"
+        title="{{title}}"
+        index="{{index}}"
+        {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
+        {{^playlistId}}release-id="{{releaseId}}"{{/playlistId}}>
+    <i class="fa fa-play-circle inactive"></i>
+    <i class="fa fa-pause-circle active"></i>
+</button>        
+</script>
+
+<script type="text/template"
         mustache-name="trackButtons">
 <a class="silent"
    target="_blank"
@@ -884,17 +899,7 @@
             <tr>
                 <td class="shrink">{{trackNumber}}.</td>
                 <td class="shrink nohpad">
-                    <button
-                        class="faux"
-                        action="playSong"
-                        role="play-song"
-                        play-link="{{playUrl}}"
-                        title="{{title}}"
-                        index="{{index}}"
-                        release-id="{{releaseId}}">
-                       <i class="fa fa-play-circle inactive"></i>
-                       <i class="fa fa-pause-circle active"></i>
-                    </button>
+                  {{>playSong}}
                 </td>
                 {{>trackCells}}
                 <td class="push-children-right">
@@ -1195,16 +1200,7 @@
             {{/noEdit}}
         </td>
         <td class="shrink nohpad">
-            <button class="faux"
-                    action="playSong"
-                    role="play-song"
-                    play-link="{{playUrl}}"
-                    title="{{title}}"
-                    index="{{index}}"
-                    playlist-id="{{playlistId}}">
-                <i class="fa fa-play-circle inactive"></i>
-                <i class="fa fa-pause-circle active"></i>
-            </button>
+          {{>playSong}}
         </td>
         {{>trackCells}}
         <td class="push-children-right">
