@@ -450,3 +450,11 @@ footer {
 footer > * {
   font-size: 14px;
 }
+
+.unlicensable {
+  font-size: 0.8em;
+}
+
+.unlicensable a {
+  font-size: 1em;
+}

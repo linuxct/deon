@@ -483,8 +483,10 @@ function mapRelease (o) {
   o.releaseDate = formatDate(o.releaseDate)
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
-  o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
-  o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
+  if(o.thumbHashes) {
+    o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
+    o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
+  }
   if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
     o.share = getReleaseShareLink(o.urls)

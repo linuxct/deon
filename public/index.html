@@ -821,6 +821,42 @@
 </script>
 
 <script type="text/template"
+        mustache-name="unlicensable">
+{{^licensable}}<div class="unlicensable">This track can't be licensed. <a href="#">Read more</a></div>{{/licensable}}
+</script>
+
+<script type="text/template"
+        mustache-name="trackCells">
+<td>{{title}}{{>unlicensable}}</td>
+<td><a href="/release/{{releaseId}}">{{release}}</a></td>
+<td>
+    {{#artists}}
+    <a href="/artist/{{_id}}">{{name}}</a>
+    {{/artists}}
+</td>
+<td>{{genre}}</td>
+<td>{{bpm}}</td>
+</script>
+
+<script type="text/template"
+        mustache-name="trackButtons">
+<a class="silent"
+   target="_blank"
+   title="Download Track"
+   action="canAccessGold"
+   href="{{downloadLink}}">
+    <i class="fa fa-cloud-download"></i>
+</a>
+<button
+    class="faux"
+    action="openTrackCopyCredits"
+    release-id="{{releaseId}}"
+    track-id="{{_id}}">
+    <i class="fa fa-copyright"></i>
+</button>
+</script>
+
+<script type="text/template"
         template-name="release-tracks"
         transform="transformReleaseTracks"
         completed="updateControls">
@@ -860,28 +896,9 @@
                        <i class="fa fa-pause-circle active"></i>
                     </button>
                 </td>
-                <td>{{title}}</td>
-                <td>
-                    {{#artists}}
-                    <a href="/artist/{{_id}}">{{name}}</a>
-                    {{/artists}}
-                </td>
-                <td>{{genre}}</td>
-                <td>{{bpm}}</td>
+                {{>trackCells}}
                 <td class="push-children-right">
-                    <a class="silent"
-                       target="_blank"
-                       action="canAccessGold"
-                       href="{{downloadLink}}">
-                        <i class="fa fa-cloud-download"></i>
-                    </a>
-                    <button
-                        class="faux"
-                        action="openTrackCopyCredits"
-                        release-id="{{releaseId}}"
-                        track-id="{{_id}}">
-                        <i class="fa fa-copyright"></i>
-                    </button>
+                    {{>trackButtons}}
                     {{#canPlaylist}}
                     <select
                         onchange="addToPlaylist(null, this)"
@@ -1189,29 +1206,9 @@
                 <i class="fa fa-pause-circle active"></i>
             </button>
         </td>
-        <td>{{title}}</td>
-        <td><a href="/release/{{releaseId}}">{{release}}</a></td>
-        <td>
-            {{#artists}}
-            <a href="/artist/{{_id}}">{{name}}</a>
-            {{/artists}}
-        </td>
-        <td>{{genre}}</td>
-        <td>{{bpm}}</td>
+        {{>trackCells}}
         <td class="push-children-right">
-            <a class="silent"
-               href="{{downloadLink}}"
-               target="_blank"
-               title="Download Track"
-               action="canAccessGold">
-                <i class="fa fa-cloud-download"></i>
-            </a>
-            <button class="faux"
-                    action="openTrackCopyCredits"
-                    release-id="{{releaseId}}"
-                    track-id="{{_id}}">
-                <i class="fa fa-copyright"></i>
-            </button>
+            {{>trackButtons}}
             {{#edit}}
             <button class="faux"
                     action="removeFromPlaylist"
