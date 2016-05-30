@@ -432,7 +432,6 @@ function queryStringToObject (str) {
 //Loads templates to be used with the {{>partial}} mustache feature
 document.addEventListener("DOMContentLoaded", function (e) {
   var mTemplateEls = document.querySelectorAll('script[mustache-name]')
-  console.log(mTemplateEls)
   for(var i = 0; i < mTemplateEls.length; i++) {
     var el = mTemplateEls[i]
     mustacheTemplates[el.getAttribute('mustache-name')] = el.innerHTML

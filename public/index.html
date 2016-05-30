@@ -811,7 +811,7 @@
             </div>
         </div>
     </div>
-    <div class="release page width center">
+    <div class="release page width center" >
         <div
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
@@ -828,8 +828,13 @@
 <script type="text/template"
         mustache-name="trackCells">
 <td>{{title}}{{>unlicensable}}</td>
+{{#playlistId}}
 <td><a href="/release/{{releaseId}}">{{release}}</a></td>
+{{/playlistId}}
 <td>
+    {{^artists}}
+    -
+    {{/artists}}
     {{#artists}}
     <a href="/artist/{{_id}}">{{name}}</a>
     {{/artists}}
