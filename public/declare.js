@@ -117,12 +117,35 @@ function loadCache (source, done, reset) {
   }, requestJSON)
 }
 
+function elMatches (el, sel) {
+  if(typeof(el.matchesSelector) == 'function') {
+    return el.matchesSelector(sel);
+  }
+  if(typeof(el.matches) == 'function') {
+    return el.matches(sel)
+  }
+  return false;
+}
+
 function interceptKeyPress (e) {
   var which = e.which || e.keyCode
   var isAction = null
   if(which == 13) {
-    if(e.target.hasAttribute && e.target.getAttribute('action-enter')) {
-      runEnterAction(e, e.target)
+    if(elMatches(e.path[0], 'input,button:not([action])')) {
+      for(var i = 0; i < e.path.length; i++) {
+        if(elMatches(e.path[i], '[trigger-target]')) {
+          var target = document.querySelector('[trigger="' + e.path[i].getAttribute('trigger-target') + '"]')
+          if(target) {
+            e.preventDefault()
+            return runAction(e, target)
+          }
+        }
+      }
+    }
+    //Hitting enter on a button that has an action
+    if(elMatches(e.path[0], 'button[action]')) {
+      e.preventDefault()
+      return runAction(e, e.path[0]);
     }
   }
 }
@@ -164,11 +187,6 @@ function getMethod(el, attr) {
 
 function runAction (e, el) {
   var fn = getMethod(el, 'action')
-  if (fn) fn(e, el)
-}
-
-function runEnterAction (e, el) {
-  var fn = getMethod(el, 'action-enter')
   if (fn) fn(e, el)
 }
 
