@@ -179,6 +179,10 @@ function stateChange (url, state) {
   openRoute(target, container, matches)
 }
 
+function setPageTitle(title) {
+  document.title = (!!title ? (title + pageTitleGlue) : '') + pageTitleSuffix
+}
+
 function openRoute (target, container, matches) {
   var source = target.getAttribute('source')
   var opts = {
@@ -187,6 +191,8 @@ function openRoute (target, container, matches) {
     template:  target.textContent,
     completed: getMethod(target, 'completed')
   }
+  setPageTitle(target.getAttribute('page-title'))
+  setMetaData({}) //This is declared in main.js but should probably be moved to this file
   if (source) {
     opts.source = source.replace(/\$(\d)/g, function (str, index) {
       return matches[index] || ""

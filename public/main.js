@@ -39,6 +39,9 @@ var downloadOptions = [
     value: "flac"
   },
 ]
+var siteRoot = 'http://monstercat.com/m'
+var pageTitleSuffix = 'Monstercat'
+var pageTitleGlue = ' - '
 
 document.addEventListener("DOMContentLoaded", function (e) {
   renderHeader()
@@ -338,7 +341,7 @@ function getArtistsAtlas (tks, done) {
   tks = tks || [];
   tks.forEach(function(track) {
     ids = ids.concat((track.artists || []).map(function (artist) {
-      return artist.artistId
+      return artist.artistId || artist._id
     }))
   })
   ids = uniqueArray(ids)
@@ -477,8 +480,10 @@ function mapRelease (o) {
   o.releaseDate = formatDate(o.releaseDate)
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
-  o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
-  o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
+  if(o.thumbHashes) {
+    o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
+    o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
+  }
   if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
     o.share = getReleaseShareLink(o.urls)
@@ -685,17 +690,104 @@ function transformAccountSettings(obj) {
   return obj
 }
 
+function appendSongMetaData (tracks) {
+  if (tracks) {
+    var songs = []
+    for(var i = 0; i < tracks.length; i++) {
+      var trackId = tracks[i].trackId ? tracks[i].trackId : tracks[i]._id
+      songs.push(siteRoot + '/track/' + trackId)
+    }
+    appendMetaData({
+      'music:song': songs
+    })
+  }
+}
+
 /* Completed Methods */
 
 function completedRelease (source, obj) {
   if (obj.error) return
   var r = obj.data
-  setMetaData({
-    "og:title": r.title,
+  var artists = []
+  var meta = {
+    "og:title": r.title + ' by ' + r.artists,
     "og:image": r.cover,
     "og:url": location.toString(),
-    "og:type": "music.album"
+    "og:type": "music.album",
+    "music:release_date": new Date(r.releaseDate).toISOString()
+  }
+  setMetaData(meta)
+  setPageTitle(r.title + ' by ' + r.artists)
+}
+
+function completedReleaseTracks (source, obj) {
+  appendSongMetaData(obj.data.results)
+  var artists = [];
+  getArtistsAtlas(obj.data.results, function (err, atlas) {
+    for(var i in atlas) {
+      artists.push(siteRoot + '/artist/' + i)
+    }
   })
+  appendMetaData({
+    'music:musician': artists
+  })
+}
+
+function completedWebsiteDetails (source, obj) {
+  appendMetaData({
+    'og:image': obj.data.image
+  })
+}
+
+function completedPlaylist (source, obj) {
+  if(obj.error) return
+  var pl = obj.data
+  setPageTitle(pl.name + pageTitleGlue + 'Playlist')  
+  setMetaData({
+    'og:type': 'music.playlist',
+    'og:title': pl.name,
+    'og:url': location.toString()
+  })
+  appendSongMetaData(obj.data.tracks)
+}
+
+function completedArtist (source, obj) {
+  if(obj.error) return
+  setPageTitle(obj.data.name)
+  
+  var meta = {
+    'og:title': obj.data.name,
+    'og:type': 'profile',
+    'og:url': location.toString()
+  }
+
+  setMetaData(meta)
+}
+
+function completedMusic (source, obj) {
+  if(obj.error) return
+  var parts = []
+  var qs = queryStringToObject(window.location.search)
+  var filter = qs.filters
+  if(qs.filters) {
+    //TODO: better pluralization
+    //TODO: better support for filtering by more than just type
+    parts.push(qs.filters.substr('type,'.length) + 's')
+  }
+  else {
+    parts.push('Music')
+  }
+  if(qs.fuzzy) {
+    //TODO: make this better for if/when fuzzy thing changes
+    parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
+  }
+  if(qs.skip) {
+    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
+    if(page > 1) {
+      parts.push('Page ' + page)
+    }
+  }
+  setPageTitle(parts.join(pageTitleGlue))
 }
 
 /* Helpers */
@@ -777,12 +869,27 @@ function removeMetaElement (el, key) {
     target.parentElement.removeChild(target)
 }
 
-function setMetaData (obj) {
+function setMetaData (meta) {
   var head = document.querySelector('head')
   if (!head) return
-  for (var key in obj) {
+  var tags = head.querySelectorAll('meta[property*="og:"],meta[property*="music:"]')
+  for(var i = 0; i < tags.length; i++) {
+    tags[i].parentElement.removeChild(tags[i])
+  }
+  meta['og:site'] = 'Monstercat'
+  appendMetaData(meta)
+}
+
+function appendMetaData (meta) {
+  var head = document.querySelector('head')
+  for (var key in meta) {
     removeMetaElement(head, key)
-    addMetaElement(head, key, obj[key])
+    var vals = typeof(meta[key]) == 'object' ? meta[key] : [meta[key]]
+    for(var i = 0; i < vals.length; i++) {
+      if(vals[i] !== undefined) {
+        addMetaElement(head, key, vals[i])
+      }
+    }
   }
 }
 

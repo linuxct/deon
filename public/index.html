@@ -324,6 +324,7 @@
 <script type="text/template"
         route="^account"
         source="$endpoint/self"
+        page-title="My Account"
         transform="mapAccount">
     <div class="page width center">
         <h1>My Account</h1>
@@ -345,12 +346,16 @@
                     <td><input type="text"
                                 name="realName"
                                 value="{{realName}}"
+                                action-enter="saveAccount"
+                                data-set-target="account"
                                 initial-value="{{realName}}" />
+                                <!-- action-enter and data-set-target should be put in a parent element and then some stuff will need to be changed for those to work -->
                     </td>
                 </tr>
                 <tr>
                     <th>Nickname</th>
                     <td><input type="text"
+                                action-enter="saveAccount"
                                 name="name"
                                 initial-value="{{name}}"
                                 value="{{name}}" />
@@ -697,11 +702,15 @@
 
 <script type="text/template"
         route="^music(\?.*)?"
+        page-title="Music"
+        completed="completedMusic"
         transform="transformMusic">
     {{#data}}
     <div class="page width center">
         <div class="filters pad-vertical push-children-right" data-set="music-search">
             <input class="round"
+                    action-enter="searchMusic"
+                    data-set-target="music-search"
                     name="search"
                     type="text"
                     placeholder="Search..."
@@ -753,11 +762,20 @@
         </li>
         {{/results}}
     </ul>
-    <div class="page width center pagination pad-vertical text center">
-        <a href="?{{previous}}">Previous</a>
-        <label>{{skip}} - {{count}} of {{total}}</label>
-        <a href="?{{next}}">Next</a>
-    </div>
+    {{^total}}
+    <div class="page width center text center">No results found.</div>
+    {{/total}}
+    {{#total}}
+      <div class="page width center pagination pad-vertical text center">
+          {{#previous}}
+            <a href="?{{previous}}">Previous</a>
+          {{/previous}}
+          <label>{{skip}} - {{count}} of {{total}}</label>
+          {{#next}}
+            <a href="?{{next}}">Next</a>
+          {{/next}}
+      </div>
+    {{/total}}
     {{/data}}
 </script>
 
@@ -820,7 +838,7 @@
 <script type="text/template"
         template-name="release-tracks"
         transform="transformReleaseTracks"
-        completed="updateControls">
+        completed="completedReleaseTracks">
     <table>
         <thead>
             <tr>
@@ -858,9 +876,9 @@
                     </button>
                 </td>
                 <td>{{title}}</td>
-                <td>
+                <td class="trackArtists">
                     {{#artists}}
-                    <a href="/artist/{{_id}}">{{name}}</a>
+                    <span class="artist"><a href="/artist/{{_id}}">{{name}}</a></span>
                     {{/artists}}
                 </td>
                 <td>{{genre}}</td>
@@ -897,6 +915,7 @@
 
 <script type="text/template"
         route="^artist\/(.*)"
+        completed="completedArtist"
         source="$endpoint/catalog/artist/$1?fields=name,websiteDetailsId">
         {{#data}}
         {{#websiteDetailsId}}
@@ -1021,6 +1040,7 @@
 </script>
 
 <script type="text/template"
+        page-title="My Playlists"
         route="^playlists">
     <div class="page width center">
         <h1>My Playlists</h1>
@@ -1077,6 +1097,7 @@
 <script type="text/template"
         route="^playlist\/(.*)"
         source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
+        completed="completedPlaylist"
         transform="transformPlaylist">
     <div class="page width center">
         {{#loading}}
@@ -1159,12 +1180,15 @@
         <td>
             {{#edit}}
             <input  type="text"
+                    action-enter="reorderPlaylistFromInputs"
+                    action-enter="reorderPlaylistFromInputs"
                     onfocus="playlistTrackOrderFocus(event, this)"
                     onblur="playlistTrackOrderBlur(event, this)"
                     track-id="{{_id}}"
                     release-id="{{releaseId}}"
                     track-title="{{title}}"
                     name="trackOrder[]"
+                    tabIndex="{{trackNumber}}"
                     value="{{trackNumber}}" size="2" />
             {{/edit}}
             {{#noEdit}}
@@ -1185,9 +1209,9 @@
         </td>
         <td>{{title}}</td>
         <td><a href="/release/{{releaseId}}">{{release}}</a></td>
-        <td>
+        <td class="trackArtists">
             {{#artists}}
-            <a href="/artist/{{_id}}">{{name}}</a>
+            <span class="artist"><a href="/artist/{{_id}}">{{name}}</a></span>
             {{/artists}}
         </td>
         <td>{{genre}}</td>
