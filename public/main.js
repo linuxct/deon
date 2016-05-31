@@ -204,7 +204,7 @@ function createPlaylist (e, el) {
   if (!name) return
   create('playlist', {
     name: name,
-    public: session.settings.playlistPublicByDefault
+    public: session.settings ? session.settings.playlistPublicByDefault : false
   }, simpleUpdate)
 }
 
@@ -625,8 +625,13 @@ function transformPlaylist (obj) {
       public: obj.public
     }
   }
-  if (hasGoldAccess())
-    obj.canDownload = true
+  if (isSignedIn()) {
+    var opts = {
+      method: 'download',
+      type: getMyPreferedDownloadOption()
+    }
+    obj.downloadUrl = endpoint + '/playlist/' + obj._id + '/download?' + objectToQueryString(opts)
+  }
   return obj
 }
 

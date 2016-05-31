@@ -1166,15 +1166,16 @@
             </label>
             {{/canPublic}}
             <button action="reorderPlaylistFromInputs" 
-                    trigger="reorderPlaylistFromInputs"><i class="fa fa-fw fa-save" role="save-playlist-order"></i> Save Order</button>
-            <button><i class="fa fa-fw fa-cloud-download"></i></button>
-            {{#canDownload}}
-            <button class="faux"
-                    title="Download Playlist"
-                    action="downloadPlaylist">
-                <i class="fa fa-fw fa-cloud-download"></i>
+                    trigger="reorderPlaylistFromInputs">
+                <i class="fa fa-fw fa-save" role="save-playlist-order"></i>
+                Save Order
             </button>
-            {{/canDownload}}
+            {{#downloadUrl}}
+            <a class="silent"
+               title="Download Playlist"
+               action="canAccessGold"
+               href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
+            {{/downloadUrl}}
             <button class="faux">
                 <i class="fa fa-fw fa-play"
                    action="playSongs"
