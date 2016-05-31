@@ -18,7 +18,7 @@ var strings   = {
   "passwordResetEmail": "Check your email for a link to reset your password.",
   "twoFactorEnabled": "Two Factor has been enabled.",
   "twoFactorDisabled": "Two Factor has been removed.",
-  "tokenResent": "A new two factor token has been sent."
+  "tokenResent": "A new two factor token has been sent.",
   "noAccount": "You do not have an account, would you like to create one?"
 }
 var downloadOptions = [
