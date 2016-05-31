@@ -523,7 +523,7 @@ function getSocials (urls) {
   return arr
 }
 
-function getReleaseShareLink(urls) {
+function getReleaseShareLink (urls) {
   var link
   var re = /spotify\.com/
   urls.forEach(function (url) {
@@ -532,6 +532,34 @@ function getReleaseShareLink(urls) {
     }
   })
   return link
+}
+
+function getReleasePurchaseLinks (urls) {
+  var storemap = {
+    'Buy from Bandcamp': /bandcamp\.com/,
+    'Download On iTunes': /apple\.com/,
+    'Get From Beatport': /beatport\.com/,
+    'Get on Google Play': /play\.google\.com/
+  }
+  var links = urls.reduce(function (v, url) {
+    for (var key in storemap) {
+      if (storemap[key].test(url)) {
+        v.push({name: key, url: url})
+      }
+    }
+    return v
+  }, [])
+  return links
+}
+
+function openPurchaseRelease (e, el) {
+  var id = document.querySelector('h1[release-id]').getAttribute('release-id')
+  var url = endpoint + '/catalog/release/' + id
+  loadCache(url, function (err, res) {
+    openModal('release-shopping-modal', {
+      data: res
+    })
+  });
 }
 
 /* Map Methods
@@ -557,7 +585,8 @@ function mapRelease (o) {
   if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
     o.share = getReleaseShareLink(o.urls)
-    o.purchase = !!o.urls.length
+    o.purchaseLinks = getReleasePurchaseLinks(o.urls)
+    o.purchase = !!o.purchaseLinks.length
   }
   o.downloadLink = getDownloadLink(o._id)
   return o
