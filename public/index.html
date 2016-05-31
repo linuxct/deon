@@ -887,13 +887,69 @@
             </div>
         </div>
     </div>
-    <div class="release page width center">
+    <div class="release page width center" >
         <div
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
     </div>
     {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="unlicensable">
+{{^licensable}}<div class="unlicensable">This track can't be licensed. <a href="#">Read more</a></div>{{/licensable}}
+</script>
+
+<script type="text/template"
+        mustache-name="trackCells">
+<td>{{title}}{{>unlicensable}}</td>
+{{#playlistId}}
+<td><a href="/release/{{releaseId}}">{{release}}</a></td>
+{{/playlistId}}
+<td>
+    {{^artists}}
+    -
+    {{/artists}}
+    {{#artists}}
+    <a href="/artist/{{_id}}">{{name}}</a>
+    {{/artists}}
+</td>
+<td>{{genre}}</td>
+<td>{{bpm}}</td>
+</script>
+
+<script type="text/template"
+        mustache-name="playSong">
+<button class="faux"
+        action="playSong"
+        role="play-song"
+        play-link="{{playUrl}}"
+        title="{{title}}"
+        index="{{index}}"
+        {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
+        {{^playlistId}}release-id="{{releaseId}}"{{/playlistId}}>
+    <i class="fa fa-play-circle inactive"></i>
+    <i class="fa fa-pause-circle active"></i>
+</button>        
+</script>
+
+<script type="text/template"
+        mustache-name="trackButtons">
+<a class="silent"
+   target="_blank"
+   title="Download Track"
+   action="canAccessGold"
+   href="{{downloadLink}}">
+    <i class="fa fa-cloud-download"></i>
+</a>
+<button
+    class="faux"
+    action="openTrackCopyCredits"
+    release-id="{{releaseId}}"
+    track-id="{{_id}}">
+    <i class="fa fa-copyright"></i>
+</button>
 </script>
 
 <script type="text/template"
@@ -924,40 +980,11 @@
             <tr>
                 <td class="shrink">{{trackNumber}}.</td>
                 <td class="shrink nohpad">
-                    <button
-                        class="faux"
-                        action="playSong"
-                        role="play-song"
-                        play-link="{{playUrl}}"
-                        title="{{title}}"
-                        index="{{index}}"
-                        release-id="{{releaseId}}">
-                       <i class="fa fa-play-circle inactive"></i>
-                       <i class="fa fa-pause-circle active"></i>
-                    </button>
+                  {{>playSong}}
                 </td>
-                <td>{{title}}</td>
-                <td class="trackArtists">
-                    {{#artists}}
-                    <span class="artist"><a href="/artist/{{_id}}">{{name}}</a></span>
-                    {{/artists}}
-                </td>
-                <td>{{genre}}</td>
-                <td>{{bpm}}</td>
+                {{>trackCells}}
                 <td class="push-children-right">
-                    <a class="silent"
-                       target="_blank"
-                       action="canAccessGold"
-                       href="{{downloadLink}}">
-                        <i class="fa fa-cloud-download"></i>
-                    </a>
-                    <button
-                        class="faux"
-                        action="openTrackCopyCredits"
-                        release-id="{{releaseId}}"
-                        track-id="{{_id}}">
-                        <i class="fa fa-copyright"></i>
-                    </button>
+                    {{>trackButtons}}
                     {{#canPlaylist}}
                     <select
                         onchange="addToPlaylist(null, this)"
@@ -1182,9 +1209,16 @@
             {{/canPublic}}
             <button action="reorderPlaylistFromInputs" 
                     trigger="reorderPlaylistFromInputs">
-                <i class="fa fa-fw fa-save" role="save-playlist-order"></i>
-                Save Order
+                    <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
+                    Save Order</button>
+            <button><i class="fa fa-fw fa-cloud-download"></i></button>
+            {{#canDownload}}
+            <button class="faux"
+                    title="Download Playlist"
+                    action="downloadPlaylist">
+                <i class="fa fa-fw fa-cloud-download"></i>
             </button>
+            {{/canDownload}}
             {{#downloadUrl}}
             <a class="silent"
                title="Download Playlist"
@@ -1260,40 +1294,11 @@
             {{/noEdit}}
         </td>
         <td class="shrink nohpad">
-            <button class="faux"
-                    action="playSong"
-                    role="play-song"
-                    play-link="{{playUrl}}"
-                    title="{{title}}"
-                    index="{{index}}"
-                    playlist-id="{{playlistId}}">
-                <i class="fa fa-play-circle inactive"></i>
-                <i class="fa fa-pause-circle active"></i>
-            </button>
+          {{>playSong}}
         </td>
-        <td>{{title}}</td>
-        <td><a href="/release/{{releaseId}}">{{release}}</a></td>
-        <td class="trackArtists">
-            {{#artists}}
-            <span class="artist"><a href="/artist/{{_id}}">{{name}}</a></span>
-            {{/artists}}
-        </td>
-        <td>{{genre}}</td>
-        <td>{{bpm}}</td>
+        {{>trackCells}}
         <td class="push-children-right">
-            <a class="silent"
-               href="{{downloadLink}}"
-               target="_blank"
-               title="Download Track"
-               action="canAccessGold">
-                <i class="fa fa-cloud-download"></i>
-            </a>
-            <button class="faux"
-                    action="openTrackCopyCredits"
-                    release-id="{{releaseId}}"
-                    track-id="{{_id}}">
-                <i class="fa fa-copyright"></i>
-            </button>
+            {{>trackButtons}}
             {{#edit}}
             <button class="faux"
                     action="removeFromPlaylist"

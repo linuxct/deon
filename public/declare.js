@@ -12,6 +12,7 @@
  *  - Your main content lies under [role="content"].
  *  - Useing ES6 tech (Maps, etc.)
  */
+ var mustacheTemplates = {}
 
 function cache (source, obj) {
   var _ = cache._
@@ -317,7 +318,7 @@ function renderTemplateOptions (opts) {
 }
 
 function render (container, template, scope) {
-  container.innerHTML = Mustache.render(template, scope)
+  container.innerHTML = Mustache.render(template, scope, mustacheTemplates)
   loadSubSources(container)
 }
 
@@ -442,3 +443,12 @@ function queryStringToObject (str) {
   })
   return obj
 }
+
+//Loads templates to be used with the {{>partial}} mustache feature
+document.addEventListener("DOMContentLoaded", function (e) {
+  var mTemplateEls = document.querySelectorAll('script[mustache-name]')
+  for(var i = 0; i < mTemplateEls.length; i++) {
+    var el = mTemplateEls[i]
+    mustacheTemplates[el.getAttribute('mustache-name')] = el.innerHTML
+  }
+})

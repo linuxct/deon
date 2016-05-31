@@ -451,7 +451,11 @@ footer > * {
   font-size: 14px;
 }
 
-ul {
-  list-style-position: inside;
+.unlicensable {
+  font-size: 0.8em;
+}
+
+.unlicensable a {
+  font-size: 1em;
 }
 
