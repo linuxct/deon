@@ -42,7 +42,6 @@ var downloadOptions = [
     value: "flac"
   },
 ]
-var siteRoot = 'http://monstercat.com/m'
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue = ' - '
 
@@ -63,6 +62,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
     stateChange(location.pathname + location.search)
   })
 })
+
+function setPageTitle(title) {
+  document.title = (!!title ? (title + pageTitleGlue) : '') + pageTitleSuffix
+}
 
 function isSignedIn () {
   return session && session.user
@@ -767,7 +770,7 @@ function appendSongMetaData (tracks) {
     var songs = []
     for(var i = 0; i < tracks.length; i++) {
       var trackId = tracks[i].trackId ? tracks[i].trackId : tracks[i]._id
-      songs.push(siteRoot + '/track/' + trackId)
+      songs.push('https://' + window.location.host + '/track/' + trackId)
     }
     appendMetaData({
       'music:song': songs
@@ -797,7 +800,7 @@ function completedReleaseTracks (source, obj) {
   var artists = [];
   getArtistsAtlas(obj.data.results, function (err, atlas) {
     for(var i in atlas) {
-      artists.push(siteRoot + '/artist/' + i)
+      artists.push('https://' + window.location.host + '/artist/' + i)
     }
   })
   appendMetaData({
@@ -809,6 +812,43 @@ function completedWebsiteDetails (source, obj) {
   appendMetaData({
     'og:image': obj.data.image
   })
+  setPageTitle(r.title + ' by ' + r.artists)
+}
+
+function completedPlaylist (source, obj) {
+  if(obj.error) return
+    setPageTitle(obj.data.name + pageTitleGlue + 'Playlist')
+}
+
+function completedArtist (source, obj) {
+  if(obj.error) return
+  setPageTitle(obj.data.name)
+}
+
+function completedMusic (source, obj) {
+  if(obj.error) return
+  var parts = []
+  var qs = queryStringToObject(window.location.search)
+  var filter = qs.filters
+  if(qs.filters) {
+    //TODO: better pluralization
+    //TODO: better support for filtering by more than just type
+    parts.push(qs.filters.substr('type,'.length) + 's')
+  }
+  else {
+    parts.push('Music')
+  }
+  if(qs.fuzzy) {
+    //TODO: make this better for if/when fuzzy thing changes
+    parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
+  }
+  if(qs.skip) {
+    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
+    if(page > 1) {
+      parts.push('Page ' + page)
+    }
+  }
+  setPageTitle(parts.join(pageTitleGlue))
 }
 
 function completedPlaylist (source, obj) {

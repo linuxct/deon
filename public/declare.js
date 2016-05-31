@@ -224,7 +224,9 @@ function openRoute (target, container, matches) {
     template:  target.textContent,
     completed: getMethod(target, 'completed')
   }
-  setPageTitle(target.getAttribute('page-title'))
+  if(target.hasAttribute('page-title')) {
+    document.title = target.getAttribute('page-title')
+  }
   setMetaData({}) //This is declared in main.js but should probably be moved to this file
   if (source) {
     opts.source = source.replace(/\$(\d)/g, function (str, index) {
