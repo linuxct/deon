@@ -5,14 +5,19 @@
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
     <link rel="stylesheet" href="/style.css">
-    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js" defer async></script>
-    <script type="text/javascript" src="https://apis.google.com/js/platform.js" defer async></script>
+    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
+            defer async></script>
+    <script type="text/javascript" src="https://apis.google.com/js/platform.js"
+            defer async></script>
+    <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"
+            defer async></script>
     <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
     <script type="text/javascript" src="/country-codes.js"></script>
     <script type="text/javascript" src="/countries.js"></script>
     <script type="text/javascript" src="/main.js"></script>
+    <script type="text/javascript" src="/pay.js"></script>
     <script type="text/javascript" src="/player.js"></script>
     <script type="text/javascript" src="/controls.js"></script>
 </head>
@@ -56,6 +61,11 @@
         <i class="fa fa-fw fa-spin fa-gear"></i>
     </div>
 </section>
+
+<footer class="page center width push-children-right">
+    <label>2016 &copy; Monstercat</label>
+    <a href="/help" title="Help"><i class="fa fa-question-circle"></i></a>
+</footer>
 
 <div class="toasts">
     <div role="toasts">
@@ -111,7 +121,7 @@
 <script type="text/template"
         route="^signin">
     <div class="page width center">
-        <table class="form" data-set="credentials">
+        <table class="form" data-set="credentials" trigger-target="signIn">
             <tbody>
                 <tr>
                     <th>Email</th>
@@ -139,7 +149,7 @@
                 </tr>
             </tbody>
         </table>
-        <button action="signIn" data-set-target="credentials">Sign In</button>
+        <button action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
         <button action="signInFacebook">Sign In With Facebook</button>
         <button action="signInGoogle">Sign In With Google</button>
         <br/>
@@ -217,10 +227,72 @@
 </script>
 
 <script type="text/template"
+        route="^confirm-sign-up"
+        transform="mapConfirmSignup">
+    <div class="page width center">
+        {{#data}}
+        <h1>Confirm Sign-Up</h1>
+        <table class="form" data-set="credentials" trigger-target="signUpSocial">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input type="text"
+                               name="email"
+                               placeholder="kitty@monstercat.com"
+                               value="{{email}}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Password (Optional)</th>
+                    <td>
+                        <input type="text"
+                               name="password"
+                               placeholder="a secret"/>
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td>
+                        <select name="location">
+                            <option disabled selected>Select One</option>
+                            {{#countries}}
+                            <option value="{{name}}">
+                                {{name}}
+                            </option>
+                            {{/countries}}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="hidden" name="token" value="{{token}}"/>
+                        <input type="hidden" name="submitWhere" value="{{submitWhere}}"/>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <button action="signUpSocial" trigger="signUpSocial" data-set-target="credentials">Sign Up</button>
+        {{/data}}
+
+        {{^data}}
+        <p>Nothing here.</p>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
-        <table class="form" data-set="credentials">
+        {{#data}}
+        <table class="form" data-set="credentials" trigger-target="signUp">
             <tbody>
                 <tr>
                     <th>Email</th>
@@ -259,13 +331,19 @@
                 </tr>
             </tbody>
         </table>
-        <button action="signUp" data-set-target="credentials">Sign Up</button>
+        <button action="signUp" 
+                trigger="signUp" 
+                data-set-target="credentials">Sign Up</button>
+        <button action="signUpFacebook">Sign up With Facebook</button>
+        <button action="signUpGoogle">Sign up With Google</button>
+        {{/data}}
     </div>
 </script>
 
 <script type="text/template"
         route="^account"
         source="$endpoint/self"
+        page-title="My Account"
         transform="mapAccount">
     <div class="page width center">
         <h1>My Account</h1>
@@ -276,7 +354,7 @@
         <p>{{message}}</p>
         {{/error}}
         {{#data}}
-        <table class="form">
+        <table class="form" trigger-target="saveAccount">
             <tbody data-set="account">
                 <tr>
                     <th>Email</th>
@@ -287,12 +365,15 @@
                     <td><input type="text"
                                 name="realName"
                                 value="{{realName}}"
+                                data-set-target="account"
                                 initial-value="{{realName}}" />
+                                <!-- action-enter and data-set-target should be put in a parent element and then some stuff will need to be changed for those to work -->
                     </td>
                 </tr>
                 <tr>
                     <th>Nickname</th>
                     <td><input type="text"
+                                action-enter="saveAccount"
                                 name="name"
                                 initial-value="{{name}}"
                                 value="{{name}}" />
@@ -330,7 +411,9 @@
                 </tr>
             </tbody>
         </table>
+
         <button action="saveAccount"
+                trigger="saveAccount"
                 data-set-target="account">
             Save
         </button>
@@ -459,46 +542,95 @@
         transform="transformSocialSettings">
     {{#data}}
     {{#facebookEnabled}}
-    <button disabled>
-        Facebook enabled
+    <button action="unlinkFacebook">
+        Unlink Facebook Account
     </button>
     {{/facebookEnabled}}
     {{^facebookEnabled}}
     <button action="enableFacebookSignin">
-        Enable Facebook signin
+        Enable Facebook Signin
     </button>
     {{/facebookEnabled}}
 
     {{#googleEnabled}}
-    <button disabled>
-        Google Login enabled
+    <button action="unlinkGoogle">
+        Unlink Google Account
     </button>
     {{/googleEnabled}}
     {{^googleEnabled}}
     <button action="enableGoogleSignin">
-        Enable Google signin
+        Enable Google Signin
     </button>
     {{/googleEnabled}}
     {{/data}}
 </script>
 
 <script type="text/template"
-        route="^services$">
+        route="^services$"
+        transform="transformServices">
+    {{#data}}
     <div class="page width center">
         <h1>Manage Services</h1>
         <h2>Gold Access</h2>
         <br/>
         <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
         <br/>
-        <label>
-            <input type="checkbox" name="gold-access" checked>
-            Subscribe for $5.00/month
-        </label>
+        {{#hasGoldPermanent}}
+        <p>You have Gold Membership.</p>
+        {{/hasGoldPermanent}}
+        {{#goldUnsubscribe}}
+        <label>Gold Subscription Active</label>
+        <p>You are subscribed for $5.00 USD a month.</p>
+        <button action="unsubscribeGold">Cancel Subscription</button>
+        {{/goldUnsubscribe}}
+        {{#goldSubscribe}}
+        <div data-set="subscribe-gold">
+            <button action="subscribeGold"
+                    data-set-target="subscribe-gold">
+                Subscribe for $5.00/month
+            </button>
+            <label>
+                <input type="radio" name="payMethod" value="paypal">
+                <i class="fa fa-fw fa-cc-paypal"></i>
+            </label>
+            <label>
+                <input type="radio" name="payMethod" value="stripe" checked>
+                <i class="fa fa-fw fa-cc-stripe"></i>
+            </label>
+        </div>
+        {{/goldSubscribe}}
         <br/>
         <br/>
         <h2>Licensing Services</h2>
         <br/>
         <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro. You can also buy a subscription and pay monthly until you pay it off.</p>
+        <br/>
+        <div data-set="new-license">
+            <select name="vendor">
+                <option value="">Select Vendor</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Twitch">Twitch</option>
+            </select>
+            <input type="text" name="identity" placeholder="Identity"/>
+            <label>
+                <input type="radio" name="licensePayMethod" value="paypal">
+                <i class="fa fa-fw fa-cc-paypal"></i>
+            </label>
+            <label>
+                <input type="radio" name="licensePayMethod" value="stripe" checked>
+                <i class="fa fa-fw fa-cc-stripe"></i>
+            </label>
+            <button
+                action="subscribeNewLicense"
+                data-set-target="new-license">
+                Subscribe $5/month
+            </button>
+            <button
+                action="buyNewLicense"
+                data-set-target="new-license">
+                Purchase $200
+            </button>
+        </div>
         <br/>
         <table>
             <thead>
@@ -513,107 +645,60 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr data-set="y">
-                    <td>
-                        <input type="hidden" name="vendor" value="YouTube"/>
-                        YouTube
-                    </td>
-                    <td>
-                        <input type="hidden" name="identity" value="Sample"/>
-                        Sample
-                    </td>
-                    <td>$20.00</td>
-                    <td>$180.00</td>
-                    <td>$5.00</td>
-                    <td>
-                        <input type="checkbox" checked/>
-                    </td>
-                    <td>
-                        <a href="#">View</a>
-                    </td>
-                    <td>
-                        <button action="buyOutLicense"
-                                data-set-target="y">Buy Out</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>YouTube</td>
-                    <td>Banana X</td>
-                    <td>$200.00</td>
-                    <td>$0.00</td>
-                    <td>$0.00</td>
-                    <td>
-                        <i class="fa fa-check-circle-o">
-                    </td>
-                    <td><a href="#">View</a></td>
-                    <td></td>
-                </tr>
-                <tr data-set="x">
-                    <td>
-                        <input type="hidden" name="vendor" value="Twitch"/>
-                        Twitch
-                    </td>
-                    <td>
-                        <input type="hidden" name="identity" value="ZZZ"/>
-                        ZZZ
-                    </td>
-                    <td>$20.00</td>
-                    <td>$180.00</td>
-                    <td>$5.00</td>
-                    <td>
-                        <input type="checkbox"/>
-                    </td>
-                    <td></td>
-                    <td>
-                        <button action="buyOutLicense"
-                                data-set-target="x">Buy Out</button>
-                    </td>
-                </tr>
+            <tbody source="$endpoint/self/whitelist"
+                   template="whitelist-licenses"
+                   role="whitelists">
             </tbody>
         </table>
-        <div data-set="new-license">
-            <select name="vendor">
-                <option value="">Select Vendor</option>
-                <option value="YouTube">YouTube</option>
-                <option value="Twitch">Twitch</option>
-                <option value="Beam Pro">Beam Pro</option>
-            </select>
-            <input type="text" name="identity" placeholder="Identity"/>
-            <button
-                action="addLicenseSubscription"
-                data-set-target="new-license">
-                Add
-            </button>
-            <button
-                action="buyOutLicense"
-                data-set-target="new-license">
-                Buy Out
-            </button>
-        </div>
-        <br/>
-        <br/>
-        <hr/>
-        <br/>
-        <label>
-            Total: 
-            <span>$10.00</span> USD per Month
-        </label>
-        <br/>
-        <br/>
-        <label>
-            <input type="radio" name="method" value="paypal">
-            <i class="fa fa-fw fa-cc-paypal"></i>
-        </label>
-        <label>
-            <input type="radio" name="method" value="stripe">
-            <i class="fa fa-fw fa-cc-stripe"></i>
-        </label>
-        <button>Update Payments</button>
-        <br/>
-        <br/>
-        <a href="/billing">View Billing History</a>
     </div>
+    {{/data}}
+</script>
+
+<script type="text/template" template-name="whitelist-licenses">
+    {{#loading}}
+    <tr><td colspan="8"><i class="fa fa-refresh fa-spin"></i></td></tr>
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="8"><p>{{message}}</p></td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr s-data-set data-set="{{_id}}">
+        <td>
+            <input type="hidden" name="vendor" value="{{vendor}}"/>
+            {{vendor}}
+        </td>
+        <td>
+            <input type="hidden" name="identity" value="{{identity}}"/>
+            {{identity}}
+        </td>
+        <td>${{paid}}</td>
+        <td>${{remaining}}</td>
+        <td t-cost="{{monthlyCost}}">${{cost}}</td>
+        <td>
+            <input
+                type="checkbox"
+                name="activelyPaying"
+                {{#activelyPaying}}checked{{/activelyPaying}}
+                {{#paid}}disabled{{/paid}}/>
+        </td>
+        <td>
+            {{#licenseUrl}}
+            <a href="{{licenseUrl}}" title="Open license document.">View</a>
+            {{/licenseUrl}}
+        </td>
+        <td>
+            {{^paid}}
+            <button action="buyOutLicense"
+                    data-set-target="{{_id}}">Buy Out</button>
+            {{/paid}}
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="8">You have no licenses.</td></tr>
+    {{/results}}
+    {{/data}}
 </script>
 
 <script type="text/template" route="^buy-license" transform="transformBuyOut">
@@ -660,11 +745,16 @@
 
 <script type="text/template"
         route="^music(\?.*)?"
+        page-title="Music"
+        completed="completedMusic"
         transform="transformMusic">
     {{#data}}
     <div class="page width center">
-        <div class="filters pad-vertical push-children-right" data-set="music-search">
+        <div class="filters pad-vertical push-children-right"
+             trigger-target="searchMusic"
+             data-set="music-search">
             <input class="round"
+                    data-set-target="music-search"
                     name="search"
                     type="text"
                     placeholder="Search..."
@@ -679,7 +769,9 @@
                     {{/types}}
                 </select>
             </button>
-            <button action="searchMusic" data-set-target="music-search">
+            <button action="searchMusic" 
+                    trigger="searchMusic" 
+                    data-set-target="music-search">
                 <i class="fa fa-search"></i>
             </button>
         </div>
@@ -707,20 +799,29 @@
     <ul class="page width center art-list">
         {{#results}}
         <li>
-            <a href="/release/{{_id}}">
+            <a class="silent" href="/release/{{_id}}" title="{{title}} / {{artists}}">
                 <img src="{{cover}}"/>
-                <label class="title">{{title}}</label>
+                <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
-                <label>{{releaseDate}}</label>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
             </a>
         </li>
         {{/results}}
     </ul>
-    <div class="page width center pagination pad-vertical text center">
-        <a href="?{{previous}}">Previous</a>
-        <label>{{skip}} - {{count}} of {{total}}</label>
-        <a href="?{{next}}">Next</a>
-    </div>
+    {{^total}}
+    <div class="page width center text center">No results found.</div>
+    {{/total}}
+    {{#total}}
+      <div class="page width center pagination pad-vertical text center">
+          {{#previous}}
+            <a href="?{{previous}}">Previous</a>
+          {{/previous}}
+          <label>{{skip}} - {{count}} of {{total}}</label>
+          {{#next}}
+            <a href="?{{next}}">Next</a>
+          {{/next}}
+      </div>
+    {{/total}}
     {{/data}}
 </script>
 
@@ -729,21 +830,31 @@
         source="$endpoint/catalog/release/$1"
         transform="mapRelease"
         completed="completedRelease">
-    <div class="release page width center">
-        {{#loading}}
-        <i class="fa fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <div class="bgbox" style="background-image: url('{{coverBig}}')">
-            <div class="bgbox-blanket cl-white">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <div class="bgbox" style="background-image: url('{{coverBig}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box page width center clearfix">
                 <img class="artwork" src="{{cover}}"/>
-                <h1 class="cancel-margin-bottom" release-id="{{_id}}">{{title}}</h1>
+                <h1 release-id="{{_id}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
                 <label>Released {{releaseDate}}</label>
                 <div class="options push-children-right">
+                    {{#purchase}}
+                    <button class="faux" action="openPurchaseRelease">
+                        <i class="fa fa-shopping-bag"></i>
+                    </button>
+                    {{/purchase}}
+                    {{#share}}
+                    <a class="silent" href="{{share}}" target="_blank">
+                        <i class="fa fa-spotify"></i>
+                    </a>
+                    {{/share}}
                     <a class="silent"
                     href="{{downloadLink}}"
                     target="_blank"
@@ -760,18 +871,20 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="release page width center">
         <div
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
-        {{/data}}
     </div>
+    {{/data}}
 </script>
 
 <script type="text/template"
         template-name="release-tracks"
         transform="transformReleaseTracks"
-        completed="updateControls">
+        completed="completedReleaseTracks">
     <table>
         <thead>
             <tr>
@@ -809,9 +922,9 @@
                     </button>
                 </td>
                 <td>{{title}}</td>
-                <td>
+                <td class="trackArtists">
                     {{#artists}}
-                    <a href="/artist/{{_id}}">{{name}}</a>
+                    <span class="artist"><a href="/artist/{{_id}}">{{name}}</a></span>
                     {{/artists}}
                 </td>
                 <td>{{genre}}</td>
@@ -848,6 +961,7 @@
 
 <script type="text/template"
         route="^artist\/(.*)"
+        completed="completedArtist"
         source="$endpoint/catalog/artist/$1?fields=name,websiteDetailsId">
         {{#data}}
         {{#websiteDetailsId}}
@@ -857,8 +971,10 @@
         {{/websiteDetailsId}}
         <div class="page center width">
             {{^websiteDetailsId}}
+            <br/>
             <h2>About</h2>
             <p>There are no details.</p>
+            <br/>
             {{/websiteDetailsId}}
             <br/>
             <br/>
@@ -881,7 +997,7 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <ul>
+    <ul class="discography">
         {{#results}}
         <li>
             <a href="/release/{{_id}}">
@@ -906,43 +1022,31 @@
     {{#data}}
     <div class="bgbox" style="background-image: url('{{image}}')">
         <div class="bgbox-blanket cl-white">
-            <div class="page center width flex">
-                <div class="flex-strong artist-details">
-                    <h1>{{name}}</h1>
+            <div class="details-box page width center clearfix">
+                {{#image}}
+                <img class="artwork" src="{{image}}"/>
+                {{/image}}
+                <h1>{{name}}</h1>
+                <div class="options push-children-right">
                     {{#socials}}
-                    <div class="push-children-right">
-                        {{#twitter}}
-                        <a href="{{twitter}}"><i class="fa fa-twitter"></i></a>
-                        {{/twitter}}
-                        {{#facebook}}
-                        <a href="{{facebook}}"><i class="fa fa-facebook-official"></i></a>
-                        {{/facebook}}
-                        {{#soundcloud}}
-                        <a href="{{soundcloud}}"><i class="fa fa-soundcloud"></i></a>
-                        {{/soundcloud}}
-                        {{#youtube}}
-                        <a href="{{youtube}}"><i class="fa fa-youtube-play"></i></a>
-                        {{/youtube}}
-                        {{/socials}}
-                    </div>
-                </div>
-                <div>
-                    {{#image}}
-                    <img class="artist-image" src="{{image}}" title="Artist profile image."/>
-                    {{/image}}
+                    <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
+                    {{/socials}}
                 </div>
             </div>
         </div>
     </div>
     <div class="page width center">
-        
         {{#about}}
+        <br/>
         <h2>About</h2>
         <p>{{about}}</p>
         {{/about}}
         {{#contact}}
-        <h3>Booking & Managment</h3>
+        <br/>
+        <h2>Booking & Managment</h2>
+        <br/>
         <p>{{booking}}</p>
+        <br/>
         <p>{{management}}</p>
         {{/contact}}
     </div>
@@ -982,6 +1086,7 @@
 </script>
 
 <script type="text/template"
+        page-title="My Playlists"
         route="^playlists">
     <div class="page width center">
         <h1>My Playlists</h1>
@@ -1038,6 +1143,7 @@
 <script type="text/template"
         route="^playlist\/(.*)"
         source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
+        completed="completedPlaylist"
         transform="transformPlaylist">
     <div class="page width center">
         {{#loading}}
@@ -1059,7 +1165,9 @@
                 Public
             </label>
             {{/canPublic}}
-            <button action="reorderPlaylistFromInputs"><i class="fa fa-fw fa-save" role="save-playlist-order"></i> Save Order</button>
+            <button action="reorderPlaylistFromInputs" 
+                    trigger="reorderPlaylistFromInputs"><i class="fa fa-fw fa-save" role="save-playlist-order"></i> Save Order</button>
+            <button><i class="fa fa-fw fa-cloud-download"></i></button>
             {{#canDownload}}
             <button class="faux"
                     title="Download Playlist"
@@ -1119,12 +1227,16 @@
         <td>
             {{#edit}}
             <input  type="text"
+                    action-enter="reorderPlaylistFromInputs"
+                    action-enter="reorderPlaylistFromInputs"
                     onfocus="playlistTrackOrderFocus(event, this)"
                     onblur="playlistTrackOrderBlur(event, this)"
+                    trigger-target="reorderPlaylistFromInputs"
                     track-id="{{_id}}"
                     release-id="{{releaseId}}"
                     track-title="{{title}}"
                     name="trackOrder[]"
+                    tabIndex="{{trackNumber}}"
                     value="{{trackNumber}}" size="2" />
             {{/edit}}
             {{#noEdit}}
@@ -1145,9 +1257,9 @@
         </td>
         <td>{{title}}</td>
         <td><a href="/release/{{releaseId}}">{{release}}</a></td>
-        <td>
+        <td class="trackArtists">
             {{#artists}}
-            <a href="/artist/{{_id}}">{{name}}</a>
+            <span class="artist"><a href="/artist/{{_id}}">{{name}}</a></span>
             {{/artists}}
         </td>
         <td>{{genre}}</td>

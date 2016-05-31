@@ -34,7 +34,7 @@ function request (opts, done) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (xhr.readyState != 4) return
-    if (xhr.status >= 200 && xhr.status < 300) {
+    if (xhr.status >= 200 && xhr.status < 400) {
       return done(null, xhr.responseText, xhr)
     }
     var msg = xhr.responseText || "An error occured."
@@ -117,6 +117,39 @@ function loadCache (source, done, reset) {
   }, requestJSON)
 }
 
+function elMatches (el, sel) {
+  if(typeof(el.matchesSelector) == 'function') {
+    return el.matchesSelector(sel);
+  }
+  if(typeof(el.matches) == 'function') {
+    return el.matches(sel)
+  }
+  return false;
+}
+
+function interceptKeyPress (e) {
+  var which = e.which || e.keyCode
+  var isAction = null
+  if(which == 13) {
+    if(elMatches(e.path[0], 'input,button:not([action])')) {
+      for(var i = 0; i < e.path.length; i++) {
+        if(elMatches(e.path[i], '[trigger-target]')) {
+          var target = document.querySelector('[trigger="' + e.path[i].getAttribute('trigger-target') + '"]')
+          if(target) {
+            e.preventDefault()
+            return runAction(e, target)
+          }
+        }
+      }
+    }
+    //Hitting enter on a button that has an action
+    if(elMatches(e.path[0], 'button[action]')) {
+      e.preventDefault()
+      return runAction(e, e.path[0]);
+    }
+  }
+}
+
 function interceptClick (e) {
   var isAnchor = false
   var isAction = null
@@ -179,6 +212,10 @@ function stateChange (url, state) {
   openRoute(target, container, matches)
 }
 
+function setPageTitle(title) {
+  document.title = (!!title ? (title + pageTitleGlue) : '') + pageTitleSuffix
+}
+
 function openRoute (target, container, matches) {
   var source = target.getAttribute('source')
   var opts = {
@@ -187,6 +224,8 @@ function openRoute (target, container, matches) {
     template:  target.textContent,
     completed: getMethod(target, 'completed')
   }
+  setPageTitle(target.getAttribute('page-title'))
+  setMetaData({}) //This is declared in main.js but should probably be moved to this file
   if (source) {
     opts.source = source.replace(/\$(\d)/g, function (str, index) {
       return matches[index] || ""
@@ -307,6 +346,10 @@ function isNumberString (str) {
 
 function parseElementValue (el, value) {
   var type  = (el.getAttribute('type') || "").toLowerCase()
+  if (type == 'radio') {
+    if (el.checked) return value
+    return ''
+  }
   if (type == 'checkbox') {
     return value == 'on' || value == 'true' || value === true ? true : false
   }
@@ -320,20 +363,22 @@ function getDataSet (el, checkInitial, ignoreEmpty) {
   var obj
   var els = el.querySelectorAll('[name]')
   for (var i = 0; i < els.length; i++) {
-    var kel = els[i]
-    var key  = kel.getAttribute('name')
-    var ival = getElementInitialValue(kel)
-    var val  = getElementValue(kel)
-    // TODO handle radio
-    if (ignoreEmpty && val === "") {
+    var kel     = els[i]
+    var key     = kel.getAttribute('name')
+    var ival    = getElementInitialValue(kel)
+    var val     = getElementValue(kel)
+    var isRadio = kel.getAttribute('type') == 'radio'
+
+    if (ignoreEmpty && val === '') {
       continue
-    } else if (obj && obj[key]) {
+    } else if (obj && obj[key] && !isRadio) {
       if (!(obj[key] instanceof Array)) {
         obj[key] = [obj[key]]
       }
       obj[key].push(val)
     } else if (!checkInitial || (checkInitial && val != ival)) {
       if (!obj) obj = {}
+      if (obj[key] && isRadio) continue
       obj[key] = val
     }
   }

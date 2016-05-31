@@ -19,6 +19,7 @@ var strings   = {
   "twoFactorEnabled": "Two Factor has been enabled.",
   "twoFactorDisabled": "Two Factor has been removed.",
   "tokenResent": "A new two factor token has been sent."
+  "noAccount": "You do not have an account, would you like to create one?"
 }
 var downloadOptions = [
   {
@@ -41,6 +42,9 @@ var downloadOptions = [
     value: "flac"
   },
 ]
+var siteRoot = 'http://monstercat.com/m'
+var pageTitleSuffix = 'Monstercat'
+var pageTitleGlue = ' - '
 
 document.addEventListener("DOMContentLoaded", function (e) {
   renderHeader()
@@ -55,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
       stateChange(location.pathname + location.search, e.state)
     })
     document.addEventListener("click", interceptClick)
+    document.addEventListener("keypress", interceptKeyPress)
     stateChange(location.pathname + location.search)
   })
 })
@@ -65,8 +70,7 @@ function isSignedIn () {
 
 function hasGoldAccess () {
   if (!isSignedIn()) return false
-  // TODO finish me
-  return false
+  return !!session.user.goldService
 }
 
 function getSession (done) {
@@ -167,9 +171,10 @@ function updatePassword (e, el) {
   })
 }
 
-function signUp (e, el) {
+
+function signUpAt (e, el, where) {
   requestJSON({
-    url: endpoint + '/signup',
+    url: endpoint + where,
     method: 'POST',
     withCredentials: true,
     data: getTargetDataSet(el)
@@ -182,6 +187,16 @@ function signUp (e, el) {
       go("/")
     })
   })
+}
+
+function signUp (e, el) {
+  signUpAt(e, el, '/signup')
+}
+
+function signUpSocial (e, el) {
+  var data = getTargetDataSet(el)
+  var where = data.submitWhere
+  signUpAt(e, el, where)
 }
 
 function createPlaylist (e, el) {
@@ -334,7 +349,7 @@ function buyOutLicense (e, el) {
 }
 
 function searchMusic (e, el) {
-  var data   = getTargetDataSet(el)
+  var data   = getTargetDataSet(el, false, true) || {}
   var q      = queryStringToObject(window.location.search)
   var filter = []
   var fuzzy  = []
@@ -393,7 +408,7 @@ function getArtistsAtlas (tks, done) {
   tks = tks || [];
   tks.forEach(function(track) {
     ids = ids.concat((track.artists || []).map(function (artist) {
-      return artist.artistId
+      return artist.artistId || artist._id
     }))
   })
   ids = uniqueArray(ids)
@@ -489,17 +504,31 @@ function getSocials (urls) {
     twitter: /twitter\.com/,
     facebook: /facebook\.com/,
     soundcloud: /soundcloud\.com/,
-    youtube: /youtube\.com/
+    "youtube-play": /youtube\.com/
   }
-  var obj = {}
+  var arr = []
   urls.forEach(function (url) {
     for (var tag in socials) {
       if (socials[tag].test(url)) {
-        obj[tag] = url
+        arr.push({
+          link: url,
+          icon: tag
+        })
       }
     }
   })
-  return obj
+  return arr
+}
+
+function getReleaseShareLink(urls) {
+  var link
+  var re = /spotify\.com/
+  urls.forEach(function (url) {
+    if (re.test(url)) {
+      link = url
+    }
+  })
+  return link
 }
 
 /* Map Methods
@@ -518,10 +547,15 @@ function mapRelease (o) {
   o.releaseDate = formatDate(o.releaseDate)
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
-  o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
-  o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
-  if (o.urls instanceof Array)
+  if(o.thumbHashes) {
+    o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
+    o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
+  }
+  if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
+    o.share = getReleaseShareLink(o.urls)
+    o.purchase = !!o.urls.length
+  }
   o.downloadLink = getDownloadLink(o._id)
   return o
 }
@@ -542,6 +576,14 @@ function mapAccount (o) {
   return o
 }
 
+function mapConfirmSignup () {
+  var obj = queryStringToObject(window.location.search)
+  if (!Object.keys(obj).length) return
+
+  obj.countries = getAccountCountries()
+  return obj
+}
+
 function mapWebsiteDetails (o) {
   if (o.profileImageBlobId)
     o.image = datapoint + '/blobs/' + o.profileImageBlobId
@@ -557,7 +599,24 @@ function mapWebsiteDetails (o) {
   return o
 }
 
+function sortRelease (a, b) {
+  var a = new Date(a.preReleaseDate || a.releaseDate)
+  var b = new Date(b.preReleaseDate || b.releaseDate)
+  if (a > b) return -1
+  if (a < b) return 1
+  return 0
+}
+
 /* Transform Methods */
+
+function transformServices () {
+  var user = isSignedIn() ? session.user : {}
+  return {
+    hasGoldPermanent: !!user.goldService && !user.goldSubscriptionId,
+    goldSubscribe: !(!!user.goldService && !!user.goldSubscriptionId),
+    goldUnsubscribe: (!!user.goldService && !!user.goldSubscriptionId)
+  }
+}
 
 function transformPlaylist (obj) {
   if (isMyPlaylist(obj)) {
@@ -618,7 +677,7 @@ function transformPlaylistTracks (obj, done) {
 
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
-  q.fields = ['title', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
+  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
   q.limit  = 25
   q.skip   = parseInt(q.skip) || 0
   var fuzzy   = commaStringToObject(q.fuzzy)
@@ -664,7 +723,7 @@ function transformMusicReleases (obj) {
 }
 
 function transformReleases (obj) {
-  obj.results = obj.results.map(mapRelease)
+  obj.results = obj.results.sort(sortRelease).map(mapRelease)
   obj.skip  = (parseInt(obj.skip) || 0) + 1
   obj.count = obj.skip + obj.results.length - 1
   return obj
@@ -703,20 +762,113 @@ function transformAccountSettings(obj) {
   return obj
 }
 
+function appendSongMetaData (tracks) {
+  if (tracks) {
+    var songs = []
+    for(var i = 0; i < tracks.length; i++) {
+      var trackId = tracks[i].trackId ? tracks[i].trackId : tracks[i]._id
+      songs.push(siteRoot + '/track/' + trackId)
+    }
+    appendMetaData({
+      'music:song': songs
+    })
+  }
+}
+
 /* Completed Methods */
 
 function completedRelease (source, obj) {
   if (obj.error) return
   var r = obj.data
-  setMetaData({
-    "og:title": r.title,
+  var artists = []
+  var meta = {
+    "og:title": r.title + ' by ' + r.artists,
     "og:image": r.cover,
     "og:url": location.toString(),
-    "og:type": "music.album"
+    "og:type": "music.album",
+    "music:release_date": new Date(r.releaseDate).toISOString()
+  }
+  setMetaData(meta)
+  setPageTitle(r.title + ' by ' + r.artists)
+}
+
+function completedReleaseTracks (source, obj) {
+  appendSongMetaData(obj.data.results)
+  var artists = [];
+  getArtistsAtlas(obj.data.results, function (err, atlas) {
+    for(var i in atlas) {
+      artists.push(siteRoot + '/artist/' + i)
+    }
+  })
+  appendMetaData({
+    'music:musician': artists
   })
 }
 
+function completedWebsiteDetails (source, obj) {
+  appendMetaData({
+    'og:image': obj.data.image
+  })
+}
+
+function completedPlaylist (source, obj) {
+  if(obj.error) return
+  var pl = obj.data
+  setPageTitle(pl.name + pageTitleGlue + 'Playlist')
+  setMetaData({
+    'og:type': 'music.playlist',
+    'og:title': pl.name,
+    'og:url': location.toString()
+  })
+  appendSongMetaData(obj.data.tracks)
+}
+
+function completedArtist (source, obj) {
+  if(obj.error) return
+  setPageTitle(obj.data.name)
+  var meta = {
+    'og:title': obj.data.name,
+    'og:type': 'profile',
+    'og:url': location.toString()
+  }
+  setMetaData(meta)
+}
+
+function completedMusic (source, obj) {
+  if(obj.error) return
+  var parts = []
+  var qs = queryStringToObject(window.location.search)
+  var filter = qs.filters
+  if(qs.filters) {
+    //TODO: better pluralization
+    //TODO: better support for filtering by more than just type
+    parts.push(qs.filters.substr('type,'.length) + 's')
+  }
+  else {
+    parts.push('Music')
+  }
+  if(qs.fuzzy) {
+    //TODO: make this better for if/when fuzzy thing changes
+    parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
+  }
+  if(qs.skip) {
+    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
+    if(page > 1) {
+      parts.push('Page ' + page)
+    }
+  }
+  setPageTitle(parts.join(pageTitleGlue))
+}
+
 /* Helpers */
+
+function toArray (nl) {
+  var arr = []
+  for (var i = 0, ref = arr.length = nl.length; i < ref; i++) {
+    arr[i] = nl[i]
+  }
+  return arr
+}
 
 function uniqueArray (arr) {
   return Array.from(new Set(arr))
@@ -787,12 +939,27 @@ function removeMetaElement (el, key) {
     target.parentElement.removeChild(target)
 }
 
-function setMetaData (obj) {
+function setMetaData (meta) {
   var head = document.querySelector('head')
   if (!head) return
-  for (var key in obj) {
+  var tags = head.querySelectorAll('meta[property*="og:"],meta[property*="music:"]')
+  for(var i = 0; i < tags.length; i++) {
+    tags[i].parentElement.removeChild(tags[i])
+  }
+  meta['og:site'] = 'Monstercat'
+  appendMetaData(meta)
+}
+
+function appendMetaData (meta) {
+  var head = document.querySelector('head')
+  for (var key in meta) {
     removeMetaElement(head, key)
-    addMetaElement(head, key, obj[key])
+    var vals = typeof(meta[key]) == 'object' ? meta[key] : [meta[key]]
+    for(var i = 0; i < vals.length; i++) {
+      if(vals[i] !== undefined) {
+        addMetaElement(head, key, vals[i])
+      }
+    }
   }
 }
 
@@ -863,6 +1030,110 @@ function simpleUpdate (err, obj, xhr) {
 
 function reloadPage () {
   stateChange(location.pathname + location.search)
+}
+
+function reorderPlaylistFromInputs() {
+  var inputs = document.querySelectorAll('[name="trackOrder\\[\\]"')
+  //This is a kinda hacky way for not letting them accidentally delete all their tracks
+  //by spam clicking while the track list is reloading
+  if(inputs.length == 0) {
+    return
+  }
+  var trackOrdering = []
+  var trackEls = []
+  var changed = false
+  for(var i = 0; i < inputs.length; i++) {
+    var input = inputs[i]
+    var trackId = input.getAttribute('track-id')
+    var releaseId = input.getAttribute('release-id')
+    var to = parseInt(input.value)
+    var from = i + 1
+    if(!changed) {
+      changed = to != from
+    }
+    trackOrdering.push({trackId: trackId, releaseId: releaseId, from: from, to: to})
+  }
+  if(!changed) return
+  trackOrdering.sort(function(a, b) {
+    //If you change #1 to #6 and leave #6 at #6 then track 1 should be after #6
+    //If you move #7 to #3 and leave #3 unchanged, then #7 should be before #3
+    if(a.to == b.to) {
+      if(a.to > a.from) {
+        return 1
+      }
+      if(a.to < a.from) {
+        return -1
+      }
+      if(b.to > b.from) {
+        return -1
+      }
+      if(b.to < b.from) {
+        return 1
+      }
+      return 0
+    }
+    return a.to > b.to ? 1 : -1
+  })
+  trackEls = trackOrdering.map(function (item) {
+    return document.querySelector('tr[role="playlist-track"][track-id="' + item.trackId + '"][release-id="' + item.releaseId + '"]')
+  })
+  var tracksNode = document.querySelector('[role="playlist-tracks"]')
+  for(var i = trackEls.length - 1; i >= 0; i--) {
+    var before = i == (trackEls.length - 1) ? null : trackEls[i+1]
+    tracksNode.insertBefore(tracksNode.removeChild(trackEls[i]), before)
+  }
+  resetPlaylistInputs()
+  savePlaylistOrder();
+}
+
+function resetPlaylistInputs() {
+  var trackEls = document.querySelectorAll('[role="playlist-track"]')
+  for(var i = 0; i < trackEls.length; i++) {
+    var input = trackEls[i].querySelector('input[name="trackOrder\[\]"]')
+    input.value = (i + 1)
+    input.setAttribute('tab-index', input.value)
+  }
+}
+
+function savePlaylistOrder() {
+  var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
+  var trackEls = document.querySelectorAll('[role="playlist-track"]')
+  var trackSaves = []
+  for(var i = 0; i < trackEls.length; i++) {
+    trackSaves.push({
+      trackId: trackEls[i].getAttribute('track-id'),
+      releaseId: trackEls[i].getAttribute('release-id')
+    })
+  }
+  var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
+  update('playlist', id, {tracks: trackSaves}, function (err, obj, xhr) {
+    if (err) {
+      toast({
+        error: true,
+        message: err.message
+      })
+      return
+    }
+    cache(url, obj)
+    simpleUpdate()
+    toast({
+      message: strings.reorderedPlaylist
+    })
+  })
+}
+
+function renderHeader () {
+  var el = document.querySelector('#navigation')
+  var target = '[template-name="' + el.getAttribute('template') + '"]'
+  var template = document.querySelector(target).textContent
+  var data = null
+  if (session) {
+    data = {}
+    data.user = session ? session.user : null
+  }
+  render(el, template, {
+    data: data
+  })
 }
 
 function reorderPlaylistFromInputs() {
@@ -1075,7 +1346,7 @@ function sendAccessToken(where, done) {
       return done(Error('User did not authorize.'))
 
     var data = {
-      accessToken: res.authResponse.accessToken
+      token: res.authResponse.accessToken
     }
     requestJSON({
       url: endpoint + where,
@@ -1083,7 +1354,7 @@ function sendAccessToken(where, done) {
       data: data,
       withCredentials: true
     }, function (err, obj, xhr) {
-      done(err)
+      done(err, xhr ? xhr.status : null)
     })
   }
 
@@ -1092,7 +1363,7 @@ function sendAccessToken(where, done) {
 
 function sendIdToken(token, where, done) {
   var data = {
-    idToken: token
+    token: token
   }
   requestJSON({
     url: endpoint + where,
@@ -1100,7 +1371,7 @@ function sendIdToken(token, where, done) {
     data: data,
     withCredentials: true
   }, function (err, obj, xhr) {
-    done(err)
+    done(err, xhr ? xhr.status : null)
   })
 }
 
@@ -1110,7 +1381,7 @@ function enableGoogleSignin (e, el) {
   var auth = gapi.auth2.getAuthInstance()
   auth.signIn()
   .then(function (user) {
-    sendIdToken(user.getAuthResponse().id_token, '/self/google/signin/enable', function (err) {
+    sendIdToken(user.getAuthResponse().id_token, '/self/google/enable', function (err) {
       if (err) return window.alert(err.message)
       window.location.reload()
     })
@@ -1122,22 +1393,76 @@ function signInGoogle (e, el) {
   var auth = gapi.auth2.getAuthInstance()
   auth.signIn()
   .then(function (user) {
-    sendIdToken(user.getAuthResponse().id_token, '/self/google/signin', function (err) {
-      if (err) return window.alert(err.message)
-      onSignIn()
-    })
+    sendIdToken(user.getAuthResponse().id_token, '/google/signin', onSocialSignIn)
   })
 }
 
 function signInFacebook (e, el) {
-  sendAccessToken('/self/facebook/signin', function (err) {
-    if (err) return window.alert(err.message)
-    onSignIn()
-  })
+  sendAccessToken('/facebook/signin', onSocialSignIn)
+}
+
+function onSocialSignIn (err, status) {
+  if (err) return window.alert(err.message)
+  if (status === 303)
+    return window.confirm(strings.noAccount) ? go('/sign-up') : ''
+
+  onSignIn()
 }
 
 function enableFacebookSignin (e, el) {
-  sendAccessToken('/self/facebook/signin/enable', function (err) {
+  sendAccessToken('/self/facebook/enable', function (err) {
+    if (err) return window.alert(err.message)
+    if (status === 303) return go('/sign-up')
+    window.location.reload()
+  })
+}
+
+function signUpGoogle (e, el) {
+  if (!gapi.auth2) return
+  var auth = gapi.auth2.getAuthInstance()
+  auth.signIn()
+  .then(function (user) {
+    var obj = {
+      email: user.getBasicProfile().getEmail(),
+      token: user.getAuthResponse().id_token,
+      submitWhere: '/google/signup'
+    }
+    go('/confirm-sign-up?' + objectToQueryString(obj))
+  })
+}
+
+function signUpFacebook (e, el) {
+  function handle(res) {
+    if (res.status != 'connected' || !res.authResponse)
+      return done(Error('User did not authorize.'))
+
+    FB.api('/me?fields=name,email', function (ares) {
+      var obj = {
+        email: ares.email,
+        token: res.authResponse.accessToken,
+        submitWhere: '/facebook/signup'
+      }
+      go('/confirm-sign-up?' + objectToQueryString(obj))
+    })
+  }
+
+  FB.login(handle, {scope: 'public_profile,email'})
+}
+
+function unlinkFacebook (e, el) {
+  unlinkAccount('facebook')
+}
+
+function unlinkGoogle (e, el) {
+  unlinkAccount('google')
+}
+
+function unlinkAccount (which) {
+  requestJSON({
+    url: endpoint + '/self/' + which + '/unlink',
+    method: 'POST',
+    withCredentials: true
+  }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     window.location.reload()
   })
