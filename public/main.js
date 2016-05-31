@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
       stateChange(location.pathname + location.search, e.state)
     })
     document.addEventListener("click", interceptClick)
+    document.addEventListener("keypress", interceptKeyPress)
     stateChange(location.pathname + location.search)
   })
 })
@@ -282,7 +283,7 @@ function saveAccountSettings (e, el) {
 }
 
 function searchMusic (e, el) {
-  var data   = getTargetDataSet(el)
+  var data   = getTargetDataSet(el, false, true) || {}
   var q      = queryStringToObject(window.location.search)
   var filter = []
   var fuzzy  = []
@@ -1015,7 +1016,9 @@ function reorderPlaylistFromInputs() {
 function resetPlaylistInputs() {
   var trackEls = document.querySelectorAll('[role="playlist-track"]')
   for(var i = 0; i < trackEls.length; i++) {
-    trackEls[i].querySelector('input[name="trackOrder\[\]"]').value = (i + 1)
+    var input = trackEls[i].querySelector('input[name="trackOrder\[\]"]')
+    input.value = (i + 1)
+    input.setAttribute('tab-index', input.value)
   }
 }
 
