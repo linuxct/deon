@@ -394,7 +394,6 @@
                                 value="{{realName}}"
                                 data-set-target="account"
                                 initial-value="{{realName}}" />
-                                <!-- action-enter and data-set-target should be put in a parent element and then some stuff will need to be changed for those to work -->
                     </td>
                 </tr>
                 <tr>
@@ -482,18 +481,7 @@
              template="account-settings">
         </div>
         <br/>
-        <br/>
-        <hr/>
-        <br/>
         <a href="/services">Manage Services</a>
-        <br/>
-        <a href="/billing">View Billing History</a>
-        <br/>
-        <a href="/faqs">FAQs</a>
-        <br/>
-        <a href="/terms-of-service">Terms of Service</a>
-        <br/>
-        <a href="/privacy-policy">Privacy Policy</a>
         {{/data}}
     </div>
 </script>
@@ -1332,9 +1320,57 @@
 </script>
 
 <script type="text/template"
+        route="^help\/?$">
+    <div class="page width center">
+        <h1>Help</h1>
+        <p>
+        Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
+        Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
+        <a href="/twitch-policy">Twitch Policy</a><br/>
+        <a href="/privacy-policy">Privacy Policy</a><br/>
+        <a href="/terms-of-service">Terms of Service</a>
+        </p>
+    </div>
+</script>
+
+<script type="text/template"
         route="^faqs\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{{data}}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^faqs\/whitelisting\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{{data}}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^twitch-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
     <div class="page width center">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
