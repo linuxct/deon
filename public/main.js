@@ -15,7 +15,10 @@ var strings   = {
   "removedFromPlaylist": "Song succesfully removed from playlist.",
   "passwordMissing": "You must enter a password.",
   "passwordReset": "Your password has been reset. Please sign in.",
-  "passwordResetEmail": "Check your email for a link to reset your password."
+  "passwordResetEmail": "Check your email for a link to reset your password.",
+  "twoFactorEnabled": "Two Factor has been enabled.",
+  "twoFactorDisabled": "Two Factor has been removed.",
+  "tokenResent": "A new two factor token has been sent."
 }
 var downloadOptions = [
   {
@@ -81,7 +84,34 @@ function signIn (e, el) {
     data: getTargetDataSet(el)
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
+    if (xhr.status != 209)
+      return onSignIn()
+    go('/authenticate-token')
+  })
+}
+
+function authenticateTwoFactorToken (e, el) {
+  requestJSON({
+    url: endhost + '/signin/token',
+    method: 'POST',
+    data: getTargetDataSet(el),
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
     onSignIn()
+  })
+}
+
+function resendTwoFactorToken (e, el) {
+  requestJSON({
+    url: endhost + '/signin/token/resend',
+    method: 'POST',
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    toast({
+      message: strings.tokenResent
+    })
   })
 }
 
@@ -264,6 +294,38 @@ function saveAccountSettings (e, el) {
     window.alert(strings.settingsUpdated)
     session.settings = obj
     resetTargetInitialValues(el, obj)
+  })
+}
+
+function enableTwoFactor (e, el) {
+  var data = getTargetDataSet(el, false, true)
+  if (!data) return
+  data.number = String(data.number)
+  requestJSON({
+    url: endpoint + '/self/two-factor',
+    method: 'PUT',
+    data: data,
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    reloadPage()
+    toast({
+      message: strings.twoFactorEnabled
+    })
+  })
+}
+
+function disableTwoFactor (e, el) {
+  requestJSON({
+    url: endpoint + '/self/two-factor/disable',
+    method: 'PUT',
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    reloadPage()
+    toast({
+      message: strings.twoFactorDisabled
+    })
   })
 }
 
@@ -472,6 +534,11 @@ function mapSignup () {
 
 function mapAccount (o) {
   o.countries = getAccountCountries(o.location)
+  if (!o.twoFactorId) {
+    o.enableTwoFactor = {
+      countries: CountryCallingCodes
+    }
+  }
   return o
 }
 
@@ -792,6 +859,10 @@ function openTrackCopyCredits (e, el) {
 function simpleUpdate (err, obj, xhr) {
   if (err) return window.alert(err.message)
   loadSubSources(document.querySelector('[role="content"]'), true, true)
+}
+
+function reloadPage () {
+  stateChange(location.pathname + location.search)
 }
 
 function reorderPlaylistFromInputs() {

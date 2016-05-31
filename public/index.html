@@ -10,6 +10,7 @@
     <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
+    <script type="text/javascript" src="/country-codes.js"></script>
     <script type="text/javascript" src="/countries.js"></script>
     <script type="text/javascript" src="/main.js"></script>
     <script type="text/javascript" src="/player.js"></script>
@@ -146,6 +147,22 @@
         <a href="/forgot-password">Forgot your password?</a>
         <br/>
         <a href="/sign-up">Don't have an account? Sign up!</a>
+    </div>
+</script>
+
+<script type="text/template"
+        route="authenticate-token">
+    <div class="page width center">
+        <table class="form" data-set="auth-token">
+            <tr>
+                <th>Token</th>
+                <td>
+                    <input type="text" name="token" placeholder="Enter Here"/>
+                </td>
+            </tr>
+        </table>
+        <button action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
+        <button action="resendTwoFactorToken">Resend Token</button>
     </div>
 </script>
 
@@ -318,6 +335,36 @@
             Save
         </button>
         <button action="signOut">Sign Out</button>
+        <br/>
+        <br/>
+        <h2>Two-Factor Auth</h2>
+        {{^enableTwoFactor}}
+        <button action="disableTwoFactor">Disable</button>
+        {{/enableTwoFactor}}
+        {{#enableTwoFactor}}
+        <table class="form" data-set="2-factor">
+            <tbody>
+                <tr>
+                    <th>Country Code</th>
+                    <td>
+                        <select name="countryCode">
+                            <option value="" selected>Select</option>
+                            {{#countries}}
+                            <option value="{{dial_code}}">{{name}} ({{dial_code}})</option>
+                            {{/countries}}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>
+                        <input type="text" name="number" placeholder="Phone Number"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+        {{/enableTwoFactor}}
         <br/>
         <br/>
         <h2>Settings</h2>
@@ -608,13 +655,6 @@
                 <tr><td colspan="3">No history.</td></tr>
             </tbody>
         </table>
-    </div>
-</script>
-
-<script type="text/template" route="^$">
-    <div class="page width center">
-        <h1>Nothing here.</h1>
-        <p>Welcome home.</p>
     </div>
 </script>
 

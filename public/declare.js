@@ -300,12 +300,17 @@ function getElementInitialValue (el) {
   return parseElementValue(el, el.getAttribute('initial-value'))
 }
 
+function isNumberString (str) {
+  if (!isNumberString.test) isNumberString.regexp = /^\d+(\.\d+)?$/g
+  return isNumberString.regexp.test(str.trim())
+}
+
 function parseElementValue (el, value) {
   var type  = (el.getAttribute('type') || "").toLowerCase()
   if (type == 'checkbox') {
     return value == 'on' || value == 'true' || value === true ? true : false
   }
-  if (typeof value == 'string' && value && !isNaN(value)) {
+  if (typeof value == 'string' && isNumberString(value)) {
     return Number(value)
   }
   return value
