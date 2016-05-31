@@ -854,7 +854,7 @@ function completedMusic (source, obj) {
 function completedPlaylist (source, obj) {
   if(obj.error) return
   var pl = obj.data
-  setPageTitle(pl.name + pageTitleGlue + 'Playlist')
+  setPageTitle(pl.name + pageTitleGlue + 'Playlist')  
   setMetaData({
     'og:type': 'music.playlist',
     'og:title': pl.name,
