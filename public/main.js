@@ -16,6 +16,9 @@ var strings   = {
   "passwordMissing": "You must enter a password.",
   "passwordReset": "Your password has been reset. Please sign in.",
   "passwordResetEmail": "Check your email for a link to reset your password.",
+  "twoFactorEnabled": "Two Factor has been enabled.",
+  "twoFactorDisabled": "Two Factor has been removed.",
+  "tokenResent": "A new two factor token has been sent.",
   "noAccount": "You do not have an account, would you like to create one?"
 }
 var downloadOptions = [
@@ -39,6 +42,8 @@ var downloadOptions = [
     value: "flac"
   },
 ]
+var pageTitleSuffix = 'Monstercat'
+var pageTitleGlue = ' - '
 
 document.addEventListener("DOMContentLoaded", function (e) {
   renderHeader()
@@ -58,14 +63,17 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 })
 
+function setPageTitle(title) {
+  document.title = (!!title ? (title + pageTitleGlue) : '') + pageTitleSuffix
+}
+
 function isSignedIn () {
   return session && session.user
 }
 
 function hasGoldAccess () {
   if (!isSignedIn()) return false
-  // TODO finish me
-  return false
+  return !!session.user.goldService
 }
 
 function getSession (done) {
@@ -83,7 +91,34 @@ function signIn (e, el) {
     data: getTargetDataSet(el)
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
+    if (xhr.status != 209)
+      return onSignIn()
+    go('/authenticate-token')
+  })
+}
+
+function authenticateTwoFactorToken (e, el) {
+  requestJSON({
+    url: endhost + '/signin/token',
+    method: 'POST',
+    data: getTargetDataSet(el),
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
     onSignIn()
+  })
+}
+
+function resendTwoFactorToken (e, el) {
+  requestJSON({
+    url: endhost + '/signin/token/resend',
+    method: 'POST',
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    toast({
+      message: strings.tokenResent
+    })
   })
 }
 
@@ -172,7 +207,7 @@ function createPlaylist (e, el) {
   if (!name) return
   create('playlist', {
     name: name,
-    public: session.settings.playlistPublicByDefault
+    public: session.settings ? session.settings.playlistPublicByDefault : false
   }, simpleUpdate)
 }
 
@@ -280,6 +315,38 @@ function saveAccountSettings (e, el) {
   })
 }
 
+function enableTwoFactor (e, el) {
+  var data = getTargetDataSet(el, false, true)
+  if (!data) return
+  data.number = String(data.number)
+  requestJSON({
+    url: endpoint + '/self/two-factor',
+    method: 'PUT',
+    data: data,
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    reloadPage()
+    toast({
+      message: strings.twoFactorEnabled
+    })
+  })
+}
+
+function disableTwoFactor (e, el) {
+  requestJSON({
+    url: endpoint + '/self/two-factor/disable',
+    method: 'PUT',
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    reloadPage()
+    toast({
+      message: strings.twoFactorDisabled
+    })
+  })
+}
+
 function buyOutLicense (e, el) {
   go('/buy-license?' + objectToQueryString(getTargetDataSet(el)))
 }
@@ -344,7 +411,7 @@ function getArtistsAtlas (tks, done) {
   tks = tks || [];
   tks.forEach(function(track) {
     ids = ids.concat((track.artists || []).map(function (artist) {
-      return artist.artistId
+      return artist.artistId || artist._id
     }))
   })
   ids = uniqueArray(ids)
@@ -456,7 +523,7 @@ function getSocials (urls) {
   return arr
 }
 
-function getReleaseShareLink(urls) {
+function getReleaseShareLink (urls) {
   var link
   var re = /spotify\.com/
   urls.forEach(function (url) {
@@ -465,6 +532,34 @@ function getReleaseShareLink(urls) {
     }
   })
   return link
+}
+
+function getReleasePurchaseLinks (urls) {
+  var storemap = {
+    'Buy from Bandcamp': /bandcamp\.com/,
+    'Download On iTunes': /apple\.com/,
+    'Get From Beatport': /beatport\.com/,
+    'Get on Google Play': /play\.google\.com/
+  }
+  var links = urls.reduce(function (v, url) {
+    for (var key in storemap) {
+      if (storemap[key].test(url)) {
+        v.push({name: key, url: url})
+      }
+    }
+    return v
+  }, [])
+  return links
+}
+
+function openPurchaseRelease (e, el) {
+  var id = document.querySelector('h1[release-id]').getAttribute('release-id')
+  var url = endpoint + '/catalog/release/' + id
+  loadCache(url, function (err, res) {
+    openModal('release-shopping-modal', {
+      data: res
+    })
+  });
 }
 
 /* Map Methods
@@ -490,7 +585,8 @@ function mapRelease (o) {
   if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
     o.share = getReleaseShareLink(o.urls)
-    o.purchase = !!o.urls.length
+    o.purchaseLinks = getReleasePurchaseLinks(o.urls)
+    o.purchase = !!o.purchaseLinks.length
   }
   o.downloadLink = getDownloadLink(o._id)
   return o
@@ -504,6 +600,11 @@ function mapSignup () {
 
 function mapAccount (o) {
   o.countries = getAccountCountries(o.location)
+  if (!o.twoFactorId) {
+    o.enableTwoFactor = {
+      countries: CountryCallingCodes
+    }
+  }
   return o
 }
 
@@ -540,6 +641,15 @@ function sortRelease (a, b) {
 
 /* Transform Methods */
 
+function transformServices () {
+  var user = isSignedIn() ? session.user : {}
+  return {
+    hasGoldPermanent: !!user.goldService && !user.goldSubscriptionId,
+    goldSubscribe: !(!!user.goldService && !!user.goldSubscriptionId),
+    goldUnsubscribe: (!!user.goldService && !!user.goldSubscriptionId)
+  }
+}
+
 function transformPlaylist (obj) {
   if (isMyPlaylist(obj)) {
     obj.canPublic = {
@@ -547,8 +657,13 @@ function transformPlaylist (obj) {
       public: obj.public
     }
   }
-  if (hasGoldAccess())
-    obj.canDownload = true
+  if (isSignedIn()) {
+    var opts = {
+      method: 'download',
+      type: getMyPreferedDownloadOption()
+    }
+    obj.downloadUrl = endpoint + '/playlist/' + obj._id + '/download?' + objectToQueryString(opts)
+  }
   return obj
 }
 
@@ -684,20 +799,150 @@ function transformAccountSettings(obj) {
   return obj
 }
 
+function appendSongMetaData (tracks) {
+  if (tracks) {
+    var songs = []
+    for(var i = 0; i < tracks.length; i++) {
+      var trackId = tracks[i].trackId ? tracks[i].trackId : tracks[i]._id
+      songs.push('https://' + window.location.host + '/track/' + trackId)
+    }
+    appendMetaData({
+      'music:song': songs
+    })
+  }
+}
+
 /* Completed Methods */
 
 function completedRelease (source, obj) {
   if (obj.error) return
   var r = obj.data
-  setMetaData({
-    "og:title": r.title,
+  var artists = []
+  var meta = {
+    "og:title": r.title + ' by ' + r.artists,
     "og:image": r.cover,
     "og:url": location.toString(),
-    "og:type": "music.album"
+    "og:type": "music.album",
+    "music:release_date": new Date(r.releaseDate).toISOString()
+  }
+  setMetaData(meta)
+  setPageTitle(r.title + ' by ' + r.artists)
+}
+
+function completedReleaseTracks (source, obj) {
+  appendSongMetaData(obj.data.results)
+  var artists = [];
+  getArtistsAtlas(obj.data.results, function (err, atlas) {
+    for(var i in atlas) {
+      artists.push('https://' + window.location.host + '/artist/' + i)
+    }
+  })
+  appendMetaData({
+    'music:musician': artists
   })
 }
 
+function completedWebsiteDetails (source, obj) {
+  appendMetaData({
+    'og:image': obj.data.image
+  })
+  setPageTitle(r.title + ' by ' + r.artists)
+}
+
+function completedPlaylist (source, obj) {
+  if(obj.error) return
+    setPageTitle(obj.data.name + pageTitleGlue + 'Playlist')
+}
+
+function completedArtist (source, obj) {
+  if(obj.error) return
+  setPageTitle(obj.data.name)
+}
+
+function completedMusic (source, obj) {
+  if(obj.error) return
+  var parts = []
+  var qs = queryStringToObject(window.location.search)
+  var filter = qs.filters
+  if(qs.filters) {
+    //TODO: better pluralization
+    //TODO: better support for filtering by more than just type
+    parts.push(qs.filters.substr('type,'.length) + 's')
+  }
+  else {
+    parts.push('Music')
+  }
+  if(qs.fuzzy) {
+    //TODO: make this better for if/when fuzzy thing changes
+    parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
+  }
+  if(qs.skip) {
+    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
+    if(page > 1) {
+      parts.push('Page ' + page)
+    }
+  }
+  setPageTitle(parts.join(pageTitleGlue))
+}
+
+function completedPlaylist (source, obj) {
+  if(obj.error) return
+  var pl = obj.data
+  setPageTitle(pl.name + pageTitleGlue + 'Playlist')  
+  setMetaData({
+    'og:type': 'music.playlist',
+    'og:title': pl.name,
+    'og:url': location.toString()
+  })
+  appendSongMetaData(obj.data.tracks)
+}
+
+function completedArtist (source, obj) {
+  if(obj.error) return
+  setPageTitle(obj.data.name)
+  var meta = {
+    'og:title': obj.data.name,
+    'og:type': 'profile',
+    'og:url': location.toString()
+  }
+  setMetaData(meta)
+}
+
+function completedMusic (source, obj) {
+  if(obj.error) return
+  var parts = []
+  var qs = queryStringToObject(window.location.search)
+  var filter = qs.filters
+  if(qs.filters) {
+    //TODO: better pluralization
+    //TODO: better support for filtering by more than just type
+    parts.push(qs.filters.substr('type,'.length) + 's')
+  }
+  else {
+    parts.push('Music')
+  }
+  if(qs.fuzzy) {
+    //TODO: make this better for if/when fuzzy thing changes
+    parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
+  }
+  if(qs.skip) {
+    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
+    if(page > 1) {
+      parts.push('Page ' + page)
+    }
+  }
+  setPageTitle(parts.join(pageTitleGlue))
+}
+
 /* Helpers */
+
+function toArray (nl) {
+  var arr = []
+  for (var i = 0, ref = arr.length = nl.length; i < ref; i++) {
+    arr[i] = nl[i]
+  }
+  return arr
+}
 
 function uniqueArray (arr) {
   return Array.from(new Set(arr))
@@ -768,12 +1013,27 @@ function removeMetaElement (el, key) {
     target.parentElement.removeChild(target)
 }
 
-function setMetaData (obj) {
+function setMetaData (meta) {
   var head = document.querySelector('head')
   if (!head) return
-  for (var key in obj) {
+  var tags = head.querySelectorAll('meta[property*="og:"],meta[property*="music:"]')
+  for(var i = 0; i < tags.length; i++) {
+    tags[i].parentElement.removeChild(tags[i])
+  }
+  meta['og:site'] = 'Monstercat'
+  appendMetaData(meta)
+}
+
+function appendMetaData (meta) {
+  var head = document.querySelector('head')
+  for (var key in meta) {
     removeMetaElement(head, key)
-    addMetaElement(head, key, obj[key])
+    var vals = typeof(meta[key]) == 'object' ? meta[key] : [meta[key]]
+    for(var i = 0; i < vals.length; i++) {
+      if(vals[i] !== undefined) {
+        addMetaElement(head, key, vals[i])
+      }
+    }
   }
 }
 
@@ -840,6 +1100,10 @@ function openTrackCopyCredits (e, el) {
 function simpleUpdate (err, obj, xhr) {
   if (err) return window.alert(err.message)
   loadSubSources(document.querySelector('[role="content"]'), true, true)
+}
+
+function reloadPage () {
+  stateChange(location.pathname + location.search)
 }
 
 function reorderPlaylistFromInputs() {

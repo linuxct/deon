@@ -5,13 +5,19 @@
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
     <link rel="stylesheet" href="/style.css">
-    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js" defer async></script>
-    <script type="text/javascript" src="https://apis.google.com/js/platform.js" defer async></script>
+    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
+            defer async></script>
+    <script type="text/javascript" src="https://apis.google.com/js/platform.js"
+            defer async></script>
+    <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"
+            defer async></script>
     <script type="text/javascript" src="/marked.js"></script>
     <script type="text/javascript" src="/mustache.js"></script>
     <script type="text/javascript" src="/declare.js"></script>
+    <script type="text/javascript" src="/country-codes.js"></script>
     <script type="text/javascript" src="/countries.js"></script>
     <script type="text/javascript" src="/main.js"></script>
+    <script type="text/javascript" src="/pay.js"></script>
     <script type="text/javascript" src="/player.js"></script>
     <script type="text/javascript" src="/controls.js"></script>
 </head>
@@ -113,6 +119,33 @@
 </script>
 
 <script type="text/template"
+        template-name="release-shopping-modal">
+    <div class="modal">
+      <div class="modal-body">
+        {{#loading}}
+        ...
+        {{/loading}}
+        {{#err}}
+        <p>Error: {{message}}</p>
+        {{/err}}
+        {{#data}}
+        <ul>
+        {{#purchaseLinks}}
+          <li><a target="_blank" href="{{url}}">{{name}}</a></li>
+        {{/purchaseLinks}}
+        </ul>
+        {{/data}}
+      </div>
+      <div class="modal-footer">
+        <button action="closeModal">
+            <i class="fa fa-remove"></i>
+        </button>
+      </div>
+    </div>
+</script>
+
+
+<script type="text/template"
         route="^signin">
     <div class="page width center">
         <table class="form" data-set="credentials" trigger-target="signIn">
@@ -151,6 +184,22 @@
         <a href="/forgot-password">Forgot your password?</a>
         <br/>
         <a href="/sign-up">Don't have an account? Sign up!</a>
+    </div>
+</script>
+
+<script type="text/template"
+        route="authenticate-token">
+    <div class="page width center">
+        <table class="form" data-set="auth-token">
+            <tr>
+                <th>Token</th>
+                <td>
+                    <input type="text" name="token" placeholder="Enter Here"/>
+                </td>
+            </tr>
+        </table>
+        <button action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
+        <button action="resendTwoFactorToken">Resend Token</button>
     </div>
 </script>
 
@@ -321,6 +370,7 @@
 <script type="text/template"
         route="^account"
         source="$endpoint/self"
+        page-title="My Account"
         transform="mapAccount">
     <div class="page width center">
         <h1>My Account</h1>
@@ -349,6 +399,7 @@
                 <tr>
                     <th>Nickname</th>
                     <td><input type="text"
+                                action-enter="saveAccount"
                                 name="name"
                                 initial-value="{{name}}"
                                 value="{{name}}" />
@@ -395,23 +446,42 @@
         <button action="signOut">Sign Out</button>
         <br/>
         <br/>
+        <h2>Two-Factor Auth</h2>
+        {{^enableTwoFactor}}
+        <button action="disableTwoFactor">Disable</button>
+        {{/enableTwoFactor}}
+        {{#enableTwoFactor}}
+        <table class="form" data-set="2-factor">
+            <tbody>
+                <tr>
+                    <th>Country Code</th>
+                    <td>
+                        <select name="countryCode">
+                            <option value="" selected>Select</option>
+                            {{#countries}}
+                            <option value="{{dial_code}}">{{name}} ({{dial_code}})</option>
+                            {{/countries}}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>
+                        <input type="text" name="number" placeholder="Phone Number"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+        {{/enableTwoFactor}}
+        <br/>
+        <br/>
         <h2>Settings</h2>
         <div source="$endpoint/self/settings"
              template="account-settings">
         </div>
         <br/>
-        <br/>
-        <hr/>
-        <br/>
         <a href="/services">Manage Services</a>
-        <br/>
-        <a href="/billing">View Billing History</a>
-        <br/>
-        <a href="/faqs">FAQs</a>
-        <br/>
-        <a href="/terms-of-service">Terms of Service</a>
-        <br/>
-        <a href="/privacy-policy">Privacy Policy</a>
         {{/data}}
     </div>
 </script>
@@ -511,22 +581,71 @@
 </script>
 
 <script type="text/template"
-        route="^services$">
+        route="^services$"
+        transform="transformServices">
+    {{#data}}
     <div class="page width center">
         <h1>Manage Services</h1>
         <h2>Gold Access</h2>
         <br/>
         <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
         <br/>
-        <label>
-            <input type="checkbox" name="gold-access" checked>
-            Subscribe for $5.00/month
-        </label>
+        {{#hasGoldPermanent}}
+        <p>You have Gold Membership.</p>
+        {{/hasGoldPermanent}}
+        {{#goldUnsubscribe}}
+        <label>Gold Subscription Active</label>
+        <p>You are subscribed for $5.00 USD a month.</p>
+        <button action="unsubscribeGold">Cancel Subscription</button>
+        {{/goldUnsubscribe}}
+        {{#goldSubscribe}}
+        <div data-set="subscribe-gold">
+            <button action="subscribeGold"
+                    data-set-target="subscribe-gold">
+                Subscribe for $5.00/month
+            </button>
+            <label>
+                <input type="radio" name="payMethod" value="paypal">
+                <i class="fa fa-fw fa-cc-paypal"></i>
+            </label>
+            <label>
+                <input type="radio" name="payMethod" value="stripe" checked>
+                <i class="fa fa-fw fa-cc-stripe"></i>
+            </label>
+        </div>
+        {{/goldSubscribe}}
         <br/>
         <br/>
         <h2>Licensing Services</h2>
         <br/>
         <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro. You can also buy a subscription and pay monthly until you pay it off.</p>
+        <br/>
+        <div data-set="new-license">
+            <select name="vendor">
+                <option value="">Select Vendor</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Twitch">Twitch</option>
+            </select>
+            <input type="text" name="identity" placeholder="Identity"/>
+            <label>
+                <input type="radio" name="licensePayMethod" value="paypal">
+                <i class="fa fa-fw fa-cc-paypal"></i>
+            </label>
+            <label>
+                <input type="radio" name="licensePayMethod" value="stripe" checked>
+                <i class="fa fa-fw fa-cc-stripe"></i>
+            </label>
+            <button
+                action="subscribeNewLicense"
+                data-set-target="new-license">
+                Subscribe $5/month
+            </button>
+            <button
+                action="buyNewLicense"
+                data-set-target="new-license">
+                Purchase $200
+            </button>
+        </div>
         <br/>
         <table>
             <thead>
@@ -541,107 +660,60 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr data-set="y">
-                    <td>
-                        <input type="hidden" name="vendor" value="YouTube"/>
-                        YouTube
-                    </td>
-                    <td>
-                        <input type="hidden" name="identity" value="Sample"/>
-                        Sample
-                    </td>
-                    <td>$20.00</td>
-                    <td>$180.00</td>
-                    <td>$5.00</td>
-                    <td>
-                        <input type="checkbox" checked/>
-                    </td>
-                    <td>
-                        <a href="#">View</a>
-                    </td>
-                    <td>
-                        <button action="buyOutLicense"
-                                data-set-target="y">Buy Out</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>YouTube</td>
-                    <td>Banana X</td>
-                    <td>$200.00</td>
-                    <td>$0.00</td>
-                    <td>$0.00</td>
-                    <td>
-                        <i class="fa fa-check-circle-o">
-                    </td>
-                    <td><a href="#">View</a></td>
-                    <td></td>
-                </tr>
-                <tr data-set="x">
-                    <td>
-                        <input type="hidden" name="vendor" value="Twitch"/>
-                        Twitch
-                    </td>
-                    <td>
-                        <input type="hidden" name="identity" value="ZZZ"/>
-                        ZZZ
-                    </td>
-                    <td>$20.00</td>
-                    <td>$180.00</td>
-                    <td>$5.00</td>
-                    <td>
-                        <input type="checkbox"/>
-                    </td>
-                    <td></td>
-                    <td>
-                        <button action="buyOutLicense"
-                                data-set-target="x">Buy Out</button>
-                    </td>
-                </tr>
+            <tbody source="$endpoint/self/whitelist"
+                   template="whitelist-licenses"
+                   role="whitelists">
             </tbody>
         </table>
-        <div data-set="new-license">
-            <select name="vendor">
-                <option value="">Select Vendor</option>
-                <option value="YouTube">YouTube</option>
-                <option value="Twitch">Twitch</option>
-                <option value="Beam Pro">Beam Pro</option>
-            </select>
-            <input type="text" name="identity" placeholder="Identity"/>
-            <button
-                action="addLicenseSubscription"
-                data-set-target="new-license">
-                Add
-            </button>
-            <button
-                action="buyOutLicense"
-                data-set-target="new-license">
-                Buy Out
-            </button>
-        </div>
-        <br/>
-        <br/>
-        <hr/>
-        <br/>
-        <label>
-            Total: 
-            <span>$10.00</span> USD per Month
-        </label>
-        <br/>
-        <br/>
-        <label>
-            <input type="radio" name="method" value="paypal">
-            <i class="fa fa-fw fa-cc-paypal"></i>
-        </label>
-        <label>
-            <input type="radio" name="method" value="stripe">
-            <i class="fa fa-fw fa-cc-stripe"></i>
-        </label>
-        <button>Update Payments</button>
-        <br/>
-        <br/>
-        <a href="/billing">View Billing History</a>
     </div>
+    {{/data}}
+</script>
+
+<script type="text/template" template-name="whitelist-licenses">
+    {{#loading}}
+    <tr><td colspan="8"><i class="fa fa-refresh fa-spin"></i></td></tr>
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="8"><p>{{message}}</p></td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr s-data-set data-set="{{_id}}">
+        <td>
+            <input type="hidden" name="vendor" value="{{vendor}}"/>
+            {{vendor}}
+        </td>
+        <td>
+            <input type="hidden" name="identity" value="{{identity}}"/>
+            {{identity}}
+        </td>
+        <td>${{paid}}</td>
+        <td>${{remaining}}</td>
+        <td t-cost="{{monthlyCost}}">${{cost}}</td>
+        <td>
+            <input
+                type="checkbox"
+                name="activelyPaying"
+                {{#activelyPaying}}checked{{/activelyPaying}}
+                {{#paid}}disabled{{/paid}}/>
+        </td>
+        <td>
+            {{#licenseUrl}}
+            <a href="{{licenseUrl}}" title="Open license document.">View</a>
+            {{/licenseUrl}}
+        </td>
+        <td>
+            {{^paid}}
+            <button action="buyOutLicense"
+                    data-set-target="{{_id}}">Buy Out</button>
+            {{/paid}}
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="8">You have no licenses.</td></tr>
+    {{/results}}
+    {{/data}}
 </script>
 
 <script type="text/template" route="^buy-license" transform="transformBuyOut">
@@ -686,15 +758,10 @@
     </div>
 </script>
 
-<script type="text/template" route="^$">
-    <div class="page width center">
-        <h1>Nothing here.</h1>
-        <p>Welcome home.</p>
-    </div>
-</script>
-
 <script type="text/template"
         route="^music(\?.*)?"
+        page-title="Music"
+        completed="completedMusic"
         transform="transformMusic">
     {{#data}}
     <div class="page width center">
@@ -756,11 +823,20 @@
         </li>
         {{/results}}
     </ul>
-    <div class="page width center pagination pad-vertical text center">
-        <a href="?{{previous}}">Previous</a>
-        <label>{{skip}} - {{count}} of {{total}}</label>
-        <a href="?{{next}}">Next</a>
-    </div>
+    {{^total}}
+    <div class="page width center text center">No results found.</div>
+    {{/total}}
+    {{#total}}
+      <div class="page width center pagination pad-vertical text center">
+          {{#previous}}
+            <a href="?{{previous}}">Previous</a>
+          {{/previous}}
+          <label>{{skip}} - {{count}} of {{total}}</label>
+          {{#next}}
+            <a href="?{{next}}">Next</a>
+          {{/next}}
+      </div>
+    {{/total}}
     {{/data}}
 </script>
 
@@ -879,7 +955,7 @@
 <script type="text/template"
         template-name="release-tracks"
         transform="transformReleaseTracks"
-        completed="updateControls">
+        completed="completedReleaseTracks">
     <table>
         <thead>
             <tr>
@@ -927,6 +1003,7 @@
 
 <script type="text/template"
         route="^artist\/(.*)"
+        completed="completedArtist"
         source="$endpoint/catalog/artist/$1?fields=name,websiteDetailsId">
         {{#data}}
         {{#websiteDetailsId}}
@@ -1051,6 +1128,7 @@
 </script>
 
 <script type="text/template"
+        page-title="My Playlists"
         route="^playlists">
     <div class="page width center">
         <h1>My Playlists</h1>
@@ -1107,6 +1185,7 @@
 <script type="text/template"
         route="^playlist\/(.*)"
         source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
+        completed="completedPlaylist"
         transform="transformPlaylist">
     <div class="page width center">
         {{#loading}}
@@ -1129,7 +1208,9 @@
             </label>
             {{/canPublic}}
             <button action="reorderPlaylistFromInputs" 
-                    trigger="reorderPlaylistFromInputs"><i class="fa fa-fw fa-save" role="save-playlist-order"></i> Save Order</button>
+                    trigger="reorderPlaylistFromInputs">
+                    <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
+                    Save Order</button>
             <button><i class="fa fa-fw fa-cloud-download"></i></button>
             {{#canDownload}}
             <button class="faux"
@@ -1137,7 +1218,12 @@
                     action="downloadPlaylist">
                 <i class="fa fa-fw fa-cloud-download"></i>
             </button>
-            {{/canDownload}}
+            {{#downloadUrl}}
+            <a class="silent"
+               title="Download Playlist"
+               action="canAccessGold"
+               href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
+            {{/downloadUrl}}
             <button class="faux">
                 <i class="fa fa-fw fa-play"
                    action="playSongs"
@@ -1190,6 +1276,8 @@
         <td>
             {{#edit}}
             <input  type="text"
+                    action-enter="reorderPlaylistFromInputs"
+                    action-enter="reorderPlaylistFromInputs"
                     onfocus="playlistTrackOrderFocus(event, this)"
                     onblur="playlistTrackOrderBlur(event, this)"
                     trigger-target="reorderPlaylistFromInputs"
@@ -1236,9 +1324,57 @@
 </script>
 
 <script type="text/template"
+        route="^help\/?$">
+    <div class="page width center">
+        <h1>Help</h1>
+        <p>
+        Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
+        Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
+        <a href="/twitch-policy">Twitch Policy</a><br/>
+        <a href="/privacy-policy">Privacy Policy</a><br/>
+        <a href="/terms-of-service">Terms of Service</a>
+        </p>
+    </div>
+</script>
+
+<script type="text/template"
         route="^faqs\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{{data}}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^faqs\/whitelisting\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
+    <div class="page width center">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{{data}}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^twitch-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
     <div class="page width center">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
