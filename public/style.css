@@ -442,14 +442,6 @@ table.drag-sortable tr.drag-active-bottom {
   display: block;
 }
 
-.trackArtists .artist:before {
-  content: " + ";
-}
-
-.trackArtists .artist:first-of-type:before {
-  content: "";
-}
-
 footer {
   margin-top: 2em;
   margin-bottom: 2em;
@@ -458,3 +450,8 @@ footer {
 footer > * {
   font-size: 14px;
 }
+
+ul {
+  list-style-position: inside;
+}
+

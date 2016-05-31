@@ -42,7 +42,6 @@ var downloadOptions = [
     value: "flac"
   },
 ]
-var siteRoot = 'http://monstercat.com/m'
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue = ' - '
 
@@ -63,6 +62,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
     stateChange(location.pathname + location.search)
   })
 })
+
+function setPageTitle(title) {
+  document.title = (!!title ? (title + pageTitleGlue) : '') + pageTitleSuffix
+}
 
 function isSignedIn () {
   return session && session.user
@@ -520,7 +523,7 @@ function getSocials (urls) {
   return arr
 }
 
-function getReleaseShareLink(urls) {
+function getReleaseShareLink (urls) {
   var link
   var re = /spotify\.com/
   urls.forEach(function (url) {
@@ -529,6 +532,34 @@ function getReleaseShareLink(urls) {
     }
   })
   return link
+}
+
+function getReleasePurchaseLinks (urls) {
+  var storemap = {
+    'Buy from Bandcamp': /bandcamp\.com/,
+    'Download On iTunes': /apple\.com/,
+    'Get From Beatport': /beatport\.com/,
+    'Get on Google Play': /play\.google\.com/
+  }
+  var links = urls.reduce(function (v, url) {
+    for (var key in storemap) {
+      if (storemap[key].test(url)) {
+        v.push({name: key, url: url})
+      }
+    }
+    return v
+  }, [])
+  return links
+}
+
+function openPurchaseRelease (e, el) {
+  var id = document.querySelector('h1[release-id]').getAttribute('release-id')
+  var url = endpoint + '/catalog/release/' + id
+  loadCache(url, function (err, res) {
+    openModal('release-shopping-modal', {
+      data: res
+    })
+  });
 }
 
 /* Map Methods
@@ -554,7 +585,8 @@ function mapRelease (o) {
   if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
     o.share = getReleaseShareLink(o.urls)
-    o.purchase = !!o.urls.length
+    o.purchaseLinks = getReleasePurchaseLinks(o.urls)
+    o.purchase = !!o.purchaseLinks.length
   }
   o.downloadLink = getDownloadLink(o._id)
   return o
@@ -772,7 +804,7 @@ function appendSongMetaData (tracks) {
     var songs = []
     for(var i = 0; i < tracks.length; i++) {
       var trackId = tracks[i].trackId ? tracks[i].trackId : tracks[i]._id
-      songs.push(siteRoot + '/track/' + trackId)
+      songs.push('https://' + window.location.host + '/track/' + trackId)
     }
     appendMetaData({
       'music:song': songs
@@ -802,7 +834,7 @@ function completedReleaseTracks (source, obj) {
   var artists = [];
   getArtistsAtlas(obj.data.results, function (err, atlas) {
     for(var i in atlas) {
-      artists.push(siteRoot + '/artist/' + i)
+      artists.push('https://' + window.location.host + '/artist/' + i)
     }
   })
   appendMetaData({
@@ -814,12 +846,49 @@ function completedWebsiteDetails (source, obj) {
   appendMetaData({
     'og:image': obj.data.image
   })
+  setPageTitle(r.title + ' by ' + r.artists)
+}
+
+function completedPlaylist (source, obj) {
+  if(obj.error) return
+    setPageTitle(obj.data.name + pageTitleGlue + 'Playlist')
+}
+
+function completedArtist (source, obj) {
+  if(obj.error) return
+  setPageTitle(obj.data.name)
+}
+
+function completedMusic (source, obj) {
+  if(obj.error) return
+  var parts = []
+  var qs = queryStringToObject(window.location.search)
+  var filter = qs.filters
+  if(qs.filters) {
+    //TODO: better pluralization
+    //TODO: better support for filtering by more than just type
+    parts.push(qs.filters.substr('type,'.length) + 's')
+  }
+  else {
+    parts.push('Music')
+  }
+  if(qs.fuzzy) {
+    //TODO: make this better for if/when fuzzy thing changes
+    parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
+  }
+  if(qs.skip) {
+    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
+    if(page > 1) {
+      parts.push('Page ' + page)
+    }
+  }
+  setPageTitle(parts.join(pageTitleGlue))
 }
 
 function completedPlaylist (source, obj) {
   if(obj.error) return
   var pl = obj.data
-  setPageTitle(pl.name + pageTitleGlue + 'Playlist')
+  setPageTitle(pl.name + pageTitleGlue + 'Playlist')  
   setMetaData({
     'og:type': 'music.playlist',
     'og:title': pl.name,

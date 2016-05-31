@@ -119,6 +119,33 @@
 </script>
 
 <script type="text/template"
+        template-name="release-shopping-modal">
+    <div class="modal">
+      <div class="modal-body">
+        {{#loading}}
+        ...
+        {{/loading}}
+        {{#err}}
+        <p>Error: {{message}}</p>
+        {{/err}}
+        {{#data}}
+        <ul>
+        {{#purchaseLinks}}
+          <li><a target="_blank" href="{{url}}">{{name}}</a></li>
+        {{/purchaseLinks}}
+        </ul>
+        {{/data}}
+      </div>
+      <div class="modal-footer">
+        <button action="closeModal">
+            <i class="fa fa-remove"></i>
+        </button>
+      </div>
+    </div>
+</script>
+
+
+<script type="text/template"
         route="^signin">
     <div class="page width center">
         <table class="form" data-set="credentials" trigger-target="signIn">
