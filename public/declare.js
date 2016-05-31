@@ -212,10 +212,6 @@ function stateChange (url, state) {
   openRoute(target, container, matches)
 }
 
-function setPageTitle(title) {
-  document.title = (!!title ? (title + pageTitleGlue) : '') + pageTitleSuffix
-}
-
 function openRoute (target, container, matches) {
   var source = target.getAttribute('source')
   var opts = {
