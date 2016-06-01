@@ -843,15 +843,17 @@ function completedReleaseTracks (source, obj) {
 }
 
 function completedWebsiteDetails (source, obj) {
+  if (obj.error) return
+  var r = obj.data
   appendMetaData({
-    'og:image': obj.data.image
+    'og:image': r.image
   })
   setPageTitle(r.title + ' by ' + r.artists)
 }
 
 function completedPlaylist (source, obj) {
   if(obj.error) return
-    setPageTitle(obj.data.name + pageTitleGlue + 'Playlist')
+  setPageTitle(obj.data.name + pageTitleGlue + 'Playlist')
 }
 
 function completedArtist (source, obj) {
