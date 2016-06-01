@@ -89,6 +89,10 @@ function showNewSubscriptions () {
   document.querySelector('#new-subscriptions').classList.remove('hide')
 }
 
+function reachedMaxCartSubscriptions () {
+  return (document.querySelectorAll('[role="new-subs"] tr') || []).length >= 5
+}
+
 function addSub (obj) {
   var t = getTemplateEl('subscription-row')
   var container = document.querySelector('[role="new-subs"]')
@@ -105,6 +109,8 @@ function removeSub (e, el) {
 }
 
 function subscribeGold (e, el) {
+  if (reachedMaxCartSubscriptions())
+    return window.alert("You can only purchase up to 5 subscriptions at a time.")
   addSub({
     name: "Gold Membership",
     cost: "5.00",
@@ -119,11 +125,22 @@ function subscribeGold (e, el) {
   toast({message: "Gold Membership added to cart. See bottom of page."})
 }
 
+function alreadyInCart (data) {
+  return !!document.querySelector('[type="hidden"][value="'+data.vendor+'"]') &&
+    !!document.querySelector('[type="hidden"][value="'+data.identity+'"]')
+}
+
 function subscribeNewLicense (e, el) {
+  if (reachedMaxCartSubscriptions())
+    return window.alert("You can only purchase up to 5 subscriptions at a time.")
+
   var data = getTargetDataSet(el)
   if (!data) return
   if (!data.vendor) return
   if (!data.identity) return
+
+  if (alreadyInCart(data))
+    return window.alert("This license is already in the cart.")
 
   var name = "Whitelisting for " + data.identity + " on " + data.vendor
   addSub({
@@ -141,43 +158,6 @@ function subscribeNewLicense (e, el) {
   })
 }
 
-/*
-function subscribeGold (e, el) {
-  var data = getTargetDataSet(el)
-  if (data.payMethod != "stripe") return
-
-  var handler = StripeCheckout.configure({
-    key: STRIPE_PK,
-    image: '/default.png',
-    locale: 'auto',
-    token: function(token) {
-      requestJSON({
-        url: endpoint + '/self/gold/subscribe',
-        method: "POST",
-        data: {
-          method: 'stripe',
-          token: token
-        }
-      }, function (err, body, xhr) {
-        if (err) {
-          window.alert(err.message)
-          return
-        }
-        go('/gold-subscribed')
-        // TODO refresh session?
-      })
-    }
-  })
-
-  handler.open({
-    name: 'Gold Membership',
-    description: 'Monthy Subscription',
-    amount: 500,
-    email: session.user.email,
-    panelLabel: "Subscribe {{amount}}"
-  })
-}*/
-
 function unsubscribeGold (e, el) {
   requestJSON({
     url: endpoint + '/self/gold/unsubscribe',
@@ -188,6 +168,5 @@ function unsubscribeGold (e, el) {
       return
     }
     go('/gold-unsubscribed')
-    // TODO refresh session?
   })
 }
