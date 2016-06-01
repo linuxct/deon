@@ -144,7 +144,6 @@
     </div>
 </script>
 
-
 <script type="text/template"
         route="^signin">
     <div class="page width center">
@@ -358,8 +357,8 @@
                 </tr>
             </tbody>
         </table>
-        <button action="signUp" 
-                trigger="signUp" 
+        <button action="signUp"
+                trigger="signUp"
                 data-set-target="credentials">Sign Up</button>
         <button action="signUpFacebook">Sign up With Facebook</button>
         <button action="signUpGoogle">Sign up With Google</button>
@@ -603,48 +602,14 @@
                     data-set-target="subscribe-gold">
                 Subscribe for $5.00/month
             </button>
-            <label>
-                <input type="radio" name="payMethod" value="paypal">
-                <i class="fa fa-fw fa-cc-paypal"></i>
-            </label>
-            <label>
-                <input type="radio" name="payMethod" value="stripe" checked>
-                <i class="fa fa-fw fa-cc-stripe"></i>
-            </label>
         </div>
         {{/goldSubscribe}}
         <br/>
         <br/>
         <h2>Licensing Services</h2>
         <br/>
-        <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro. You can also buy a subscription and pay monthly until you pay it off.</p>
-        <br/>
-        <div data-set="new-license">
-            <select name="vendor">
-                <option value="">Select Vendor</option>
-                <option value="YouTube">YouTube</option>
-                <option value="Twitch">Twitch</option>
-            </select>
-            <input type="text" name="identity" placeholder="Identity"/>
-            <label>
-                <input type="radio" name="licensePayMethod" value="paypal">
-                <i class="fa fa-fw fa-cc-paypal"></i>
-            </label>
-            <label>
-                <input type="radio" name="licensePayMethod" value="stripe" checked>
-                <i class="fa fa-fw fa-cc-stripe"></i>
-            </label>
-            <button
-                action="subscribeNewLicense"
-                data-set-target="new-license">
-                Subscribe $5/month
-            </button>
-            <button
-                action="buyNewLicense"
-                data-set-target="new-license">
-                Purchase $200
-            </button>
-        </div>
+        <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro. You can also buy a subscription and pay monthly until you pay it off. To buy a license at full go <a href="/buy-license">here</a>.
+        </p>
         <br/>
         <table>
             <thead>
@@ -664,8 +629,70 @@
                    role="whitelists">
             </tbody>
         </table>
+        <br/>
+        <div data-set="new-license">
+            <select name="vendor">
+                <option value="">Select Vendor</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Twitch">Twitch</option>
+            </select>
+            <input type="text" name="identity" placeholder="Identity"/>
+           <button
+                action="subscribeNewLicense"
+                data-set-target="new-license">
+                Subscribe $5/month
+            </button>
+        </div>
+        <br/>
+        <br/>
+        <div id="new-subscriptions" class="hide">
+            <h2>Purchase Subscriptions</h2>
+            <br/>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subscription</th>
+                        <th>Monthly Cost</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody role="new-subs">
+                </tbody>
+            </table>
+            <br/>
+            <div data-set="pay-method">
+                <label>
+                    <input type="radio" name="method" value="paypal">
+                    <i class="fa fa-fw fa-cc-paypal"></i>
+                </label>
+                <label>
+                    <input type="radio" name="method" value="stripe" checked>
+                    <i class="fa fa-fw fa-cc-stripe"></i>
+                </label>
+                <button action="checkoutSubscriptions" data-set-target="pay-method">
+                    Purchase Subscriptions
+                </button>
+            </div>
+        </div>
     </div>
     {{/data}}
+</script>
+
+<script type="text/template" template-name="subscription-row">
+    <tr>
+        <td>{{name}}</td>
+        <td>
+            {{#fields}}
+            <input type="hidden" name="{{key}}" value="{{value}}">
+            {{/fields}}
+            ${{cost}}
+        </td>
+        <td>
+            <button class="faux" action="removeSub">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
 </script>
 
 <script type="text/template" template-name="whitelist-licenses">
