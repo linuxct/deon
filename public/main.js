@@ -87,7 +87,7 @@ function recordEvent (name, obj, done) {
   if (typeof done != 'function')
     done = function (err, obj, xhr) {}
   requestJSON({
-    url: endpoint + '/analytics/record/event'
+    url: endpoint + '/analytics/record/event',
     withCredentials: true,
     data: {
       event: name,
