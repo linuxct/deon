@@ -83,6 +83,19 @@ function getSession (done) {
   }, done)
 }
 
+function recordEvent (name, obj, done) {
+  if (typeof done != 'function')
+    done = function (err, obj, xhr) {}
+  requestJSON({
+    url: endpoint + '/analytics/record/event'
+    withCredentials: true,
+    data: {
+      event: name,
+      properties: obj
+    }
+  }, done)
+}
+
 function signIn (e, el) {
   requestJSON({
     url: endhost + '/signin',
@@ -364,29 +377,6 @@ function searchMusic (e, el) {
   q.fuzzy   = fuzzy.join(',')
   q.skip    = 0
   go('/music?' + objectToQueryString(q))
-}
-
-function formatDate (date) {
-  if (!formatDate.months) {
-    formatDate.months = [
-      "January",
-      "Feburary",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ]
-  }
-  if (!(date instanceof Date)) date = new Date(date)
-  return formatDate.months[date.getMonth()] + ' ' +
-    date.getDate() + ', ' +
-    date.getFullYear()
 }
 
 function createCopycredit (title, urls) {
@@ -1037,6 +1027,29 @@ function appendMetaData (meta) {
       }
     }
   }
+}
+
+function formatDate (date) {
+  if (!formatDate.months) {
+    formatDate.months = [
+      "January",
+      "Feburary",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
+  }
+  if (!(date instanceof Date)) date = new Date(date)
+  return formatDate.months[date.getMonth()] + ' ' +
+    date.getDate() + ', ' +
+    date.getFullYear()
 }
 
 /* UI Stuff */
