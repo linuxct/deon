@@ -931,7 +931,7 @@
         {{^playlistId}}release-id="{{releaseId}}"{{/playlistId}}>
     <i class="fa fa-play-circle inactive"></i>
     <i class="fa fa-pause-circle active"></i>
-</button>        
+</button>
 </script>
 
 <script type="text/template"
@@ -1212,13 +1212,6 @@
                     <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
                     Save Order</button>
             <button><i class="fa fa-fw fa-cloud-download"></i></button>
-            {{#canDownload}}
-            <button class="faux"
-                    title="Download Playlist"
-                    action="downloadPlaylist">
-                <i class="fa fa-fw fa-cloud-download"></i>
-            </button>
-            {{/canDownload}}
             {{#downloadUrl}}
             <a class="silent"
                title="Download Playlist"
@@ -1339,9 +1332,7 @@
 </script>
 
 <script type="text/template"
-        route="^faqs\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+        mustache-name="markdown-basic">
     <div class="page width center">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
@@ -1353,74 +1344,41 @@
         {{{data}}}
         {{/data}}
     </div>
+</script>
+
+<script type="text/template"
+        route="^faqs\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+    {{>markdown-basic}}
 </script>
 
 <script type="text/template"
         route="^faqs\/whitelisting\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
-    <div class="page width center">
-        {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        {{{data}}}
-        {{/data}}
-    </div>
+    {{>markdown-basic}}
 </script>
 
 <script type="text/template"
         route="^twitch-policy\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
-    <div class="page width center">
-        {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        {{{data}}}
-        {{/data}}
-    </div>
+    {{>markdown-basic}}
 </script>
 
 <script type="text/template"
         route="^privacy-policy\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Privacy%20Policy.md">
-    <div class="page width center">
-        {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        {{{data}}}
-        {{/data}}
-    </div>
+    {{>markdown-basic}}
 </script>
 
 <script type="text/template"
         route="^terms-of-service\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
-    <div class="page width center">
-        {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        {{{data}}}
-        {{/data}}
-    </div>
+    {{>markdown-basic}}
 </script>
 
 <script type="text/template" template-name="toast">
