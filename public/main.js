@@ -540,11 +540,12 @@ function removeYouTubeClaim (e, el) {
   var data = getTargetDataSet(el)
   if (!data || !data.videoId) return
   requestJSON({
-    url: endpoint + '/self/remove-claim',
+    url: endpoint + '/self/remove-claims',
     method: 'POST',
     data: {
       videoId: data.videoId
-    }
+    },
+    withCredentials: true
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     toasty(strings.claimReleased)
