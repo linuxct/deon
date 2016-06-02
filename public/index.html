@@ -86,8 +86,7 @@
 </script>
 
 <script type="text/template" template-name="navigation">
-    <a class="silent" href="/"><i class="fa fa-hand-peace-o fa-flip-horizontal"></i></a>
-    <a class="silent" href="/music"><i class="fa fa-headphones"></i></a>
+    <a class="silent" href="/"><i class="fa fa-headphones"></i></a>
     {{#data}}
     {{#user}}
     <a class="silent" href="/playlists"><i class="fa fa-bars"></i></a>
@@ -869,7 +868,7 @@
 </script>
 
 <script type="text/template"
-        route="^music(\?.*)?"
+        route="^(:?$|music(\?.*)?)"
         page-title="Music"
         completed="completedMusic"
         transform="transformMusic">

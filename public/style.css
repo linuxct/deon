@@ -265,7 +265,7 @@ td.push-children-right > * {
 
 .details-box img.artwork {
   float: right;
-  max-height: 256px;
+  height: 256px;
 }
 
 .details-box .options i {
@@ -405,6 +405,7 @@ span.note a {
   margin-top: 1em;
   background-size: 110%;
   background-position: center 60%;
+  background-color: black;
 }
 
 .bgbox-blanket {
