@@ -1,8 +1,9 @@
 var endhost   = 'https://connect.monstercat.com'
-var facebookAppId = '282352068773785'
-var endpoint  = endhost + '/api'
-var datapoint = 'https://s3.amazonaws.com/data.monstercat.com'
-var session   = null
+var endpoint        = endhost + '/api'
+var datapoint       = 'https://s3.amazonaws.com/data.monstercat.com'
+var session         = null
+var pageTitleSuffix = 'Monstercat'
+var pageTitleGlue   = ' - '
 var strings   = {
   "error": "An error occured.",
   "createPlaylist": "Give a name for new playlist.",
@@ -19,7 +20,8 @@ var strings   = {
   "twoFactorEnabled": "Two Factor has been enabled.",
   "twoFactorDisabled": "Two Factor has been removed.",
   "tokenResent": "A new two factor token has been sent.",
-  "noAccount": "You do not have an account, would you like to create one?"
+  "noAccount": "You do not have an account, would you like to create one?",
+  "claimReleased": "Your claim has been succesfully removed."
 }
 var downloadOptions = [
   {
@@ -42,8 +44,6 @@ var downloadOptions = [
     value: "flac"
   },
 ]
-var pageTitleSuffix = 'Monstercat'
-var pageTitleGlue = ' - '
 
 document.addEventListener("DOMContentLoaded", function (e) {
   renderHeader()
@@ -63,8 +63,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 })
 
-function setPageTitle(title) {
-  document.title = (!!title ? (title + pageTitleGlue) : '') + pageTitleSuffix
+function setPageTitle (title, glue, suffix) {
+  if (!glue) glue = pageTitleGlue
+  if (!suffix) suffix = pageTitleSuffix
+  document.title = (!!title ? (title + glue) : '') + suffix
 }
 
 function isSignedIn () {
@@ -129,9 +131,7 @@ function resendTwoFactorToken (e, el) {
     withCredentials: true
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
-    toast({
-      message: strings.tokenResent
-    })
+    toasty(strings.tokenResent)
   })
 }
 
@@ -246,13 +246,8 @@ function removeFromPlaylist (e, el) {
     var tracks = obj.tracks
     tracks.splice(index, 1)
     update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
+      if (err) return toasty(err)
       cache(url, obj)
-      if (err) {
-        toast({
-          message: err.message,
-          error: true
-        })
-      }
       loadSubSources(document.querySelector('[role="content"]'), true)
       updatePlayerPlaylist(id, tracks)
     })
@@ -277,19 +272,12 @@ function addToPlaylist (e, el) {
     if (isNaN(index)) index = tracks.length
     tracks.splice(index, 0, item)
     update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
-      cache(url, obj)
       el.disabled = false
       el.selectedIndex = 0
-      if (err) {
-        toast({
-          error: true,
-          message: err.message
-        })
-      }
+      if (err) return toasty(err)
+      cache(url, obj)
       updatePlayerPlaylist(id, tracks)
-      toast({
-        message: strings.addedToPlaylist
-      })
+      toasty(strings.addedToPlaylist)
     })
   })
 }
@@ -340,9 +328,7 @@ function enableTwoFactor (e, el) {
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     reloadPage()
-    toast({
-      message: strings.twoFactorEnabled
-    })
+    toasty(strings.twoFactorEnabled)
   })
 }
 
@@ -354,9 +340,7 @@ function disableTwoFactor (e, el) {
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     reloadPage()
-    toast({
-      message: strings.twoFactorDisabled
-    })
+    toasty(strings.twoFactorDisabled)
   })
 }
 
@@ -549,7 +533,23 @@ function openPurchaseRelease (e, el) {
     openModal('release-shopping-modal', {
       data: res
     })
-  });
+  })
+}
+
+function removeYouTubeClaim (e, el) {
+  var data = getTargetDataSet(el)
+  if (!data || !data.videoId) return
+  requestJSON({
+    url: endpoint + '/self/remove-claim',
+    method: 'POST',
+    data: {
+      videoId: data.videoId
+    }
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    toasty(strings.claimReleased)
+    document.querySelector('input[name="videoId"]').value = ""
+  })
 }
 
 /* Map Methods
@@ -621,15 +621,13 @@ function mapWebsiteDetails (o) {
   return o
 }
 
-function sortRelease (a, b) {
-  var a = new Date(a.preReleaseDate || a.releaseDate)
-  var b = new Date(b.preReleaseDate || b.releaseDate)
-  if (a > b) return -1
-  if (a < b) return 1
-  return 0
-}
-
 /* Transform Methods */
+
+function transformSocialSettings (obj) {
+  obj.facebookEnabled = !!obj.facebookId
+  obj.googleEnabled = !!obj.googleId
+  return obj
+}
 
 function transformServices () {
   var user = isSignedIn() ? session.user : {}
@@ -1052,6 +1050,14 @@ function formatDate (date) {
     date.getFullYear()
 }
 
+function sortRelease (a, b) {
+  var a = new Date(a.preReleaseDate || a.releaseDate)
+  var b = new Date(b.preReleaseDate || b.releaseDate)
+  if (a > b) return -1
+  if (a < b) return 1
+  return 0
+}
+
 /* UI Stuff */
 
 function toast (opts) {
@@ -1066,6 +1072,23 @@ function toast (opts) {
   setTimeout(function () {
     container.removeChild(el)
   }, opts.time || 3000)
+}
+
+function toasty (obj, time) {
+  if (obj instanceof Error) {
+    return toast({
+      error: true,
+      message: obj.message,
+      time: time
+    })
+  }
+  if (typeof obj == 'string') {
+    return toast({
+      message: obj,
+      time: time
+    })
+  }
+  toast(obj)
 }
 
 function openModal (name, data) {
@@ -1104,14 +1127,6 @@ function togglePassword (e, el) {
   iel.classList.add('fa-' + cls)
 }
 
-function openTrackCopyCredits (e, el) {
-  openModal('track-copycredits-modal', {
-    trackId:   el.getAttribute('track-id'),
-    releaseId: el.getAttribute('release-id')
-  })
-}
-
-// TODO don't use this...
 function simpleUpdate (err, obj, xhr) {
   if (err) return window.alert(err.message)
   loadSubSources(document.querySelector('[role="content"]'), true, true)
@@ -1120,6 +1135,35 @@ function simpleUpdate (err, obj, xhr) {
 function reloadPage () {
   stateChange(location.pathname + location.search)
 }
+
+function canAccessGold (e, el) {
+  if (hasGoldAccess()) return
+  e.preventDefault()
+  openModal('subscription-required-modal')
+}
+
+function openTrackCopyCredits (e, el) {
+  openModal('track-copycredits-modal', {
+    trackId:   el.getAttribute('track-id'),
+    releaseId: el.getAttribute('release-id')
+  })
+}
+
+function renderHeader () {
+  var el = document.querySelector('#navigation')
+  var target = '[template-name="' + el.getAttribute('template') + '"]'
+  var template = document.querySelector(target).textContent
+  var data = null
+  if (session) {
+    data = {}
+    data.user = session ? session.user : null
+  }
+  render(el, template, {
+    data: data
+  })
+}
+
+/* PLAYLIST METHODS */
 
 function reorderPlaylistFromInputs() {
   var inputs = document.querySelectorAll('[name="trackOrder\\[\\]"')
@@ -1196,32 +1240,10 @@ function savePlaylistOrder() {
   }
   var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
   update('playlist', id, {tracks: trackSaves}, function (err, obj, xhr) {
-    if (err) {
-      toast({
-        error: true,
-        message: err.message
-      })
-      return
-    }
+    if (err) return toasty(err)
     cache(url, obj)
     simpleUpdate()
-    toast({
-      message: strings.reorderedPlaylist
-    })
-  })
-}
-
-function renderHeader () {
-  var el = document.querySelector('#navigation')
-  var target = '[template-name="' + el.getAttribute('template') + '"]'
-  var template = document.querySelector(target).textContent
-  var data = null
-  if (session) {
-    data = {}
-    data.user = session ? session.user : null
-  }
-  render(el, template, {
-    data: data
+    toasty(strings.reorderedPlaylist)
   })
 }
 
@@ -1298,39 +1320,11 @@ function savePlaylistOrder() {
   }
   var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
   update('playlist', id, {tracks: trackSaves}, function (err, obj, xhr) {
-    if (err) {
-      toast({
-        error: true,
-        message: err.message
-      })
-      return
-    }
+    if (err) return toasty(err)
     cache(url, obj)
     simpleUpdate()
-    toast({
-      message: strings.reorderedPlaylist
-    })
+    toasty(strings.reorderedPlaylist)
   })
-}
-
-function renderHeader () {
-  var el = document.querySelector('#navigation')
-  var target = '[template-name="' + el.getAttribute('template') + '"]'
-  var template = document.querySelector(target).textContent
-  var data = null
-  if (session) {
-    data = {}
-    data.user = session ? session.user : null
-  }
-  render(el, template, {
-    data: data
-  })
-}
-
-function canAccessGold (e, el) {
-  if (hasGoldAccess()) return
-  e.preventDefault()
-  openModal('subscription-required-modal')
 }
 
 function playlistTrackOrderFocus(e, el) {
@@ -1415,18 +1409,14 @@ function playlistDrop (e) {
   savePlaylistOrder()
 }
 
-window.fbAsyncInit = function () {
+/* SOCIAL SIGNIN */
+
+function fbAsyncInit () {
   FB.init({
-    appId: facebookAppId,
+    appId: '282352068773785',
     cookie: true,
     version: 'v2.5'
   })
-}
-
-function transformSocialSettings (obj) {
-  obj.facebookEnabled = !!obj.facebookId
-  obj.googleEnabled = !!obj.googleId
-  return obj
 }
 
 function sendAccessToken(where, done) {

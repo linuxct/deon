@@ -1,14 +1,10 @@
 var STRIPE_PK = 'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
 
-function buyOutLicense (e, el) {
-  go('/buy-license?' + objectToQueryString(getTargetDataSet(el)))
-}
-
-function buyNewLicense (e, el) {
+function buyLicense (e, el) {
   var data = getTargetDataSet(el)
   if (!data.vendor) return
   if (!data.identity) return
-  if (data.licensePayMethod != 'stripe') return
+  if (data.method != 'stripe') return
 
   var handler = StripeCheckout.configure({
     key: STRIPE_PK,
