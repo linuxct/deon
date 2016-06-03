@@ -151,8 +151,6 @@ function trackUser () {
   analytics.identify(session.user._id, {
     email: session.user.email,
     name: session.user.realName
-  }, function () {
-    console.log(2)
   })
 }
 
