@@ -448,8 +448,11 @@ footer {
   margin-bottom: 2em;
 }
 
-footer > * {
+footer > label,
+footer > a,
+footer > button.faux {
   font-size: 14px;
+  font-weight: normal;
 }
 
 .unlicensable {

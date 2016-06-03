@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
       console.warn(err.message)
     }
     session = obj
+    trackUser()
     renderHeader()
     window.addEventListener("popstate", function popState (e) {
       stateChange(location.pathname + location.search, e.state)
@@ -139,9 +140,30 @@ function onSignIn() {
   getSession(function (err, sess) {
     if (err) return window.alert(err.message)
     session = sess
+    trackUser()
     renderHeader()
     go("/")
   })
+}
+
+function trackUser () {
+  if (!isSignedIn()) return
+  analytics.identify(session.user._id, {
+    email: session.user.email,
+    name: session.user.realName
+  }, function () {
+    console.log(2)
+  })
+}
+
+function untrackUser () {
+  analytics.reset()
+}
+
+function showIntercom (e, el) {
+  if (!window.Intercom)
+    return toasty(Error('Intercom disabled by Ad-Block. Please unblock.'))
+  window.Intercom('show')
 }
 
 function signOut (e, el) {
@@ -152,6 +174,7 @@ function signOut (e, el) {
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     session.user = null
+    untrackUser()
     renderHeader()
     go("/")
   })
