@@ -1183,6 +1183,8 @@ function renderHeader () {
   render(el, template, {
     data: data
   })
+  var feedbackBtn = document.querySelector('[role="feedback"]')
+  if (feedbackBtn) feedbackBtn.classList.toggle('hide', !isSignedIn())
 }
 
 /* PLAYLIST METHODS */

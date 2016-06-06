@@ -1,11 +1,24 @@
 var STRIPE_PK = 'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
 
+function isValidPayMethod (str) {
+  if (str == 'stripe') return true
+  if (str == 'paypal') return true
+  return false
+}
+
 function buyLicense (e, el) {
   var data = getTargetDataSet(el)
   if (!data.vendor) return
   if (!data.identity) return
-  if (data.method != 'stripe') return
+  if (!isValidPayMethod(data.method)) return
+  buyLicense[data.method](data)
+}
 
+buyLicense.paypal = function buyLicensePayPal (data) {
+  console.warn('not implemented')
+}
+
+buyLicense.stripe = function buyLicenseStripe (data) {
   var handler = StripeCheckout.configure({
     key: STRIPE_PK,
     image: '/default.png',
@@ -42,29 +55,47 @@ function checkoutSubscriptions (e, el) {
   var els = toArray(document.querySelectorAll('[role="new-subs"] tr') || [])
   var subs = els.map(getDataSet)
   if (!subs.length) return
-
   var data = getTargetDataSet(el)
-  if (data.method != 'stripe') return
+  if (!isValidPayMethod(data.method)) return
+  checkoutSubscriptions[data.method](data, subs)
+}
 
+checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs) {
+  requestJSON({
+    url: endpoint + '/self/subscription/services',
+    method: 'POST',
+    data: {
+      provider: 'paypal',
+      returnUrl: location.origin + '/subscribed',
+      cancelUrl: location.origin + '/canceled-payment',
+      services: subs
+    }
+  }, function (err, body, xhr) {
+    if (err) return window.alert(err.message)
+    window.location = body.redirect
+  })
+}
+
+checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs) {
   var handler = StripeCheckout.configure({
     key: STRIPE_PK,
     image: '/default.png',
     locale: 'auto',
     token: function(token) {
       requestJSON({
-        url: endpoint + '/self/license/subscribe',
-        method: "POST",
+        url: endpoint + '/self/subscription/services',
+        method: 'POST',
         data: {
-          method: 'stripe',
+          provider: 'stripe',
           token: token,
-          subscriptions: subs
+          services: subs
         }
       }, function (err, body, xhr) {
         if (err) {
           window.alert(err.message)
           return
         }
-        go('/license-subscribed')
+        go('/subscribed')
       })
     }
   })
@@ -80,6 +111,25 @@ function checkoutSubscriptions (e, el) {
     panelLabel: "Subscribe {{amount}}"
   })
 }
+
+function unsubscribeGold (e, el) {
+  requestJSON({
+    url: endpoint + '/self/subscription/gold/cancel',
+    method: "POST"
+  }, function (err, body, xhr) {
+    if (err) {
+      window.alert(err.message)
+      return
+    }
+    go('/unsubscribed')
+  })
+}
+
+function redirectServices (e, el) {
+  window.location = location.origin + '/services'
+}
+
+/* UI Stuff */
 
 function showNewSubscriptions () {
   document.querySelector('#new-subscriptions').classList.remove('hide')
@@ -112,6 +162,7 @@ function subscribeGold (e, el) {
     cost: "5.00",
     fields: [
       { key: "name", value: "Gold Membership" },
+      { key: "type", value: "gold" },
       { key: "amount", value: 500 }
     ]
   })
@@ -144,25 +195,13 @@ function subscribeNewLicense (e, el) {
     cost: "5.00",
     fields: [
       { key: "amount", value: 500 },
+      { key: "type", value: 'whitelist'},
       { key: "vendor", value: data.vendor },
       { key: "identity", value: data.identity }
     ]
   })
   showNewSubscriptions()
   toast({
-    message: name + ' added to cart. See bototm of page.'
-  })
-}
-
-function unsubscribeGold (e, el) {
-  requestJSON({
-    url: endpoint + '/self/gold/unsubscribe',
-    method: "POST"
-  }, function (err, body, xhr) {
-    if (err) {
-      window.alert(err.message)
-      return
-    }
-    go('/gold-unsubscribed')
+    message: name + ' added to cart. See bottom of page.'
   })
 }
