@@ -1,16 +1,16 @@
 var STRIPE_PK = 'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
 
-function isValidPayMethod (str) {
-  if (str == 'stripe') return true
-  if (str == 'paypal') return true
-  return false
+function isValidPayMethod (str, obj) {
+  if (str != 'stripe' && str != 'paypal') return false
+  if (typeof obj[str] != 'function') return false
+  return true
 }
 
 function buyLicense (e, el) {
   var data = getTargetDataSet(el)
   if (!data.vendor) return
   if (!data.identity) return
-  if (!isValidPayMethod(data.method)) return
+  if (!isValidPayMethod(data.method, buyLicense)) return
   buyLicense[data.method](data)
 }
 
@@ -27,6 +27,7 @@ buyLicense.stripe = function buyLicenseStripe (data) {
       requestJSON({
         url: endpoint + '/self/license/buy',
         method: "POST",
+        withCredentials: true,
         data: {
           method: 'stripe',
           token: token,
@@ -56,14 +57,15 @@ function checkoutSubscriptions (e, el) {
   var subs = els.map(getDataSet)
   if (!subs.length) return
   var data = getTargetDataSet(el)
-  if (!isValidPayMethod(data.method)) return
+  if (!isValidPayMethod(data.method, checkoutSubscriptions)) return
   checkoutSubscriptions[data.method](data, subs)
 }
 
-checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs) {
+checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs) {
   requestJSON({
     url: endpoint + '/self/subscription/services',
     method: 'POST',
+    withCredentials: true,
     data: {
       provider: 'paypal',
       returnUrl: location.origin + '/subscribed',
@@ -85,6 +87,7 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
       requestJSON({
         url: endpoint + '/self/subscription/services',
         method: 'POST',
+        withCredentials: true,
         data: {
           provider: 'stripe',
           token: token,
@@ -115,6 +118,7 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
 function unsubscribeGold (e, el) {
   requestJSON({
     url: endpoint + '/self/subscription/gold/cancel',
+    withCredentials: true,
     method: "POST"
   }, function (err, body, xhr) {
     if (err) {
@@ -126,7 +130,9 @@ function unsubscribeGold (e, el) {
 }
 
 function redirectServices (e, el) {
-  window.location = location.origin + '/services'
+  setTimeout(function () {
+    window.location = location.origin + '/services'
+  }, 5000)
 }
 
 /* UI Stuff */
