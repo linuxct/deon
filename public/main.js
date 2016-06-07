@@ -28,8 +28,10 @@ var strings   = {
   "whitelistAdded": "The license was added to your cart. Check below!",
   "cart5": "You can only purchase up to 5 subscriptions at a time.",
   "goldInCart": "The Gold Membership is already in your cart.",
-  "licenseInCart": "The license is already in your cart or is already purchased."
+  "licenseInCart": "The license is already in your cart or is already purchased.",
+  "cancelWhitelistSub": "Are you sure you want to cancel this subscription?"
 }
+
 var downloadOptions = [
   {
     name: "MP3 320kbps",
@@ -787,22 +789,27 @@ function transformMarkdown (obj) {
   return marked(obj)
 }
 
-function transformBuyOut () {
-  return queryStringToObject(window.location.search)
+function transformBuyOut (obj) {
+  if (!obj)
+    return queryStringToObject(window.location.search)
+  obj.cost = (obj.amountRemaining / 100).toFixed(2)
+  return obj
 }
 
 function transformWhitelists (obj) {
   obj.results = obj.results.map(function (whitelist) {
     whitelist.paid = (whitelist.amountPaid / 100).toFixed(2)
     whitelist.remaining = (whitelist.amountRemaining / 100).toFixed(2)
-    whitelist.cost = (5).toFixed(2)
+    if (whitelist.subscriptionActive)
+      whitelist.cost = (5).toFixed(2)
     whitelist.monthlyCost = 500
-    whitelist.activelyPaying = whitelist.subscriptionActive
     whitelist.canBuyOut = whitelist.paidInFull ? { _id: whitelist._id } : undefined
     if (whitelist.whitelisted)
       whitelist.licenseUrl = endpoint + '/self/whitelist/' + whitelist._id + '.pdf'
     if (!whitelist.subscriptionActive && whitelist.amountRemaining > 0)
-      whitelist.resume = true
+      whitelist.resume = { _id: whitelist._id, amount: whitelist.monthlyCost }
+    if (whitelist.subscriptionActive)
+      whitelist.cancel = { _id: whitelist._id }
     return whitelist
   })
   return obj

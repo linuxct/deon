@@ -6,16 +6,38 @@ function isValidPayMethod (str, obj) {
   return true
 }
 
+function buyoutUrl (id) {
+  var url = endpoint + '/self/whitelist/'
+  if (id) url += id
+  url += '/buyout'
+  return url
+}
+
 function buyLicense (e, el) {
   var data = getTargetDataSet(el)
   if (!data.vendor) return
   if (!data.identity) return
+  if (!data.amount) return
   if (!isValidPayMethod(data.method, buyLicense)) return
   buyLicense[data.method](data)
 }
 
 buyLicense.paypal = function buyLicensePayPal (data) {
-  console.warn('not implemented')
+  requestJSON({
+    url: buyoutUrl(data.id),
+    method: data.id ? 'PUT' : 'POST',
+    withCredentials: true,
+    data: {
+      provider: 'paypal',
+      returnUrl: location.origin + '/services/processing?type=buyout',
+      cancelUrl: location.origin + '/services/canceled-payment',
+      vendor: data.vendor,
+      identity: data.identity
+    }
+  }, function (err, body, xhr) {
+    if (err) return window.alert(err.message)
+    window.location = body.redirect
+  })
 }
 
 buyLicense.stripe = function buyLicenseStripe (data) {
@@ -25,20 +47,21 @@ buyLicense.stripe = function buyLicenseStripe (data) {
     locale: 'auto',
     token: function(token) {
       requestJSON({
-        url: endpoint + '/self/license/buy',
-        method: "POST",
+        url: buyoutUrl(data.id),
+        method: data.id ? 'PUT' : 'POST',
         withCredentials: true,
         data: {
-          method: 'stripe',
+          provider: 'stripe',
           token: token.id,
-          license: data
+          vendor: data.vendor,
+          identity: data.identity
         }
       }, function (err, body, xhr) {
         if (err) {
           window.alert(err.message)
           return
         }
-        go('/license-bought')
+        go('/sevices/buyout/purchased')
       })
     }
   })
@@ -46,7 +69,7 @@ buyLicense.stripe = function buyLicenseStripe (data) {
   handler.open({
     name: data.vendor + ' Whitelist',
     description: 'For "' + data.identity + '"',
-    amount: 20000,
+    amount: data.amount,
     email: session.user.email,
     panelLabel: "Pay {{amount}}"
   })
@@ -68,8 +91,8 @@ checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs)
     withCredentials: true,
     data: {
       provider: 'paypal',
-      returnUrl: location.origin + '/subscribed',
-      cancelUrl: location.origin + '/canceled-payment',
+      returnUrl: location.origin + '/services/processing?type=subscriptions',
+      cancelUrl: location.origin + '/services/canceled-payment',
       services: subs
     }
   }, function (err, body, xhr) {
@@ -84,6 +107,7 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
     image: '/default.png',
     locale: 'auto',
     token: function(token) {
+      // TODO handle temporary UX wait here
       requestJSON({
         url: endpoint + '/self/subscription/services',
         method: 'POST',
@@ -98,7 +122,7 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
           window.alert(err.message)
           return
         }
-        go('/subscribed')
+        go('/services/subscribed')
       })
     }
   })
@@ -115,6 +139,114 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
   })
 }
 
+function cancelLicenseSubscription (e, el) {
+  if (!window.confirm(strings.cancelWhitelistSub)) return
+  var id = el.getAttribute('whitelist-id')
+  // TODO handle wait UX
+  requestJSON({
+    url: endpoint + '/self/whitelist/' + id + '/cancel',
+    method: 'PUT',
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    go('/services/unsubscribed')
+  })
+}
+
+function resumeLicenseSubscription (e, el) {
+  var data = getTargetDataSet(el)
+  openModal('resume-whitelist', data)
+}
+
+function resumeLicenseConfirm (e, el) {
+  var data = getTargetDataSet(el)
+  if (!data.id) return
+  if (!data.vendor) return
+  if (!data.identity) return
+  if (!data.amount) return
+  if (!isValidPayMethod(data.method, resumeLicenseConfirm)) return
+  resumeLicenseConfirm[data.method](data)
+}
+
+resumeLicenseConfirm.paypal = function resumeLicenseConfirmPayPal (data) {
+  requestJSON({
+    url: endpoint + '/self/whitelist/' + data.id + '/resume',
+    method: 'PUT',
+    withCredentials: true,
+    data: {
+      provider: 'paypal',
+      returnUrl: location.origin + '/services/processing?type=resume',
+      cancelUrl: location.origin + '/services/canceled-payment'
+    }
+  }, function (err, body, xhr) {
+    if (err) return window.alert(err.message)
+    window.location = body.redirect
+  })
+}
+
+resumeLicenseConfirm.stripe = function resumeLicenseConfirmStripe (data) {
+  var handler = StripeCheckout.configure({
+    key: STRIPE_PK,
+    image: '/default.png',
+    locale: 'auto',
+    token: function(token) {
+      // TODO handle temporary UX wait here
+      requestJSON({
+        url: endpoint + '/self/whitelist/' + data.id + '/resume',
+        method: 'PUT',
+        withCredentials: true,
+        data: {
+          provider: 'stripe',
+          token: token.id
+        }
+      }, function (err, body, xhr) {
+        if (err) {
+          window.alert(err.message)
+          return
+        }
+        go('/services/subscribed')
+      })
+    }
+  })
+  handler.open({
+    name: 'Whitelist Subscription',
+    amount: data.amount,
+    description: data.vendor + ' - ' + data.identity,
+    email: session.user.email,
+    panelLabel: "Resubscribe {{amount}}"
+  })
+}
+
+function completedProcessing () {
+  var obj     = queryStringToObject(location.search)
+  var uri     = null
+  var forward = null
+  if (obj.type == 'buyout') {
+    uri     = 'whitelist/buyout/complete'
+    forward = '/services/buyout/purchased'
+  }
+  if (obj.type == 'subscriptions' || obj.type == 'resume') {
+    uri     = 'subscription/services/complete'
+    forward = '/services/subscribed'
+  }
+  if (!uri) {
+    // TODO display in page and check all data was recieved
+    return window.alert('An error occured because there was no data recieved to move forward.')
+  }
+  requestJSON({
+    url: endpoint + '/self/' + uri,
+    withCredentials: true,
+    method: 'POST',
+    data: {
+      token: obj.token,
+      payerId: obj.payerId
+    }
+  }, function (err, obj, xhr) {
+    if (err) window.alert(err.message)
+    go(forward)
+  })
+}
+
 function unsubscribeGold (e, el) {
   if (!window.confirm(strings.unsubscribeGold))
     return
@@ -127,7 +259,7 @@ function unsubscribeGold (e, el) {
       window.alert(err.message)
       return
     }
-    go('/unsubscribed')
+    go('/services/unsubscribed')
   })
 }
 

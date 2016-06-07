@@ -167,7 +167,7 @@ function interceptClick (e) {
   if (isAction) {
     runAction(e, isAction)
   }
-  if (!isAnchor) return
+  if (!isAnchor || !t.hasAttribute('href')) return
   var url = t.getAttribute("href")
   if (url.indexOf('http') == 0)
     return
