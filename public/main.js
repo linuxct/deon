@@ -889,7 +889,9 @@ function completedWebsiteDetails (source, obj) {
   appendMetaData({
     'og:image': r.image
   })
-  setPageTitle(r.title + ' by ' + r.artists)
+  if(r.title && r.artists) {
+    setPageTitle(r.title + ' by ' + r.artists)
+  }
 }
 
 function completedPlaylist (source, obj) {

@@ -155,6 +155,9 @@ function interceptClick (e) {
   var isAnchor = false
   var isAction = null
   var t = null
+  if (e.metaKey) {
+    return true
+  }
   for (var i = 0; i < e.path.length; i++) {
     t = e.path[i]
     if (t.hasAttribute && t.hasAttribute('action'))
