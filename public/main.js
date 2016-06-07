@@ -21,7 +21,14 @@ var strings   = {
   "twoFactorDisabled": "Two Factor has been removed.",
   "tokenResent": "A new two factor token has been sent.",
   "noAccount": "You do not have an account, would you like to create one?",
-  "claimReleased": "Your claim has been succesfully removed."
+  "claimReleased": "Your claim has been succesfully removed.",
+  "unsubscribeGold": "Are you sure you want to unsubscribe from the Gold Membership?",
+  "unsubscribeWhitelist": "Are you sure you want to cancel your license subscription? The whitelisting will be removed at the end of your payment period.",
+  "goldAdded": "Gold Membership was added to your cart. Check below!",
+  "whitelistAdded": "The license was added to your cart. Check below!",
+  "cart5": "You can only purchase up to 5 subscriptions at a time.",
+  "goldInCart": "The Gold Membership is already in your cart.",
+  "licenseInCart": "The license is already in your cart or is already purchased."
 }
 var downloadOptions = [
   {
@@ -782,6 +789,23 @@ function transformMarkdown (obj) {
 
 function transformBuyOut () {
   return queryStringToObject(window.location.search)
+}
+
+function transformWhitelists (obj) {
+  obj.results = obj.results.map(function (whitelist) {
+    whitelist.paid = (whitelist.amountPaid / 100).toFixed(2)
+    whitelist.remaining = (whitelist.amountRemaining / 100).toFixed(2)
+    whitelist.cost = (5).toFixed(2)
+    whitelist.monthlyCost = 500
+    whitelist.activelyPaying = whitelist.subscriptionActive
+    whitelist.canBuyOut = whitelist.paidInFull ? { _id: whitelist._id } : undefined
+    if (whitelist.whitelisted)
+      whitelist.licenseUrl = endpoint + '/self/whitelist/' + whitelist._id + '.pdf'
+    if (!whitelist.subscriptionActive && whitelist.amountRemaining > 0)
+      whitelist.resume = true
+    return whitelist
+  })
+  return obj
 }
 
 function transformReleaseTracks (obj, done) {

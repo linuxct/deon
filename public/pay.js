@@ -30,7 +30,7 @@ buyLicense.stripe = function buyLicenseStripe (data) {
         withCredentials: true,
         data: {
           method: 'stripe',
-          token: token,
+          token: token.id,
           license: data
         }
       }, function (err, body, xhr) {
@@ -90,7 +90,7 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
         withCredentials: true,
         data: {
           provider: 'stripe',
-          token: token,
+          token: token.id,
           services: subs
         }
       }, function (err, body, xhr) {
@@ -116,6 +116,8 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
 }
 
 function unsubscribeGold (e, el) {
+  if (!window.confirm(strings.unsubscribeGold))
+    return
   requestJSON({
     url: endpoint + '/self/subscription/gold/cancel',
     withCredentials: true,
@@ -162,7 +164,9 @@ function removeSub (e, el) {
 
 function subscribeGold (e, el) {
   if (reachedMaxCartSubscriptions())
-    return window.alert("You can only purchase up to 5 subscriptions at a time.")
+    return window.alert(strings.cart5)
+  if (document.querySelector('[type="hidden"][name="type"][value="gold"]'))
+    return window.alert(strings.goldInCart)
   addSub({
     name: "Gold Membership",
     cost: "5.00",
@@ -172,10 +176,8 @@ function subscribeGold (e, el) {
       { key: "amount", value: 500 }
     ]
   })
-  el.disabled = true
-  el.textContent = "Added - See Below"
   showNewSubscriptions()
-  toast({message: "Gold Membership added to cart. See bottom of page."})
+  toasty(strings.goldAdded)
 }
 
 function alreadyInCart (data) {
@@ -185,7 +187,7 @@ function alreadyInCart (data) {
 
 function subscribeNewLicense (e, el) {
   if (reachedMaxCartSubscriptions())
-    return window.alert("You can only purchase up to 5 subscriptions at a time.")
+    return window.alert(strings.cart5)
 
   var data = getTargetDataSet(el)
   if (!data) return
@@ -193,7 +195,7 @@ function subscribeNewLicense (e, el) {
   if (!data.identity) return
 
   if (alreadyInCart(data))
-    return window.alert("This license is already in the cart.")
+    return window.alert(strings.licenseInCart)
 
   var name = "Whitelisting for " + data.identity + " on " + data.vendor
   addSub({
@@ -207,7 +209,5 @@ function subscribeNewLicense (e, el) {
     ]
   })
   showNewSubscriptions()
-  toast({
-    message: name + ' added to cart. See bottom of page.'
-  })
+  toasty(strings.whitelistAdded)
 }
