@@ -82,13 +82,29 @@ function searchMusic (e, el) {
   var q      = queryStringToObject(window.location.search)
   var filter = []
   var fuzzy  = []
-  if (data.type)
+  if (data.type) {
     filter.push('type', data.type)
-  if (data.search)
+  }
+  else {
+    delete q.filters;
+  }
+  if (data.search) {
     fuzzy.push('title', data.search)
-  q.filters = filter.join(',')
-  q.fuzzy   = fuzzy.join(',')
-  q.skip    = 0
+  }
+  else {
+    delete q.fuzzy;
+  }
+  if (filter.length > 0) {
+    q.filters = filter.join(',')
+  }
+  if (fuzzy.length > 0) {
+    q.fuzzy   = fuzzy.join(',')
+  }
+  //q.skip    = 0
+
+  delete q.skip
+  delete q.limit
+
   go('/music?' + objectToQueryString(q))
 }
 
