@@ -11,6 +11,7 @@
  *  - You want to use CORS.
  *  - Your main content lies under [role="content"].
  *  - Useing ES6 tech (Maps, etc.)
+ *  - Completed hook defaults to seting prerenderReady to true
  */
  var mustacheTemplates = {}
 
@@ -222,11 +223,10 @@ function openRoute (target, container, matches) {
     container: container,
     transform: getMethod(target, 'transform'),
     template:  target.textContent,
-    completed: getMethod(target, 'completed')
+    completed: getMethod(target, 'completed') || function () { window.prerenderReady = true }
   }
-  if(target.hasAttribute('page-title')) {
+  if (target.hasAttribute('page-title'))
     document.title = target.getAttribute('page-title')
-  }
   setMetaData({}) //This is declared in main.js but should probably be moved to this file
   if (source) {
     opts.source = source.replace(/\$(\d)/g, function (str, index) {
@@ -299,13 +299,12 @@ function renderTemplateOptions (opts) {
   var container = opts.container
   var template  = opts.template
   var transform = opts.transform
-  var completed = opts.completed
+  var completed = typeof opts.completed == 'function' ? opts.completed : function () {}
   var data      = opts.data
 
   var fa = function (data) {
     render(container, template, data)
-    if (typeof completed == 'function')
-      completed(opts.source, data)
+    completed(opts.source, data)
   }
   var fn = function (err, obj) {
     fa({
@@ -313,11 +312,9 @@ function renderTemplateOptions (opts) {
       data: obj
     })
   }
-  if (transform)
-    return applyTransform(transform, data, fn)
+  if (transform) return applyTransform(transform, data, fn)
   render(container, template, data)
-  if (typeof completed == 'function')
-    completed(opts.source, data)
+  completed(opts.source, data)
 }
 
 function render (container, template, scope) {

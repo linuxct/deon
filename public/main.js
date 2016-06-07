@@ -868,6 +868,7 @@ function completedRelease (source, obj) {
   }
   setMetaData(meta)
   setPageTitle(r.title + ' by ' + r.artists)
+  prerendered()
 }
 
 function completedReleaseTracks (source, obj) {
@@ -881,6 +882,7 @@ function completedReleaseTracks (source, obj) {
   appendMetaData({
     'music:musician': artists
   })
+  prerendered()
 }
 
 function completedWebsiteDetails (source, obj) {
@@ -892,16 +894,19 @@ function completedWebsiteDetails (source, obj) {
   if(r.title && r.artists) {
     setPageTitle(r.title + ' by ' + r.artists)
   }
+  prerendered()
 }
 
 function completedPlaylist (source, obj) {
   if(obj.error) return
   setPageTitle(obj.data.name + pageTitleGlue + 'Playlist')
+  prerendered()
 }
 
 function completedArtist (source, obj) {
   if(obj.error) return
   setPageTitle(obj.data.name)
+  prerendered()
 }
 
 function completedMusic (source, obj) {
@@ -928,6 +933,7 @@ function completedMusic (source, obj) {
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
+  prerendered()
 }
 
 function completedPlaylist (source, obj) {
@@ -940,6 +946,7 @@ function completedPlaylist (source, obj) {
     'og:url': location.toString()
   })
   appendSongMetaData(obj.data.tracks)
+  prerendered()
 }
 
 function completedArtist (source, obj) {
@@ -951,6 +958,7 @@ function completedArtist (source, obj) {
     'og:url': location.toString()
   }
   setMetaData(meta)
+  prerendered()
 }
 
 function completedMusic (source, obj) {
@@ -977,6 +985,7 @@ function completedMusic (source, obj) {
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
+  prerendered()
 }
 
 /* Helpers */
@@ -1111,6 +1120,10 @@ function sortRelease (a, b) {
   if (a > b) return -1
   if (a < b) return 1
   return 0
+}
+
+function prerendered () {
+  window.prerenderReady = true
 }
 
 /* UI Stuff */
