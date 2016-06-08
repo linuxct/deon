@@ -10,26 +10,24 @@
  *  - Use JSON as transit format.
  *  - You want to use CORS.
  *  - Your main content lies under [role="content"].
- *  - Useing ES6 tech (Maps, etc.)
  *  - Completed hook defaults to seting prerenderReady to true
  */
- var mustacheTemplates = {}
+
+var mustacheTemplates = {}
 
 function cache (source, obj) {
   var _ = cache._
-  if (!_) {
-    _ = new Map()
+  if (!_ || !arguments.length) {
+    _ = {}
     cache._ = _
   }
-  if (!arguments.length) {
-    _.clear()
+  if (!arguments.length)
     return
-  }
   if (source && obj) {
-    _.set(source, obj)
+    _[source] = obj
     return
   }
-  return _.get(source)
+  return _[source]
 }
 
 function request (opts, done) {
@@ -96,15 +94,15 @@ function requestJSON (opts, done) {
 function loadCache (source, done, reset) {
   var _ = loadCache._
   if (!_) {
-    _ = new Map()
+    _ = {}
     loadCache._ = _
   }
   var cached = cache(source)
   if (!reset && cached) return done(null, cached)
-  var callbacks = _.get(source)
+  var callbacks = _[source]
   if (!callbacks) {
     callbacks = []
-    _.set(source, callbacks)
+    _[source] = callbacks
   }
   callbacks.push(done)
   requestDetect({
@@ -115,7 +113,7 @@ function loadCache (source, done, reset) {
     callbacks.forEach(function (fn) {
       fn(err, obj)
     })
-    _.delete(source)
+    delete _[source]
   }, requestJSON)
 }
 
