@@ -85,7 +85,12 @@ function isSignedIn () {
 
 function hasGoldAccess () {
   if (!isSignedIn()) return false
-  return !!session.user.goldService
+  var user = session.user
+  // TODO remove temporary support for old checks
+  return !!user.goldService ||
+    user.type.indexOf('gold') > -1 ||
+    user.type.indexOf('golden') > -1 ||
+    user.type.indexOf('license') > -1
 }
 
 function getSession (done) {
