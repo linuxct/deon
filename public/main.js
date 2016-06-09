@@ -6,6 +6,7 @@ var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
 
 document.addEventListener("DOMContentLoaded", function (e) {
+  initSocials()
   renderHeader()
   getSession(function (err, obj, xhr) {
     if (err) {
