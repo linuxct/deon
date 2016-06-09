@@ -1,3 +1,28 @@
+function flattenObject (obj, sep) {
+  if (typeof obj != 'object') return
+  var flat = {}
+  for (var key in obj) {
+    flattenObject.dive(flat, obj[key], key, sep)
+  }
+  return flat
+}
+flattenObject.dive = function (flat, val, chain, sep) {
+  var path = chain ? chain + sep : ""
+  if (val instanceof Array) {
+    for (var i=0; i<val.length; i++) {
+      flattenObject.dive(flat, val[i], path + i, sep)
+    }
+  }
+  else if (typeof val == 'object') {
+    for (var key in val) {
+      flattenObject.dive(flat, val[key], path + key, sep)
+    }
+  }
+  else {
+    flat[chain] = val
+  }
+}
+
 function toArray (nl) {
   var arr = []
   for (var i = 0, ref = arr.length = nl.length; i < ref; i++) {
@@ -38,6 +63,10 @@ function commaStringToObject (str) {
     obj[arr[i]] = arr[i+1]
   }
   return obj
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function requestSimple (method, what, obj, done) {

@@ -10,16 +10,37 @@ var sel = {
 
 var playerEvents = {
   statechange: updateControls,
-  play: onNewSong
+  play: onNewSong,
 }
+
+var playerAnalyticEvents = [
+  'play',
+  'stop',
+  'pause',
+  'next',
+  'previous',
+  'ended'
+]
 
 document.addEventListener('DOMContentLoaded', function(e) {
   var events = Object.keys(playerEvents)
-  for (var i = 0; i < events.length; i++) {
-    player.addEventListener(events[i], playerEvents[events[i]])
-  }
+  events.forEach(function (name) {
+    player.addEventListener(name, playerEvents[name])
+  })
+  playerAnalyticEvents.forEach(function (name) {
+    player.addEventListener(name, recordPlayerEvent)
+  })
+  player.addEventListener('error', recordPlayerError)
   requestAnimationFrame(updatePlayerProgress)
 })
+
+function recordPlayerEvent (e) {
+  recordEvent('Deon AP ' + capitalizeFirstLetter(e.type), flattenObject(e.detail))
+}
+
+function recordPlayerError (e) {
+  recordEvent('Deon AP Error', e)
+}
 
 function togglePlay(e, el) {
   player.toggle()
@@ -133,12 +154,13 @@ function isReleaseLoaded(id) {
   return player.items.length && player.items[0].releaseId == id
 }
 
-function mapTrackElToPlayer(el) {
+function mapTrackElToPlayer (el) {
   return {
-    source: el.getAttribute('play-link'),
-    title: el.getAttribute('title'),
+    source:     el.getAttribute('play-link'),
+    title:      el.getAttribute('title'),
+    trackId:    el.getAttribute('track-id'),
     playlistId: el.getAttribute('playlist-id'),
-    releaseId: el.getAttribute('release-id')
+    releaseId:  el.getAttribute('release-id')
   }
 }
 

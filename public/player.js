@@ -28,6 +28,7 @@ var MusicPlayer = (function () {
       return duplicate
 
     this.items.push(item)
+    this.dispatchEvent(new CustomEvent('add', {detail: {item: item}}))
     return this.items.length - 1
   }
 
@@ -47,16 +48,21 @@ var MusicPlayer = (function () {
     if (!this.items || !this.items.length || ((index != null) && (!this.items[index] || !this.items[index].source)))
       return
 
+    var pi = this.index
     index = index == undefined ? +this.index : +index
     this.index = index
-    if (this.audio.src != this.items[index].source) {
+    if (this.audio.src != this.items[index].source || pi != index) {
       this.audio.src = this.items[index].source
     }
     this.audio.autoplay = true
     this.audio.play()
     this.index = index
 
-    this.dispatchEvent(new CustomEvent('play', {detail: {item: this.items[this.index]}}))
+    this.trigger('play')
+  }
+
+  MusicPlayer.prototype.trigger = function (name) {
+    this.dispatchEvent(new CustomEvent(name, {detail: {item: this.currentItem}}))
   }
 
   MusicPlayer.prototype.clear = function () {
@@ -72,16 +78,19 @@ var MusicPlayer = (function () {
 
   MusicPlayer.prototype.restart = function () {
     this.seek(0)
+    this.trigger('restart')
     if (!this.playing) this.play()
   }
 
   MusicPlayer.prototype.pause = function () {
     this.audio.pause()
+    this.trigger('pause')
   }
 
   MusicPlayer.prototype.stop = function () {
-    this.pause()
+    this.audio.pause()
     this.seek(0)
+    this.trigger('stop')
   }
 
   MusicPlayer.prototype.toggle = function (index) {
@@ -105,11 +114,21 @@ var MusicPlayer = (function () {
   }
 
   MusicPlayer.prototype.next = function () {
+    var old = this.currentItem
     this.advance(1)
+    this.dispatchEvent(new CustomEvent('next', {detail: {
+      was: old,
+      item: this.currentItem
+    }}))
   }
 
   MusicPlayer.prototype.previous = function () {
+    var old = this.currentItem
     this.advance(-1)
+    this.dispatchEvent(new CustomEvent('previous', {detail: {
+      was: old,
+      item: this.currentItem
+    }}))
   }
 
   MusicPlayer.prototype.advance = function (amount) {
@@ -152,6 +171,12 @@ var MusicPlayer = (function () {
   }
 
   MusicPlayer.define = function (obj) {
+    Object.defineProperty(obj, 'currentItem', {
+      get: function () {
+        return this.items[this.index]
+      }
+    })
+
     Object.defineProperty(obj, 'playable', {
       get: function () {
         return this.audio.readyState >= 3
@@ -211,6 +236,7 @@ var MusicPlayer = (function () {
   }
 
   function onEnded(e) {
+    e.detail = { item: this.currentItem }
     cloneAndDispatch.call(this, e)
     if (this.finished)
       return
@@ -220,7 +246,9 @@ var MusicPlayer = (function () {
   }
 
   function cloneAndDispatch(e) {
-    this.dispatchEvent(new e.constructor(e.type, e))
+    var ev = new e.constructor(e.type, e)
+    ev.detail = e.detail
+    this.dispatchEvent(ev)
   }
 
   function clamp(a, min, max) {
