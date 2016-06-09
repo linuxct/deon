@@ -239,7 +239,7 @@ function completedProcessing () {
     method: 'POST',
     data: {
       token: obj.token,
-      payerId: obj.payerId
+      payerId: obj.PayerID
     }
   }, function (err, obj, xhr) {
     if (err) window.alert(err.message)

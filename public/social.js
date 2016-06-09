@@ -1,3 +1,12 @@
+function initSocials() {
+  gapi.load('auth2', function() {
+    gapi.auth2.init({
+        client_id: "1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com",
+        scope: "profile email"
+    })
+  })
+}
+
 function fbAsyncInit () {
   FB.init({
     appId: '282352068773785',
