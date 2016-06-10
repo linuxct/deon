@@ -111,7 +111,7 @@ function setMetaData (meta) {
   for(var i = 0; i < tags.length; i++) {
     tags[i].parentElement.removeChild(tags[i])
   }
-  meta['og:site'] = 'Monstercat'
+  meta['og:site_name'] = 'Monstercat'
   appendMetaData(meta)
 }
 
