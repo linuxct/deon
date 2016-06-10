@@ -511,12 +511,21 @@ function completedRelease (source, obj) {
   if (obj.error) return
   var r = obj.data
   var artists = []
+  var description = r.title + ' is ' + (r.type == 'EP' ? 'an' : 'a') + ' ' + r.type + ' by ' + r.artists
+
+  var releaseDate = new Date(r.releaseDate)
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Desc']
+  if(r.releaseDate) {
+    description += ' released on ' + months[releaseDate.getMonth()] + ' ' + releaseDate.getDay() + ' ' + releaseDate.getYear()
+  }
+  description += '.'
   var meta = {
     "og:title": r.title + ' by ' + r.artists,
     "og:image": r.cover,
+    "og:description": description,
     "og:url": location.toString(),
     "og:type": "music.album",
-    "music:release_date": new Date(r.releaseDate).toISOString()
+    "music:release_date": releaseDate.toISOString()
   }
   setMetaData(meta)
   setPageTitle(r.title + ' by ' + r.artists)
@@ -540,7 +549,7 @@ function completedWebsiteDetails (source, obj) {
   if (obj.error) return
   var r = obj.data
   appendMetaData({
-    'og:image': r.image
+    'og:image': r.image,
   })
   if(r.title && r.artists) {
     setPageTitle(r.title + ' by ' + r.artists)
@@ -586,6 +595,7 @@ function completedArtist (source, obj) {
   setPageTitle(obj.data.name)
   var meta = {
     'og:title': obj.data.name,
+    'og:description': 'Bio and discography for ' + obj.data.name,
     'og:type': 'profile',
     'og:url': location.toString()
   }
