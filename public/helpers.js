@@ -31,8 +31,12 @@ function toArray (nl) {
   return arr
 }
 
+function onlyUnique(value, index, self) { 
+  return self.indexOf(value) === index;
+}
+
 function uniqueArray (arr) {
-  return Array.from(new Set(arr))
+  return arr.filter(onlyUnique)
 }
 
 function toAtlas (arr, key) {
@@ -159,7 +163,7 @@ function sortRelease (a, b) {
   return 0
 }
 
-function prerendered () {
+function pageIsReady () {
+  window.pageReady = true
   window.prerenderReady = true
-  console.log("prerender ready!")
 }

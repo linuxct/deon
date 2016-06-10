@@ -156,11 +156,16 @@ function loadReleaseAndTrack (obj, done) {
   })
 }
 
-function getPlayUrl (albums, releaseId) {
-  var album = (albums || []).find(function(album) {
-    return album.albumId == releaseId
-  })
-  return album ? datapoint + '/blobs/' + album.streamHash : undefined
+function getPlayUrl (arr, releaseId) {
+  if (!(arr instanceof Array)) arr = []
+  var release
+  for (var i=0; i<arr.length; i++) {
+    if (arr[i].albumId == releaseId) {
+      release = arr[i]
+      break
+    }
+  }
+  return release ? datapoint + '/blobs/' + release.streamHash : undefined
 }
 
 function getMyPreferedDownloadOption () {
@@ -497,7 +502,6 @@ function completedRelease (source, obj) {
   }
   setMetaData(meta)
   setPageTitle(r.title + ' by ' + r.artists)
-  prerendered()
 }
 
 function completedReleaseTracks (source, obj) {
@@ -511,7 +515,7 @@ function completedReleaseTracks (source, obj) {
   appendMetaData({
     'music:musician': artists
   })
-  prerendered()
+  pageIsReady()
 }
 
 function completedWebsiteDetails (source, obj) {
@@ -523,13 +527,13 @@ function completedWebsiteDetails (source, obj) {
   if(r.title && r.artists) {
     setPageTitle(r.title + ' by ' + r.artists)
   }
-  prerendered()
+  pageIsReady()
 }
 
 function completedArtist (source, obj) {
   if(obj.error) return
   setPageTitle(obj.data.name)
-  prerendered()
+  pageIsReady()
 }
 
 function completedMusic (source, obj) {
@@ -556,7 +560,7 @@ function completedMusic (source, obj) {
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
-  prerendered()
+  pageIsReady()
 }
 
 function completedArtist (source, obj) {
@@ -568,7 +572,7 @@ function completedArtist (source, obj) {
     'og:url': location.toString()
   }
   setMetaData(meta)
-  prerendered()
+  pageIsReady()
 }
 
 function completedMusic (source, obj) {
@@ -595,7 +599,7 @@ function completedMusic (source, obj) {
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
-  prerendered()
+  pageIsReady()
 }
 
 /* UI Stuff */
