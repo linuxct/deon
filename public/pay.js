@@ -8,8 +8,8 @@ function isValidPayMethod (str, obj) {
 
 function buyoutUrl (id) {
   var url = endpoint + '/self/whitelist/'
-  if (id) url += id
-  url += '/buyout'
+  if (id) url += id + '/'
+  url += 'buyout'
   return url
 }
 
@@ -61,7 +61,7 @@ buyLicense.stripe = function buyLicenseStripe (data) {
           window.alert(err.message)
           return
         }
-        go('/sevices/buyout/purchased')
+        go('/services/buyout/purchased')
       })
     }
   })
