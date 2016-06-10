@@ -8,8 +8,8 @@ function isValidPayMethod (str, obj) {
 
 function buyoutUrl (id) {
   var url = endpoint + '/self/whitelist/'
-  if (id) url += id
-  url += '/buyout'
+  if (id) url += id + '/'
+  url += 'buyout'
   return url
 }
 
