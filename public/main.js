@@ -49,6 +49,8 @@ function getSession (done) {
 function recordEvent (name, obj, done) {
   if (typeof done != 'function')
     done = function (err, obj, xhr) {}
+  if (location.host.indexOf('localhost') == 0)
+    return done(Error('Localhost not supported.'))
   requestJSON({
     url: endpoint + '/analytics/record/event',
     withCredentials: true,
@@ -57,6 +59,22 @@ function recordEvent (name, obj, done) {
       properties: obj
     }
   }, done)
+}
+
+function recordErrorAndAlert (err, where) {
+  recordEvent('Error', {
+    message: err.message,
+    where: where
+  })
+  window.alert(err.message)
+}
+
+function recordErrorAndGo (err, where, uri) {
+  recordEvent('Error', {
+    message: err.message,
+    where: where
+  })
+  go(uri)
 }
 
 function trackUser () {
