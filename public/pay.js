@@ -61,7 +61,7 @@ buyLicense.stripe = function buyLicenseStripe (data) {
           window.alert(err.message)
           return
         }
-        go('/sevices/buyout/purchased')
+        go('/services/buyout/purchased')
       })
     }
   })
