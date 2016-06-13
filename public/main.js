@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 })
 
+openRoute.completed = [function () {
+  pageIsReady()
+}]
+
 function isSignedIn () {
   return session && session.user
 }
@@ -469,6 +473,22 @@ function transformReleaseTracks (obj, done) {
     if (!atlas) atlas = {}
     var releaseId = getLastPathnameComponent()
     obj.results.forEach(function (track, index, arr) {
+      mapReleaseTrack(track, index, arr)
+      track.releaseId = releaseId
+      track.playUrl = getPlayUrl(track.albums, releaseId)
+      track.artists = mapTrackArtists(track, atlas)
+      track.artsistsTitle = getArtistsTitle(track.artists)
+      track.downloadLink = getDownloadLink(releaseId, track._id)
+    })
+    done(null, obj)
+  })
+}
+
+function transformTracks (obj, done) {
+  getArtistsAtlas(obj.results, function (err, atlas) {
+    if (!atlas) atlas = {}
+    obj.results.forEach(function (track, index, arr) {
+      var releaseId = track.albums[0].albumId
       mapReleaseTrack(track, index, arr)
       track.releaseId = releaseId
       track.playUrl = getPlayUrl(track.albums, releaseId)
