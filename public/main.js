@@ -25,9 +25,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 })
 
-openRoute.completed = [function () {
-  pageIsReady()
-}]
+function pageIsReady () {
+  window.prerenderReady = true
+}
 
 function isSignedIn () {
   return session && session.user

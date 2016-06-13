@@ -471,48 +471,15 @@ td.genres span:first-of-type:before {
   content: "";
 }
 
-.snippet-container {
-  min-height: 100px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+.search-snippet h3 {
+  margin: 1em 0;
 }
 
-.snippet-container.loading {
-  text-align: center;
-  line-height: 100px;
+.global-search input[type="text"] {
+  margin-left: 1em;
 }
 
-.snippet-container a.view-more {
-  color: dodgerblue;
-  border: solid 3px dodgerblue;
-  padding: 8px 10px 10px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 5px;
-  margin: 10px 0 0 0;
-  display: inline-block;
-  text-decoration: none;
-}
-
-.snippet-container a.view-more:hover {
-  opacity: 0.8;
-}
-
-
-.snippet-container .fa-refresh {
-}
-
-.global-search {
-  padding-left: 20px;
-}
-
-.global-search select {
-  font-size: 12px;
-}
-
-.global-search input.round,
-.global-search button {
-  padding: 4px 8px;
-  font-size: 14px;
+.global-search input[type="text"] {
+  border: none;
+  font-size: 18px;
 }

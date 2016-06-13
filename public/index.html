@@ -51,14 +51,14 @@
         <div class="global-search"
              trigger-target="searchForm"
              data-set="search-form">
-            <input class="round"
-                    data-set-target="search-form"
-                    name="search"
-                    type="text"
-                    placeholder="Search.."
-                    value=""/>
-            <button action="search" 
-                    trigger="searchForm" 
+            <input data-set-target="search-form"
+                   name="search"
+                   type="text"
+                   placeholder="Search.."
+                   value=""/>
+            <button class="faux"
+                    action="search"
+                    trigger="searchForm"
                     data-set-target="search-form">
                 <i class="fa fa-search"></i>
             </button>
@@ -1155,7 +1155,7 @@
                 <th class="shrink nohpad"></th>
                 <th>Title</th>
                 <th>Artists</th>
-                <th>Genres</th>
+                <th>Genre</th>
                 <th>BPM</th>
                 <th></th>
             </tr>
@@ -1423,7 +1423,7 @@
                     <th>Title</th>
                     <th>Release</th>
                     <th>Artist</th>
-                    <th>Genres</th>
+                    <th>Genre</th>
                     <th>BPM</th>
                     <th></th>
                 </tr>
@@ -1687,22 +1687,20 @@
         transform="transformSearchSnippetReleases">
     <div class="page width center search-snippet">
         <h3>Releases</h3>
-        <div class="snippet-container{{#loading}} loading{{/loading}}">
+        <div class="snippet-container">
             {{#loading}}
-                <i class="fa fa-fw fa-spin fa-refresh"></i>
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
             {{/loading}}
             {{#error}}
-                <p>{{message}}</p>
+            <p>{{message}}</p>
             {{/error}}
             {{#data}}
             {{>searchReleasesList}}
             {{^total}}
-            <div class="page width text">No releases found.</div>
+            <p>No releases found.</p>
             {{/total}}
             {{#more}}
-            <div class="page width center text">
-                <a href="/search/releases?{{query}}" class="view-more">{{message}}</a>
-            </div>
+            <a href="/search/releases?{{query}}">{{message}}</a>
             {{/more}}
             {{/data}}
         </div>
@@ -1715,23 +1713,21 @@
         transform="transformSearchSnippetArtists">
     <div class="page width center search-snippet">
         <h3>Artists</h3>
-        <div class="snippet-container{{#loading}} loading{{/loading}}">
+        <div class="snippet-container">
             {{#loading}}
-                <i class="fa fa-fw fa-spin fa-refresh"></i>
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
             {{/loading}}
             {{#error}}
-                <p>{{message}}</p>
-            </div>
+            <p>{{message}}</p>
             {{/error}}
             {{#data}}
             {{>searchArtistsList}}
             {{^total}}
-            <div class="page width text">No artists found.</div>
+            <p>No artists found.</p>
             {{/total}}
             {{#more}}
-            <div class="page width center text">
-                <a href="/search/artists?{{query}}" class="view-more">{{message}}</a>
-            </div>
+            <br/>
+            <a href="/search/artists?{{query}}">{{message}}</a>
             {{/more}}
             {{/data}}
         </div>
@@ -1743,23 +1739,21 @@
         transform="transformSearchSnippetTracks">
     <div class="page width center search-snippet">
         <h3>Songs</h3>
-        <div class="snippet-container{{#loading}} loading{{/loading}}">
+        <div class="snippet-container">
             {{#loading}}
-                <i class="fa fa-fw fa-spin fa-refresh"></i>
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
             {{/loading}}
             {{#error}}
-                <p>{{message}}</p>
-            </div>
+            <p>{{message}}</p>
             {{/error}}
             {{#data}}
             {{>searchTracksTable}}
             {{^total}}
-            <div class="page width text">No songs found.</div>
+            <p>No songs found.</p>
             {{/total}}
             {{#more}}
-            <div class="page width center text">
-                <a href="/search/songs?{{query}}" class="view-more">{{message}}</a>
-            </div>
+            <br/>
+            <a href="/search/songs?{{query}}">{{message}}</a>
             {{/more}}
             {{/data}}
         </div>
@@ -1775,7 +1769,7 @@
                 <th class="shrink"></th>
                 <th>Title</th>
                 <th>Artists</th>
-                <th>Genres</th>
+                <th>Genre</th>
                 <th>BPM</th>
                 <th></th>
             </tr>
@@ -1796,7 +1790,7 @@
                         template="select-playlist"
                         track-id="{{_id}}">
                     </select>
-                    {{/canPlaylist}}                        
+                    {{/canPlaylist}}
                 </td>
             </tr>
             {{/results}}

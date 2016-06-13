@@ -224,10 +224,16 @@ function openRoute (target, container, matches) {
   }
   opts.completed = function () {
     var fn = getMethod(target, 'completed')
-    if (fn) fn.apply(fn, arguments)
-    if (openRoute.completed) {
-      for(var i = 0; i < openRoute.completed.length; i++) {
-        openRoute.completed[i].apply(fn, arguments)
+    if (fn) {
+      fn.apply(fn, arguments)
+    } else if (typeof pageIsReady == 'function') {
+      pageIsReady()
+    }
+    var fns = openRoute.completed
+    if (fns instanceof Array) {
+      for(var i = 0; i < fns; i++) {
+        if (typeof fns[i] == 'function')
+          fns[i].apply(fn, arguments)
       }
     }
   }
@@ -243,6 +249,7 @@ function openRoute (target, container, matches) {
   }
   renderTemplateOptions(opts)
 }
+openRoute.completed = []
 
 function loadSource (opts) {
   var source    = opts.source
