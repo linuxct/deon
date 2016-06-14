@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 *:focus {
@@ -17,11 +18,11 @@ body {
 body,
 input[type="text"],
 input[type="password"] {
-  font-family: "Proxima Nova", sans-serif;
+  font-family: "Proxima Nova", Open Sans, sans-serif;
 }
 
 p, label, a {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 select {
@@ -48,10 +49,23 @@ a.silent {
   text-decoration: none;
   color: #383838;
 }
+a{
+  -webkit-transition: color 0.4s ease;
+  transition: color 0.4s ease;
+  color: #000;
+}
+a:focus,
+a:hover{
+  color: dodgerblue;
+}
 
 section.page {
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+section > .page{
+  margin-top: 2rem;
 }
 
 table {
@@ -95,16 +109,23 @@ table.form input {
   padding: 0;
   border: none;
   font-size: 18px;
+  border-bottom: 2px solid transparent;
+  transition: border-color .3s ease;
 }
 
-/*
-table.form input[type="text"],
-table.form input[type="password"] {
-  width: 100%;
-}*/
+table.form input:focus{
+  border-color: dodgerblue;
+}
+table.form select:focus{
+  outline: 2px solid dodgerblue;
+}
 
 table.form th {
   width: 270px;
+}
+
+table.form th label{
+  font-weight: normal;
 }
 
 button {
@@ -116,14 +137,74 @@ button {
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+  transition: background 0.5s ease, color 0.4s ease, border-color 0.5s ease;
 }
-
+.button-group{
+  margin: 1rem;
+}
+.button--main{
+  background: dodgerblue;
+  color: white;
+}
+.button--main:focus,
+.button--main:hover{
+  background: black;
+  border-color: black;
+  color: white;
+}
+.button--social{
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+}
+.button--fb{
+  border-color: #3b5998;
+}
+.button--fb:focus,
+.button--fb:hover{
+  background: #3b5998;
+}
+.button--fb > i{
+  transition: color 0.4s ease;
+  color: #3b5998;
+}
+.button--fb:focus > i,
+.button--fb:hover > i{
+  color: white;
+}
+.button--tw{
+  border-color: #55acee;
+}
+.button--tw:focus,
+.button--tw:hover{
+  background: #55acee;
+}
+.button--tw > i{
+  transition: color 0.4s ease;
+  color: #55acee;
+}
+.button--tw:focus > i,
+.button--tw:hover > i{
+  color: white;
+}
 button.faux {
   border: none;
   background: transparent;
   font-size: 100%;
   padding: 0;
   color: #383838;
+}
+
+button:focus,
+button:hover{
+  background: dodgerblue;
+  color: white;
+}
+
+button.faux:focus,
+button.faux:hover{
+  color: dodgerblue;
+  background: transparent;
 }
 
 button.select {
@@ -135,7 +216,14 @@ button.select select {
   border: none;
   font-weight: bold;
   color: dodgerblue;
+  transition: color 0.4s ease;
   cursor: pointer;
+}
+
+button.select:focus,
+button.select:hover{
+  background: transparent;
+  color: dodgerblue;
 }
 
 input.round {
@@ -143,13 +231,54 @@ input.round {
   font-size: 16px;
   border-radius: 22px;
   padding: 8px 18px;
+  transition: border-color 0.5s ease;
 }
-
+input.round:focus{
+  border-color: dodgerblue;
+}
 hr {
   height: 3px;
   background: #d4d4d4;
   border: none;
 }
+
+.nav-item,
+.footer-item {
+  text-transform: uppercase;
+  font-size: .85rem;
+  letter-spacing: 2px;
+}
+.nav-item::after,
+.footer-item::after{
+  content: "";
+  display: inline-block;
+  margin-left: .75rem;
+  width: 2px;
+  vertical-align: middle;
+  height: 18px;
+  background: #eee;
+}
+.nav-item:last-child::after,
+.footer-item:last-child::after{
+  display: none;
+}
+.nav-item:focus,
+.nav-item:hover,
+.footer-item:focus,
+.footer-item:hover{
+  color: dodgerblue;
+}
+.nav-item>i,
+.footer-item>i{
+  padding-right: .5rem;
+  font-size: 1rem;
+}
+.footer-item{
+  text-transform: none;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
 
 .flex {
   display: flex;
@@ -159,6 +288,47 @@ hr {
   width: 80%;
 }
 
+.loading {
+  display: flex;
+  text-align: center;
+  width: 100%;
+  min-height: 200px;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-inner{
+  min-height: 50px;
+}
+
+.loader {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  border: 0.25em solid rgba(0, 0, 0, 0.1);
+  border-top-color: dodgerblue;
+  border-radius: 50%;
+  -webkit-animation: loading 1s infinite linear;
+  animation: loading 1s infinite linear;
+  margin: 2em;
+}
+
+.loading-table{
+  text-align: center;
+}
+
+@-webkit-keyframes loading {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loading {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .page.center {
   margin-left: auto;
   margin-right: auto;
@@ -166,6 +336,35 @@ hr {
 
 .text.center {
   text-align: center;
+}
+.text.left{
+  text-align: left;
+}
+.text.right{
+  text-align: right;
+}
+
+.panel {
+  margin: 2rem 0;
+  padding: 2rem 2rem 3.5rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.panel table {
+  margin-bottom: 2rem;
+}
+
+.line-top::before {
+  content: "";
+  width: 100px;
+  height: 4px;
+  background: dodgerblue;
+  display: block;
+  margin-bottom: .25em;
+}
+
+.panel h2{
+  margin-bottom: 1rem;
 }
 
 .pad-vertical {
@@ -254,13 +453,23 @@ td.push-children-right > * {
 }
 
 .details-box h1 {
-  font-size: 48px;
+  font-size: 52px;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  line-height: 1.3;
   margin: 0;
 }
 
 .details-box h2 {
-  font-size: 32px;
-  margin-top: 0;
+  font-size: 27px;
+  font-weight: normal;
+  margin-top: 0.75rem;
+}
+
+.details-box label,
+.cl-white .details-box label{
+  color: #aaa;
+  font-size: 18px;
 }
 
 .details-box img.artwork {
@@ -296,8 +505,15 @@ header:hover .scrub > .progress {
   background: #f5f5f5;
 }
 
-.cl-white * {
+.cl-white *:not(i) {
   color: white;
+}
+
+.cl-white a:focus,
+.cl-white a:hover,
+.cl-white button:focus,
+.cl-white button:hover{
+  color: dodgerblue;
 }
 
 .flex {
@@ -308,6 +524,21 @@ header:hover .scrub > .progress {
   flex: 1;
 }
 
+.top-button > h1{
+  float: left;
+}
+.top-button .line-top{
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+.top-button > button{
+  float: right;
+  margin-top: 1.5rem;
+}
+.top-button > .options{
+  float: right;
+  margin-top: 1.5rem;
+}
 .special-nav {
   list-style: none;
 }
@@ -409,7 +640,7 @@ span.note a {
 }
 
 .bgbox-blanket {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.65);
   overflow: hidden;
 }
 
@@ -462,4 +693,3 @@ footer > button.faux {
 .unlicensable a {
   font-size: 1em;
 }
-

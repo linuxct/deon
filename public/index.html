@@ -71,16 +71,15 @@
 </header>
 
 <section role="content">
-    <div class="page center width">
-        Loading kitty bits... 
-        <i class="fa fa-fw fa-spin fa-gear"></i>
+    <div class="page width center loading">
+        <span class="loader"></span>
     </div>
 </section>
 
 <footer class="page center width push-children-right">
     <label>2016 &copy; Monstercat</label>
-    <a href="/help" title="Help"><i class="fa fa-question-circle"></i></a>
-    <button class="faux" action="showIntercom" role="feedback">Talk to Someone</button>
+    <a href="/help" class="silent footer-item" title="Help"><i class="fa fa-question-circle"></i>Help</a>
+    <button class="faux footer-item" action="showIntercom" role="feedback"><i class="fa fa-users"></i>Talk to us</button>
 </footer>
 
 <div class="toasts">
@@ -101,15 +100,31 @@
     </div>
 </script>
 
+<script type="text/template" mustache-name="loading-view">
+    <div class="page width center loading">
+        <span class="loader"></span>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="loading-inner-view">
+    <div class="page width center loading loading-inner">
+        <span class="loader"></span>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="loading-table-view">
+    <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
+</script>
+
 <script type="text/template" template-name="navigation">
-    <a class="silent" href="/"><i class="fa fa-headphones"></i></a>
+    <a class="silent nav-item" href="/"><i class="fa fa-headphones"></i>Browse</a>
     {{#data}}
     {{#user}}
-    <a class="silent" href="/playlists"><i class="fa fa-bars"></i></a>
-    <a class="silent" href="/account"><i class="fa fa-gear"></i></a>
+    <a class="silent nav-item" href="/playlists"><i class="fa fa-bars"></i>Playlists</a>
+    <a class="silent nav-item" href="/account"><i class="fa fa-gear"></i>Account</a>
     {{/user}}
     {{^user}}
-    <a class="silent" href="/signin">Sign In</a>
+    <a class="silent nav-item" href="/signin"><i class="fa fa-user"></i>Sign In</a>
     {{/user}}
     {{/data}}
 </script>
@@ -162,6 +177,8 @@
 <script type="text/template"
         route="^signin">
     <div class="page width center">
+        <h1 class="line-top">Sign in</h1>
+        <div class="panel">
         <table class="form" data-set="credentials" trigger-target="signIn">
             <tbody>
                 <tr>
@@ -190,20 +207,23 @@
                 </tr>
             </tbody>
         </table>
-        <button action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
-        <button action="signInFacebook">Sign In With Facebook</button>
-        <button action="signInGoogle">Sign In With Google</button>
-        <br/>
-        <br/>
+        <div class="button-group">
+            <button class="button--main" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
+            <button class="button--social button--fb" action="signInFacebook"><i class="fa fa-facebook"></i></button>
+            <button class="button--social button--tw" action="signInGoogle"><i class="fa fa-twitter"></i></button>
+        </div>
         <a href="/forgot-password">Forgot your password?</a>
         <br/>
         <a href="/sign-up">Don't have an account? Sign up!</a>
+        </div>
     </div>
 </script>
 
 <script type="text/template"
         route="authenticate-token">
     <div class="page width center">
+        <h1 class="line-top">Authenticate token</h1>
+        <div class="panel">
         <table class="form" data-set="auth-token">
             <tr>
                 <th>Token</th>
@@ -214,12 +234,15 @@
         </table>
         <button action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
         <button action="resendTwoFactorToken">Resend Token</button>
+        </div>  
     </div>
 </script>
 
 <script type="text/template"
         route="^forgot-password">
     <div class="page width center">
+        <h1 class="line-top">Forgot password?</h1>
+        <div class="panel">
         <table class="form" data-set="credentials">
             <tbody>
                 <tr>
@@ -234,12 +257,15 @@
             </tbody>
         </table>
         <button action="recoverPassword" data-set-target="credentials">Send Reset Link</button>
+        </div>
     </div>
 </script>
 
 <script type="text/template"
         route="^reset-password">
     <div class="page width center">
+        <h1 class="line-top">Reset password</h1>
+        <div class="panel">
         <table class="form" data-set="password">
             <tbody>
                 <tr>
@@ -264,6 +290,7 @@
             data-set-target="password">
             Update Password
         </button>
+        </div>
     </div>
 </script>
 
@@ -271,8 +298,9 @@
         route="^confirm-sign-up"
         transform="mapConfirmSignup">
     <div class="page width center">
+        <h1 class="line-top">Confirm Sign-up</h1>
+        <div class="panel">
         {{#data}}
-        <h1>Confirm Sign-Up</h1>
         <table class="form" data-set="credentials" trigger-target="signUpSocial">
             <tbody>
                 <tr>
@@ -325,6 +353,7 @@
         {{^data}}
         <p>Nothing here.</p>
         {{/data}}
+        </div>
     </div>
 </script>
 
@@ -332,52 +361,55 @@
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
-        {{#data}}
-        <table class="form" data-set="credentials" trigger-target="signUp">
-            <tbody>
-                <tr>
-                    <th>Email</th>
-                    <td>
-                        <input type="text"
-                               name="email"
-                               placeholder="kitty@monstercat.com"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Password</th>
-                    <td>
-                        <input type="text"
-                               name="password"
-                               placeholder="a secret"/>
-                        <button
-                            class="faux"
-                            action="togglePassword"
-                            toggle-target="password">
-                            <i class="fa fa-eye-slash"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Country</th>
-                    <td>
-                        <select name="location">
-                            <option disabled selected>Select One</option>
-                            {{#countries}}
-                            <option value="{{name}}">
-                                {{name}}
-                            </option>
-                            {{/countries}}
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <button action="signUp"
-                trigger="signUp"
-                data-set-target="credentials">Sign Up</button>
-        <button action="signUpFacebook">Sign up With Facebook</button>
-        <button action="signUpGoogle">Sign up With Google</button>
-        {{/data}}
+        <h1 class="line-top">Sign-up</h1>
+        <div class="panel">
+            {{#data}}
+            <table class="form" data-set="credentials" trigger-target="signUp">
+                <tbody>
+                    <tr>
+                        <th>Email</th>
+                        <td>
+                            <input type="text"
+                                   name="email"
+                                   placeholder="kitty@monstercat.com"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Password</th>
+                        <td>
+                            <input type="text"
+                                   name="password"
+                                   placeholder="a secret"/>
+                            <button
+                                class="faux"
+                                action="togglePassword"
+                                toggle-target="password">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>
+                            <select name="location">
+                                <option disabled selected>Select One</option>
+                                {{#countries}}
+                                <option value="{{name}}">
+                                    {{name}}
+                                </option>
+                                {{/countries}}
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="button--main" action="signUp"
+                    trigger="signUp"
+                    data-set-target="credentials">Sign Up</button>
+            <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i></button>
+            <button class="button--social button--tw" action="signUpGoogle"><i class="fa fa-twitter"></i></button>
+            {{/data}}
+        </div>
     </div>
 </script>
 
@@ -387,113 +419,115 @@
         page-title="My Account"
         transform="mapAccount">
     <div class="page width center">
-        <h1>My Account</h1>
-        {{#loading}}
-        <i class="fa fa-fw fa-refresh fa-spin"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <table class="form" trigger-target="saveAccount">
-            <tbody data-set="account">
-                <tr>
-                    <th>Email</th>
-                    <td>{{email}}</td>
-                </tr>
-                <tr>
-                    <th>Full Name</th>
-                    <td><input type="text"
-                                name="realName"
-                                value="{{realName}}"
-                                data-set-target="account"
-                                initial-value="{{realName}}" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Nickname</th>
-                    <td><input type="text"
-                                action-enter="saveAccount"
-                                name="name"
-                                initial-value="{{name}}"
-                                value="{{name}}" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Country</th>
-                    <td>
-                        <select name="location"
-                                initial-value="{{location}}">
-                            <option disabled>Select One</option>
-                            {{#countries}}
-                            <option
-                                value="{{name}}"
-                                {{#selected}}selected{{/selected}}>
-                                {{name}}
-                            </option>
-                            {{/countries}}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Change Password</th>
-                    <td>
-                        <input type="password"
-                               name="password"
-                               placeholder="New Password">
-                        <button
-                            class="faux"
-                            action="togglePassword"
-                            toggle-target="password">
-                            <i class="fa fa-eye-slash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <button action="saveAccount"
-                trigger="saveAccount"
-                data-set-target="account">
-            Save
-        </button>
-        <button action="signOut">Sign Out</button>
-        <br/>
-        <br/>
-        <h2>Two-Factor Auth</h2>
-        {{^enableTwoFactor}}
-        <button action="disableTwoFactor">Disable</button>
-        {{/enableTwoFactor}}
-        {{#enableTwoFactor}}
-        <table class="form" data-set="2-factor">
-            <tbody>
-                <tr>
-                    <th>Country Code</th>
-                    <td>
-                        <select name="countryCode">
-                            <option value="" selected>Select</option>
-                            {{#countries}}
-                            <option value="{{dial_code}}">{{name}} ({{dial_code}})</option>
-                            {{/countries}}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Phone Number</th>
-                    <td>
-                        <input type="text" name="number" placeholder="Phone Number"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
-        {{/enableTwoFactor}}
-        <br/>
-        <br/>
-        <h2>Settings</h2>
-        <div source="$endpoint/self/settings"
-             template="account-settings">
+        <h1 class="line-top">My Account</h1>
+        <div class="panel">
+            {{#loading}}
+            {{>/loading-view}}
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <table class="form" trigger-target="saveAccount">
+                <tbody data-set="account">
+                    <tr>
+                        <th>Email</th>
+                        <td>{{email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Full Name</th>
+                        <td><input type="text"
+                                    name="realName"
+                                    value="{{realName}}"
+                                    data-set-target="account"
+                                    initial-value="{{realName}}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nickname</th>
+                        <td><input type="text"
+                                    action-enter="saveAccount"
+                                    name="name"
+                                    initial-value="{{name}}"
+                                    value="{{name}}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>
+                            <select name="location"
+                                    initial-value="{{location}}">
+                                <option disabled>Select One</option>
+                                {{#countries}}
+                                <option
+                                    value="{{name}}"
+                                    {{#selected}}selected{{/selected}}>
+                                    {{name}}
+                                </option>
+                                {{/countries}}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Change Password</th>
+                        <td>
+                            <input type="password"
+                                   name="password"
+                                   placeholder="New Password">
+                            <button
+                                class="faux"
+                                action="togglePassword"
+                                toggle-target="password">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="button--main" 
+                    action="saveAccount"
+                    trigger="saveAccount"
+                    data-set-target="account">
+                Save
+            </button>
+            <button action="signOut">Sign Out</button>
         </div>
-        <br/>
+        <div class="panel">
+            <h2>Two-Factor Auth</h2>
+            {{^enableTwoFactor}}
+            <button action="disableTwoFactor">Disable</button>
+            {{/enableTwoFactor}}
+            {{#enableTwoFactor}}
+            <table class="form" data-set="2-factor">
+                <tbody>
+                    <tr>
+                        <th>Country Code</th>
+                        <td>
+                            <select name="countryCode">
+                                <option value="" selected>Select</option>
+                                {{#countries}}
+                                <option value="{{dial_code}}">{{name}} ({{dial_code}})</option>
+                                {{/countries}}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Phone Number</th>
+                        <td>
+                            <input type="text" name="number" placeholder="Phone Number"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+            {{/enableTwoFactor}}
+        </div>
+        <div class="panel">
+            <h2>Settings</h2>
+            <div source="$endpoint/self/settings"
+                 template="account-settings">
+            </div>
+        </div>
         <!--<a href="/services">Manage Services</a>-->
         {{/data}}
     </div>
@@ -503,7 +537,7 @@
         template-name="account-settings"
         transform="transformAccountSettings">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -558,7 +592,8 @@
          template="social-settings">
     </div>
     <br/>
-    <button action="saveAccountSettings"
+    <button class="button--main"
+            action="saveAccountSettings"
             data-set-target="settings">
         Update Settings
     </button>
@@ -1004,9 +1039,7 @@
         template-name="music-releases"
         transform="transformMusicReleases">
     {{#loading}}
-    <div class="page width center">
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-    </div>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <div class="page width center">
@@ -1049,7 +1082,9 @@
         transform="mapRelease"
         completed="completedRelease">
     {{#loading}}
-    <i class="fa fa-spin fa-refresh"></i>
+    <div class="page width center loading">
+        <span class="loader"></span>
+    </div>
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -1174,7 +1209,7 @@
         </thead>
         <tbody>
             {{#loading}}
-            <tr><td colspan="5"><i class="fa fa-spin fa-refresh"></i></td></tr>
+            <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
             {{/loading}}
             {{#error}}
             <tr><td colspan="5"><p>{{message}}</p></td></tr>
@@ -1237,7 +1272,7 @@
         template-name="user-releases"
         transform="transformReleases">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-inner-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -1260,7 +1295,7 @@
         transform="mapWebsiteDetails"
         completed="completedWebsiteDetails">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -1334,8 +1369,8 @@
 <script type="text/template"
         page-title="My Playlists"
         route="^playlists">
-    <div class="page width center">
-        <h1>My Playlists</h1>
+    <div class="page width center panel top-button">
+        <h1 class="line-top">My Playlists</h1>
         <button action="createPlaylist">
             Create Playlist
         </button>
@@ -1357,7 +1392,7 @@
 <script type="text/template"
         template-name="playlists">
     {{#loading}}
-    <tr><td colspan="2"><i class="fa fa-fw fa-refresh fa-spin"></i></td></tr>
+    {{>loading-table-view}}
     {{/loading}}
     {{#error}}
     <tr><td colspan="2">{{message}}</td></tr>
@@ -1366,7 +1401,7 @@
     {{#results}}
     <tr>
         <td><a href="/playlist/{{_id}}">{{name}}</a></td>
-        <td class="push-children-right">
+        <td class="push-children-right text right">
             <button class="faux"
                     action="renamePlaylist"
                     playlist-id="{{_id}}">
@@ -1391,15 +1426,15 @@
         source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
         completed="completedPlaylist"
         transform="transformPlaylist">
-    <div class="page width center">
+    <div class="page width center panel top-button">
         {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{>loading-view}}
         {{/loading}}
         {{#error}}
         <p>{{message}}</p>
         {{/error}}
         {{#data}}
-        <h1 playlist-id="{{_id}}">{{name}}</h1>
+        <h1 class="line-top" playlist-id="{{_id}}">{{name}}</h1>
         <div class="options pad-vertical push-children-right">
             {{#canPublic}}
             <label>
@@ -1453,7 +1488,7 @@
         transform="transformPlaylistTracks"
         completed="updateControls">
     {{#loading}}
-    <tr><td colspan="6"><i class="fa fa-fw fa-spin fa-refresh"></i></td></tr>
+    {{>loading-table-view}}
     {{/loading}}
     {{#error}}
     <tr><td colspan="6">{{message}}</td></tr>
@@ -1507,7 +1542,7 @@
     {{/results}}
     {{^results}}
     <tr>
-        <td colspan="6">No Results.</td>
+        <td colspan="10">No Results.</td>
     </tr>
     {{/results}}
     {{/data}}
@@ -1524,8 +1559,8 @@
 
 <script type="text/template"
         route="^help\/?$">
-    <div class="page width center">
-        <h1>Help</h1>
+    <div class="page width center panel">
+        <h1 class="line-top">Help</h1>
         <p>
         Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
         Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
@@ -1540,13 +1575,15 @@
         mustache-name="markdown-basic">
     <div class="page width center">
         {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{>loading-view}}
         {{/loading}}
         {{#error}}
         <p>{{message}}</p>
         {{/error}}
         {{#data}}
+        <div class="panel">
         {{{data}}}
+        </div>
         {{/data}}
     </div>
 </script>
