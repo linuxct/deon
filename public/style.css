@@ -471,7 +471,7 @@ td.genres span:first-of-type:before {
   content: "";
 }
 
-.search-snippet h3 {
+.page.search h2 {
   margin: 1em 0;
 }
 

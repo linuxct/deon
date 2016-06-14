@@ -1501,12 +1501,13 @@
     {{/data}}
 </script>
 
+<!-- SEARCH -->
 
 <script type="text/template"
         route="^search\/artists(\?.*)?"
         transform="transformSearchArtistsPage"
         completed="completedSearchArtists">
-    <div class="page width center">        
+    <div class="page width center">
         <h1>Artists</h1>
         {{#loading}}
             <i class="fa fa-fw fa-spin fa-refresh"></i>
@@ -1516,47 +1517,45 @@
         {{/error}}
         {{#data}}
         <div source="$endpoint/catalog/artist?{{query}}"
-                template="search-artists">
+             template="search-artists">
         </div>
         {{/data}}
     </div>
 </script>
 
-
 <script type="text/template"
         template-name="search-artists"
         transform="transformSearchArtistsResults">
-        {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-            <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-            {{>searchArtistsList}}
-            {{^total}}
-                <div class="page width text">No artists found.</div>
-            {{/total}}
-            {{>searchPagination}}
-        {{/data}}
-    </div>
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchArtistsList}}
+    {{^total}}
+    <p>No artists found.</p>
+    {{/total}}
+    {{>searchPagination}}
+    {{/data}}
 </script>
 
 <script type="text/template"
         route="^search\/songs(\?.*)?"
         transform="transformSearchTracksPage"
         completed="completedSearchTracks">
-    <div class="page width center">        
+    <div class="page width center">
         <h1>Songs</h1>
         {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
         {{/loading}}
         {{#error}}
         <p>{{message}}</p>
         {{/error}}
         {{#data}}
         <div source="$endpoint/catalog/track?{{query}}"
-                template="search-tracks">
+             template="search-tracks">
         </div>
         {{/data}}
     </div>
@@ -1565,52 +1564,36 @@
 <script type="text/template"
         template-name="search-tracks"
         transform="transformSearchTrackResults">
-        {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-            <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-            {{>searchTracksTable}}
-            {{^total}}
-                <div class="page width text">No songs found.</div>
-            {{/total}}
-            {{>searchPagination}}
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        mustache-name="searchPagination">
-    {{#total}}
-    <div class="page width center pagination pad-vertical text center">
-      {{#previous}}
-        <a href="?{{previous}}">Previous</a>
-      {{/previous}}
-      <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
-      {{#next}}
-        <a href="?{{next}}">Next</a>
-      {{/next}}
-    </div>
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchTracksTable}}
+    {{^total}}
+    <p>No songs found.</p>
     {{/total}}
+    {{>searchPagination}}
+    {{/data}}
 </script>
 
 <script type="text/template"
         route="^search\/releases(\?.*)?"
         transform="transformSearchReleasesPage"
         completed="completedSearchReleases">
-    <div class="page width center">        
+    <div class="page width center">
         <h1>Releases</h1>
         {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
         {{/loading}}
         {{#error}}
         <p>{{message}}</p>
         {{/error}}
         {{#data}}
         <div source="$endpoint/catalog/release?{{query}}"
-                template="search-releases"></div>
+             template="search-releases"></div>
         {{/data}}
     </div>
 </script>
@@ -1619,145 +1602,107 @@
         template-name="search-releases"
         transform="transformSearchReleaseResults">
         {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
         {{/loading}}
         {{#error}}
-            <p>{{message}}</p>
+        <p>{{message}}</p>
         {{/error}}
         {{#data}}
         {{>searchReleasesList}}
         {{^total}}
-        <div class="page width text">No releases found.</div>
+        <p>No releases found.</p>
         {{/total}}
         {{#total}}
-            {{>searchPagination}}
+        {{>searchPagination}}
         {{/total}}
         {{/data}}
     </div>
 </script>
 
 <script type="text/template"
-        route="^search\/artists(\?.*)?"
-        page-title="Search artists">
- <div class="page width center">
-    <h1>Artists</h1>
-    {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-    {{/loading}}
-    {{#error}}
-        <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    <ul>
-        {{#results}}
-        <li>
-            Artist: {{name}}
-        </li>
-        {{/results}}
-    </ul>
-    {{^total}}
-    <div class="page width text">No releases found.</div>
-    {{/total}}
-    {{/data}}
-</div>   
-</script>
-
-
-<script type="text/template"
         route="^search(\?.*)?"
         page-title="Search All"
         completed="completedSearchAll"
         transform="transformSearch">
-    {{#data}}
-    <div source="$endpoint/catalog/track?{{searches.tracks.query}}"
-            template="search-snippet-tracks">
+    <div class="page width center search">
+        <h1>Search</h1>
+        {{#data}}
+        <h2>Songs</h2>
+        <div source="$endpoint/catalog/track?{{searches.tracks.query}}"
+             template="search-snippet-tracks">
+        </div>
+        <h2>Releases</h2>
+        <div source="$endpoint/catalog/release?{{searches.releases.query}}"
+             template="search-snippet-releases">
+        </div>
+        <h2>Artists</h2>
+        <div source="$endpoint/catalog/artist?{{searches.artists.query}}"
+             template="search-snippet-artists">
+        </div>
+        {{/data}}
     </div>
-    <div source="$endpoint/catalog/release?{{searches.releases.query}}"
-            template="search-snippet-releases">
-    </div>
-    <div source="$endpoint/catalog/artist?{{searches.artists.query}}"
-            template="search-snippet-artists">
-    </div>
-    {{/data}}
 </script>
-
 
 <script type="text/template"
         template-name="search-snippet-releases"
         transform="transformSearchSnippetReleases">
-    <div class="page width center search-snippet">
-        <h3>Releases</h3>
-        <div class="snippet-container">
-            {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            {{>searchReleasesList}}
-            {{^total}}
-            <p>No releases found.</p>
-            {{/total}}
-            {{#more}}
-            <a href="/search/releases?{{query}}">{{message}}</a>
-            {{/more}}
-            {{/data}}
-        </div>
-    </div>
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchReleasesList}}
+    {{^total}}
+    <p>No releases found.</p>
+    {{/total}}
+    {{#more}}
+    <a href="/search/releases?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
 </script>
-
 
 <script type="text/template"
         template-name="search-snippet-artists"
         transform="transformSearchSnippetArtists">
-    <div class="page width center search-snippet">
-        <h3>Artists</h3>
-        <div class="snippet-container">
-            {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            {{>searchArtistsList}}
-            {{^total}}
-            <p>No artists found.</p>
-            {{/total}}
-            {{#more}}
-            <br/>
-            <a href="/search/artists?{{query}}">{{message}}</a>
-            {{/more}}
-            {{/data}}
-        </div>
-    </div>
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchArtistsList}}
+    {{^total}}
+    <p>No artists found.</p>
+    {{/total}}
+    {{#more}}
+    <br/>
+    <a href="/search/artists?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
 </script>
 
 <script type="text/template"
         template-name="search-snippet-tracks"
         transform="transformSearchSnippetTracks">
-    <div class="page width center search-snippet">
-        <h3>Songs</h3>
-        <div class="snippet-container">
-            {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            {{>searchTracksTable}}
-            {{^total}}
-            <p>No songs found.</p>
-            {{/total}}
-            {{#more}}
-            <br/>
-            <a href="/search/songs?{{query}}">{{message}}</a>
-            {{/more}}
-            {{/data}}
-        </div>
-    </div>
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchTracksTable}}
+    {{^total}}
+    <p>No songs found.</p>
+    {{/total}}
+    {{#more}}
+    <br/>
+    <a href="/search/songs?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -1818,7 +1763,7 @@
 
 <script type="text/template"
         mustache-name="searchArtistsList">
-    <ul class="artists-list">
+    <ul>
         {{#results}}
         <li>
             <a href="/artist/{{_id}}">{{name}}</a>
@@ -1826,6 +1771,23 @@
         {{/results}}
     </ul>
 </script>
+
+<script type="text/template"
+        mustache-name="searchPagination">
+    {{#total}}
+    <div class="page width center pagination pad-vertical text center">
+        {{#previous}}
+        <a href="?{{previous}}">Previous</a>
+        {{/previous}}
+        <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
+        {{#next}}
+        <a href="?{{next}}">Next</a>
+        {{/next}}
+    </div>
+    {{/total}}
+</script>
+
+<!-- END SEARCH -->
 
 <script type="text/template"
         route="services\/error"
