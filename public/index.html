@@ -51,17 +51,17 @@
         <div class="global-search"
              trigger-target="searchForm"
              data-set="search-form">
-            <input data-set-target="search-form"
-                   name="search"
-                   type="text"
-                   placeholder="Search.."
-                   value=""/>
             <button class="faux"
                     action="search"
                     trigger="searchForm"
                     data-set-target="search-form">
                 <i class="fa fa-search"></i>
             </button>
+            <input data-set-target="search-form"
+                   name="search"
+                   type="text"
+                   placeholder="Search.."
+                   value=""/>
         </div>
         <div class="flex-strong"></div>
         <div class="controls push-children-right">
@@ -93,8 +93,12 @@
 
 <footer class="page center width push-children-right">
     <label>2016 &copy; Monstercat</label>
-    <a href="/help" class="silent footer-item" title="Help"><i class="fa fa-question-circle"></i>Help</a>
-    <button class="faux footer-item" action="showIntercom" role="feedback"><i class="fa fa-users"></i>Talk to us</button>
+    <a href="/help" class="silent footer-item" title="Help">
+        <i class="fa fa-question-circle"></i>Help
+    </a>
+    <button class="faux footer-item" action="showIntercom" role="feedback">
+        <i class="fa fa-comments-o"></i>Talk to us
+    </button>
 </footer>
 
 <div class="toasts">

@@ -702,15 +702,23 @@ td.genres span:first-of-type:before {
   content: "";
 }
 
-.page.search h2 {
-  margin: 1em 0;
+.global-search::before {
+    content: "";
+    display: inline-block;
+    margin: 0 .75rem;
+    width: 2px;
+    vertical-align: middle;
+    height: 18px;
+    background: #eee;
 }
 
 .global-search input[type="text"] {
-  margin-left: 1em;
+  margin-left: .75em;
 }
 
 .global-search input[type="text"] {
   border: none;
-  font-size: 18px;
+  text-transform: uppercase;
+  font-size: .85rem;
+  letter-spacing: 2px;
 }
