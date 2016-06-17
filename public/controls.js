@@ -92,7 +92,7 @@ function loadAndPlayTracks(index) {
     player.play(index)
 
     var el = document.querySelector(sel.title)
-    if (el) el.setAttribute('href', window.location.pathname)
+    if (el) el.setAttribute('href', window.location.pathname + window.location.search)
   }
 
   updateControls()
