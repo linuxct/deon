@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     player.addEventListener(name, recordPlayerEvent)
   })
   player.addEventListener('error', recordPlayerError)
-  player.addEventListner('play', recordPlayerPlayLegacy)
+  player.addEventListener('play', recordPlayerPlayLegacy)
   requestAnimationFrame(updatePlayerProgress)
 })
 
