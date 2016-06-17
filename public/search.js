@@ -111,6 +111,7 @@ function transformSearch () {
   q.skip   = parseInt(q.skip) || 0
   q.search = q.search || "" //Text search
   q.fields = []
+  if (!q.search) return {}
   var searches = getSearchTypes()
   for(var type in searches) {
     var search = searches[type]

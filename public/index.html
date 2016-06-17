@@ -336,7 +336,6 @@
         </table>
         <button action="signUpSocial" trigger="signUpSocial" data-set-target="credentials">Sign Up</button>
         {{/data}}
-
         {{^data}}
         <p>Nothing here.</p>
         {{/data}}
@@ -983,7 +982,7 @@
         transform="transformMusic">
     {{#data}}
     <div source="$endpoint/catalog/release?{{query}}"
-            template="music-releases">
+         template="music-releases">
     </div>
     {{/data}}
 </script>
@@ -1627,18 +1626,23 @@
     <div class="page width center search">
         <h1>Search</h1>
         {{#data}}
+        {{#searches}}
         <h2>Songs</h2>
-        <div source="$endpoint/catalog/track?{{searches.tracks.query}}"
+        <div source="$endpoint/catalog/track?{{tracks.query}}"
              template="search-snippet-tracks">
         </div>
         <h2>Releases</h2>
-        <div source="$endpoint/catalog/release?{{searches.releases.query}}"
+        <div source="$endpoint/catalog/release?{{releases.query}}"
              template="search-snippet-releases">
         </div>
         <h2>Artists</h2>
-        <div source="$endpoint/catalog/artist?{{searches.artists.query}}"
+        <div source="$endpoint/catalog/artist?{{artists.query}}"
              template="search-snippet-artists">
         </div>
+        {{/searches}}
+        {{^searches}}
+        <p>Please enter a search term at the top of the page.</p>
+        {{/searches}}
         {{/data}}
     </div>
 </script>
