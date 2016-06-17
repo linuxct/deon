@@ -8,8 +8,8 @@ function isValidPayMethod (str, obj) {
 
 function buyoutUrl (id) {
   var url = endpoint + '/self/whitelist/'
-  if (id) url += id
-  url += '/buyout'
+  if (id) url += id + '/'
+  url += 'buyout'
   return url
 }
 
@@ -35,7 +35,12 @@ buyLicense.paypal = function buyLicensePayPal (data) {
       identity: data.identity
     }
   }, function (err, body, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) {
+      return recordErrorAndAlert(err, 'Buy License PayPal')
+    }
+    if (!body.redirect) {
+      return recordErrorAndGo(Error('Missing paypal redirect'), 'Buy License PayPal', '/services/error')
+    }
     window.location = body.redirect
   })
 }
@@ -61,7 +66,7 @@ buyLicense.stripe = function buyLicenseStripe (data) {
           window.alert(err.message)
           return
         }
-        go('/sevices/buyout/purchased')
+        go('/services/buyout/purchased')
       })
     }
   })
@@ -96,7 +101,12 @@ checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs)
       services: subs
     }
   }, function (err, body, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) {
+      return recordErrorAndAlert(err, 'Checkout Subscriptions PayPal')
+    }
+    if (!body.redirect) {
+      return recordErrorAndGo(Error('Missing paypal redirect'), 'Checkout Subscriptions PayPal', '/services/error')
+    }
     window.location = body.redirect
   })
 }
@@ -118,10 +128,7 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
           services: subs
         }
       }, function (err, body, xhr) {
-        if (err) {
-          window.alert(err.message)
-          return
-        }
+        if (err) return recordErrorAndAlert(err, 'Checkout Subscriptions Stripe')
         go('/services/subscribed')
       })
     }
@@ -148,7 +155,7 @@ function cancelLicenseSubscription (e, el) {
     method: 'PUT',
     withCredentials: true
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return recordErrorAndAlert(err, 'Cancel License Subscription')
     go('/services/unsubscribed')
   })
 }
@@ -179,7 +186,10 @@ resumeLicenseConfirm.paypal = function resumeLicenseConfirmPayPal (data) {
       cancelUrl: location.origin + '/services/canceled-payment'
     }
   }, function (err, body, xhr) {
-    if (err) return window.alert(err.message)
+    if (err)
+      return recordErrorAndAlert(err, 'Resume License Confirm PayPal')
+    if (!body.redirect)
+      return recordErrorAndGo(Error('Missing PayPal redirect.'), 'Resume License Confirm PayPal', '/services/error')
     window.location = body.redirect
   })
 }
@@ -200,10 +210,8 @@ resumeLicenseConfirm.stripe = function resumeLicenseConfirmStripe (data) {
           token: token.id
         }
       }, function (err, body, xhr) {
-        if (err) {
-          window.alert(err.message)
-          return
-        }
+        if (err)
+          return recordErrorAndAlert(err, 'Resume License Confirm Stripe')
         go('/services/subscribed')
       })
     }
@@ -242,7 +250,8 @@ function completedProcessing () {
       payerId: obj.PayerID
     }
   }, function (err, obj, xhr) {
-    if (err) window.alert(err.message)
+    if (err)
+      return recordErrorAndAlert(err, 'Complete Processing')
     go(forward)
   })
 }
@@ -255,10 +264,8 @@ function unsubscribeGold (e, el) {
     withCredentials: true,
     method: "POST"
   }, function (err, body, xhr) {
-    if (err) {
-      window.alert(err.message)
-      return
-    }
+    if (err)
+      return recordErrorAndAlert(err, 'Unsubscribe Gold')
     go('/services/unsubscribed')
   })
 }

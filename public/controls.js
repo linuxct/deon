@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     player.addEventListener(name, recordPlayerEvent)
   })
   player.addEventListener('error', recordPlayerError)
+  player.addEventListener('play', recordPlayerPlayLegacy)
   requestAnimationFrame(updatePlayerProgress)
 })
 
@@ -40,6 +41,10 @@ function recordPlayerEvent (e) {
 
 function recordPlayerError (e) {
   recordEvent('Deon AP Error', e)
+}
+
+function recordPlayerPlayLegacy (e) {
+  recordEvent('Audio Player Play Server Side', e.detail.item)
 }
 
 function togglePlay(e, el) {

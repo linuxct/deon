@@ -31,8 +31,12 @@ function toArray (nl) {
   return arr
 }
 
+function onlyUnique(value, index, self) { 
+  return self.indexOf(value) === index;
+}
+
 function uniqueArray (arr) {
-  return Array.from(new Set(arr))
+  return arr.filter(onlyUnique)
 }
 
 function toAtlas (arr, key) {
@@ -111,7 +115,7 @@ function setMetaData (meta) {
   for(var i = 0; i < tags.length; i++) {
     tags[i].parentElement.removeChild(tags[i])
   }
-  meta['og:site'] = 'Monstercat'
+  meta['og:site_name'] = 'Monstercat'
   appendMetaData(meta)
 }
 
@@ -157,9 +161,4 @@ function sortRelease (a, b) {
   if (a > b) return -1
   if (a < b) return 1
   return 0
-}
-
-function prerendered () {
-  window.prerenderReady = true
-  console.log("prerender ready!")
 }

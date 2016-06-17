@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 })
 
+function pageIsReady () {
+  window.prerenderReady = true
+}
+
 function isSignedIn () {
   return session && session.user
 }
@@ -49,6 +53,8 @@ function getSession (done) {
 function recordEvent (name, obj, done) {
   if (typeof done != 'function')
     done = function (err, obj, xhr) {}
+  if (location.host.indexOf('localhost') == 0)
+    return done(Error('Localhost not supported.'))
   requestJSON({
     url: endpoint + '/analytics/record/event',
     withCredentials: true,
@@ -57,6 +63,22 @@ function recordEvent (name, obj, done) {
       properties: obj
     }
   }, done)
+}
+
+function recordErrorAndAlert (err, where) {
+  recordEvent('Error', {
+    message: err.message,
+    where: where
+  })
+  window.alert(err.message)
+}
+
+function recordErrorAndGo (err, where, uri) {
+  recordEvent('Error', {
+    message: err.message,
+    where: where
+  })
+  go(uri)
 }
 
 function trackUser () {
@@ -82,13 +104,29 @@ function searchMusic (e, el) {
   var q      = queryStringToObject(window.location.search)
   var filter = []
   var fuzzy  = []
-  if (data.type)
+  if (data.type) {
     filter.push('type', data.type)
-  if (data.search)
+  }
+  else {
+    delete q.filters;
+  }
+  if (data.search) {
     fuzzy.push('title', data.search)
-  q.filters = filter.join(',')
-  q.fuzzy   = fuzzy.join(',')
-  q.skip    = 0
+  }
+  else {
+    delete q.fuzzy;
+  }
+  if (filter.length > 0) {
+    q.filters = filter.join(',')
+  }
+  if (fuzzy.length > 0) {
+    q.fuzzy   = fuzzy.join(',')
+  }
+  //q.skip    = 0
+
+  delete q.skip
+  delete q.limit
+
   go('/music?' + objectToQueryString(q))
 }
 
@@ -156,11 +194,16 @@ function loadReleaseAndTrack (obj, done) {
   })
 }
 
-function getPlayUrl (albums, releaseId) {
-  var album = (albums || []).find(function(album) {
-    return album.albumId == releaseId
-  })
-  return album ? datapoint + '/blobs/' + album.streamHash : undefined
+function getPlayUrl (arr, releaseId) {
+  if (!(arr instanceof Array)) arr = []
+  var release
+  for (var i=0; i<arr.length; i++) {
+    if (arr[i].albumId == releaseId) {
+      release = arr[i]
+      break
+    }
+  }
+  return release ? datapoint + '/blobs/' + release.streamHash : undefined
 }
 
 function getMyPreferedDownloadOption () {
@@ -408,6 +451,8 @@ function transformWhitelists (obj) {
   obj.results = obj.results.map(function (whitelist) {
     whitelist.paid = (whitelist.amountPaid / 100).toFixed(2)
     whitelist.remaining = (whitelist.amountRemaining / 100).toFixed(2)
+    if (whitelist.availableUntil)
+      whitelist.nextBillingDate = whitelist.availableUntil
     if (whitelist.subscriptionActive)
       whitelist.cost = (5).toFixed(2)
     whitelist.monthlyCost = 500
@@ -428,6 +473,22 @@ function transformReleaseTracks (obj, done) {
     if (!atlas) atlas = {}
     var releaseId = getLastPathnameComponent()
     obj.results.forEach(function (track, index, arr) {
+      mapReleaseTrack(track, index, arr)
+      track.releaseId = releaseId
+      track.playUrl = getPlayUrl(track.albums, releaseId)
+      track.artists = mapTrackArtists(track, atlas)
+      track.artsistsTitle = getArtistsTitle(track.artists)
+      track.downloadLink = getDownloadLink(releaseId, track._id)
+    })
+    done(null, obj)
+  })
+}
+
+function transformTracks (obj, done) {
+  getArtistsAtlas(obj.results, function (err, atlas) {
+    if (!atlas) atlas = {}
+    obj.results.forEach(function (track, index, arr) {
+      var releaseId = track.albums[0].albumId
       mapReleaseTrack(track, index, arr)
       track.releaseId = releaseId
       track.playUrl = getPlayUrl(track.albums, releaseId)
@@ -488,16 +549,24 @@ function completedRelease (source, obj) {
   if (obj.error) return
   var r = obj.data
   var artists = []
+  var description = r.title + ' is ' + (r.type == 'EP' ? 'an' : 'a') + ' ' + r.type + ' by ' + r.artists
+
+  var releaseDate = new Date(r.releaseDate)
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Desc']
+  if(r.releaseDate) {
+    description += ' released on ' + months[releaseDate.getMonth()] + ' ' + releaseDate.getDay() + ' ' + releaseDate.getYear()
+  }
+  description += '.'
   var meta = {
     "og:title": r.title + ' by ' + r.artists,
     "og:image": r.cover,
+    "og:description": description,
     "og:url": location.toString(),
     "og:type": "music.album",
-    "music:release_date": new Date(r.releaseDate).toISOString()
+    "music:release_date": releaseDate.toISOString()
   }
   setMetaData(meta)
   setPageTitle(r.title + ' by ' + r.artists)
-  prerendered()
 }
 
 function completedReleaseTracks (source, obj) {
@@ -511,25 +580,25 @@ function completedReleaseTracks (source, obj) {
   appendMetaData({
     'music:musician': artists
   })
-  prerendered()
+  pageIsReady()
 }
 
 function completedWebsiteDetails (source, obj) {
   if (obj.error) return
   var r = obj.data
   appendMetaData({
-    'og:image': r.image
+    'og:image': r.image,
   })
   if(r.title && r.artists) {
     setPageTitle(r.title + ' by ' + r.artists)
   }
-  prerendered()
+  pageIsReady()
 }
 
 function completedArtist (source, obj) {
   if(obj.error) return
   setPageTitle(obj.data.name)
-  prerendered()
+  pageIsReady()
 }
 
 function completedMusic (source, obj) {
@@ -556,7 +625,7 @@ function completedMusic (source, obj) {
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
-  prerendered()
+  pageIsReady()
 }
 
 function completedArtist (source, obj) {
@@ -564,11 +633,12 @@ function completedArtist (source, obj) {
   setPageTitle(obj.data.name)
   var meta = {
     'og:title': obj.data.name,
+    'og:description': 'Bio and discography for ' + obj.data.name,
     'og:type': 'profile',
     'og:url': location.toString()
   }
   setMetaData(meta)
-  prerendered()
+  pageIsReady()
 }
 
 function completedMusic (source, obj) {
@@ -595,7 +665,7 @@ function completedMusic (source, obj) {
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
-  prerendered()
+  pageIsReady()
 }
 
 /* UI Stuff */

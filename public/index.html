@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="fragment" content="!" />
     <meta name="google-signin-client_id" content="1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com">
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
     <link rel="stylesheet" href="/style.css">
-    <script type="text/javascript">
-     window.prerenderReady = false;
-    </script>
+    <script type="text/javascript">window.prerenderReady = false</script>
     <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
             defer async></script>
     <script type="text/javascript" src="https://apis.google.com/js/platform.js"
@@ -30,6 +29,7 @@
     <script type="text/javascript" src="/controls.js"></script>
     <script type="text/javascript" src="/ui.js"></script>
     <script type="text/javascript" src="/main.js"></script>
+    <script type="text/javascript" src="/search.js"></script>
     <script type="text/javascript">
     !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
     analytics.load("FYHmNWDPH4MU44NH03s9EC9arg2Hu8Cr");
@@ -47,6 +47,21 @@
         <div class="push-children-right"
                 id="navigation"
                 template="navigation">
+        </div>
+        <div class="global-search"
+             trigger-target="searchForm"
+             data-set="search-form">
+            <input data-set-target="search-form"
+                   name="search"
+                   type="text"
+                   placeholder="Search.."
+                   value=""/>
+            <button class="faux"
+                    action="search"
+                    trigger="searchForm"
+                    data-set-target="search-form">
+                <i class="fa fa-search"></i>
+            </button>
         </div>
         <div class="flex-strong"></div>
         <div class="controls push-children-right">
@@ -349,7 +364,6 @@
         </table>
         <button action="signUpSocial" trigger="signUpSocial" data-set-target="credentials">Sign Up</button>
         {{/data}}
-
         {{^data}}
         <p>Nothing here.</p>
         {{/data}}
@@ -814,7 +828,7 @@
     {{/data}}
 </script>
 
-<script type="text/template" route="^services\/processing" completed="completeProcessing">
+<script type="text/template" route="^services\/processing" completed="completedProcessing">
     <div class="page width center">
         <h1>Payment Processing <i class="fa fa-spin fa-gear"></i></h1>
         <p>Your payment is being processed. Please wait.</p>
@@ -1002,35 +1016,8 @@
         completed="completedMusic"
         transform="transformMusic">
     {{#data}}
-    <div class="page width center">
-        <div class="filters pad-vertical push-children-right"
-             trigger-target="searchMusic"
-             data-set="music-search">
-            <input class="round"
-                    data-set-target="music-search"
-                    name="search"
-                    type="text"
-                    placeholder="Search..."
-                    value="{{search}}"/>
-            <button action="hitSelect" class="select">
-                <select name="type">
-                    <option value="">Show All Types</option>
-                    {{#types}}
-                    <option value="{{value}}" {{#selected}}selected{{/selected}}>
-                        {{name}}
-                    </option>
-                    {{/types}}
-                </select>
-            </button>
-            <button action="searchMusic" 
-                    trigger="searchMusic" 
-                    data-set-target="music-search">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
-    </div>
     <div source="$endpoint/catalog/release?{{query}}"
-            template="music-releases">
+         template="music-releases">
     </div>
     {{/data}}
 </script>
@@ -1153,7 +1140,7 @@
     <a href="/artist/{{_id}}">{{name}}</a>
     {{/artists}}
 </td>
-<td>{{genre}}</td>
+<td class="genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
 <td>{{bpm}}</td>
 </script>
 
@@ -1546,6 +1533,308 @@
     </tr>
     {{/results}}
     {{/data}}
+</script>
+
+<!-- SEARCH -->
+
+<script type="text/template"
+        route="^search\/artists(\?.*)?"
+        transform="transformSearchArtistsPage"
+        completed="completedSearchArtists">
+    <div class="page width center">
+        <h1>Artists</h1>
+        {{#loading}}
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <div source="$endpoint/catalog/artist?{{query}}"
+             template="search-artists">
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-artists"
+        transform="transformSearchArtistsResults">
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchArtistsList}}
+    {{^total}}
+    <p>No artists found.</p>
+    {{/total}}
+    {{>searchPagination}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^search\/songs(\?.*)?"
+        transform="transformSearchTracksPage"
+        completed="completedSearchTracks">
+    <div class="page width center">
+        <h1>Songs</h1>
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <div source="$endpoint/catalog/track?{{query}}"
+             template="search-tracks">
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-tracks"
+        transform="transformSearchTrackResults">
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchTracksTable}}
+    {{^total}}
+    <p>No songs found.</p>
+    {{/total}}
+    {{>searchPagination}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^search\/releases(\?.*)?"
+        transform="transformSearchReleasesPage"
+        completed="completedSearchReleases">
+    <div class="page width center">
+        <h1>Releases</h1>
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <div source="$endpoint/catalog/release?{{query}}"
+             template="search-releases"></div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-releases"
+        transform="transformSearchReleaseResults">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{>searchReleasesList}}
+        {{^total}}
+        <p>No releases found.</p>
+        {{/total}}
+        {{#total}}
+        {{>searchPagination}}
+        {{/total}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^search(\?.*)?"
+        page-title="Search All"
+        completed="completedSearchAll"
+        transform="transformSearch">
+    <div class="page width center search">
+        <h1>Search</h1>
+        {{#data}}
+        {{#searches}}
+        <h2>Songs</h2>
+        <div source="$endpoint/catalog/track?{{tracks.query}}"
+             template="search-snippet-tracks">
+        </div>
+        <h2>Releases</h2>
+        <div source="$endpoint/catalog/release?{{releases.query}}"
+             template="search-snippet-releases">
+        </div>
+        <h2>Artists</h2>
+        <div source="$endpoint/catalog/artist?{{artists.query}}"
+             template="search-snippet-artists">
+        </div>
+        {{/searches}}
+        {{^searches}}
+        <p>Please enter a search term at the top of the page.</p>
+        {{/searches}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-snippet-releases"
+        transform="transformSearchSnippetReleases">
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchReleasesList}}
+    {{^total}}
+    <p>No releases found.</p>
+    {{/total}}
+    {{#more}}
+    <a href="/search/releases?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="search-snippet-artists"
+        transform="transformSearchSnippetArtists">
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchArtistsList}}
+    {{^total}}
+    <p>No artists found.</p>
+    {{/total}}
+    {{#more}}
+    <br/>
+    <a href="/search/artists?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="search-snippet-tracks"
+        transform="transformSearchSnippetTracks">
+    {{#loading}}
+    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchTracksTable}}
+    {{^total}}
+    <p>No songs found.</p>
+    {{/total}}
+    {{#more}}
+    <br/>
+    <a href="/search/songs?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="searchTracksTable">
+    {{#results.length}}
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th>Genre</th>
+                <th>BPM</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#results}}
+            <tr>
+                <td class="shrink">
+                  {{>playSong}}
+                </td>
+                {{>trackCells}}
+                <td class="push-children-right">
+                    {{>trackButtons}}
+                    {{#canPlaylist}}
+                    <select
+                        onchange="addToPlaylist(null, this)"
+                        source="$endpoint/playlist"
+                        template="select-playlist"
+                        track-id="{{_id}}">
+                    </select>
+                    {{/canPlaylist}}
+                </td>
+            </tr>
+            {{/results}}
+        </tbody>
+    </table>
+    {{/results.length}}
+</script>
+
+<script type="text/template"
+        mustache-name="searchReleasesList">
+    <ul class="art-list">
+        {{#results}}
+        <li>
+            <a class="silent" href="/release/{{_id}}" title="{{title}} / {{artists}}">
+                <img src="{{cover}}"/>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br/>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+</script>
+
+
+<script type="text/template"
+        mustache-name="searchArtistsList">
+    <ul>
+        {{#results}}
+        <li>
+            <a href="/artist/{{_id}}">{{name}}</a>
+        </li>
+        {{/results}}
+    </ul>
+</script>
+
+<script type="text/template"
+        mustache-name="searchPagination">
+    {{#total}}
+    <div class="page width center pagination pad-vertical text center">
+        {{#previous}}
+        <a href="?{{previous}}">Previous</a>
+        {{/previous}}
+        <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
+        {{#next}}
+        <a href="?{{next}}">Next</a>
+        {{/next}}
+    </div>
+    {{/total}}
+</script>
+
+<!-- END SEARCH -->
+
+<script type="text/template"
+        route="services\/error"
+        page-title="Payment Error">
+    <div class="page width center">
+        <h1>An error occured.</h1>
+        <p>An error occured while working with the payment information provided. Please contact support.</p>
+    </div>
 </script>
 
 <script type="text/template"

@@ -221,7 +221,21 @@ function openRoute (target, container, matches) {
     container: container,
     transform: getMethod(target, 'transform'),
     template:  target.textContent,
-    completed: getMethod(target, 'completed') || function () { window.prerenderReady = true }
+  }
+  opts.completed = function () {
+    var fn = getMethod(target, 'completed')
+    if (fn) {
+      fn.apply(fn, arguments)
+    } else if (typeof pageIsReady == 'function') {
+      pageIsReady()
+    }
+    var fns = openRoute.completed
+    if (fns instanceof Array) {
+      for(var i = 0; i < fns; i++) {
+        if (typeof fns[i] == 'function')
+          fns[i].apply(fn, arguments)
+      }
+    }
   }
   if (target.hasAttribute('page-title'))
     document.title = target.getAttribute('page-title')
@@ -235,6 +249,7 @@ function openRoute (target, container, matches) {
   }
   renderTemplateOptions(opts)
 }
+openRoute.completed = []
 
 function loadSource (opts) {
   var source    = opts.source

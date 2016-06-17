@@ -693,3 +693,24 @@ footer > button.faux {
 .unlicensable a {
   font-size: 1em;
 }
+
+td.genres span:before {
+  content: ", ";
+}
+
+td.genres span:first-of-type:before {
+  content: "";
+}
+
+.page.search h2 {
+  margin: 1em 0;
+}
+
+.global-search input[type="text"] {
+  margin-left: 1em;
+}
+
+.global-search input[type="text"] {
+  border: none;
+  font-size: 18px;
+}

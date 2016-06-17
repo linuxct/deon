@@ -154,7 +154,7 @@ function completedPlaylist (source, obj) {
     'og:url': location.toString()
   })
   appendSongMetaData(obj.data.tracks)
-  prerendered()
+  pageIsReady()
 }
 
 function reorderPlaylistFromInputs() {
