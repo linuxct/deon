@@ -37,7 +37,7 @@
     }}();
     </script>
 </head>
-<body>
+<body class="bg">
 
 <header>
     <div class="scrub" action="scrub">
@@ -196,7 +196,7 @@
 <script type="text/template"
         route="^signin">
     <div class="page width center">
-        <h1 class="line-top">Sign in</h1>
+        <h1>Sign in</h1>
         <div class="panel">
         <table class="form" data-set="credentials" trigger-target="signIn">
             <tbody>
@@ -227,9 +227,9 @@
             </tbody>
         </table>
         <div class="button-group">
-            <button class="button--main" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
-            <button class="button--social button--fb" action="signInFacebook"><i class="fa fa-facebook"></i></button>
-            <button class="button--social button--tw" action="signInGoogle"><i class="fa fa-twitter"></i></button>
+            <button class="button--cta" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
+            <button class="button--social button--fb" action="signInFacebook"><i class="fa fa-facebook"></i> Sign In</button>
+            <button class="button--social button--g" action="signInGoogle"><i class="fa fa-google-plus"></i> Sign In</button>
         </div>
         <a href="/forgot-password">Forgot your password?</a>
         <br/>
@@ -241,7 +241,7 @@
 <script type="text/template"
         route="authenticate-token">
     <div class="page width center">
-        <h1 class="line-top">Authenticate token</h1>
+        <h1>Authenticate token</h1>
         <div class="panel">
         <table class="form" data-set="auth-token">
             <tr>
@@ -260,7 +260,7 @@
 <script type="text/template"
         route="^forgot-password">
     <div class="page width center">
-        <h1 class="line-top">Forgot password?</h1>
+        <h1>Forgot password?</h1>
         <div class="panel">
         <table class="form" data-set="credentials">
             <tbody>
@@ -283,7 +283,7 @@
 <script type="text/template"
         route="^reset-password">
     <div class="page width center">
-        <h1 class="line-top">Reset password</h1>
+        <h1>Reset password</h1>
         <div class="panel">
         <table class="form" data-set="password">
             <tbody>
@@ -317,7 +317,7 @@
         route="^confirm-sign-up"
         transform="mapConfirmSignup">
     <div class="page width center">
-        <h1 class="line-top">Confirm Sign-up</h1>
+        <h1>Confirm Sign-up</h1>
         <div class="panel">
         {{#data}}
         <table class="form" data-set="credentials" trigger-target="signUpSocial">
@@ -379,7 +379,7 @@
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
-        <h1 class="line-top">Sign-up</h1>
+        <h1>Sign-up</h1>
         <div class="panel">
             {{#data}}
             <table class="form" data-set="credentials" trigger-target="signUp">
@@ -421,11 +421,11 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="button--main" action="signUp"
-                    trigger="signUp"
-                    data-set-target="credentials">Sign Up</button>
-            <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i></button>
-            <button class="button--social button--tw" action="signUpGoogle"><i class="fa fa-twitter"></i></button>
+            <div class="button-group">
+                <button class="button--cta" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+                <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
+                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google-plus"></i> Sign Up</button>
+            </div>
             {{/data}}
         </div>
     </div>
@@ -437,7 +437,7 @@
         page-title="My Account"
         transform="mapAccount">
     <div class="page width center">
-        <h1 class="line-top">My Account</h1>
+        <h1>My Account</h1>
         <div class="panel">
             {{#loading}}
             {{>/loading-view}}
@@ -502,13 +502,13 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="button--main" 
+            <button class="button--cta" 
                     action="saveAccount"
                     trigger="saveAccount"
                     data-set-target="account">
                 Save
             </button>
-            <button action="signOut">Sign Out</button>
+            <button class="button--danger" action="signOut">Sign Out</button>
         </div>
         <div class="panel">
             <h2>Two-Factor Auth</h2>
@@ -610,7 +610,7 @@
          template="social-settings">
     </div>
     <br/>
-    <button class="button--main"
+    <button class="button--cta"
             action="saveAccountSettings"
             data-set-target="settings">
         Update Settings
@@ -623,24 +623,24 @@
         transform="transformSocialSettings">
     {{#data}}
     {{#facebookEnabled}}
-    <button action="unlinkFacebook">
-        Unlink Facebook Account
+    <button class="button--social button--fb" action="unlinkFacebook">
+        <i class="fa fa-facebook"></i> Unlink Account
     </button>
     {{/facebookEnabled}}
     {{^facebookEnabled}}
-    <button action="enableFacebookSignin">
-        Enable Facebook Signin
+    <button class="button--social button--fb" action="enableFacebookSignin">
+        <i class="fa fa-facebook"></i> Link Account
     </button>
     {{/facebookEnabled}}
 
     {{#googleEnabled}}
-    <button action="unlinkGoogle">
-        Unlink Google Account
+    <button class="button--social button--g" action="unlinkGoogle">
+        <i class="fa fa-google-plus"></i> Unlink Account
     </button>
     {{/googleEnabled}}
     {{^googleEnabled}}
-    <button action="enableGoogleSignin">
-        Enable Google Signin
+    <button class="button--social button--g" action="enableGoogleSignin">
+        <i class="fa fa-google-plus"></i> Link Account
     </button>
     {{/googleEnabled}}
     {{/data}}
@@ -1360,23 +1360,27 @@
 <script type="text/template"
         page-title="My Playlists"
         route="^playlists">
-    <div class="page width center panel top-button">
-        <h1 class="line-top">My Playlists</h1>
-        <button action="createPlaylist">
-            Create Playlist
-        </button>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody
-                source="$endpoint/playlist?fields=name,public"
-                template="playlists">
-            </tbody>
-        </table>
+    <div class="page width center">
+        <h1>My Playlists</h1>
+        <div class="panel">
+            <div class="options">
+                <button action="createPlaylist">
+                    Create Playlist
+                </button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody
+                    source="$endpoint/playlist?fields=name,public"
+                    template="playlists">
+                </tbody>
+            </table>
+        </div>
     </div>
 </script>
 
@@ -1417,7 +1421,7 @@
         source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
         completed="completedPlaylist"
         transform="transformPlaylist">
-    <div class="page width center panel top-button">
+    <div class="page width center">
         {{#loading}}
         {{>loading-view}}
         {{/loading}}
@@ -1425,51 +1429,53 @@
         <p>{{message}}</p>
         {{/error}}
         {{#data}}
-        <h1 class="line-top" playlist-id="{{_id}}">{{name}}</h1>
-        <div class="options pad-vertical push-children-right">
-            {{#canPublic}}
-            <label>
-                <input
-                    type="checkbox"
-                    action="togglePlaylistPublic"
-                    playlist-id="{{_id}}"
-                    {{#public}}checked{{/public}} />
-                Public
-            </label>
-            {{/canPublic}}
-            <button action="reorderPlaylistFromInputs" 
-                    trigger="reorderPlaylistFromInputs">
-                    <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
-                    Save Order</button>
-            {{#downloadUrl}}
-            <a class="silent"
-               title="Download Playlist"
-               action="canAccessGold"
-               href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
-            {{/downloadUrl}}
-            <button class="faux">
-                <i class="fa fa-fw fa-play"
-                   action="playSongs"
-                   role="play-playlist"></i>
-            </button>
+        <h1 playlist-id="{{_id}}">{{name}}</h1>
+        <div class="panel">
+            <div class="options pad-vertical push-children-right">
+                {{#canPublic}}
+                <label>
+                    <input
+                        type="checkbox"
+                        action="togglePlaylistPublic"
+                        playlist-id="{{_id}}"
+                        {{#public}}checked{{/public}} />
+                    Public
+                </label>
+                {{/canPublic}}
+                <button action="reorderPlaylistFromInputs" 
+                        trigger="reorderPlaylistFromInputs">
+                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
+                        Save Order</button>
+                {{#downloadUrl}}
+                <a class="silent"
+                   title="Download Playlist"
+                   action="canAccessGold"
+                   href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
+                {{/downloadUrl}}
+                <button class="faux">
+                    <i class="fa fa-fw fa-play"
+                       action="playSongs"
+                       role="play-playlist"></i>
+                </button>
+            </div>
+            <table class="drag-sortable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="shrink nohpad"></th>
+                        <th>Title</th>
+                        <th>Release</th>
+                        <th>Artist</th>
+                        <th>Genre</th>
+                        <th>BPM</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody role="playlist-tracks" source="$endpoint/playlist/{{_id}}/tracks"
+                       template="playlist-tracks">
+                </tbody>
+            </table>
         </div>
-        <table class="drag-sortable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th class="shrink nohpad"></th>
-                    <th>Title</th>
-                    <th>Release</th>
-                    <th>Artist</th>
-                    <th>Genre</th>
-                    <th>BPM</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody role="playlist-tracks" source="$endpoint/playlist/{{_id}}/tracks"
-                   template="playlist-tracks">
-            </tbody>
-        </table>
         {{/data}}
     </div>
 </script>
@@ -1852,15 +1858,17 @@
 
 <script type="text/template"
         route="^help\/?$">
-    <div class="page width center panel">
-        <h1 class="line-top">Help</h1>
-        <p>
-        Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
-        Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
-        <a href="/twitch-policy">Twitch Policy</a><br/>
-        <a href="/privacy-policy">Privacy Policy</a><br/>
-        <a href="/terms-of-service">Terms of Service</a>
-        </p>
+    <div class="page width center">
+        <h1>Help</h1>
+        <div class="panel">
+            <p>
+            Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
+            Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
+            <a href="/twitch-policy">Twitch Policy</a><br/>
+            <a href="/privacy-policy">Privacy Policy</a><br/>
+            <a href="/terms-of-service">Terms of Service</a>
+            </p>
+        </div>
     </div>
 </script>
 
@@ -1874,7 +1882,7 @@
         <p>{{message}}</p>
         {{/error}}
         {{#data}}
-        <div class="panel">
+        <div class="panel md-container">
         {{{data}}}
         </div>
         {{/data}}
