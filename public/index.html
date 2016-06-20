@@ -120,7 +120,7 @@
 </script>
 
 <script type="text/template" mustache-name="loading-view">
-    <div class="page width center loading">
+    <div class="page width center loading panel">
         <span class="loader"></span>
     </div>
 </script>
@@ -1014,6 +1014,8 @@
     </select>
 </script>
 
+<!-- MUSIC -->
+
 <script type="text/template"
         route="^(:?(\?.*)?$|music(\?.*)?)"
         page-title="Music"
@@ -1033,12 +1035,12 @@
     {{>loading-view}}
     {{/loading}}
     {{#error}}
-    <div class="page width center">
+    <div class="page width center panel">
         <p>{{message}}</p>
     </div>
     {{/error}}
     {{#data}}
-    <ul class="page width center art-list">
+    <ul class="page width center panel art-list">
         {{#results}}
         <li>
             <a class="silent" href="/release/{{_id}}" title="{{title}} / {{artists}}">
@@ -1051,7 +1053,7 @@
         {{/results}}
     </ul>
     {{^total}}
-    <div class="page width center text center">No results found.</div>
+    <div class="page width center text center panel">No results found.</div>
     {{/total}}
     {{#total}}
       <div class="page width center pagination pad-vertical text center">
@@ -1325,22 +1327,15 @@
     {{/data}}
 </script>
 
-<script type="text/template">
-    {{#loading}}
-    <li><i class="fa fa-fw fa-spin fa-refresh"></li>
-    {{/loading}}
-    {{#error}}
-    <li>{{message}}</li>
-    {{/error}}
-    {{#data}}
-    {{#results}}
-    <li>
-        <img src="{{cover}}"/>
-        <label>{{title}}</label>
-    </li>
-    {{/results}}
-    {{/data}}
+<!-- ROSTER -->
+
+<script type="text/template" route="^roster\/?">
+    <div class="page width center">
+        WIP
+    </div>
 </script>
+
+<!-- PLAYLIST STUFF -->
 
 <script type="text/template"
         template-name="select-playlist">
@@ -1852,7 +1847,9 @@
         page-title="Page Not Found">
     <div class="page width center">
         <h1>Page Not Found</h1>
-        <p>The page you are looking for is not here.</p>
+        <div class="panel">
+            <p>The page you are looking for is not here.</p>
+        </div>
     </div>
 </script>
 

@@ -431,11 +431,13 @@ td.push-children-right > * {
 }
 
 .art-list li img {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   max-width: 100%;
   cursor: pointer;
 }
 
 .art-list li label.title {
+  margin-top: 15px;
   font-weight: bold;
 }
 
