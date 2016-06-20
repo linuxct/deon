@@ -109,7 +109,7 @@
 <div role="modals" class="modal-layer"></div>
 
 <script type="text/template" template-name="subscription-required-modal">
-    <div class="modal">
+    <div class="modal panel">
         <h1>Sign Up!</h1>
         <p>You need a subscription to do that!</p>
         <a href="/sign-up">Sign Up Here</a> or 
@@ -151,7 +151,7 @@
 <script type="text/template"
         template-name="track-copycredits-modal"
         transform="loadReleaseAndTrack">
-    <div class="modal">
+    <div class="modal panel">
         {{#loading}}
         ...
         {{/loading}}
@@ -169,7 +169,7 @@
 
 <script type="text/template"
         template-name="release-shopping-modal">
-    <div class="modal">
+    <div class="modal panel">
       <div class="modal-body">
         {{#loading}}
         ...
@@ -229,7 +229,7 @@
         <div class="button-group">
             <button class="button--cta" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
             <button class="button--social button--fb" action="signInFacebook"><i class="fa fa-facebook"></i> Sign In</button>
-            <button class="button--social button--g" action="signInGoogle"><i class="fa fa-google-plus"></i> Sign In</button>
+            <button class="button--social button--g" action="signInGoogle"><i class="fa fa-google"></i> Sign In</button>
         </div>
         <a href="/forgot-password">Forgot your password?</a>
         <br/>
@@ -424,7 +424,7 @@
             <div class="button-group">
                 <button class="button--cta" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
                 <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
-                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google-plus"></i> Sign Up</button>
+                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
             </div>
             {{/data}}
         </div>
@@ -871,7 +871,7 @@
 </script>
 
 <script type="text/template" template-name="resume-whitelist">
-    <div class="modal">
+    <div class="modal panel">
         <div data-set="resume-payment">
             <input type="hidden" name="id" value="{{id}}">
             <input type="hidden" name="vendor" value="{{vendor}}">
