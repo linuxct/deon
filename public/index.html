@@ -120,7 +120,7 @@
 </script>
 
 <script type="text/template" mustache-name="loading-view">
-    <div class="page width center loading panel">
+    <div class="page width center loading">
         <span class="loader"></span>
     </div>
 </script>
@@ -253,7 +253,7 @@
         </table>
         <button action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
         <button action="resendTwoFactorToken">Resend Token</button>
-        </div>  
+        </div>
     </div>
 </script>
 
@@ -1080,7 +1080,9 @@
     </div>
     {{/loading}}
     {{#error}}
-    <p>{{message}}</p>
+    <div class="page width center panel">
+        <p>{{message}}</p>
+    </div>
     {{/error}}
     {{#data}}
     <div class="bgbox" style="background-image: url('{{coverBig}}')">
@@ -1119,7 +1121,7 @@
         </div>
     </div>
     <div class="release page width center" >
-        <div
+        <div class="panel"
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
@@ -1250,12 +1252,11 @@
             <p>There are no details.</p>
             <br/>
             {{/websiteDetailsId}}
-            <br/>
-            <br/>
-            <h2>Discography</h2>
-            <br/>
-            <div source="$endpoint/catalog/artist/{{_id}}/releases"
-                 template="user-releases">
+            <div class="panel">
+                <h2>Discography</h2>
+                <div source="$endpoint/catalog/artist/{{_id}}/releases"
+                     template="user-releases">
+                </div>
             </div>
         </div>
         {{/data}}
@@ -1291,7 +1292,9 @@
     {{>loading-view}}
     {{/loading}}
     {{#error}}
-    <p>{{message}}</p>
+    <div class="page width center panel">
+        <p>{{message}}</p>
+    </div>
     {{/error}}
     {{#data}}
     <div class="bgbox" style="background-image: url('{{image}}')">
@@ -1311,17 +1314,19 @@
     </div>
     <div class="page width center">
         {{#about}}
-        <br/>
-        <h2>About</h2>
-        <p>{{about}}</p>
+        <div calss="panel">
+            <h2>About</h2>
+            <p>{{about}}</p>
+        </div>
         {{/about}}
         {{#contact}}
-        <br/>
-        <h2>Booking & Managment</h2>
-        <br/>
-        <p>{{booking}}</p>
-        <br/>
-        <p>{{management}}</p>
+        <div class="panel">
+            <h2>Booking & Managment</h2>
+            <br/>
+            <p>{{booking}}</p>
+            <br/>
+            <p>{{management}}</p>
+        </div>
         {{/contact}}
     </div>
     {{/data}}
@@ -1549,10 +1554,14 @@
     <div class="page width center">
         <h1>Artists</h1>
         {{#loading}}
+        <div class="panel">
             <i class="fa fa-fw fa-spin fa-refresh"></i>
+        </div>
         {{/loading}}
         {{#error}}
-        <p>{{message}}</p>
+        <div class="panel">
+            <p>{{message}}</p>
+        </div>
         {{/error}}
         {{#data}}
         <div source="$endpoint/catalog/artist?{{query}}"
@@ -1565,17 +1574,21 @@
 <script type="text/template"
         template-name="search-artists"
         transform="transformSearchArtistsResults">
-    {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
+    <div class="panel">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{>searchArtistsList}}
+        {{^total}}
+        <p>No artists found.</p>
+        {{/total}}
+        {{/data}}
+    </div>
     {{#data}}
-    {{>searchArtistsList}}
-    {{^total}}
-    <p>No artists found.</p>
-    {{/total}}
     {{>searchPagination}}
     {{/data}}
 </script>
@@ -1587,10 +1600,14 @@
     <div class="page width center">
         <h1>Songs</h1>
         {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        <div class="panel">
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        </div>
         {{/loading}}
         {{#error}}
-        <p>{{message}}</p>
+        <div class="panel">
+            <p>{{message}}</p>
+        </div>
         {{/error}}
         {{#data}}
         <div source="$endpoint/catalog/track?{{query}}"
@@ -1603,17 +1620,21 @@
 <script type="text/template"
         template-name="search-tracks"
         transform="transformSearchTrackResults">
-    {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
+    <div class="panel">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{>searchTracksTable}}
+        {{^total}}
+        <p>No songs found.</p>
+        {{/total}}
+        {{/data}}
+    </div>
     {{#data}}
-    {{>searchTracksTable}}
-    {{^total}}
-    <p>No songs found.</p>
-    {{/total}}
     {{>searchPagination}}
     {{/data}}
 </script>
@@ -1625,10 +1646,14 @@
     <div class="page width center">
         <h1>Releases</h1>
         {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        <div class="panel">
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        </div>
         {{/loading}}
         {{#error}}
-        <p>{{message}}</p>
+        <div class="panel">
+            <p>{{message}}</p>
+        </div>
         {{/error}}
         {{#data}}
         <div source="$endpoint/catalog/release?{{query}}"
@@ -1640,17 +1665,21 @@
 <script type="text/template"
         template-name="search-releases"
         transform="transformSearchReleaseResults">
-        {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
+        <div class="panel">
+            {{#loading}}
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            {{>searchReleasesList}}
+            {{^total}}
+            <p>No releases found.</p>
+            {{/total}}
+            {{/data}}
+        </div>
         {{#data}}
-        {{>searchReleasesList}}
-        {{^total}}
-        <p>No releases found.</p>
-        {{/total}}
         {{#total}}
         {{>searchPagination}}
         {{/total}}
@@ -1667,21 +1696,29 @@
         <h1>Search</h1>
         {{#data}}
         {{#searches}}
-        <h2>Songs</h2>
-        <div source="$endpoint/catalog/track?{{tracks.query}}"
-             template="search-snippet-tracks">
+        <div class="panel">
+            <h2>Songs</h2>
+            <div source="$endpoint/catalog/track?{{tracks.query}}"
+                 template="search-snippet-tracks">
+            </div>
         </div>
-        <h2>Releases</h2>
-        <div source="$endpoint/catalog/release?{{releases.query}}"
-             template="search-snippet-releases">
+        <div class="panel">
+            <h2>Releases</h2>
+            <div source="$endpoint/catalog/release?{{releases.query}}"
+                 template="search-snippet-releases">
+            </div>
         </div>
-        <h2>Artists</h2>
-        <div source="$endpoint/catalog/artist?{{artists.query}}"
-             template="search-snippet-artists">
+        <div class="panel">
+            <h2>Artists</h2>
+            <div source="$endpoint/catalog/artist?{{artists.query}}"
+                 template="search-snippet-artists">
+            </div>
         </div>
         {{/searches}}
         {{^searches}}
-        <p>Please enter a search term at the top of the page.</p>
+        <div class="panel">
+            <p>Please enter a search term at the top of the page.</p>
+        </div>
         {{/searches}}
         {{/data}}
     </div>

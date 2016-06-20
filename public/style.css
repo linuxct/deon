@@ -178,17 +178,17 @@ button {
   color: white;
 }
 .button--g{
-  border-color: #dd4b39;
-  color: #dd4b39;
+  border-color: #34a853;
+  color: #34a853;
 }
 .button--g:focus,
 .button--g:hover{
   color: white;
-  background: #dd4b39;
+  background: #34a853;
 }
 .button--g > i{
   transition: color 0.4s ease;
-  color: #dd4b39;
+  color: #34a853;
 }
 .button--g:focus > i,
 .button--g:hover > i{
