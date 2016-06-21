@@ -156,7 +156,7 @@ function getArtistsAtlas (tks, done) {
     }))
   })
   ids = uniqueArray(ids)
-  var url = endpoint + '/catalog/artist?fields=name,websiteDetailsId&ids=' + ids.join(',')
+  var url = endpoint + '/catalog/artists-by-users?ids=' + ids.join(',')
   loadCache(url, function (err, aobj) {
     if (err) return done(err)
     return done(err, toAtlas(aobj.results, '_id'))
@@ -239,7 +239,12 @@ function mapTrackArtists (track, atlas) {
   return (track.artists || []).filter(function (obj) {
     return !!obj
   }).map(function (artist) {
-    return atlas[artist.artistId] || {}
+    var o = atlas[artist.artistId]
+    if (!o) return {}
+    return {
+      uri: o.vanityUri || o.websiteDetailsId || o._id,
+      name: o.name
+    }
   })
 }
 
@@ -367,6 +372,14 @@ function mapWebsiteDetails (o) {
 
 /* Transform Methods */
 
+function transformRoster (obj) {
+  obj.results.forEach(function (doc) {
+    if (doc.profileImageBlobId)
+      doc.image = datapoint + '/blobs/' + doc.profileImageBlobId
+  })
+  return obj
+}
+
 function transformSocialSettings (obj) {
   obj.facebookEnabled = !!obj.facebookId
   obj.googleEnabled = !!obj.googleId
@@ -477,7 +490,6 @@ function transformReleaseTracks (obj, done) {
       track.releaseId = releaseId
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
-      track.artsistsTitle = getArtistsTitle(track.artists)
       track.downloadLink = getDownloadLink(releaseId, track._id)
     })
     done(null, obj)
@@ -493,7 +505,6 @@ function transformTracks (obj, done) {
       track.releaseId = releaseId
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
-      track.artsistsTitle = getArtistsTitle(track.artists)
       track.downloadLink = getDownloadLink(releaseId, track._id)
     })
     done(null, obj)

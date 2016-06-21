@@ -121,7 +121,6 @@ function transformPlaylistTracks (obj, done) {
         track.artists = mapTrackArtists(track, artistAtlas)
         track.playlistId = id
         track.playUrl = getPlayUrl(track.albums, track.releaseId)
-        track.artsistsTitle = getArtistsTitle(track.artists)
         track.canRemove = isMyPlaylist(playlist) ? { index: track.index } : undefined
         track.downloadLink = getDownloadLink(release._id, track._id)
         if (isMyPlaylist(playlist)) {

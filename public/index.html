@@ -1142,10 +1142,10 @@
 {{/playlistId}}
 <td>
     {{^artists}}
-    -
+    Id
     {{/artists}}
     {{#artists}}
-    <a href="/artist/{{_id}}">{{name}}</a>
+    <a href="/artist/{{uri}}">{{name}}</a>
     {{/artists}}
 </td>
 <td class="genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
@@ -1237,57 +1237,9 @@
 
 <script type="text/template"
         route="^artist\/(.*)"
-        completed="completedArtist"
-        source="$endpoint/catalog/artist/$1?fields=name,websiteDetailsId">
-        {{#data}}
-        {{#websiteDetailsId}}
-        <div source="$endpoint/website/{{websiteDetailsId}}"
-             template="user-details">
-        </div>
-        {{/websiteDetailsId}}
-        <div class="page center width">
-            {{^websiteDetailsId}}
-            <h1>{{name}}</h1>
-            <div class="panel">
-                <p>There are no details.</p>
-            </div>
-            {{/websiteDetailsId}}
-            <div class="panel">
-                <h2>Discography</h2>
-                <div source="$endpoint/catalog/artist/{{_id}}/releases"
-                     template="user-releases">
-                </div>
-            </div>
-        </div>
-        {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="user-releases"
-        transform="transformReleases">
-    {{#loading}}
-    {{>loading-inner-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    <ul class="discography">
-        {{#results}}
-        <li>
-            <a href="/release/{{_id}}">
-                <img src="{{cover}}">
-            </a>
-        </li>
-        {{/results}}
-    </ul>
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="user-details"
         transform="mapWebsiteDetails"
-        completed="completedWebsiteDetails">
+        completed="completedWebsiteDetails"
+        source="$endpoint/catalog/artist/$1">
     {{#loading}}
     {{>loading-view}}
     {{/loading}}
@@ -1328,15 +1280,78 @@
             <p>{{management}}</p>
         </div>
         {{/contact}}
+        <div class="panel">
+            <h2>Discography</h2>
+            <div source="$endpoint/catalog/artist/{{_id}}/releases"
+                template="user-releases">
+            </div>
+        </div>
     </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="user-releases"
+        transform="transformReleases">
+    {{#loading}}
+    {{>loading-inner-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <ul class="discography">
+        {{#results}}
+        <li>
+            <a href="/release/{{_id}}">
+                <img src="{{cover}}">
+            </a>
+        </li>
+        {{/results}}
+    </ul>
     {{/data}}
 </script>
 
 <!-- ROSTER -->
 
-<script type="text/template" route="^roster\/?">
+<script type="text/template"
+        route="^roster\/?"
+        transform="transformRoster"
+        source="$endpoint/catalog/artist?fields=name,websiteDetailsId,profileImageBlobId&filters=years,2016">
     <div class="page width center">
-        WIP
+        <h1>Roster</h1>
+        <div class="panel">
+            {{#loading}}
+            {{>loading-view}}
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <button action="selectRosterYear">2016</button>
+            <button action="selectRosterYear">2015</button>
+            <button action="selectRosterYear">2014</button>
+            <button action="selectRosterYear">2013</button>
+            <button action="selectRosterYear">2012</button>
+            <ul class="art-list">
+                {{#results}}
+                <li>
+                    <a class="silent" href="/artist/{{_id}}" title="{{name}}">
+                        {{#image}}
+                        <img src="{{image}}"/>
+                        {{/image}}
+                        {{^image}}
+                        <div class="no-art">
+                            <label>No image.</label>
+                        </div>
+                        {{/image}}
+                        <label class="title one-line-ellipsis">{{name}}</label>
+                    </a>
+                </li>
+                {{/results}}
+            </ul>
+            {{/data}}
+        </div>
     </div>
 </script>
 
