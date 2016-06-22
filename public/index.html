@@ -1317,7 +1317,7 @@
 <script type="text/template"
         route="^roster\/?"
         transform="transformRoster"
-        source="$endpoint/catalog/artist?fields=name,websiteDetailsId,profileImageBlobId&filters=years,2016">
+        source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId&filters=years,2016">
     <div class="page width center">
         <h1>Roster</h1>
         <div class="panel">
@@ -1328,11 +1328,7 @@
             <p>{{message}}</p>
             {{/error}}
             {{#data}}
-            <button action="selectRosterYear">2016</button>
-            <button action="selectRosterYear">2015</button>
-            <button action="selectRosterYear">2014</button>
-            <button action="selectRosterYear">2013</button>
-            <button action="selectRosterYear">2012</button>
+            <a href="/roster/2016">2016</a>
             <ul class="art-list">
                 {{#results}}
                 <li>

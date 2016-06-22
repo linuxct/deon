@@ -100,11 +100,14 @@ function loadCache (source, done, reset) {
   var cached = cache(source)
   if (!reset && cached) return done(null, cached)
   var callbacks = _[source]
+  var doit = false
   if (!callbacks) {
     callbacks = []
     _[source] = callbacks
+    doit = true
   }
   callbacks.push(done)
+  if (doit == false) return
   requestDetect({
     url: source,
     withCredentials: true
