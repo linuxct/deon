@@ -1315,40 +1315,51 @@
 <!-- ROSTER -->
 
 <script type="text/template"
-        route="^roster\/?"
-        transform="transformRoster"
-        source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId&filters=years,2016">
+        route="^artists\/?"
+        transform="transformRoster">
     <div class="page width center">
-        <h1>Roster</h1>
+        <h1>Artists</h1>
         <div class="panel">
-            {{#loading}}
-            {{>loading-view}}
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
             {{#data}}
-            <a href="/roster/2016">2016</a>
-            <ul class="art-list">
-                {{#results}}
-                <li>
-                    <a class="silent" href="/artist/{{_id}}" title="{{name}}">
-                        {{#image}}
-                        <img src="{{image}}"/>
-                        {{/image}}
-                        {{^image}}
-                        <div class="no-art">
-                            <label>No image.</label>
-                        </div>
-                        {{/image}}
-                        <label class="title one-line-ellipsis">{{name}}</label>
-                    </a>
-                </li>
-                {{/results}}
-            </ul>
+            {{#years}}
+            <a href="/artists/?year={{.}}">{{.}}</a>
+            {{/years}}
+            <div source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId&filters=years,{{year}}"
+                 template="roster-year">
+            </div>
             {{/data}}
         </div>
     </div>
+</script>
+
+<script type="text/template"
+        template-name="roster-year"
+        transform="transformRosterYear">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <ul class="art-list">
+        {{#results}}
+        <li>
+            <a class="silent" href="/artist/{{uri}}" title="{{name}}">
+                {{#image}}
+                <img src="{{image}}"/>
+                {{/image}}
+                {{^image}}
+                <div class="no-art">
+                    <label>No image.</label>
+                </div>
+                {{/image}}
+                <label class="title one-line-ellipsis">{{name}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    {{/data}}
 </script>
 
 <!-- PLAYLIST STUFF -->
@@ -1584,7 +1595,7 @@
 
 <script type="text/template"
         template-name="search-artists"
-        transform="transformSearchArtistsResults">
+        transform="transformRosterYear">
     <div class="panel">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
@@ -1757,7 +1768,7 @@
 
 <script type="text/template"
         template-name="search-snippet-artists"
-        transform="transformSearchSnippetArtists">
+        transform="transformRosterYear">
     {{#loading}}
     <i class="fa fa-fw fa-spin fa-refresh"></i>
     {{/loading}}
@@ -1855,10 +1866,20 @@
 
 <script type="text/template"
         mustache-name="searchArtistsList">
-    <ul>
+    <ul class="art-list">
         {{#results}}
         <li>
-            <a href="/artist/{{_id}}">{{name}}</a>
+            <a class="silent" href="/artist/{{uri}}" title="{{name}}">
+                {{#image}}
+                <img src="{{image}}"/>
+                {{/image}}
+                {{^image}}
+                <div class="no-art">
+                    <label>No image.</label>
+                </div>
+                {{/image}}
+                <label class="title one-line-ellipsis">{{name}}</label>
+            </a>
         </li>
         {{/results}}
     </ul>

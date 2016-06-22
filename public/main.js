@@ -372,9 +372,25 @@ function mapWebsiteDetails (o) {
 
 /* Transform Methods */
 
-function transformRoster (obj) {
+function transformRoster () {
+  var q = queryStringToObject(window.location.search)
+  var thisYear = (new Date()).getFullYear()
+  var arr = []
+  var i = thisYear
+  while (i >= 2012) {
+    arr.push(i)
+    i--
+  }
+  return {
+    years: arr,
+    year: q.year || thisYear
+  }
+}
+
+function transformRosterYear (obj) {
   obj.results.forEach(function (doc) {
     if (doc.profileImageBlobId)
+      doc.uri = doc.vanityUri || doc.websiteDetailsId || doc._id
       doc.image = datapoint + '/blobs/' + doc.profileImageBlobId
   })
   return obj

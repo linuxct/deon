@@ -74,7 +74,7 @@ function getSearchTypes () {
     },
     artists: {
       fuzzyFields: ['name'],
-      fields: ['name'],
+      fields: ['name', 'websiteDetailsId', 'profileImageBlobId', 'vanityUri'],
       q: {},
       title: 'Search Artists',
       perPage: 10,
