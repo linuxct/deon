@@ -20,6 +20,12 @@ function saveAccountSettings (e, el) {
   })
 }
 
+function updateBackground (e, el) {
+  if (!lstore) return
+  lstore.setItem('bgon', el.checked)
+  bgmebro()
+}
+
 function enableTwoFactor (e, el) {
   var data = getTargetDataSet(el, false, true)
   if (!data) return
@@ -57,3 +63,37 @@ function mapAccount (o) {
   }
   return o
 }
+
+function transformAccountSettings(obj) {
+  obj.bgon = false
+  if (lstore)
+    obj.bgon = lstore.getItem('bgon') == 'true' ? true : false
+  obj.downloadOptions = transformAccountSettings.options.map(function (opt) {
+    opt = cloneObject(opt)
+    opt.selected = opt.value == obj.preferredDownloadFormat
+    return opt
+  })
+  return obj
+}
+transformAccountSettings.options = [
+  {
+    name: "MP3 320kbps",
+    value: "mp3_320"
+  }, {
+    name: "MP3 128kbps",
+    value: "mp3_128"
+  }, {
+    name: "MP3 V0",
+    value: "mp3_v0"
+  }, {
+    name: "MP3 V2",
+    value: "mp3_v2"
+  }, {
+    name: "WAV",
+    value: "wav"
+  }, {
+    name: "FLAC",
+    value: "flac"
+  },
+]
+

@@ -4,6 +4,7 @@ var datapoint       = 'https://s3.amazonaws.com/data.monstercat.com'
 var session         = null
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
+var lstore          = window.localStorage
 
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
@@ -24,6 +25,12 @@ document.addEventListener("DOMContentLoaded", function (e) {
     stateChange(location.pathname + location.search)
   })
 })
+
+function bgmebro() {
+  if (!lstore) return
+  var m = lstore.getItem('bgon') == 'true' ? 'add' : 'remove'
+  document.body.classList[m]('bg')
+}
 
 function pageIsReady () {
   window.prerenderReady = true
@@ -526,36 +533,6 @@ function transformTracks (obj, done) {
     done(null, obj)
   })
 }
-
-function transformAccountSettings(obj) {
-  obj.downloadOptions = transformAccountSettings.options.map(function (opt) {
-    opt = cloneObject(opt)
-    opt.selected = opt.value == obj.preferredDownloadFormat
-    return opt;
-  })
-  return obj
-}
-transformAccountSettings.options = [
-  {
-    name: "MP3 320kbps",
-    value: "mp3_320"
-  }, {
-    name: "MP3 128kbps",
-    value: "mp3_128"
-  }, {
-    name: "MP3 V0",
-    value: "mp3_v0"
-  }, {
-    name: "MP3 V2",
-    value: "mp3_v2"
-  }, {
-    name: "WAV",
-    value: "wav"
-  }, {
-    name: "FLAC",
-    value: "flac"
-  },
-]
 
 function appendSongMetaData (tracks) {
   if (tracks) {
