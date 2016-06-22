@@ -662,72 +662,70 @@
     {{#data}}
     <div class="page width center">
         <h1>Manage Services</h1>
-        <h2>Gold Access</h2>
-        <br/>
-        <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
-        <br/>
-        {{#hasGoldPermanent}}
-        <p>You have Gold Membership.</p>
-        {{/hasGoldPermanent}}
-        {{#goldUnsubscribe}}
-        <label>Gold Subscription Active</label>
-        <p>You are subscribed for $5.00 USD a month.</p>
-        <button action="unsubscribeGold">Cancel Subscription</button>
-        {{/goldUnsubscribe}}
-        {{#goldSubscribe}}
-        <div data-set="subscribe-gold">
-            <button action="subscribeGold"
-                    data-set-target="subscribe-gold">
-                Subscribe for $5.00/month
-            </button>
+        <div class="panel">
+            <h2>Gold Access</h2>
+            <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+            {{#hasGoldPermanent}}
+            <p>You have Gold Membership.</p>
+            {{/hasGoldPermanent}}
+            {{#goldUnsubscribe}}
+            <label>Gold Subscription Active</label>
+            <p>You are subscribed for $5.00 USD a month.</p>
+            <button action="unsubscribeGold">Cancel Subscription</button>
+            {{/goldUnsubscribe}}
+            {{#goldSubscribe}}
+            <br/>
+            <div data-set="subscribe-gold">
+                <button action="subscribeGold"
+                        data-set-target="subscribe-gold">
+                    Subscribe for $5.00/month
+                </button>
+            </div>
+            {{/goldSubscribe}}
         </div>
-        {{/goldSubscribe}}
-        <br/>
-        <br/>
-        <h2>Licensing Services</h2>
-        <br/>
-        <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro.
-            You can also buy a subscription and pay monthly until you pay it off.
-        </p>
-        <br/>
-        <p>To buy a license at full go <a href="/services/buyout">here</a>.</p>
-        <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
-        <br/>
-        <table>
-            <thead>
-                <tr>
-                    <th>Vendor</th>
-                    <th>Identity</th>
-                    <th>Paid Off</th>
-                    <th>Remaining</th>
-                    <th>Monthly Cost</th>
-                    <th>Next Billing Date</th>
-                    <th>Options</th>
-                </tr>
-            </thead>
-            <tbody source="$endpoint/self/whitelist"
-                   template="whitelist-licenses"
-                   role="whitelists"
-                   transform="transformWhitelists">
-            </tbody>
-        </table>
-        <br/>
-        <div data-set="new-license">
-            <select name="vendor">
-                <option value="">Select Vendor</option>
-                <option value="YouTube">YouTube</option>
-                <option value="Twitch">Twitch</option>
-            </select>
-            <input type="text" name="identity" placeholder="Identity"/>
-           <button
-                action="subscribeNewLicense"
-                data-set-target="new-license">
-                Subscribe $5/month
-            </button>
+        <div class="panel">
+            <h2>Licensing Services</h2>
+            <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro.
+                You can also buy a subscription and pay monthly until you pay it off.
+            </p>
+            <br/>
+            <p>To buy a license at full go <a href="/services/buyout">here</a>.</p>
+            <br/>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vendor</th>
+                        <th>Identity</th>
+                        <th>Paid Off</th>
+                        <th>Remaining</th>
+                        <th>Monthly Cost</th>
+                        <th>Next Billing Date</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody source="$endpoint/self/whitelist"
+                    template="whitelist-licenses"
+                    role="whitelists"
+                    transform="transformWhitelists">
+                </tbody>
+            </table>
+            <div data-set="new-license">
+                <select name="vendor">
+                    <option value="">Select Vendor</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="Twitch">Twitch</option>
+                </select>
+                <input type="text" name="identity" placeholder="Identity"/>
+                <button
+                    action="subscribeNewLicense"
+                    data-set-target="new-license">
+                    Subscribe $5/month
+                </button>
+            </div>
+            <br/>
+            <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
         </div>
-        <br/>
-        <br/>
-        <div id="new-subscriptions" class="hide">
+        <div id="new-subscriptions" class="hide panel">
             <h2>Purchase Subscriptions</h2>
             <br/>
             <table>
@@ -913,49 +911,51 @@
         page-title="Whitelist Buy Out">
     <div class="page center width">
         <h1>Buy Out Whitelist</h1>
-        <p>Buy out the remainder of your whitelist subscription and have it forever!</p>
-        {{#loading}}
-        <i class="fa fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <div data-set="buy-out-license">
-            <input type="hidden" name="amount" value="{{amountRemaining}}"/>
-            <input type="hidden" name="id" value="{{_id}}"/>
-            <table class="form">
-                <tbody>
-                    <tr>
-                        <th>Vendor</th>
-                        <td>
-                            <input type="text"
-                                name="vendor"
-                                value="{{vendor}}"
-                                disabled />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Identity</th>
-                        <td>
-                            <input type="text"
-                                name="identity"
-                                value="{{identity}}"
-                                disabled />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Total Cost</th>
-                        <td>
-                            ${{cost}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            {{>payment-method}}
-            <button action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
+        <div class="panel">
+            <p>Buy out the remainder of your whitelist subscription and have it forever!</p>
+            {{#loading}}
+            <i class="fa fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <div data-set="buy-out-license">
+                <input type="hidden" name="amount" value="{{amountRemaining}}"/>
+                <input type="hidden" name="id" value="{{_id}}"/>
+                <table class="form">
+                    <tbody>
+                        <tr>
+                            <th>Vendor</th>
+                            <td>
+                                <input type="text"
+                                       name="vendor"
+                                       value="{{vendor}}"
+                                       disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Identity</th>
+                            <td>
+                                <input type="text"
+                                       name="identity"
+                                       value="{{identity}}"
+                                       disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total Cost</th>
+                            <td>
+                                ${{cost}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{>payment-method}}
+                <button action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
+            </div>
+            {{/data}}
         </div>
-        {{/data}}
     </div>
 </script>
 
@@ -964,33 +964,35 @@
         page-title="Purchase Whitelist">
     <div class="page center width">
         <h1>Purchase Whitelist</h1>
-        <p>Purchase a whitelist license and get whitelisting for that provider forever.</p>
-        <div data-set="new-license">
-            <input type="hidden" name="amount" value="20000">
-            <table class="form">
-                <tbody>
-                    <tr>
-                        <th>Vendor</th>
-                        <td>
-                            {{>vendor-selector}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Identity</th>
-                        <td>
-                            <input type="text"
-                                name="identity"
-                                placeholder="Put here."/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Total Cost</th>
-                        <td>$200.00</td>
-                    </tr>
-                </tbody>
-            </table>
-            {{>payment-method}}
-            <button action="buyLicense" data-set-target="new-license">Purchase Whitelisting</button>
+        <div class="panel">
+            <p>Purchase a whitelist license and get whitelisting for that provider forever.</p>
+            <div data-set="new-license">
+                <input type="hidden" name="amount" value="20000">
+                <table class="form">
+                    <tbody>
+                        <tr>
+                            <th>Vendor</th>
+                            <td>
+                                {{>vendor-selector}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Identity</th>
+                            <td>
+                                <input type="text"
+                                       name="identity"
+                                       placeholder="Put here."/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total Cost</th>
+                            <td>$200.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{>payment-method}}
+                <button action="buyLicense" data-set-target="new-license">Purchase Whitelisting</button>
+            </div>
         </div>
     </div>
 </script>
@@ -1000,19 +1002,21 @@
         page-title="Remove YouTube Claim">
     <div class="page center width">
         <h1>YouTube Release Claim</h1>
-        <p>If you have recieved a claim on your whitelisted YouTube channel you can release it here. Please fill out the form below.</p>
-        <br/>
-        <table class="form">
-            <tbody data-set="youtube-claim">
-                <tr>
-                    <th>YouTube Video Id</th>
-                    <td>
-                        <input type="text" name="videoId" placeholder="Video Id"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <button action="removeYouTubeClaim" data-set-target="youtube-claim">Release Claim</button>
+        <div class="panel">
+            <p>If you have recieved a claim on your whitelisted YouTube channel you can release it here. Please fill out the form below.</p>
+            <br/>
+            <table class="form">
+                <tbody data-set="youtube-claim">
+                    <tr>
+                        <th>YouTube Video Id</th>
+                        <td>
+                            <input type="text" name="videoId" placeholder="Video Id"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button action="removeYouTubeClaim" data-set-target="youtube-claim">Release Claim</button>
+        </div>
     </div>
 </script>
 
