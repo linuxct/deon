@@ -61,7 +61,7 @@
             <ul>
                 <li><a href="/music">Music</a></li>
                 <li><a href="http://www.monstercat.com/blog">News</a></li>
-                <li><a href="http://www.monstercat.com/events">Events</a></li>
+                <li><a href="http://www.monstercat.com/showcase">Events</a></li>
                 <li><a href="http://www.monstercat.com/podcast">Podcast</a></li>
                 <li><a href="http://shop.monstercat.com">Shop</a></li>
             </ul>
@@ -161,7 +161,6 @@
 </script>
 
 <script type="text/template" template-name="navigation">
-    <a class="silent nav-item" href="/"><i class="fa fa-headphones"></i>Browse</a>
     {{#data}}
     {{#user}}
     <a class="silent nav-item" href="/playlists"><i class="fa fa-bars"></i>Playlists</a>
@@ -221,7 +220,7 @@
 <script type="text/template"
         route="^signin">
     <div class="page width center">
-        <h1>Sign in</h1>
+        <h1>Sign In</h1>
         <div class="panel">
         <table class="form" data-set="credentials" trigger-target="signIn">
             <tbody>
@@ -285,7 +284,7 @@
 <script type="text/template"
         route="^forgot-password">
     <div class="page width center">
-        <h1>Forgot password?</h1>
+        <h1>Forgot Password?</h1>
         <div class="panel">
         <table class="form" data-set="credentials">
             <tbody>
@@ -342,7 +341,7 @@
         route="^confirm-sign-up"
         transform="mapConfirmSignup">
     <div class="page width center">
-        <h1>Confirm Sign-up</h1>
+        <h1>Confirm Sign Up</h1>
         <div class="panel">
         {{#data}}
         <table class="form" data-set="credentials" trigger-target="signUpSocial">
@@ -404,7 +403,7 @@
         route="^sign-up"
         transform="mapSignup">
     <div class="page width center">
-        <h1>Sign-up</h1>
+        <h1>Sign Up</h1>
         <div class="panel">
             {{#data}}
             <table class="form" data-set="credentials" trigger-target="signUp">
@@ -1091,10 +1090,47 @@
     </select>
 </script>
 
+<!-- HOME -->
+
+<script type="text/template"
+        route="^(\?.*)?$"
+        transform="transformHome"
+        page-title="Home">
+    <div>
+        {{#featured}}
+        <img src="cover"/>
+        <h1>{{title}}</h1>
+        <p>By {{artistTitle}}</p>
+        <p>Released {{releaseDate}}</p>
+        {{/featured}}
+        <h2>Latest Releases</h2>
+        <div>
+            <ul>
+                {{#releases}}
+                <li>
+                    {{title}}
+                </li>
+                {{/releases}}
+            </ul>
+        </div>
+        <p><span>We're proudly proving that</span><br/>
+            Independent labels have the ability to reshape the music industry.
+        </p>
+    </div>
+    <div>
+        <div>
+            <h2>Listen on Spotify</h2>
+        </div>
+        <div>
+            <h2>Join the Family</h2>
+        </div>
+    </div>
+</script>
+
 <!-- MUSIC -->
 
 <script type="text/template"
-        route="^(:?(\?.*)?$|music(\?.*)?)"
+        route="^music\/?(\?.*)?"
         page-title="Music"
         completed="completedMusic"
         transform="transformMusic">

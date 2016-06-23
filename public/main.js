@@ -379,6 +379,10 @@ function mapWebsiteDetails (o) {
 
 /* Transform Methods */
 
+function transformHome () {
+  return {}
+}
+
 function transformRoster () {
   var q = queryStringToObject(window.location.search)
   var thisYear = (new Date()).getFullYear()
