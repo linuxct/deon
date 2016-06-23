@@ -432,7 +432,7 @@
 </script>
 
 <script type="text/template"
-        route="^account"
+        route="^account\/?$"
         source="$endpoint/self"
         page-title="My Account"
         transform="mapAccount">
@@ -656,12 +656,15 @@
     {{/data}}
 </script>
 
+<!-- SERVICES -->
+
 <script type="text/template"
-        route="^services$"
+        route="^account\/services\/?"
         transform="transformServices">
     {{#data}}
     <div class="page width center">
         <h1>Manage Services</h1>
+        {{#user}}
         <div class="panel">
             <h2>Gold Access</h2>
             <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
@@ -684,13 +687,14 @@
             </div>
             {{/goldSubscribe}}
         </div>
+
         <div class="panel">
             <h2>Licensing Services</h2>
             <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro.
                 You can also buy a subscription and pay monthly until you pay it off.
             </p>
             <br/>
-            <p>To buy a license at full go <a href="/services/buyout">here</a>.</p>
+            <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
             <br/>
             <table>
                 <thead>
@@ -726,8 +730,9 @@
             <br/>
             <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
         </div>
+
         <div id="new-subscriptions" class="hide panel">
-            <h2>Purchase Subscriptions</h2>
+            <h2>Checkout</h2>
             <br/>
             <table>
                 <thead>
@@ -748,6 +753,12 @@
                 </button>
             </div>
         </div>
+        {{/user}}
+        {{^user}}
+        <div class="panel">
+            <p>You need to be logged in to access this page.</p>
+        </div>
+        {{/user}}
     </div>
     {{/data}}
 </script>
@@ -819,18 +830,24 @@
         <td>{{nextBillingDate}}</td>
         <td>
             {{#licenseUrl}}
-            <a href="{{licenseUrl}}" title="Open license document." target="_blank">View License</a>
+            <a href="{{licenseUrl}}"
+               title="Open license document."
+               target="_blank">View License</a>
             {{/licenseUrl}}
             {{^canBuyOut}}
-            <a href="/services/buyout/{{_id}}">Buy Out</a>
+            <a href="/account/services/buyout/{{_id}}">Buy Out</a>
             {{/canBuyOut}}
             {{#cancel}}
-            <button class="faux" action="cancelLicenseSubscription" whitelist-id="{{_id}}">
+            <button class="faux"
+                    action="cancelLicenseSubscription"
+                    whitelist-id="{{_id}}">
                 Cancel Subscription
             </button>
             {{/cancel}}
             {{#resume}}
-            <button class="faux" action="resumeLicenseSubscription" data-set-target="whitelist-{{_id}}">
+            <button class="faux"
+                    action="resumeLicenseSubscription"
+                    data-set-target="whitelist-{{_id}}">
                 Resume Subscription
             </button>
             {{/resume}}
@@ -843,28 +860,35 @@
     {{/data}}
 </script>
 
-<script type="text/template" route="^services\/processing" completed="completedProcessing">
+<script type="text/template"
+        route="^account\/services\/processing"
+        completed="completedProcessing">
     <div class="page width center">
         <h1>Payment Processing <i class="fa fa-spin fa-gear"></i></h1>
         <p>Your payment is being processed. Please wait.</p>
     </div>
 </script>
 
-<script type="text/template" route="^services\/subscribed" completed="redirectServices">
+<script type="text/template"
+        route="^account\/services\/subscribed"
+        completed="redirectServices">
     <div class="page width center">
         <h1>Subscribed!</h1>
         <p>You have been succefully subscribed! You will be redirected to your services in 5 seconds.</p>
     </div>
 </script>
 
-<script type="text/template" route="^services\/unsubscribed\/?" completed="redirectServices">
+<script type="text/template"
+        route="^account\/services\/unsubscribed\/?"
+        completed="redirectServices">
     <div class="page width center">
         <h1>Unsubscribed</h1>
         <p>You have been succefully unsubscribed. You will be redirected to your services in 5 seconds.</p>
     </div>
 </script>
 
-<script type="text/template" route="^services\/canceled-payment\/?$">
+<script type="text/template"
+        route="^account\/services\/canceled-payment\/?$">
     <div class="page width center">
         <h1>Payment Canceled</h1>
         <p>The payment has been canceled. Go back to <a href="/services">services</a>.</p>
@@ -872,12 +896,21 @@
 </script>
 
 <script type="text/template"
-        route="^services\/buyout\/purchased\/?"
+        route="^account\/services\/buyout\/purchased\/?"
         page-title="Purchased Whitelist"
         completed="redirectServices">
     <div class="page center width">
         <h1>Purchased Whitelist!</h1>
         <p>Whitelist succesfully purchased. You will be redirected to the services page in 5 seconds.</p>
+    </div>
+</script>
+
+<script type="text/template"
+        route="account\/services\/error"
+        page-title="Payment Error">
+    <div class="page width center">
+        <h1>An error occured.</h1>
+        <p>An error occured while working with the payment information provided. Please contact support.</p>
     </div>
 </script>
 
@@ -908,7 +941,7 @@
 </script>
 
 <script type="text/template"
-        route="^services\/buyout\/(.+)"
+        route="^account\/services\/buyout\/(.+)"
         transform="transformBuyOut"
         source="$endpoint/whitelist/$1"
         page-title="Whitelist Buy Out">
@@ -963,7 +996,7 @@
 </script>
 
 <script type="text/template"
-        route="^services\/buyout\/?$"
+        route="^account\/services\/buyout\/?$"
         page-title="Purchase Whitelist">
     <div class="page center width">
         <h1>Purchase Whitelist</h1>
@@ -999,6 +1032,8 @@
         </div>
     </div>
 </script>
+
+<!-- CLAIMS -->
 
 <script type="text/template"
         route="^release-claim"
@@ -1148,7 +1183,7 @@
 
 <script type="text/template"
         mustache-name="unlicensable">
-{{^licensable}}<div class="unlicensable">This track can't be licensed. <a href="#">Read more</a></div>{{/licensable}}
+{{^licensable}}<div class="unlicensable">This track can't be licensed. <a href="/non-licensable-tracks">Read more</a></div>{{/licensable}}
 </script>
 
 <script type="text/template"
@@ -1920,15 +1955,6 @@
 <!-- END SEARCH -->
 
 <script type="text/template"
-        route="services\/error"
-        page-title="Payment Error">
-    <div class="page width center">
-        <h1>An error occured.</h1>
-        <p>An error occured while working with the payment information provided. Please contact support.</p>
-    </div>
-</script>
-
-<script type="text/template"
         template-name="404"
         page-title="Page Not Found">
     <div class="page width center">
@@ -2004,6 +2030,14 @@
         route="^terms-of-service\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^non-licensable-tracks\/?$"
+        source-type="markdown"
+        transform="transformMarkdown"
+        source="https://connect.monstercat.com/handbook/licensing">
     {{>markdown-basic}}
 </script>
 

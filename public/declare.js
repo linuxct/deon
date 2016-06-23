@@ -91,7 +91,7 @@ function requestJSON (opts, done) {
   })
 }
 
-function loadCache (source, done, reset) {
+function loadCache (source, done, reset, fallback) {
   var _ = loadCache._
   if (!_) {
     _ = {}
@@ -117,7 +117,7 @@ function loadCache (source, done, reset) {
       fn(err, obj)
     })
     delete _[source]
-  }, requestJSON)
+  }, fallback || requestJSON)
 }
 
 function elMatches (el, sel) {
@@ -224,6 +224,7 @@ function openRoute (target, container, matches) {
     container: container,
     transform: getMethod(target, 'transform'),
     template:  target.textContent,
+    sourceType: target.getAttribute('source-type')
   }
   opts.completed = function () {
     var fn = getMethod(target, 'completed')
@@ -279,7 +280,7 @@ function loadSource (opts) {
     }
     if (err) return fn(err, obj)
     applyTransform(opts.transform, obj, fn)
-  }, reset)
+  }, reset, opts.sourceType == 'markdown' ? request : undefined)
 }
 
 function loadSubSources (container, reset, disableLoadingRender) {

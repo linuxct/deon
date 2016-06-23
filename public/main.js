@@ -411,10 +411,13 @@ function transformSocialSettings (obj) {
 
 function transformServices () {
   var user = isSignedIn() ? session.user : {}
-  return {
+  var opts = {
     hasGoldPermanent: !!user.goldService && !user.goldSubscriptionId,
     goldSubscribe: !(!!user.goldService && !!user.goldSubscriptionId),
     goldUnsubscribe: (!!user.goldService && !!user.goldSubscriptionId)
+  }
+  return {
+    user: isSignedIn() ? opts : null
   }
 }
 
