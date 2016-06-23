@@ -1,0 +1,8 @@
+@font-face{
+  font-family: 'Geometry Soft Pro Bold';
+  src: url('./geometry_soft_pro-bold_a-webfont.eot');
+  src: url('./geometry_soft_pro-bold_a-webfont.eot?#iefix') format('embedded-opentype'),
+       url('./geometry_soft_pro-bold_a-webfont.woff') format('woff'),
+       url('./geometry_soft_pro-bold_a-webfont.ttf') format('truetype'),
+       url('./geometry_soft_pro-bold_a-webfont.svg#webfont') format('svg');
+}

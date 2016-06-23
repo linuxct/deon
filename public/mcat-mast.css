@@ -1,0 +1,62 @@
+.mcat-mast {
+  display: flex;
+  margin: 22px 0;
+}
+
+.mcat-mast .mcat-logo {
+  flex-shrink: 0;
+}
+
+.mcat-logo .graphic {
+  width: 32px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
+}
+
+.mcat-logo .graphic img {
+  position: absolute;
+  width: 100%;
+  top: -100%;
+  left: 0;
+}
+
+.mcat-mast .mcat-logo label {
+  font-family: "Geometry Soft Pro Bold";
+  text-transform: lowercase;
+  font-size: 28px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.mcat-mast .mcat-nav {
+  flex: 1;
+  text-align: right;
+}
+
+.mcat-mast .mcat-nav ul {
+  list-style: none;
+}
+
+.mcat-mast .mcat-nav ul li {
+  display: inline-block;
+  padding: 2px 0;
+}
+
+.mcat-mast .mcat-logo a,
+.mcat-mast .mcat-nav ul li a {
+  text-decoration: none;
+}
+
+.mcat-mast .mcat-logo a:hover,
+.mcat-mast .mcat-nav ul li a:hover {
+  color: initial;
+}
+
+.mcat-mast .mcat-nav ul li a {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-left: 10px;
+}
