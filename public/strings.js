@@ -23,5 +23,7 @@ var strings = {
   "cart5": "You can only purchase up to 5 subscriptions at a time.",
   "goldInCart": "The Gold Membership is already in your cart.",
   "licenseInCart": "The license is already in your cart or is already purchased.",
-  "cancelWhitelistSub": "Are you sure you want to cancel this subscription?"
+  "cancelWhitelistSub": "Are you sure you want to cancel this subscription?",
+  "codeNotFound": "The code you entered does not exist.",
+  "codeNotValid": "The code you entered is not valid any more."
 }

@@ -143,7 +143,7 @@
     <a class="silent nav-item" href="/account"><i class="fa fa-gear"></i>Account</a>
     {{/user}}
     {{^user}}
-    <a class="silent nav-item" href="/signin"><i class="fa fa-user"></i>Sign In</a>
+    <a class="silent nav-item" href="/signin"><i class="fa fa-sign-in"></i>Sign In</a>
     {{/user}}
     {{/data}}
 </script>
@@ -676,6 +676,7 @@
             {{#goldSubscribe}}
             <br/>
             <div data-set="subscribe-gold">
+                <input type="text" name="trailCode" placeholder="Special Code"/>
                 <button action="subscribeGold"
                         data-set-target="subscribe-gold">
                     Subscribe for $5.00/month
@@ -764,7 +765,9 @@
 
 <script type="text/template" template-name="subscription-row">
     <tr>
-        <td>{{name}}</td>
+        <td>
+            {{name}}
+        </td>
         <td>
             {{#fields}}
             <input type="hidden" name="{{key}}" value="{{value}}">
