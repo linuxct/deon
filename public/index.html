@@ -381,6 +381,14 @@
     <div class="page width center">
         <h1>Sign-up</h1>
         <div class="panel">
+            <h2>With Social</h2>
+            <div class="button-group">
+                <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
+                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
+            </div>
+        </div>
+        <div class="panel">
+            <h2>With Email</h2>
             {{#data}}
             <table class="form" data-set="credentials" trigger-target="signUp">
                 <tbody>
@@ -395,7 +403,7 @@
                     <tr>
                         <th>Password</th>
                         <td>
-                            <input type="text"
+                            <input type="password"
                                    name="password"
                                    placeholder="a secret"/>
                             <button
@@ -423,8 +431,6 @@
             </table>
             <div class="button-group">
                 <button class="button--cta" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
-                <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
-                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
             </div>
             {{/data}}
         </div>
@@ -455,19 +461,11 @@
                     <tr>
                         <th>Full Name</th>
                         <td><input type="text"
-                                    name="realName"
-                                    value="{{realName}}"
-                                    data-set-target="account"
-                                    initial-value="{{realName}}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Nickname</th>
-                        <td><input type="text"
-                                    action-enter="saveAccount"
-                                    name="name"
-                                    initial-value="{{name}}"
-                                    value="{{name}}" />
+                                   name="realName"
+                                   value="{{realName}}"
+                                   placeholder="Jon GQ Winter"
+                                   data-set-target="account"
+                                   initial-value="{{realName}}" />
                         </td>
                     </tr>
                     <tr>
