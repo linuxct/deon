@@ -498,7 +498,7 @@ function transformWhitelists (obj) {
     whitelist.canBuyOut = whitelist.paidInFull ? { _id: whitelist._id } : undefined
     if (whitelist.whitelisted)
       whitelist.licenseUrl = endpoint + '/self/whitelist/' + whitelist._id + '.pdf'
-    if (!whitelist.subscriptionActive && whitelist.amountRemaining > 0)
+    if (whitelist.subscriptionId && !whitelist.subscriptionActive && whitelist.amountRemaining > 0)
       whitelist.resume = { _id: whitelist._id, amount: whitelist.monthlyCost }
     if (whitelist.subscriptionActive)
       whitelist.cancel = { _id: whitelist._id }
