@@ -491,7 +491,7 @@ function transformWhitelists (obj) {
     whitelist.paid = (whitelist.amountPaid / 100).toFixed(2)
     whitelist.remaining = (whitelist.amountRemaining / 100).toFixed(2)
     if (whitelist.availableUntil)
-      whitelist.nextBillingDate = whitelist.availableUntil
+      whitelist.nextBillingDate = formatDate(whitelist.availableUntil)
     if (whitelist.subscriptionActive)
       whitelist.cost = (5).toFixed(2)
     whitelist.monthlyCost = 500
