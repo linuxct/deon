@@ -676,9 +676,10 @@
             <p>You have Gold Membership.</p>
             {{/hasGoldPermanent}}
             {{#goldUnsubscribe}}
-            <label>Gold Subscription Active</label>
-            <p>You are subscribed for $5.00 USD a month.</p>
-            <button action="unsubscribeGold">Cancel Subscription</button>
+            <div source="$endpoint/self/gold-subscription"
+                    template="gold-subscription"
+                    transform="transformGoldSubscription">
+            </div>
             {{/goldUnsubscribe}}
             {{#goldSubscribe}}
             <br/>
@@ -764,6 +765,23 @@
         </div>
         {{/user}}
     </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="gold-subscription"
+        transform="transformGoldSubscription">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <label>Gold Subscription Active</label>
+    <p>You are subscribed for $5.00 USD a month</p>
+    <p>Your next invoice will be charged on {{nextBillingDate}}</p>
+    <button action="unsubscribeGold">Cancel Subscription</button>
     {{/data}}
 </script>
 

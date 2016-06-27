@@ -412,12 +412,18 @@ function transformSocialSettings (obj) {
 function transformServices () {
   var user = isSignedIn() ? session.user : {}
   var opts = {
-    hasGoldPermanent: !!user.goldService && !user.goldSubscriptionId,
-    goldSubscribe: !(!!user.goldService && !!user.goldSubscriptionId),
-    goldUnsubscribe: (!!user.goldService && !!user.goldSubscriptionId)
+    hasGoldPermanent: !!user.goldService && !user.currentGoldSubscription,
+    goldSubscribe: !user.goldService && !user.currentGoldSubscription,
+    goldUnsubscribe: (!!user.goldService && !!user.currentGoldSubscription)
   }
   return {
     user: isSignedIn() ? opts : null
+  }
+}
+
+function transformGoldSubscription (obj) {
+  return {
+    nextBillingDate: formatDate(obj.availableUntil)
   }
 }
 
