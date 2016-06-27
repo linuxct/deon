@@ -3,7 +3,7 @@ function saveAccount (e, el) {
   if (!data) return
   update('self', null, data, function (err, obj) {
     if (err) return window.alert(err.message)
-    window.alert(strings.accountUpdated)
+    toasty(strings.accountUpdated)
     document.querySelector('[name="password"]').value = ""
     resetTargetInitialValues(el, obj)
   })
@@ -14,7 +14,7 @@ function saveAccountSettings (e, el) {
   if (!data) return
   update('self/settings', null, data, function (err, obj) {
     if (err) return window.alert(err.message)
-    window.alert(strings.settingsUpdated)
+    toasty(strings.settingsUpdated)
     session.settings = obj
     resetTargetInitialValues(el, obj)
   })

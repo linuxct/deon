@@ -678,9 +678,12 @@ function completedMusic (source, obj) {
 /* UI Stuff */
 
 function canAccessGold (e, el) {
-  if (hasGoldAccess()) return
+  var hasit = hasGoldAccess()
+  if (hasit) return
   e.preventDefault()
-  openModal('subscription-required-modal')
+  openModal('subscription-required-modal', {
+    hasGold: hasGoldAccess()
+  })
 }
 
 function openTrackCopyCredits (e, el) {
