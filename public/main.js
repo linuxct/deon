@@ -422,9 +422,15 @@ function transformServices () {
 }
 
 function transformGoldSubscription (obj) {
-  return {
-    nextBillingDate: formatDate(obj.availableUntil)
+  var nobj = {
+    nextBillingDate: formatDate(obj.availableUntil),
   }
+  if (obj.canceled) {
+    nobj.canceled = {
+      endDate: formatDate(obj.availableUntil),
+    }
+  }
+  return nobj
 }
 
 function transformMusic () {

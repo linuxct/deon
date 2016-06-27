@@ -306,7 +306,7 @@ function subscribeGold (e, el) {
     return window.alert(strings.cart5)
   if (document.querySelector('[type="hidden"][name="type"][value="gold"]'))
     return window.alert(strings.goldInCart)
-  var data = getTargetDataSet(el)
+  var data = getTargetDataSet(el) || {}
   var opts = {
     name: "Gold Membership",
     cost: "5.00",
@@ -321,17 +321,17 @@ function subscribeGold (e, el) {
     showNewSubscriptions()
     toasty(strings.goldAdded)
   }
-  if (data.trailCode) {
+  if (data.trialCode) {
     // TODO show spinner
     return requestJSON({
-      url: endpoint + "/services/gold/code/" + data.trailCode
+      url: endpoint + "/services/gold/code/" + data.trialCode
     }, function (err, obj, xhr) {
       if (xhr.status == 404) return window.alert(strings.codeNotFound)
       if (err) return window.alert(err.message)
       if (!obj) return window.alert(strings.error)
       if (!obj.valid) return window.alert(strings.codeNotValid)
       opts.name += " (" + obj.numMonths + " Free Months)"
-      opts.fields.push({ key: "trailCode", value: obj.name })
+      opts.fields.push({ key: "trialCode", value: obj.name })
       fin(opts)
     })
   }
