@@ -112,14 +112,12 @@
     <div class="modal panel">
         <h1>Get Gold!</h1>
         <p>You need a subscription to do that!</p>
-        {{#data}}
-        {{#hasGold}}
-        <a href="/account/services">Get your Gold membership!</a>
-        {{/hasGold}}
         {{^hasGold}}
-        <a href="/sign-up">Sign up for an account!</a>
+        <a href="/account/services" action="closeModal">Get your Gold membership!</a>
         {{/hasGold}}
-        {{/data}}
+        {{^signedIn}}
+        <a href="/sign-up" action="closeModal">Sign up for an account!</a>
+        {{/signedIn}}
         <br/>
         <button action="closeModal">Close</button>
     </div>
@@ -749,6 +747,7 @@
                 <tbody role="new-subs">
                 </tbody>
             </table>
+            <div>$<span role="total-cost">0.00</span></div>
             <br/>
             <div data-set="pay-method">
                {{>payment-method}}
