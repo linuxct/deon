@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 })
 
+openRoute.completed.push(function () {
+  recordPage()
+})
+
 function bgmebro() {
   if (!lstore) return
   var m = lstore.getItem('bgon') == 'true' ? 'add' : 'remove'
@@ -55,6 +59,11 @@ function getSession (done) {
     url: endpoint + '/self/session',
     withCredentials: true
   }, done)
+}
+
+function recordPage () {
+  if (typeof analytics == 'undefined') return
+  analytics.page()
 }
 
 function recordEvent (name, obj, done) {
