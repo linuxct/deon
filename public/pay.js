@@ -290,10 +290,15 @@ function updateTotalCheckoutCost () {
   var cost = getTotalCheckoutCost()
   var el = document.querySelector('[role="total-cost"]')
   el.textContent = (cost / 100).toFixed(2)
+  if (cost <= 0) {
+    showNewSubscriptions(false)
+  }
 }
 
-function showNewSubscriptions () {
-  document.querySelector('#new-subscriptions').classList.remove('hide')
+function showNewSubscriptions (value) {
+  if (typeof value == 'undefined') value = true
+  var method = value ? 'remove' : 'add'
+  document.querySelector('#new-subscriptions').classList[method]('hide')
 }
 
 function reachedMaxCartSubscriptions () {
@@ -307,6 +312,7 @@ function addSub (obj) {
   render(div, t.textContent, obj)
   container.appendChild(div.firstElementChild)
   updateTotalCheckoutCost()
+  showNewSubscriptions()
 }
 
 function removeSub (e, el) {
@@ -334,15 +340,16 @@ function subscribeGold (e, el) {
   }
   var fin = function (opts) {
     addSub(opts)
-    showNewSubscriptions()
     toasty(strings.goldAdded)
   }
   if (data.trialCode) {
-    // TODO show spinner
+    el.classList.add('working')
+    el.disabled = true
     return requestJSON({
       url: endpoint + "/services/gold/code/" + data.trialCode
     }, function (err, obj, xhr) {
-      // TODO hide spinner
+      el.classList.remove('working')
+      el.disabled = false
       if (xhr.status == 404) return window.alert(strings.codeNotFound)
       if (err) return window.alert(err.message)
       if (!obj) return window.alert(strings.error)
@@ -372,11 +379,13 @@ function subscribeNewLicense (e, el) {
   if (alreadyInCart(data))
     return window.alert(strings.licenseInCart)
 
-  // TODO add spinner to button
+  el.classList.add('working')
+  el.disabled = true
   requestJSON({
     url: endhost + '/validate/vendor/' + data.vendor.toLowerCase() + '/' + data.identity
   }, function (err, obj, xhr) {
-    // TODO remove spinner from button
+    el.classList.remove('working')
+    el.disabled = false
     if (err) return window.alert(err.message)
     if (!obj) return window.alert(strings.error)
     if (!obj.isValid) return window.alert(strings.invalidIdentity)
@@ -391,7 +400,6 @@ function subscribeNewLicense (e, el) {
         { key: "identity", value: data.identity }
       ]
     })
-    showNewSubscriptions()
     toasty(strings.whitelistAdded)
   })
 }

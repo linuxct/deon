@@ -845,3 +845,12 @@ body.bg {
 .bg .panel table.form tr:nth-child(odd) > td{
   background: transparent;
 }
+
+/* Workingin Spinner */
+.working-spinner {
+  display: none;
+}
+
+.working .working-spinner {
+  display: initial;
+}
