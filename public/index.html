@@ -661,7 +661,7 @@
 <!-- SERVICES -->
 
 <script type="text/template"
-        route="^account\/services\/?"
+        route="^account\/services$"
         transform="transformServices">
     {{#data}}
     <div class="page width center">
@@ -674,14 +674,15 @@
             <p>You have Gold Membership.</p>
             {{/hasGoldPermanent}}
             {{#goldUnsubscribe}}
-            <label>Gold Subscription Active</label>
-            <p>You are subscribed for $5.00 USD a month.</p>
-            <button action="unsubscribeGold">Cancel Subscription</button>
+            <div source="$endpoint/self/gold-subscription"
+                    template="gold-subscription"
+                    transform="transformGoldSubscription">
+            </div>
             {{/goldUnsubscribe}}
             {{#goldSubscribe}}
             <br/>
             <div data-set="subscribe-gold">
-                <input type="text" name="trailCode" placeholder="Special Code"/>
+                <input type="text" name="trialCode" placeholder="Special Code"/>
                 <button action="subscribeGold"
                         data-set-target="subscribe-gold">
                     Subscribe for $5.00/month
@@ -763,6 +764,29 @@
         </div>
         {{/user}}
     </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="gold-subscription"
+        transform="transformGoldSubscription">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <label>Gold Subscription Active</label>
+    {{^canceled}}
+    <p>You are subscribed for $5.00 USD a month</p>
+    <p>Your next invoice will be charged on {{nextBillingDate}}</p>
+    <button action="unsubscribeGold">Cancel Subscription</button>
+    {{/canceled}}
+    {{#canceled}}
+    <p>Your gold subscription will expire on {{endDate}}</p>
+    <button action="subscribeGold">Re-Subscribe</button>
+    {{/canceled}}
     {{/data}}
 </script>
 

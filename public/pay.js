@@ -269,7 +269,7 @@ function unsubscribeGold (e, el) {
 
 function redirectServices (e, el) {
   setTimeout(function () {
-    window.location = location.origin + '/services'
+    window.location = location.origin + '/account/services'
   }, 5000)
 }
 
@@ -322,7 +322,7 @@ function subscribeGold (e, el) {
     return window.alert(strings.cart5)
   if (document.querySelector('[type="hidden"][name="type"][value="gold"]'))
     return window.alert(strings.goldInCart)
-  var data = getTargetDataSet(el)
+  var data = getTargetDataSet(el) || {}
   var opts = {
     name: "Gold Membership",
     cost: "5.00",

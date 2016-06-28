@@ -412,13 +412,25 @@ function transformSocialSettings (obj) {
 function transformServices () {
   var user = isSignedIn() ? session.user : {}
   var opts = {
-    hasGoldPermanent: !!user.goldService && !user.goldSubscriptionId,
-    goldSubscribe: !(!!user.goldService && !!user.goldSubscriptionId),
-    goldUnsubscribe: (!!user.goldService && !!user.goldSubscriptionId)
+    hasGoldPermanent: !!user.goldService && !user.currentGoldSubscription,
+    goldSubscribe: !user.goldService && !user.currentGoldSubscription,
+    goldUnsubscribe: (!!user.goldService && !!user.currentGoldSubscription)
   }
   return {
     user: isSignedIn() ? opts : null
   }
+}
+
+function transformGoldSubscription (obj) {
+  var nobj = {
+    nextBillingDate: formatDate(obj.availableUntil),
+  }
+  if (obj.canceled) {
+    nobj.canceled = {
+      endDate: formatDate(obj.availableUntil),
+    }
+  }
+  return nobj
 }
 
 function transformMusic () {
@@ -491,14 +503,14 @@ function transformWhitelists (obj) {
     whitelist.paid = (whitelist.amountPaid / 100).toFixed(2)
     whitelist.remaining = (whitelist.amountRemaining / 100).toFixed(2)
     if (whitelist.availableUntil)
-      whitelist.nextBillingDate = whitelist.availableUntil
+      whitelist.nextBillingDate = formatDate(whitelist.availableUntil)
     if (whitelist.subscriptionActive)
       whitelist.cost = (5).toFixed(2)
     whitelist.monthlyCost = 500
     whitelist.canBuyOut = whitelist.paidInFull ? { _id: whitelist._id } : undefined
     if (whitelist.whitelisted)
       whitelist.licenseUrl = endpoint + '/self/whitelist/' + whitelist._id + '.pdf'
-    if (!whitelist.subscriptionActive && whitelist.amountRemaining > 0)
+    if (whitelist.subscriptionId && !whitelist.subscriptionActive && whitelist.amountRemaining > 0)
       whitelist.resume = { _id: whitelist._id, amount: whitelist.monthlyCost }
     if (whitelist.subscriptionActive)
       whitelist.cancel = { _id: whitelist._id }
