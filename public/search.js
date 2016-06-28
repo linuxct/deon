@@ -279,9 +279,6 @@ function completedSearchArtists() {
 }
 
 openRoute.completed.push(function () {
-  var path = window.location.pathname
-  if(path.indexOf('/search') !== 0) {
-    var input = getGlobalSearchInput()
-    input.value = ''
-  }
+  if (window.location.pathname.indexOf('/search') >= 0) return
+  (getGlobalSearchInput() || {value:''}).value = ''
 })

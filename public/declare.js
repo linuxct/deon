@@ -235,7 +235,7 @@ function openRoute (target, container, matches) {
     }
     var fns = openRoute.completed
     if (fns instanceof Array) {
-      for(var i = 0; i < fns; i++) {
+      for(var i = 0; i < fns.length; i++) {
         if (typeof fns[i] == 'function')
           fns[i].apply(fn, arguments)
       }
