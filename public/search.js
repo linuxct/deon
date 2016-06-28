@@ -49,9 +49,11 @@ function searchAll (e, el) {
 
 function searchToFuzzy (search, fields) {
   if (!search) return
-  var fuzzy = []
-  fuzzy.push(fields, search)
-  return fuzzy.join(',')
+  var arr = []
+  fields.forEach(function (field) {
+    arr.push(field, search)
+  })
+  return arr.join(',')
 }
 
 function getSearchTypes () {
@@ -61,7 +63,7 @@ function getSearchTypes () {
       url: '/search'
     },
     tracks: {
-      fuzzyFields: ['title'],
+      fuzzyFields: ['title', 'artistsTitle'],
       q: {},
       perPage: 25,
       title: 'Search Songs',
@@ -86,7 +88,7 @@ function getSearchTypes () {
       searchPrefix: 'artists:'
     },
     releases: {
-      fuzzyFields: ['title'],
+      fuzzyFields: ['title', 'renderedArtists'],
       q: {},
       title: 'Search Releases',
       fields: ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(','),
@@ -116,11 +118,11 @@ function transformSearch () {
   for(var type in searches) {
     var search = searches[type]
     var sq = {}
-    for(var x in q) {
+    for (var x in q) {
       sq[x] = !search.hasOwnProperty(x) ? q[x] : search[x]
     }
-    if(q.term) {
-      sq.fuzzy = searchToFuzzy(q.term, search.fuzzyFields)
+    if (q.term && search.fuzzyFields) {
+      sq.fuzzyOr = searchToFuzzy(q.term, search.fuzzyFields)
     }
     search.query = objectToQueryString(sq)
   }
@@ -142,8 +144,8 @@ function transformSearchPage (obj, type) {
   var q = queryStringToObject(window.location.search)
   var searchType = getSearchType(type)
   objSetPageQuery(query, q.page, {perPage: searchType.perPage})
-  if(q.term) {
-    query.fuzzy = searchToFuzzy(q.term, searchType.fuzzyFields)
+  if(q.term && searchType.fuzzyFields) {
+    query.fuzzyOr = searchToFuzzy(q.term, searchType.fuzzyFields)
   }
   obj.query = objectToQueryString(query)
   obj.searchForm = searchType.searchForm
