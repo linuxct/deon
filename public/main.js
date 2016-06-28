@@ -444,7 +444,7 @@ function transformGoldSubscription (obj) {
 
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
-  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
+  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(',')
   q.limit  = 24
   q.skip   = parseInt(q.skip) || 0
   var fuzzy   = commaStringToObject(q.fuzzy)

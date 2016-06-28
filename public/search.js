@@ -89,13 +89,13 @@ function getSearchTypes () {
       fuzzyFields: ['title'],
       q: {},
       title: 'Search Releases',
-      fields: ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(','),
+      fields: ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(','),
       perPage: 10,
       searchForm: {
         placeholder: 'Search releases...',
         action: 'searchReleases'
       },
-      url: '/search/releases', 
+      url: '/search/releases',
       searchPrefix: 'releases:'
     }
   }
@@ -240,7 +240,7 @@ function setPagination (obj, perPage) {
 }
 
 function getGlobalSearchInput() {
-  return document.querySelector('[data-set="search-form"] input[name="search"]')  
+  return document.querySelector('[data-set="search-form"] input[name="search"]')
 }
 
 function completedSearchPage (type) {
