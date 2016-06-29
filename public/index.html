@@ -1106,6 +1106,36 @@
         completed="completedBrowseMusic"
         transform="transformBrowseMusic">
     {{#data}}
+    <div class="page width center panel">
+        <table data-set="browse-music" trigger-target="filterBrowseMusic" class="form">
+            <tbody>
+                <tr>
+                    <th>Tags</th>
+                    <td>
+                        <input type="text" name="tags" placeholder="Song Tags" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Genres</th>
+                    <td>
+                        <input type="text" name="genres" placeholder="Song Genres" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Types</th>
+                    <td>
+                        <input type="text" name="types" placeholder="Album types" />
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button action="filterBrowseMusic" trigger="filterBrowseMusic" data-set-target="browse-music">Filter</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div source="$endpoint/catalog/browse?{{query}}"
          template="music-browse">
     </div>

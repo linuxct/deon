@@ -1,18 +1,5 @@
 var searchSnippetLimit = 5
 
-function pageToQuery (page, opts) {
-  opts = opts || {}
-  opts.perPage = opts.perPage || 25
-  page = page || 1
-
-  return {skip: (page - 1) * opts.perPage, limit: opts.perPage}
-}
-
-function objSetPageQuery (obj, page, opts) {
-  var sl = pageToQuery(page, opts);
-  obj.skip = sl.skip
-  obj.limit = sl.limit
-}
 
 //TODO: Look at all of this duplicate code. Be the change you want to see in the code.
 function search (e, el, url) {
@@ -40,7 +27,8 @@ function search (e, el, url) {
     delete q.search
   }
   delete q.page
-  go(url + '?' + objectToQueryString(q))}
+  go(url + '?' + objectToQueryString(q))
+}
 
 function searchAll (e, el) {
   search(e, el, '/search')

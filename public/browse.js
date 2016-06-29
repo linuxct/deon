@@ -1,10 +1,9 @@
 function transformBrowseMusic (obj) {
 	obj = obj || {}
-	query = {
-		skip: 0,
-		limit: 25
-	}
-	obj.query = objectToQueryString(query)
+  var q    = queryStringToObject(window.location.search)
+  q.limit  = 25
+  q.skip   = parseInt(q.skip) || 0
+	obj.query = objectToQueryString(q)
 
 	return obj
 }
@@ -36,11 +35,38 @@ function transformMusicBrowseResults (obj, done) {
   })
 
 	console.log('obj.results', obj.results)
-
-	//TODO: Make this actual pagination
-	obj.previous = 'skip=20&limit=20'
-	obj.next = 'skip=25&limit=11'
 	obj.data = {results: [{name: 'fake', album: 'faker'}]}
 
 	return obj
+}
+
+function filterBrowseMusic (e, el) {
+  var data   = getTargetDataSet(el, false, true) || {}
+  var q = queryStringToObject(window.location.search)
+  
+  console.log('data', data)
+
+  if(data.tags.length > 0) {
+  	q.tags = data.tags
+  }
+  else {
+  	delete q.tags
+  } 
+
+  if(data.genres.length > 0) {
+  	q.genres = data.genres
+  }
+  else {
+  	delete q.genres
+  }   
+
+  if(data.types.length > 0) {
+  	q.types = data.types
+  }
+  else {
+  	delete q.types
+  } 
+  var qs = objectToQueryString(q)
+
+	go('/browse?' + qs)
 }

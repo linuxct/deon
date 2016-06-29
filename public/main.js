@@ -115,6 +115,21 @@ function showIntercom (e, el) {
   window.Intercom('show')
 }
 
+
+function pageToQuery (page, opts) {
+  opts = opts || {}
+  opts.perPage = opts.perPage || 25
+  page = page || 1
+
+  return {skip: (page - 1) * opts.perPage, limit: opts.perPage}
+}
+
+function objSetPageQuery (obj, page, opts) {
+  var sl = pageToQuery(page, opts);
+  obj.skip = sl.skip
+  obj.limit = sl.limit
+}
+
 function searchMusic (e, el) {
   var data   = getTargetDataSet(el, false, true) || {}
   var q      = queryStringToObject(window.location.search)
