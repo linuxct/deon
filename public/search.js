@@ -20,13 +20,13 @@ function search (e, el, url) {
   var types = getSearchTypes()
   var searchType = getSearchType('all')
   var q = queryStringToObject(window.location.search)
-  var searchTerm = data.search
-  if(data.search) {
+  var searchTerm = data.term
+  if(data.term) {
     for(var i in types) {
       if(types[i].searchPrefix) {
-        if(data.search.substr(0, types[i].searchPrefix.length) == types[i].searchPrefix) {
+        if(data.term.substr(0, types[i].searchPrefix.length) == types[i].searchPrefix) {
           searchType = types[i]
-          searchTerm = data.search.substr(searchType.searchPrefix.length).trim()
+          searchTerm = data.term.substr(searchType.searchPrefix.length).trim()
           break
         }
       }
@@ -34,10 +34,10 @@ function search (e, el, url) {
   }
   var url = searchType.url
   if (searchTerm) {
-    q.search = searchTerm
+    q.term = searchTerm
   }
   else {
-    delete q.search
+    delete q.term
   }
   delete q.page
   go(url + '?' + objectToQueryString(q))}
@@ -111,9 +111,9 @@ function transformSearch () {
   var q    = queryStringToObject(window.location.search)
   q.limit  = searchSnippetLimit
   q.skip   = parseInt(q.skip) || 0
-  q.search = q.search || "" //Text search
+  q.term = q.term || "" //Text search
   q.fields = []
-  if (!q.search) return {}
+  if (!q.term) return {}
   var searches = getSearchTypes()
   for(var type in searches) {
     var search = searches[type]
@@ -121,18 +121,18 @@ function transformSearch () {
     for (var x in q) {
       sq[x] = !search.hasOwnProperty(x) ? q[x] : search[x]
     }
-    if (q.search && search.fuzzyFields) {
-      sq.fuzzyOr = searchToFuzzy(q.search, search.fuzzyFields)
+    if (q.term && search.fuzzyFields) {
+      sq.fuzzyOr = searchToFuzzy(q.term, search.fuzzyFields)
     }
     search.query = objectToQueryString(sq)
   }
   var searchForm = {
     placeholder: 'Search anything...',
-    search: q.search,
+    search: q.term,
     action: 'searchAll'
   }
   return {
-    search: q.search || "",
+    search: q.term || "",
     searches: searches,
     searchForm: searchForm
   }
@@ -144,12 +144,12 @@ function transformSearchPage (obj, type) {
   var q = queryStringToObject(window.location.search)
   var searchType = getSearchType(type)
   objSetPageQuery(query, q.page, {perPage: searchType.perPage})
-  if(q.search && searchType.fuzzyFields) {
-    query.fuzzyOr = searchToFuzzy(q.search, searchType.fuzzyFields)
+  if(q.term && searchType.fuzzyFields) {
+    query.fuzzyOr = searchToFuzzy(q.term, searchType.fuzzyFields)
   }
   obj.query = objectToQueryString(query)
   obj.searchForm = searchType.searchForm
-  obj.searchForm.search = q.search
+  obj.searchForm.term = q.term
   return obj
 }
 
@@ -242,7 +242,7 @@ function setPagination (obj, perPage) {
 }
 
 function getGlobalSearchInput() {
-  return document.querySelector('[data-set="search-form"] input[name="search"]')
+  return document.querySelector('[data-set="search-form"] input[name="term"]')
 }
 
 function completedSearchPage (type) {
@@ -250,16 +250,16 @@ function completedSearchPage (type) {
   var q = queryStringToObject(window.location.search)
   q.page = parseInt(q.page) || 1
   var title = searchType.title
-  if(q.search) {
-    title += ' for "' + q.search + '"'
+  if(q.term) {
+    title += ' for "' + q.term + '"'
   }
   if(q.page > 1) {
     title += ' - Page ' + q.page
   }
   setPageTitle(title)
   var searchInput = getGlobalSearchInput()
-  if(q.search) {
-    searchInput.value = type != 'all' ? searchType.searchPrefix + ' ' + q.search : q.search
+  if(q.term) {
+    searchInput.value = type != 'all' ? searchType.searchPrefix + ' ' + q.term : q.term
   }
   searchInput.focus()
 }
