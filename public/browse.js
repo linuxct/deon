@@ -9,7 +9,18 @@ function transformBrowseMusic (obj) {
 }
 
 function completedBrowseMusic () {
-	setPageTitle('Browse Monstercat Music')
+  var q    = queryStringToObject(window.location.search)
+
+	if (q.tags) {
+		document.querySelector('input[name="tags"]').value = q.tags
+	}
+	if (q.genres) {
+		document.querySelector('input[name="genres"]').value = q.genres
+	}
+	if (q.types) {
+		document.querySelector('input[name="types"]').value = q.types
+	}
+
 }
 
 function transformMusicBrowseResults (obj, done) {
@@ -46,21 +57,21 @@ function filterBrowseMusic (e, el) {
   
   console.log('data', data)
 
-  if(data.tags.length > 0) {
+  if(data.tags && data.tags.length > 0) {
   	q.tags = data.tags
   }
   else {
   	delete q.tags
   } 
 
-  if(data.genres.length > 0) {
+  if(data.genres && data.genres.length > 0) {
   	q.genres = data.genres
   }
   else {
   	delete q.genres
   }   
 
-  if(data.types.length > 0) {
+  if(data.types && data.types.length > 0) {
   	q.types = data.types
   }
   else {

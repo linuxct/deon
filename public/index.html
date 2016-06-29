@@ -1105,7 +1105,6 @@
         page-title="Browse Music"
         completed="completedBrowseMusic"
         transform="transformBrowseMusic">
-    {{#data}}
     <div class="page width center panel">
         <table data-set="browse-music" trigger-target="filterBrowseMusic" class="form">
             <tbody>
@@ -1135,7 +1134,8 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div>        
+    {{#data}} 
     <div source="$endpoint/catalog/browse?{{query}}"
          template="music-browse">
     </div>
