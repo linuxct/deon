@@ -513,6 +513,9 @@
                 Save
             </button>
             <button class="button--danger" action="signOut">Sign Out</button>
+            <br/>
+            <br/>
+            <a href="/account/services">Manage Services</a>
         </div>
         <div class="panel">
             <h2>Two-Factor Auth</h2>
@@ -550,7 +553,6 @@
                  template="account-settings">
             </div>
         </div>
-        <!--<a href="/services">Manage Services</a>-->
         {{/data}}
     </div>
 </script>
@@ -669,6 +671,16 @@
     <div class="page width center">
         <h1>Manage Services</h1>
         {{#user}}
+        {{#hasLegacy}}
+        <div class="panel">
+            <p>
+                You have a legacy account. Please access your subscription from
+                <a target="_blank" href="http://connect.monstercat.com">Monstercat Connect</a>.
+            </p>
+        </div>
+        {{/hasLegacy}}
+
+        {{^hasLegacy}}
         <div class="panel">
             <h2>Gold Access</h2>
             <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
@@ -761,6 +773,7 @@
                 </button>
             </div>
         </div>
+        {{/hasLegacy}}
         {{/user}}
         {{^user}}
         <div class="panel">

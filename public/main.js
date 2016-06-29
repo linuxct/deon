@@ -48,10 +48,18 @@ function hasGoldAccess () {
   if (!isSignedIn()) return false
   var user = session.user
   // TODO remove temporary support for old checks
-  return !!user.goldService ||
-    user.type.indexOf('gold') > -1 ||
+  return !!user.goldService || hasLegacyAccess()
+}
+
+function hasLegacyAccess () {
+  if (!isSignedIn()) return false
+  var user = session.user
+  // Lolwut
+  return user.type.indexOf('gold') > -1 ||
     user.type.indexOf('golden') > -1 ||
-    user.type.indexOf('license') > -1
+    user.type.indexOf('license') > -1 ||
+    user.type.indexOf('admin') > -1 ||
+    user.type.indexOf('admin_readonly') > -1
 }
 
 function getSession (done) {
@@ -425,6 +433,8 @@ function transformServices () {
     goldSubscribe: !user.goldService && !user.currentGoldSubscription,
     goldUnsubscribe: (!!user.goldService && !!user.currentGoldSubscription)
   }
+  if (hasLegacyAccess())
+    opts = {hasLegacy: true}
   return {
     user: isSignedIn() ? opts : null
   }
