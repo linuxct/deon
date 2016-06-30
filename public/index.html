@@ -1161,11 +1161,11 @@
     </div>
     {{/error}}
     {{#data}}
-    {{#results}}
+    {{#results.length}}
     <ul class="page width center panel browse-testing">
         {{> browseMusicTable}}
     </ul>
-    {{/results}}
+    {{/results.length}}
     {{^total}}
     <div class="page width center text center panel">No results found.</div>
     {{/total}}
