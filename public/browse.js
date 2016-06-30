@@ -6,6 +6,11 @@ function transformBrowseMusic (obj) {
   q.limit  = browseMusicLimit
   q.skip   = parseInt(q.skip) || 0
 	obj.query = objectToQueryString(q)
+	obj.releaseTypes = releaseTypesList
+	checkedTypes = q.types ? q.types.split(',') : []
+	obj.releaseTypes.forEach(function (item) {
+    item.checked = checkedTypes.indexOf(item.key) >= 0
+  })
 	return obj
 }
 
@@ -18,16 +23,11 @@ function completedBrowseMusic () {
 	if (q.genres) {
 		document.querySelector('input[name="genres"]').value = q.genres
 	}
-	if (q.types) {
-		document.querySelector('input[name="types"]').value = q.types
-	}
-
 }
 
 function transformMusicBrowseResults (obj, done) {
 	tracks = obj.results.map( function(tandr) {
 		tandr.track.release = tandr.release
-		console.log('tandr.track.release.catalogId', tandr.track.release.catalogId)
 		return tandr.track
 	})
 
@@ -67,11 +67,9 @@ function transformMusicBrowseResults (obj, done) {
     obj.results = tracks
     obj.skip = obj.skip + 1
 	  obj.count = obj.skip + obj.results.length - 1
-	  console.log('obj', obj)
     done(null, obj)
   })
 
-	console.log('obj.results', obj.results)
 	obj.data = {results: [{name: 'fake', album: 'faker'}]}
 
 	return obj
@@ -81,8 +79,6 @@ function filterBrowseMusic (e, el) {
   var data   = getTargetDataSet(el, false, true) || {}
   var q = queryStringToObject(window.location.search)
   
-  console.log('data', data)
-
   if(data.tags && data.tags.length > 0) {
   	q.tags = data.tags
   }

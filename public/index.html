@@ -1105,6 +1105,7 @@
         page-title="Browse Music"
         completed="completedBrowseMusic"
         transform="transformBrowseMusic">
+    {{#data}}
     <div class="page width center panel">
         <table data-set="browse-music" trigger-target="filterBrowseMusic" class="form">
             <tbody>
@@ -1123,7 +1124,14 @@
                 <tr>
                     <th>Types</th>
                     <td>
-                        <input type="text" name="types" placeholder="Album types" />
+                        <ul>
+                        {{#releaseTypes}}
+                            <li>
+                                <input type="checkbox" name="types" value="{{key}}" id="type-{{key}}" {{#checked}}checked="true"{{/checked}} />
+                                <label for="type-{{key}}">{{name}}</label>
+                            </li>
+                        {{/releaseTypes}}
+                        </ul>
                     </td>
                 </tr>
                 <tr>
@@ -1135,7 +1143,6 @@
             </tbody>
         </table>
     </div>        
-    {{#data}} 
     <div source="$endpoint/catalog/browse?{{query}}"
          template="music-browse">
     </div>
@@ -1154,9 +1161,11 @@
     </div>
     {{/error}}
     {{#data}}
+    {{#results}}
     <ul class="page width center panel browse-testing">
         {{> browseMusicTable}}
     </ul>
+    {{/results}}
     {{^total}}
     <div class="page width center text center panel">No results found.</div>
     {{/total}}

@@ -30,6 +30,15 @@ openRoute.completed.push(function () {
   recordPage()
 })
 
+var releaseTypes = {
+  album: { value: 'Album', name: "Albums", key: 'album' },
+  ep: { value: 'EP', name: "EPs", key: 'ep' },
+  single: { value: 'Single', name: "Singles", key: 'single' },
+  podcast: { value: 'Podcast', name: "Podcasts", key: 'podcast' }
+}
+
+var releaseTypesList = [releaseTypes.album, releaseTypes.ep, releaseTypes.single, releaseTypes.podcast]
+
 function bgmebro() {
   if (!lstore) return
   var m = lstore.getItem('bgon') == 'true' ? 'add' : 'remove'
@@ -465,12 +474,8 @@ function transformMusic () {
   var fuzzy   = commaStringToObject(q.fuzzy)
   var filters = commaStringToObject(q.filters)
   var type    = filters.type || ""
-  var types   = [
-    { value: 'Album', name: "Albums" },
-    { value: 'EP', name: "EPs" },
-    { value: 'Single', name: "Singles" },
-    { value: 'Podcast', name: "Podcasts" }
-  ]
+  var types = cloneObject(releaseTypesList)
+
   types.forEach(function (item) {
     item.selected = type == item.value
   })

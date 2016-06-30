@@ -345,8 +345,6 @@ function getTemplateEl(name) {
 
 function getElementValue (el) {
   var type = el.getAttribute('type')
-  if (type == 'checkbox')
-    return el.checked
   return parseElementValue(el, el.value)
 }
 
@@ -367,7 +365,14 @@ function parseElementValue (el, value) {
     return ''
   }
   if (type == 'checkbox') {
-    return value == 'on' || value == 'true' || value === true ? true : false
+    if (el.checked) {
+      if (el.value == '1')
+        return true
+      return el.value
+    }
+    else {
+      return false
+    }
   }
   if (typeof value == 'string' && isNumberString(value)) {
     return Number(value)
@@ -384,6 +389,7 @@ function getDataSet (el, checkInitial, ignoreEmpty) {
     var ival    = getElementInitialValue(kel)
     var val     = getElementValue(kel)
     var isRadio = kel.getAttribute('type') == 'radio'
+    var isCheckboxList = el.querySelector('[name="' + key + '"]').length > 0
 
     if (ignoreEmpty && val === '') {
       continue
@@ -391,7 +397,13 @@ function getDataSet (el, checkInitial, ignoreEmpty) {
       if (!(obj[key] instanceof Array)) {
         obj[key] = [obj[key]]
       }
-      obj[key].push(val)
+      if(!isCheckboxList)
+        obj[key].push(val)
+      else {
+        if (val !== false) {
+          obj[key].push(val)
+        }
+      }
     } else if (!checkInitial || (checkInitial && val != ival)) {
       if (!obj) obj = {}
       if (obj[key] && isRadio) continue
