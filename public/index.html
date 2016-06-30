@@ -695,6 +695,12 @@
             {{/goldUnsubscribe}}
             {{#goldSubscribe}}
             <br/>
+            <ul>
+                <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                <li>Playlist your music directly within Connect</li>
+                <li>Direct support via e-mail and on site.</li>
+            </ul>
+            <br/>
             <div data-set="subscribe-gold">
                 <input type="text" name="trialCode" placeholder="Special Code"/>
                 <button action="subscribeGold"
@@ -709,8 +715,8 @@
         <div class="panel">
             <h2>Licensing Services</h2>
             <p>Buy a whitelisting service for use in online media for YouTube or Twitch.
-                You can pay as you go or pay outright for 20 months of whitelisting.
-            </p>
+               Upon subscribing for 20 months, all your previously uploaded videos within
+               your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
             <br/>
             <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
             <br/>
@@ -992,7 +998,8 @@
     <div class="page center width">
         <h1>Buy Out Whitelist</h1>
         <div class="panel">
-            <p>Buy out the remainder of your whitelist subscription and have it forever!</p>
+            <p>Pre-pay the rest of your whitelist license. All videos created with the
+                cleared Monstercat catalog during this time period will never receive content-ID claims.</p>
             {{#loading}}
             <i class="fa fa-spin fa-refresh"></i>
             {{/loading}}
@@ -1045,7 +1052,9 @@
     <div class="page center width">
         <h1>Purchase Whitelist</h1>
         <div class="panel">
-            <p>Purchase a whitelist license and get whitelisting for that provider forever.</p>
+            <p>Pre-pay your whitelist license for 20 months. All videos created with the
+                cleared Monstercat catalog during this time period will never
+                receive content-ID claims.</p>
             <div data-set="new-license">
                 <input type="hidden" name="amount" value="20000">
                 <table class="form">
