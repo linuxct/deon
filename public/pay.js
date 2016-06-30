@@ -354,8 +354,8 @@ function subscribeGold (e, el) {
       if (err) return window.alert(err.message)
       if (!obj) return window.alert(strings.error)
       if (!obj.valid) return window.alert(strings.codeNotValid)
-      opts.name += " (" + obj.numMonths + " Free Months)"
-      opts.fields.push({ key: "trialCode", value: obj.name })
+      opts.name += " (" + obj.code + ' - ' + obj.durationDays + " Free Days)"
+      opts.fields.push({ key: "trialCode", value: obj.code })
       fin(opts)
     })
   }

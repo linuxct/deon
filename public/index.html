@@ -717,8 +717,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Vendor</th>
-                        <th>Identity</th>
+                        <th>Platform</th>
+                        <th>Channel Id</th>
                         <th>Paid Off</th>
                         <th>Remaining</th>
                         <th>Monthly Cost</th>
@@ -734,11 +734,11 @@
             </table>
             <div data-set="new-license">
                 <select name="vendor">
-                    <option value="">Select Vendor</option>
+                    <option value="">Select Platform</option>
                     <option value="YouTube">YouTube</option>
                     <option value="Twitch">Twitch</option>
                 </select>
-                <input type="text" name="identity" placeholder="Identity"/>
+                <input type="text" name="identity" placeholder="Channel Id"/>
                 <button
                     action="subscribeNewLicense"
                     data-set-target="new-license">
@@ -969,11 +969,11 @@
             {{/amount}}
             <table class="form">
                 <tr>
-                    <th>Vendor</th>
+                    <th>Platform</th>
                     <td>{{vendor}}</td>
                 </tr>
                 <tr>
-                    <th>Identity</th>
+                    <th>Channel Id</th>
                     <td>{{identity}}</td>
                 </tr>
             </table>
@@ -1006,7 +1006,7 @@
                 <table class="form">
                     <tbody>
                         <tr>
-                            <th>Vendor</th>
+                            <th>Channel Id</th>
                             <td>
                                 <input type="text"
                                        name="vendor"
@@ -1051,13 +1051,13 @@
                 <table class="form">
                     <tbody>
                         <tr>
-                            <th>Vendor</th>
+                            <th>Platform</th>
                             <td>
                                 {{>vendor-selector}}
                             </td>
                         </tr>
                         <tr>
-                            <th>Identity</th>
+                            <th>Channel Id</th>
                             <td>
                                 <input type="text"
                                        name="identity"
