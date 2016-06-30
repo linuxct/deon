@@ -1,10 +1,11 @@
+var browseMusicLimit = 25
+
 function transformBrowseMusic (obj) {
 	obj = obj || {}
   var q    = queryStringToObject(window.location.search)
-  q.limit  = 25
+  q.limit  = browseMusicLimit
   q.skip   = parseInt(q.skip) || 0
 	obj.query = objectToQueryString(q)
-
 	return obj
 }
 
@@ -30,6 +31,29 @@ function transformMusicBrowseResults (obj, done) {
 		return tandr.track
 	})
 
+  var q = queryStringToObject(window.location.search)
+  if (!q.limit)
+    q.limit  = browseMusicLimit
+  q.limit = parseInt(q.limit)
+  if (!q.skip)
+    q.skip= 0
+  q.skip = parseInt(q.skip)
+
+	var next = obj.skip + browseMusicLimit
+	var prev = obj.skip - browseMusicLimit
+
+	if(next <= obj.total) {
+		var nq = cloneObject(q)	
+		nq.skip = next
+		obj.next = objectToQueryString(nq)
+	}
+
+	if(prev >= 0) {
+		var pq = cloneObject(q)
+		pq.skip = prev
+		obj.previous = objectToQueryString(pq)
+	}
+
 	getArtistsAtlas(tracks, function (err, atlas) {
     if (!atlas) atlas = {}
     tracks.forEach(function (track, index, arr) {
@@ -39,9 +63,11 @@ function transformMusicBrowseResults (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
-      tracks.push(track)
     })
     obj.results = tracks
+    obj.skip = obj.skip + 1
+	  obj.count = obj.skip + obj.results.length - 1
+	  console.log('obj', obj)
     done(null, obj)
   })
 
