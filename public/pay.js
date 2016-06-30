@@ -382,7 +382,7 @@ function subscribeNewLicense (e, el) {
   el.classList.add('working')
   el.disabled = true
   requestJSON({
-    url: endhost + '/validate/vendor/' + data.vendor.toLowerCase() + '/' + data.identity
+    url: endpoint + '/whitelist/status/?vendor=' + data.vendor.toLowerCase() + '&identity=' + data.identity
   }, function (err, obj, xhr) {
     el.classList.remove('working')
     el.disabled = false
