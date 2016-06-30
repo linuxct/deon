@@ -388,7 +388,7 @@ function subscribeNewLicense (e, el) {
     el.disabled = false
     if (err) return window.alert(err.message)
     if (!obj) return window.alert(strings.error)
-    if (!obj.isValid) return window.alert(strings.invalidIdentity)
+    if (!obj.valid) return window.alert(strings.invalidIdentity)
     var name = "Whitelisting for " + data.identity + " on " + data.vendor
     addSub({
       name: name,
