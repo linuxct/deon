@@ -1360,7 +1360,7 @@
     <a href="/artist/{{uri}}">{{name}}</a>
     {{/artists}}
 </td>
-<td class="genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td class="genre">{{#genre}}<a href="/browse?genres={{genreLink}}">{{.}}</a>{{/genre}}{{#genreBonus}} <span class="genre-bonus" title="{{genresList}}">{{.}}</span>{{/genreBonus}}</td>
 <td>{{bpm}}</td>
 </script>
 

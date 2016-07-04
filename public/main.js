@@ -1,4 +1,4 @@
-var endhost         = 'https://connect.monstercat.com'
+var endhost         = 'http://localhost:8080'//'https://connect.monstercat.com'
 var endpoint        = endhost + '/api'
 var datapoint       = 'https://s3.amazonaws.com/data.monstercat.com'
 var session         = null
@@ -359,6 +359,7 @@ function mapReleaseTrack (o, index, arr) {
   o.index       = index
   o.canPlaylist = isSignedIn() ? { _id: o._id } : null
   o.bpm         = Math.round(o.bpm)
+  o.licensable  = o.licensable === false ? false : true
   return o
 }
 

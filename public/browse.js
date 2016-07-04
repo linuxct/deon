@@ -26,10 +26,7 @@ function completedBrowseMusic () {
 }
 
 function transformMusicBrowseResults (obj, done) {
-	tracks = obj.results.map( function(tandr) {
-		tandr.track.release = tandr.release
-		return tandr.track
-	})
+	tracks = obj.results
 
   var q = queryStringToObject(window.location.search)
   if (!q.limit)
@@ -63,10 +60,13 @@ function transformMusicBrowseResults (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
+      track.genresList = track.genres.filter(function (i) { return i !== track.genre }).join(", ")
+      track.genreBonus = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
+      track.genreLink = encodeURIComponent(track.genre)
     })
     obj.results = tracks
     obj.skip = obj.skip + 1
-	  obj.count = obj.skip + obj.results.length - 1
+	  obj.total = obj.total
     done(null, obj)
   })
 

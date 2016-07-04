@@ -759,6 +759,10 @@ td.genres span:first-of-type:before {
   margin-bottom: 1.5rem;
 }
 
+.genre-bonus {
+  border-bottom: 1px dotted #666;
+}
+
 body.bg {
   background: rgba(0, 0, 0, 0.6) url(https://connect.monstercat.com/img/DSC02629.JPG) 50% 50%;
   background-size: cover;
