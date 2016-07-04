@@ -354,7 +354,7 @@ function removeYouTubeClaim (e, el) {
  * Should conform to the array map method parameters.
  */
 
-function mapReleaseTrack (o, index, arr) {
+function mapReleaseTrack (o, index) {
   o.trackNumber = index + 1
   o.index       = index
   o.canPlaylist = isSignedIn() ? { _id: o._id } : null

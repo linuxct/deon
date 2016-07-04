@@ -55,7 +55,7 @@ function transformMusicBrowseResults (obj, done) {
     if (!atlas) atlas = {}
     tracks.forEach(function (track, index, arr) {
       var releaseId = track.release._id
-      mapReleaseTrack(track, index, arr)
+      mapReleaseTrack(track, index)
       track.releaseId = releaseId
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
