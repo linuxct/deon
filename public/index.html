@@ -159,17 +159,17 @@
         transform="loadReleaseAndTrack">
     <div class="modal panel">
         {{#loading}}
-        ...
+        <i class="fa fa-spin fa-refresh"></i>
         {{/loading}}
-        {{#err}}
-        <p>Error: {{message}}</p>
-        {{/err}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
         {{#data}}
         <textarea class="copycredits">{{track.copycredit}}</textarea>
+        {{/data}}
         <button action="closeModal">
             <i class="fa fa-remove"></i>
         </button>
-        {{/data}}
     </div>
 </script>
 
@@ -178,11 +178,11 @@
     <div class="modal panel">
       <div class="modal-body">
         {{#loading}}
-        ...
+        <i class="fa fa-spin fa-refresh"></i>
         {{/loading}}
-        {{#err}}
-        <p>Error: {{message}}</p>
-        {{/err}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
         {{#data}}
         <ul>
         {{#purchaseLinks}}

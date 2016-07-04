@@ -211,9 +211,9 @@ function getArtistsTitle(artists) {
  *   trackId
  */
 function loadReleaseAndTrack (obj, done) {
-  loadCache(endpoint + '/track/' + obj.trackId, function(err, track) {
+  loadCache(endpoint + '/catalog/track/' + obj.trackId, function(err, track) {
     if (err) return done(err);
-    loadCache(endpoint + '/release/' + obj.releaseId, function(err, release) {
+    loadCache(endpoint + '/catalog/release/' + obj.releaseId, function(err, release) {
       if (err) return done(err)
       var title = track.title + ' by ' + track.artistsTitle + ' from ' + release.title
       track.copycredit = createCopycredit(title, release.urls)
