@@ -58,15 +58,15 @@ function isLegacyUser () {
 
 function hasGoldAccess () {
   if (!isSignedIn()) return false
-  var user = session.user
   // TODO remove temporary support for old checks
-  return !!user.goldService || hasLegacyAccess()
+  return !!session.user.goldService || hasLegacyAccess()
 }
 
 function hasLegacyAccess () {
   if (!isLegacyUser()) return false
   if (session.subscription) return !!session.subscription.subscriptionActive
-  return !!user.subscriptionActive
+  if (session.user) return !!session.user.subscriptionActive
+  return false
 }
 
 function getSession (done) {
@@ -722,6 +722,12 @@ function canAccessGold (e, el) {
   openModal('subscription-required-modal', {
     signedIn: isSignedIn(),
     hasGold: hasGoldAccess()
+  })
+}
+
+function openReleaseArt (e, el) {
+  openModal('release-art-modal', {
+    src: el.getAttribute('big-src')
   })
 }
 

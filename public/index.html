@@ -108,20 +108,25 @@
     </div>
 </div>
 
-<div role="modals" class="modal-layer"></div>
+<div role="modals" class="modal-layer">
+    <div class="modal-escape-layer" action="closeModal"></div>
+    <div class="modal-content-layer" role="container"></div>
+</div>
 
 <script type="text/template" template-name="subscription-required-modal">
-    <div class="modal panel">
-        <h1>Get Gold!</h1>
-        <p>You need a subscription to do that!</p>
-        {{^hasGold}}
-        <a href="/account/services" action="closeModal">Get your Gold membership!</a>
-        {{/hasGold}}
-        {{^signedIn}}
-        <a href="/sign-up" action="closeModal">Sign up for an account!</a>
-        {{/signedIn}}
-        <br/>
-        <button action="closeModal">Close</button>
+    <div class="modal">
+        <div class="panel pointer-events">
+            <h1>Get Gold!</h1>
+            <p>You need a subscription to do that!</p>
+            {{^hasGold}}
+            <a href="/account/services" action="closeModal">Get your Gold membership!</a>
+            {{/hasGold}}
+            {{^signedIn}}
+            <a href="/sign-up" action="closeModal">Sign up for an account!</a>
+            {{/signedIn}}
+            <br/>
+            <button action="closeModal">Close</button>
+        </div>
     </div>
 </script>
 
@@ -157,45 +162,54 @@
 <script type="text/template"
         template-name="track-copycredits-modal"
         transform="loadReleaseAndTrack">
-    <div class="modal panel">
-        {{#loading}}
-        <i class="fa fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <textarea class="copycredits">{{track.copycredit}}</textarea>
-        {{/data}}
-        <button action="closeModal">
-            <i class="fa fa-remove"></i>
-        </button>
+    <div class="modal">
+        <div class="panel pointer-events">
+            {{#loading}}
+            <i class="fa fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <textarea class="copycredits">{{track.copycredit}}</textarea>
+            {{/data}}
+            <button action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
     </div>
 </script>
 
 <script type="text/template"
         template-name="release-shopping-modal">
-    <div class="modal panel">
-      <div class="modal-body">
-        {{#loading}}
-        <i class="fa fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <ul>
-        {{#purchaseLinks}}
-          <li><a target="_blank" href="{{url}}">{{name}}</a></li>
-        {{/purchaseLinks}}
-        </ul>
-        {{/data}}
-      </div>
-      <div class="modal-footer">
-        <button action="closeModal">
-            <i class="fa fa-remove"></i>
-        </button>
-      </div>
+    <div class="modal">
+        <div class="panel pointer-events">
+            {{#loading}}
+            <i class="fa fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <ul>
+                {{#purchaseLinks}}
+                <li><a target="_blank" href="{{url}}">{{name}}</a></li>
+                {{/purchaseLinks}}
+            </ul>
+            {{/data}}
+            <button action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="release-art-modal">
+    <div class="center text pointer-events" style="margin: 50px auto 0; width: 720px;">
+        <a href="{{src}}" target="blank">
+            <img src="{{src}}" width="720"/>
+        </a>
     </div>
 </script>
 
@@ -966,7 +980,7 @@
 
 <script type="text/template" template-name="resume-whitelist">
     <div class="modal panel">
-        <div data-set="resume-payment">
+        <div class="pointer-events" data-set="resume-payment">
             <input type="hidden" name="id" value="{{id}}">
             <input type="hidden" name="vendor" value="{{vendor}}">
             <input type="hidden" name="identity" value="{{identity}}">
@@ -1193,7 +1207,7 @@
     <div class="bgbox" style="background-image: url('{{coverBig}}')">
         <div class="bgbox-blanket cl-white">
             <div class="details-box page width center clearfix">
-                <img class="artwork" src="{{cover}}"/>
+                <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
                 <h1 release-id="{{_id}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
                 <label>Released {{releaseDate}}</label>
