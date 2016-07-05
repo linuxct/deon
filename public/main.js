@@ -131,34 +131,6 @@ function showIntercom (e, el) {
   window.Intercom('show')
 }
 
-function searchMusic (e, el) {
-  var data   = getTargetDataSet(el, false, true) || {}
-  var q      = queryStringToObject(window.location.search)
-  var filter = []
-  var fuzzy  = []
-  if (data.type) {
-    filter.push('type', data.type)
-  }
-  else {
-    delete q.filters;
-  }
-  if (data.search) {
-    fuzzy.push('title', data.search)
-  }
-  else {
-    delete q.fuzzy;
-  }
-  if (filter.length > 0) {
-    q.filters = filter.join(',')
-  }
-  if (fuzzy.length > 0) {
-    q.fuzzy   = fuzzy.join(',')
-  }
-  delete q.skip
-  delete q.limit
-  go('/music?' + objectToQueryString(q))
-}
-
 function createCopycredit (title, urls) {
   var credit = 'Title: ' + title + "\n";
   var prefixes = {
