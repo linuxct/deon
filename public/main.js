@@ -643,10 +643,10 @@ function completedMusic (source, obj) {
     //TODO: make this better for if/when fuzzy thing changes
     parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
   }
-  if(qs.skip) {
-    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
-    if(page > 1) {
-      parts.push('Page ' + page)
+  if(qs.page) {
+    qs.page = parseInt(qs.page)
+    if(qs.page > 1) {
+      parts.push('Page ' + qs.page)
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
