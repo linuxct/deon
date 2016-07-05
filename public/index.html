@@ -5,6 +5,7 @@
     <meta name="google-signin-client_id" content="1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com">
     <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/proxima-nova.css">
+    <link rel="stylesheet" href="/grid.css">
     <link rel="stylesheet" href="/style.css">
     <script type="text/javascript">window.prerenderReady = false</script>
     <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
@@ -682,7 +683,7 @@
         route="^account\/services$"
         transform="transformServices">
     {{#data}}
-    <div class="page width center">
+    <div class="page width center services">
         <h1>Manage Services</h1>
         {{#user}}
         {{#hasLegacy}}
@@ -693,85 +694,91 @@
             </p>
         </div>
         {{/hasLegacy}}
-
+        
         {{^hasLegacy}}
-        <div class="panel">
-            <h2>Gold Access</h2>
-            <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
-            {{#hasGoldPermanent}}
-            <p>You have Gold Membership.</p>
-            {{/hasGoldPermanent}}
-            {{#goldUnsubscribe}}
-            <div source="$endpoint/self/gold-subscription"
-                 template="gold-subscription"
-                 transform="transformGoldSubscription">
-            </div>
-            {{/goldUnsubscribe}}
-            {{#goldSubscribe}}
-            <br/>
-            <ul>
-                <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
-                <li>Playlist your music directly within Connect</li>
-                <li>Direct support via e-mail and on site.</li>
-            </ul>
-            <br/>
-            <div data-set="subscribe-gold">
-                <input type="text" name="trialCode" placeholder="Special Code"/>
-                <button action="subscribeGold"
-                        data-set-target="subscribe-gold">
-                    Subscribe for $5.00/month
-                    <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
-                </button>
-            </div>
-            {{/goldSubscribe}}
-        </div>
+        <div class="flex">
 
-        <div class="panel">
-            <h2>Licensing Services</h2>
-            <p>Buy a whitelisting service for use in online media for YouTube or Twitch.
-               Upon subscribing for 20 months, all your previously uploaded videos within
-               your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
-            <br/>
-            <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
-            <br/>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Platform</th>
-                        <th>Channel Id</th>
-                        <th>Paid Off</th>
-                        <th>Remaining</th>
-                        <th>Monthly Cost</th>
-                        <th>Next Billing Date</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody source="$endpoint/self/whitelist"
-                    template="whitelist-licenses"
-                    role="whitelists"
-                    transform="transformWhitelists">
-                </tbody>
-            </table>
-            <div data-set="new-license">
-                <select name="vendor">
-                    <option value="">Select Platform</option>
-                    <option value="YouTube">YouTube</option>
-                    <option value="Twitch">Twitch</option>
-                </select>
-                <input type="text" name="identity" placeholder="Channel Id"/>
-                <button
-                    action="subscribeNewLicense"
-                    data-set-target="new-license">
-                    Subscribe $5/month 
-                    <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
-                </button>
+            <div class="col-xs-12 col-lg-4 col-lg-last panel panel--dark">
+                <h1>Gold Access</h1>
+                <h2 class="pricing pricing--gold">$5/month</h2>
+                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+                {{#hasGoldPermanent}}
+                <p>You have Gold Membership.</p>
+                {{/hasGoldPermanent}}
+                {{#goldUnsubscribe}}
+                <div source="$endpoint/self/gold-subscription"
+                     template="gold-subscription"
+                     transform="transformGoldSubscription">
+                </div>
+                {{/goldUnsubscribe}}
+                {{#goldSubscribe}}
+                <br/>
+                <ul>
+                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                    <li>Playlist your music directly within Connect</li>
+                    <li>Direct support via e-mail and on site.</li>
+                </ul>
+                <br/>
+                <div data-set="subscribe-gold">
+                    <input type="text" name="trialCode" placeholder="Special Code"/>
+                    <button class="button--gold"
+                            action="subscribeGold"
+                            data-set-target="subscribe-gold">
+                        Subscribe
+                        <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
+                    </button>
+                </div>
+                {{/goldSubscribe}}
             </div>
-            <br/>
-            <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
+    
+            <div class="col-xs-12 col-lg-8 panel">
+                <h1>Licensing Services</h1>
+                <h2 class="pricing">$5/month</h2>
+                <p>Buy a whitelisting service for use in online media for YouTube or Twitch.
+                   Upon subscribing for 20 months, all your previously uploaded videos within
+                   your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
+                <br/>
+                <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
+                <br/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Channel Id</th>
+                            <th>Paid Off</th>
+                            <th>Remaining</th>
+                            <th>Monthly Cost</th>
+                            <th>Next Billing Date</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody source="$endpoint/self/whitelist"
+                        template="whitelist-licenses"
+                        role="whitelists"
+                        transform="transformWhitelists">
+                    </tbody>
+                </table>
+                <div data-set="new-license">
+                    <select name="vendor">
+                        <option value="">Select Platform</option>
+                        <option value="YouTube">YouTube</option>
+                        <option value="Twitch">Twitch</option>
+                    </select>
+                    <input type="text" name="identity" placeholder="Channel Id"/>
+                    <button
+                        action="subscribeNewLicense"
+                        data-set-target="new-license">
+                        Subscribe
+                        <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
+                    </button>
+                </div>
+                <br/>
+                <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
+            </div>
         </div>
 
         <div id="new-subscriptions" class="hide panel">
-            <h2>Checkout</h2>
+            <h1>Checkout</h1>
             <br/>
             <table>
                 <thead>
@@ -788,8 +795,9 @@
             <br/>
             <div data-set="pay-method">
                {{>payment-method}}
-               <button action="checkoutSubscriptions" data-set-target="pay-method">
-                    Purchase Subscriptions
+               <button class="button--cta"
+                       action="checkoutSubscriptions" data-set-target="pay-method">
+                    Purchase
                 </button>
             </div>
         </div>
@@ -830,11 +838,11 @@
 <script type="text/template" mustache-name="payment-method">
     <label>
         <input type="radio" name="method" value="paypal">
-        <i class="fa fa-fw fa-cc-paypal"></i>
+        <span><i class="fa fa-fw fa-cc-paypal"></i></span>
     </label>
     <label>
         <input type="radio" name="method" value="stripe" checked>
-        <i class="fa fa-fw fa-cc-stripe"></i>
+        <span><i class="fa fa-fw fa-cc-stripe"></i></span>
     </label>
 </script>
 
@@ -1065,7 +1073,7 @@
         page-title="Purchase Whitelist">
     <div class="page center width">
         <h1>Purchase Whitelist</h1>
-        <div class="panel">
+        <div class="services panel">
             <p>Pre-pay your whitelist license for 20 months. All videos created with the
                 cleared Monstercat catalog during this time period will never
                 receive content-ID claims.</p>
@@ -1163,7 +1171,10 @@
         {{#results}}
         <li>
             <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <img src="{{cover}}"/>
+                <div class="image-wrapper">
+                    <img src="/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
                 <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
                 <label class="artist one-line-ellipsis">{{artists}}</label>

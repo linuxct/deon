@@ -17,12 +17,21 @@ body {
 
 body,
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+select {
   font-family: "Proxima Nova", Open Sans, sans-serif;
 }
 
 p, label, a {
   font-size: 16px;
+}
+
+select,
+input,
+textarea{
+  box-shadow: 0 0 0;
+  border: 0;
+  background: transparent;
 }
 
 select {
@@ -194,6 +203,15 @@ button {
 .button--g:hover > i{
   color: white;
 }
+.button--gold{
+  color: white;
+  border-color: gold;
+}
+.button--gold:focus,
+.button--gold:hover{
+  color: black;
+  background: gold;
+}
 button.faux {
   border: none;
   background: transparent;
@@ -243,6 +261,95 @@ input.round {
 input.round:focus{
   border-color: dodgerblue;
 }
+
+label {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 2.5;
+  font-size: 1rem;
+}
+
+[type="radio"] {
+  border: 0; 
+  clip: rect(0 0 0 0); 
+  height: 1px; margin: -1px; 
+  overflow: hidden; 
+  padding: 0; 
+  position: absolute; 
+  width: 1px;
+}
+
+[type="radio"] + span {
+  display: block;
+}
+
+[type="radio"] + span:before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.25em;
+  border-radius: 1em;
+  border: 0.125em solid #fff;
+  box-shadow: 0 0 0 0.15em #000;
+  margin-right: 0.75em;
+  transition: 0.5s ease all;
+}
+
+[type="radio"]:checked + span:before {
+  background: dodgerblue;
+  box-shadow: 0 0 0 0.25em dodgerblue;
+}
+
+a,
+button,
+[type="radio"]:focus + span{
+  position: relative;
+}
+a:not([role=track-title]):focus::after,
+button:focus::after,
+[type="radio"]:focus + span:after {
+  content: "\f077";
+  font-family: "FontAwesome";
+  font-size: .75rem;
+  position: absolute;
+  bottom: -20px;
+  color: dodgerblue;
+  opacity: 0;
+  animation: fadeOff 2s ease 1;
+  text-align: center;
+  left: 0;
+  right: 0;
+  margin: auto;
+  line-height: 1;
+  vertical-align: -0.125em;
+}
+a:not([role=track-title]):active::after,
+button:active::after,
+a:not([role=track-title]):visited::after,
+button:visited::after,
+a:not([role=track-title]):hover::after,
+button:hover::after,
+[type="radio"]:active + span:after {
+  display: none;
+}
+@keyframes fadeOff{
+  from{
+    opacity: 1;
+  }
+  to{
+    opacity: 0;
+  }
+}
+[type="radio"] + span > i {
+  font-size: 2rem;
+  vertical-align: middle;
+  margin-right: 1.5rem;
+}
+[type="radio"]:checked + span > i {
+  color: dodgerblue;
+}
+
 hr {
   height: 3px;
   background: #d4d4d4;
@@ -281,9 +388,9 @@ hr {
   font-size: 1rem;
 }
 
-
 .flex {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .page.width {
@@ -348,9 +455,23 @@ hr {
 
 .panel {
   margin: 2rem 0;
-  padding: 2rem 2rem 2.2rem;
+  padding: 2rem 2rem 2.5rem;
   background: white;
   box-shadow: 0 0 35px rgba(0,0,0,0.1);
+}
+
+.panel--dark{
+  background: #181818;
+}
+.panel--dark h1,
+.panel--dark h2,
+.panel--dark h3,
+.panel--dark h4,
+.panel--dark h5,
+.panel--dark p,
+.panel--dark span,
+.panel--dark ul{
+  color: white;
 }
 
 .panel table {
@@ -429,10 +550,20 @@ td.push-children-right > * {
     width: 12.5%;
   }
 }
+.artl-list .image-wrapper{
+  position: relative;
+}
+
+.art-list li img.preload{
+  box-shadow: 0 0 0;
+  position: relative;
+}
 
 .art-list li img {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   max-width: 100%;
+  position: absolute; 
+  top: 0;
   cursor: pointer;
 }
 
@@ -447,6 +578,7 @@ td.push-children-right > * {
 
 .art-list li label{
   cursor: pointer;
+  line-height: 1;
 }
 
 .one-line-ellipsis {
@@ -548,10 +680,6 @@ header:hover .scrub > .progress {
   color: dodgerblue;
 }
 
-.flex {
-  display: flex;
-}
-
 .flex-strong {
   flex: 1;
 }
@@ -616,14 +744,19 @@ textarea.copycredits {
 
 .toast {
   width: 100%;
-  padding: 10px;
+  padding: 1.5rem;
   box-sizing: border-box;
   background: dodgerblue;
   color: white;
 }
 
 .toast.error {
-  background: red;
+  background: #ef6958;
+}
+
+.toast p{
+  max-width: 80%;
+  margin: 0 auto;
 }
 
 span.note,
@@ -656,6 +789,45 @@ span.note a {
 .modal {
   max-width: 80%;
   margin: 50px auto;
+}
+
+.services .panel--dark{
+  padding: 2rem 3rem 2.2rem;
+}
+.services select,
+.services input[type="text"]{
+  height: 51px;
+  background: #eee;
+  padding: 1rem;
+  font-size: 1rem;
+  width: 100%;
+  margin: .1rem 0;
+}
+.services button{
+  width: 100%;
+}
+.services > p {
+  margin-bottom: 1.5rem;
+}
+@media screen and (min-width: 992px){
+  .services select,
+  .services input[type="text"],
+  .services button{
+    width: auto;
+  }
+}
+.services select{
+  vertical-align: bottom;
+}
+.services .panel--dark input[type="text"]{
+  background: #333;
+  color: white;
+}
+.pricing{
+  font-weight: normal;
+}
+.pricing.pricing--gold{
+  color: gold;
 }
 
 .pointer-events {
@@ -833,6 +1005,8 @@ body.bg {
 .bg .panel button.faux:hover {
   color: dodgerblue;
 }
+.bg .panel.panel--dark,
+.bg .panel.panel--dark p,
 .bg .panel button.button--cta{
   color: white;
 }
@@ -851,6 +1025,16 @@ body.bg {
   background: #ef6958;
   border-color: #ef6958;
   color: white;
+}
+.bg .panel button.button--gold{
+  color: white;
+  border-color: gold;
+}
+.bg .panel button.button--gold:focus,
+.bg .panel button.button--gold:hover{
+  background: gold;
+  border-color: gold;
+  color: black;
 }
 .bg .panel .loader{
   border: 0.25em solid rgba(0,0,0, 0.1);
