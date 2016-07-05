@@ -7,6 +7,7 @@ function search (e, el, url) {
   var types = getSearchTypes()
   var searchType = getSearchType('all')
   var q = queryStringToObject(window.location.search)
+  data.term = data.term.toString()
   var searchTerm = data.term
   if(data.term) {
     for(var i in types) {
