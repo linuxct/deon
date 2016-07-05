@@ -460,8 +460,7 @@ function transformGoldSubscription (obj) {
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
   q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(',')
-  q.limit  = 24
-  q.skip   = parseInt(q.skip) || 0
+  objSetPageQuery(q, q.page, {perPage: 24})
   var fuzzy   = commaStringToObject(q.fuzzy)
   var filters = commaStringToObject(q.filters)
   var type    = filters.type || ""
@@ -482,25 +481,7 @@ function transformMusic () {
 }
 
 function transformMusicReleases (obj) {
-  var q = queryStringToObject(window.location.search)
-  if (!q.limit)
-    q.limit  = 24
-  q.limit = parseInt(q.limit)
-  if (!q.skip)
-    q.skip= 0
-  q.skip = parseInt(q.skip)
-  var next = q.skip + q.limit
-  var prev = q.skip - q.limit
-  if (prev < 0)
-    prev = null
-  if (next > obj.total)
-    next = null
-  var nq    = cloneObject(q)
-  nq.skip   = next
-  var pq    = cloneObject(q)
-  pq.skip   = prev
-  if (next != null) obj.next     = objectToQueryString(nq)
-  if (prev != null) obj.previous = objectToQueryString(pq)
+  setPagination(obj, 24)
   return transformReleases(obj)
 }
 
@@ -757,4 +738,42 @@ function setPageTitle (title, glue, suffix) {
   if (!glue) glue = pageTitleGlue
   if (!suffix) suffix = pageTitleSuffix
   document.title = (!!title ? (title + glue) : '') + suffix
+}
+
+function pageToQuery (page, opts) {
+  opts = opts || {}
+  opts.perPage = opts.perPage || 25
+  page = page || 1
+
+  return {skip: (page - 1) * opts.perPage, limit: opts.perPage}
+}
+
+function objSetPageQuery (obj, page, opts) {
+  var sl = pageToQuery(page, opts);
+  obj.skip = sl.skip
+  obj.limit = sl.limit
+}
+
+function setPagination (obj, perPage) {
+  var q = queryStringToObject(window.location.search)
+  q.page = parseInt(q.page) || 1
+  //TODO: Calculate whether prev or next are required
+  //based on current page and the numperpage
+  var nq = cloneObject(q)
+  var pq  = cloneObject(q)
+  nq.page = nq.page + 1
+  pq.page = pq.page - 1
+  if (q.page * perPage < obj.total) {
+    obj.next     = objectToQueryString(nq)
+  }
+  if (q.page > 1) {
+    obj.previous = objectToQueryString(pq)
+  }
+  obj.showingFrom = Math.max((q.page - 1) * perPage, 1)
+  if (obj.next) {
+    obj.showingTo = q.page == 1 ? perPage : obj.showingFrom + perPage - 1
+  }
+  else {
+    obj.showingTo = obj.total
+  }
 }

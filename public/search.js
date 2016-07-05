@@ -1,18 +1,5 @@
 var searchSnippetLimit = 5
 
-function pageToQuery (page, opts) {
-  opts = opts || {}
-  opts.perPage = opts.perPage || 25
-  page = page || 1
-
-  return {skip: (page - 1) * opts.perPage, limit: opts.perPage}
-}
-
-function objSetPageQuery (obj, page, opts) {
-  var sl = pageToQuery(page, opts);
-  obj.skip = sl.skip
-  obj.limit = sl.limit
-}
 
 //TODO: Look at all of this duplicate code. Be the change you want to see in the code.
 function search (e, el, url) {
@@ -215,30 +202,6 @@ function transformSearchArtistsResults (obj, done) {
   var type = getSearchType('artists')
   setPagination(obj, type.perPage)
   return obj
-}
-
-function setPagination (obj, perPage) {
-  var q = queryStringToObject(window.location.search)
-  q.page = parseInt(q.page) || 1
-  //TODO: Calculate whether prev or next are required
-  //based on current page and the numperpage
-  var nq = cloneObject(q)
-  var pq  = cloneObject(q)
-  nq.page = nq.page + 1
-  pq.page = pq.page - 1
-  if (q.page * perPage < obj.total) {
-    obj.next     = objectToQueryString(nq)
-  }
-  if (q.page > 1) {
-    obj.previous = objectToQueryString(pq)
-  }
-  obj.showingFrom = Math.max((q.page - 1) * perPage, 1)
-  if (obj.next) {
-    obj.showingTo = q.page == 1 ? perPage : obj.showingFrom + perPage - 1
-  }
-  else {
-    obj.showingTo = obj.total
-  }
 }
 
 function getGlobalSearchInput() {
