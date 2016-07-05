@@ -153,11 +153,8 @@ function searchMusic (e, el) {
   if (fuzzy.length > 0) {
     q.fuzzy   = fuzzy.join(',')
   }
-  //q.skip    = 0
-
   delete q.skip
   delete q.limit
-
   go('/music?' + objectToQueryString(q))
 }
 
@@ -509,7 +506,7 @@ function transformMusicReleases (obj) {
 function transformReleases (obj) {
   obj.results = obj.results.sort(sortRelease).map(mapRelease)
   obj.skip  = (parseInt(obj.skip) || 0) + 1
-  obj.count = obj.skip + obj.results.length - 1
+  obj.count = obj.skip + obj.results.length
   return obj
 }
 
