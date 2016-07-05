@@ -89,6 +89,7 @@ function recordEvent (name, obj, done) {
   requestJSON({
     url: endpoint + '/analytics/record/event',
     withCredentials: true,
+    method: 'POST',
     data: {
       event: name,
       properties: obj
@@ -543,9 +544,10 @@ function transformWhitelists (obj) {
 }
 
 function transformReleaseTracks (obj, done) {
+  var h1 = document.querySelector('h1[release-id]')
+  var releaseId = h1 ? h1.getAttribute('release-id') : ''
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
-    var releaseId = getLastPathnameComponent()
     obj.results.forEach(function (track, index, arr) {
       mapReleaseTrack(track, index, arr)
       track.releaseId = releaseId
