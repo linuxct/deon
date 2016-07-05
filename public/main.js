@@ -483,7 +483,7 @@ function transformMusic () {
 function transformMusicReleases (obj) {
   var q = queryStringToObject(window.location.search)
   if (!q.limit)
-    q.limit  = 25
+    q.limit  = 24
   q.limit = parseInt(q.limit)
   if (!q.skip)
     q.skip= 0
@@ -504,9 +504,9 @@ function transformMusicReleases (obj) {
 }
 
 function transformReleases (obj) {
-  obj.results = obj.results.sort(sortRelease).map(mapRelease)
-  obj.skip  = (parseInt(obj.skip) || 0) + 1
-  obj.count = obj.skip + obj.results.length
+  obj.results     = obj.results.sort(sortRelease).map(mapRelease)
+  obj.showingFrom = (obj.skip || 0) + 1
+  obj.showingTo   = obj.skip + obj.results.length
   return obj
 }
 
