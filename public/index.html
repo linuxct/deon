@@ -116,17 +116,20 @@
 
 <script type="text/template" template-name="subscription-required-modal">
     <div class="modal">
-        <div class="panel pointer-events">
+        <div class="panel panel--dark pointer-events">
             <h1>Get Gold!</h1>
-            <p>You need a subscription to do that!</p>
-            {{^hasGold}}
-            <a href="/account/services" action="closeModal">Get your Gold membership!</a>
-            {{/hasGold}}
-            {{^signedIn}}
-            <a href="/sign-up" action="closeModal">Sign up for an account!</a>
-            {{/signedIn}}
-            <br/>
-            <button action="closeModal">Close</button>
+            <div class="modal-content">
+                <p>You need a subscription to do that!</p>
+            </div>
+                {{^hasGold}}
+                <a class="button button--gold" href="/account/services" action="closeModal">Get your Gold membership!</a>
+                {{/hasGold}}
+                {{^signedIn}}
+                <a class="button button--cta" href="/sign-up" action="closeModal">Sign up for an account!</a>
+                {{/signedIn}}
+            <button action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
         </div>
     </div>
 </script>
@@ -1880,7 +1883,7 @@
         template-name="search-snippet-releases"
         transform="transformSearchSnippetReleases">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -1900,7 +1903,7 @@
         template-name="search-snippet-artists"
         transform="transformRosterYear">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -1921,7 +1924,7 @@
         template-name="search-snippet-tracks"
         transform="transformSearchSnippetTracks">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -1983,7 +1986,10 @@
         {{#results}}
         <li>
             <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <img src="{{cover}}"/>
+                <div class="image-wrapper">
+                    <img src="/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
                 <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
                 <label class="artist one-line-ellipsis">{{artists}}</label>
@@ -2001,7 +2007,10 @@
         <li>
             <a class="silent" href="/artist/{{uri}}" title="{{name}}">
                 {{#image}}
-                <img src="{{image}}"/>
+                <div class="image-wrapper">
+                    <img src="/artist.jpg" class="preload" />
+                    <img src="{{image}}"/>
+                </div>
                 {{/image}}
                 {{^image}}
                 <div class="no-art">

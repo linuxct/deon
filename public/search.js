@@ -1,4 +1,4 @@
-var searchSnippetLimit = 5
+var searchSnippetLimit = 8
 
 function pageToQuery (page, opts) {
   opts = opts || {}
