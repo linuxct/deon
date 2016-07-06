@@ -373,8 +373,11 @@ function mapWebsiteDetails (o) {
 
 /* Transform Methods */
 
-function transformHome () {
-  return {}
+function transformHome (obj) {
+  var results = obj.results.map(mapRelease)
+  obj.featured = results.shift()
+  obj.releases = results
+  return obj
 }
 
 function transformBlogPosts (obj) {

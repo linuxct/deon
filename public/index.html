@@ -1159,24 +1159,9 @@
 
 <script type="text/template"
         route="^(\?.*)?$"
-        transform="transformHome"
         page-title="Home">
     <div>
-        {{#featured}}
-        <img src="cover"/>
-        <h1>{{title}}</h1>
-        <p>By {{artistTitle}}</p>
-        <p>Released {{releaseDate}}</p>
-        {{/featured}}
-        <h2>Latest Releases</h2>
-        <div>
-            <ul>
-                {{#releases}}
-                <li>
-                    {{title}}
-                </li>
-                {{/releases}}
-            </ul>
+        <div source="$endpoint/catalog/release?limit=20" template="homeFeatured">
         </div>
         <p><span>We're proudly proving that</span><br/>
             Independent labels have the ability to reshape the music industry.
@@ -1192,6 +1177,41 @@
             <h2>Join the Family</h2>
         </div>
     </div>
+</script>
+
+<script type="text/template"
+        template-name="homeFeatured"
+        transform="transformHome">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{#featured}}
+    <div>
+        <h1>{{title}}</h1>
+        <img src="{{cover}}"/>
+        <p>By {{artists}}</p>
+        <p>Released {{releaseDate}}</p>
+    </div>
+    {{/featured}}
+    <h2>Latest Releases</h2>
+    <div>
+        <ul>
+            {{#releases}}
+            <li>
+                <label>{{title}}</label>
+                <label>{{releaseDate}}</label>
+                <label>{{artists}}</label>
+                <img src="{{cover}}" width="200" />
+                <a href="/release/{{catalogId}}">View</a>
+            </li>
+            {{/releases}}
+        </ul>
+    </div>
+    {{/data}}
 </script>
 
 <script type="text/template"
