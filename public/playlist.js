@@ -284,9 +284,9 @@ function reorderPlaylistFromInputs() {
     return document.querySelector('tr[role="playlist-track"][track-id="' + item.trackId + '"][release-id="' + item.releaseId + '"]')
   })
   var tracksNode = document.querySelector('[role="playlist-tracks"]')
-  for(var i = trackEls.length - 1; i >= 0; i--) {
-    var before = i == (trackEls.length - 1) ? null : trackEls[i+1]
-    tracksNode.insertBefore(tracksNode.removeChild(trackEls[i]), before)
+  tracksNode.innerHTML = ''
+  for(var i = 0; i < trackEls.length; i ++) {
+    tracksNode.insertBefore(trackEls[i], null)
   }
   resetPlaylistInputs()
   savePlaylistOrder();

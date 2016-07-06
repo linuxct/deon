@@ -33,7 +33,7 @@ function openModal (name, data) {
   var el         = getTemplateEl(name)
   var opts       = getElementSourceOptions(el)
   var container  = document.querySelector('[role="modals"]')
-  opts.container = container
+  opts.container = container.querySelector('[role="container"]')
   opts.data      = data
   if (opts.source) {
     loadSource(opts)
@@ -47,7 +47,8 @@ function openModal (name, data) {
 function closeModal () {
   var container = document.querySelector('[role="modals"]')
   container.classList.remove('open')
-  container.removeChild(container.firstElementChild)
+  var x = container.querySelector('[role="container"]').firstElementChild
+  x.parentElement.removeChild(x)
 }
 
 function togglePassword (e, el) {

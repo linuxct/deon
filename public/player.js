@@ -43,7 +43,7 @@ var MusicPlayer = (function () {
       this.play(index)
   }
 
-  // If index is undefined, it will start first or resume currently playing song.
+  // If index is undefined, it will start the first song or resume currently playing song.
   MusicPlayer.prototype.play = function (index) {
     if (!this.items || !this.items.length || ((index != null) && (!this.items[index] || !this.items[index].source)))
       return
@@ -167,6 +167,8 @@ var MusicPlayer = (function () {
         this.index += this.items.length
     }
 
+    if ((this.items || []).length > 1 && (this.items[this.index] || {}).skip)
+      return this.advance(amount)
     this.play(this.index)
   }
 

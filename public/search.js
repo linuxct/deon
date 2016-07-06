@@ -1,18 +1,5 @@
 var searchSnippetLimit = 5
 
-function pageToQuery (page, opts) {
-  opts = opts || {}
-  opts.perPage = opts.perPage || 25
-  page = page || 1
-
-  return {skip: (page - 1) * opts.perPage, limit: opts.perPage}
-}
-
-function objSetPageQuery (obj, page, opts) {
-  var sl = pageToQuery(page, opts);
-  obj.skip = sl.skip
-  obj.limit = sl.limit
-}
 
 //TODO: Look at all of this duplicate code. Be the change you want to see in the code.
 function search (e, el, url) {
@@ -20,13 +7,14 @@ function search (e, el, url) {
   var types = getSearchTypes()
   var searchType = getSearchType('all')
   var q = queryStringToObject(window.location.search)
-  var searchTerm = data.search
-  if(data.search) {
+  data.term = data.term.toString()
+  var searchTerm = data.term
+  if(data.term) {
     for(var i in types) {
       if(types[i].searchPrefix) {
-        if(data.search.substr(0, types[i].searchPrefix.length) == types[i].searchPrefix) {
+        if(data.term.substr(0, types[i].searchPrefix.length) == types[i].searchPrefix) {
           searchType = types[i]
-          searchTerm = data.search.substr(searchType.searchPrefix.length).trim()
+          searchTerm = data.term.substr(searchType.searchPrefix.length).trim()
           break
         }
       }
@@ -34,10 +22,10 @@ function search (e, el, url) {
   }
   var url = searchType.url
   if (searchTerm) {
-    q.search = searchTerm
+    q.term = searchTerm
   }
   else {
-    delete q.search
+    delete q.term
   }
   delete q.page
   go(url + '?' + objectToQueryString(q))}
@@ -49,9 +37,11 @@ function searchAll (e, el) {
 
 function searchToFuzzy (search, fields) {
   if (!search) return
-  var fuzzy = []
-  fuzzy.push(fields, search)
-  return fuzzy.join(',')
+  var arr = []
+  fields.forEach(function (field) {
+    arr.push(field, search)
+  })
+  return arr.join(',')
 }
 
 function getSearchTypes () {
@@ -61,7 +51,7 @@ function getSearchTypes () {
       url: '/search'
     },
     tracks: {
-      fuzzyFields: ['title'],
+      fuzzyFields: ['title', 'artistsTitle'],
       q: {},
       perPage: 25,
       title: 'Search Songs',
@@ -86,16 +76,16 @@ function getSearchTypes () {
       searchPrefix: 'artists:'
     },
     releases: {
-      fuzzyFields: ['title'],
+      fuzzyFields: ['title', 'renderedArtists'],
       q: {},
       title: 'Search Releases',
-      fields: ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(','),
+      fields: ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(','),
       perPage: 10,
       searchForm: {
         placeholder: 'Search releases...',
         action: 'searchReleases'
       },
-      url: '/search/releases', 
+      url: '/search/releases',
       searchPrefix: 'releases:'
     }
   }
@@ -109,28 +99,28 @@ function transformSearch () {
   var q    = queryStringToObject(window.location.search)
   q.limit  = searchSnippetLimit
   q.skip   = parseInt(q.skip) || 0
-  q.search = q.search || "" //Text search
+  q.term = q.term || "" //Text search
   q.fields = []
-  if (!q.search) return {}
+  if (!q.term) return {}
   var searches = getSearchTypes()
   for(var type in searches) {
     var search = searches[type]
     var sq = {}
-    for(var x in q) {
+    for (var x in q) {
       sq[x] = !search.hasOwnProperty(x) ? q[x] : search[x]
     }
-    if(q.search) {
-      sq.fuzzy = searchToFuzzy(q.search, search.fuzzyFields)
+    if (q.term && search.fuzzyFields) {
+      sq.fuzzyOr = searchToFuzzy(q.term, search.fuzzyFields)
     }
     search.query = objectToQueryString(sq)
   }
   var searchForm = {
     placeholder: 'Search anything...',
-    search: q.search,
+    search: q.term,
     action: 'searchAll'
   }
   return {
-    search: q.search || "",
+    search: q.term || "",
     searches: searches,
     searchForm: searchForm
   }
@@ -142,12 +132,12 @@ function transformSearchPage (obj, type) {
   var q = queryStringToObject(window.location.search)
   var searchType = getSearchType(type)
   objSetPageQuery(query, q.page, {perPage: searchType.perPage})
-  if(q.search) {
-    query.fuzzy = searchToFuzzy(q.search, searchType.fuzzyFields)
+  if(q.term && searchType.fuzzyFields) {
+    query.fuzzyOr = searchToFuzzy(q.term, searchType.fuzzyFields)
   }
   obj.query = objectToQueryString(query)
   obj.searchForm = searchType.searchForm
-  obj.searchForm.search = q.search
+  obj.searchForm.term = q.term
   return obj
 }
 
@@ -215,32 +205,8 @@ function transformSearchArtistsResults (obj, done) {
   return obj
 }
 
-function setPagination (obj, perPage) {
-  var q = queryStringToObject(window.location.search)
-  q.page = parseInt(q.page) || 1
-  //TODO: Calculate whether prev or next are required
-  //based on current page and the numperpage
-  var nq = cloneObject(q)
-  var pq  = cloneObject(q)
-  nq.page = nq.page + 1
-  pq.page = pq.page - 1
-  if (q.page * perPage < obj.total) {
-    obj.next     = objectToQueryString(nq)
-  }
-  if (q.page > 1) {
-    obj.previous = objectToQueryString(pq)
-  }
-  obj.showingFrom = Math.max((q.page - 1) * perPage, 1)
-  if (obj.next) {
-    obj.showingTo = q.page == 1 ? perPage : obj.showingFrom + perPage - 1
-  }
-  else {
-    obj.showingTo = obj.total
-  }
-}
-
 function getGlobalSearchInput() {
-  return document.querySelector('[data-set="search-form"] input[name="search"]')  
+  return document.querySelector('[data-set="search-form"] input[name="term"]')
 }
 
 function completedSearchPage (type) {
@@ -248,16 +214,16 @@ function completedSearchPage (type) {
   var q = queryStringToObject(window.location.search)
   q.page = parseInt(q.page) || 1
   var title = searchType.title
-  if(q.search) {
-    title += ' for "' + q.search + '"'
+  if(q.term) {
+    title += ' for "' + q.term + '"'
   }
   if(q.page > 1) {
     title += ' - Page ' + q.page
   }
   setPageTitle(title)
   var searchInput = getGlobalSearchInput()
-  if(q.search) {
-    searchInput.value = type != 'all' ? searchType.searchPrefix + ' ' + q.search : q.search
+  if(q.term) {
+    searchInput.value = type != 'all' ? searchType.searchPrefix + ' ' + q.term : q.term
   }
   searchInput.focus()
 }
@@ -279,9 +245,6 @@ function completedSearchArtists() {
 }
 
 openRoute.completed.push(function () {
-  var path = window.location.pathname
-  if(path.indexOf('/search') !== 0) {
-    var input = getGlobalSearchInput()
-    input.value = ''
-  }
+  if (window.location.pathname.indexOf('/search') >= 0) return
+  (getGlobalSearchInput() || {value:''}).value = ''
 })

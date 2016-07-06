@@ -162,6 +162,7 @@ function isReleaseLoaded(id) {
 function mapTrackElToPlayer (el) {
   return {
     source:     el.getAttribute('play-link'),
+    skip:       isSignedIn() && !el.hasAttribute('licensable') && session.settings.hideNonLicensableTracks,
     title:      el.getAttribute('title'),
     trackId:    el.getAttribute('track-id'),
     playlistId: el.getAttribute('playlist-id'),

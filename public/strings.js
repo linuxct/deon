@@ -25,5 +25,6 @@ var strings = {
   "licenseInCart": "The license is already in your cart or is already purchased.",
   "cancelWhitelistSub": "Are you sure you want to cancel this subscription?",
   "codeNotFound": "The code you entered does not exist.",
-  "codeNotValid": "The code you entered is not valid any more."
+  "codeNotValid": "The code you entered is not valid any more.",
+  "invalidIdentity": "The channel you tried to add is not valid."
 }

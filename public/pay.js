@@ -1,4 +1,4 @@
-var STRIPE_PK = 'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
+var STRIPE_PK = 'pk_live_4afTMPX9ckO9an6kq9zGz0QQ' //'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
 
 function isValidPayMethod (str, obj) {
   if (str != 'stripe' && str != 'paypal') return false
@@ -133,10 +133,7 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
       })
     }
   })
-
-  var cost = subs.reduce(function (prev, cur) {
-    return prev + cur.amount
-  }, 0)
+  var cost = getTotalCheckoutCostFromSubs(subs)
   handler.open({
     name: 'Monstercat',
     description: 'Subscription Services',
@@ -272,14 +269,36 @@ function unsubscribeGold (e, el) {
 
 function redirectServices (e, el) {
   setTimeout(function () {
-    window.location = location.origin + '/services'
+    window.location = location.origin + '/account/services'
   }, 5000)
+}
+
+function getTotalCheckoutCostFromSubs (arr) {
+  return arr.reduce(function (prev, cur) {
+    return prev + cur.amount
+  }, 0)
+}
+
+function getTotalCheckoutCost (arr) {
+  var els = toArray(document.querySelectorAll('[role="new-subs"] tr') || [])
+  return getTotalCheckoutCostFromSubs(els.map(getDataSet))
 }
 
 /* UI Stuff */
 
-function showNewSubscriptions () {
-  document.querySelector('#new-subscriptions').classList.remove('hide')
+function updateTotalCheckoutCost () {
+  var cost = getTotalCheckoutCost()
+  var el = document.querySelector('[role="total-cost"]')
+  el.textContent = (cost / 100).toFixed(2)
+  if (cost <= 0) {
+    showNewSubscriptions(false)
+  }
+}
+
+function showNewSubscriptions (value) {
+  if (typeof value == 'undefined') value = true
+  var method = value ? 'remove' : 'add'
+  document.querySelector('#new-subscriptions').classList[method]('hide')
 }
 
 function reachedMaxCartSubscriptions () {
@@ -292,6 +311,8 @@ function addSub (obj) {
   var div = document.createElement('tbody')
   render(div, t.textContent, obj)
   container.appendChild(div.firstElementChild)
+  updateTotalCheckoutCost()
+  showNewSubscriptions()
 }
 
 function removeSub (e, el) {
@@ -299,6 +320,7 @@ function removeSub (e, el) {
     if (el.tagName && el.tagName.toLowerCase() == 'tr')
       el.parentElement.removeChild(el)
   })
+  updateTotalCheckoutCost()
 }
 
 function subscribeGold (e, el) {
@@ -306,7 +328,7 @@ function subscribeGold (e, el) {
     return window.alert(strings.cart5)
   if (document.querySelector('[type="hidden"][name="type"][value="gold"]'))
     return window.alert(strings.goldInCart)
-  var data = getTargetDataSet(el)
+  var data = getTargetDataSet(el) || {}
   var opts = {
     name: "Gold Membership",
     cost: "5.00",
@@ -318,20 +340,22 @@ function subscribeGold (e, el) {
   }
   var fin = function (opts) {
     addSub(opts)
-    showNewSubscriptions()
     toasty(strings.goldAdded)
   }
-  if (data.trailCode) {
-    // TODO show spinner
+  if (data.trialCode) {
+    el.classList.add('working')
+    el.disabled = true
     return requestJSON({
-      url: endpoint + "/services/gold/code/" + data.trailCode
+      url: endpoint + "/services/gold/code/" + data.trialCode
     }, function (err, obj, xhr) {
+      el.classList.remove('working')
+      el.disabled = false
       if (xhr.status == 404) return window.alert(strings.codeNotFound)
       if (err) return window.alert(err.message)
       if (!obj) return window.alert(strings.error)
       if (!obj.valid) return window.alert(strings.codeNotValid)
-      opts.name += " (" + obj.numMonths + " Free Months)"
-      opts.fields.push({ key: "trailCode", value: obj.name })
+      opts.name += " (" + obj.code + ' - ' + obj.durationDays + " Free Days)"
+      opts.fields.push({ key: "trialCode", value: obj.code })
       fin(opts)
     })
   }
@@ -355,17 +379,27 @@ function subscribeNewLicense (e, el) {
   if (alreadyInCart(data))
     return window.alert(strings.licenseInCart)
 
-  var name = "Whitelisting for " + data.identity + " on " + data.vendor
-  addSub({
-    name: name,
-    cost: "5.00",
-    fields: [
-      { key: "amount", value: 500 },
-      { key: "type", value: 'whitelist'},
-      { key: "vendor", value: data.vendor },
-      { key: "identity", value: data.identity }
-    ]
+  el.classList.add('working')
+  el.disabled = true
+  requestJSON({
+    url: endpoint + '/whitelist/status/?vendor=' + data.vendor.toLowerCase() + '&identity=' + data.identity
+  }, function (err, obj, xhr) {
+    el.classList.remove('working')
+    el.disabled = false
+    if (err) return window.alert(err.message)
+    if (!obj) return window.alert(strings.error)
+    if (!obj.valid) return window.alert(strings.invalidIdentity)
+    var name = "Whitelisting for " + data.identity + " on " + data.vendor
+    addSub({
+      name: name,
+      cost: "5.00",
+      fields: [
+        { key: "amount", value: 500 },
+        { key: "type", value: 'whitelist'},
+        { key: "vendor", value: data.vendor },
+        { key: "identity", value: data.identity }
+      ]
+    })
+    toasty(strings.whitelistAdded)
   })
-  showNewSubscriptions()
-  toasty(strings.whitelistAdded)
 }

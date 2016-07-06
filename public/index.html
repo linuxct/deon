@@ -35,17 +35,17 @@
     <script type="text/javascript">
     !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
     analytics.load("FYHmNWDPH4MU44NH03s9EC9arg2Hu8Cr");
-    analytics.page()
     }}();
     </script>
 </head>
 <body>
 <script type="text/javascript">if (typeof bgmebro == 'function') bgmebro()</script>
-
 <header>
 
-    <div class="scrub" action="scrub">
-        <div class="progress" role="scrub-progress"></div>
+    <div class="scrub-container">
+        <div class="scrub" action="scrub">
+            <div class="progress" role="scrub-progress"></div>
+        </div>
     </div>
 
     <div class="mcat-mast page width center">
@@ -83,7 +83,7 @@
                 <i class="fa fa-search"></i>
             </button>
             <input data-set-target="search-form"
-                   name="search"
+                   name="term"
                    type="text"
                    placeholder="Search"
                    value=""/>
@@ -131,16 +131,25 @@
     </div>
 </div>
 
-<div role="modals" class="modal-layer"></div>
+<div role="modals" class="modal-layer">
+    <div class="modal-escape-layer" action="closeModal"></div>
+    <div class="modal-content-layer" role="container"></div>
+</div>
 
 <script type="text/template" template-name="subscription-required-modal">
-    <div class="modal panel">
-        <h1>Sign Up!</h1>
-        <p>You need a subscription to do that!</p>
-        <a href="/sign-up">Sign Up Here</a> or 
-        <a href="/services">Update Your Subscription</a>
-        <br/>
-        <button action="closeModal">Close</button>
+    <div class="modal">
+        <div class="panel pointer-events">
+            <h1>Get Gold!</h1>
+            <p>You need a subscription to do that!</p>
+            {{^hasGold}}
+            <a href="/account/services" action="closeModal">Get your Gold membership!</a>
+            {{/hasGold}}
+            {{^signedIn}}
+            <a href="/sign-up" action="closeModal">Sign up for an account!</a>
+            {{/signedIn}}
+            <br/>
+            <button action="closeModal">Close</button>
+        </div>
     </div>
 </script>
 
@@ -175,45 +184,54 @@
 <script type="text/template"
         template-name="track-copycredits-modal"
         transform="loadReleaseAndTrack">
-    <div class="modal panel">
-        {{#loading}}
-        ...
-        {{/loading}}
-        {{#err}}
-        <p>Error: {{message}}</p>
-        {{/err}}
-        {{#data}}
-        <textarea class="copycredits">{{track.copycredit}}</textarea>
-        <button action="closeModal">
-            <i class="fa fa-remove"></i>
-        </button>
-        {{/data}}
+    <div class="modal">
+        <div class="panel pointer-events">
+            {{#loading}}
+            <i class="fa fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <textarea class="copycredits">{{track.copycredit}}</textarea>
+            {{/data}}
+            <button action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
     </div>
 </script>
 
 <script type="text/template"
         template-name="release-shopping-modal">
-    <div class="modal panel">
-      <div class="modal-body">
-        {{#loading}}
-        ...
-        {{/loading}}
-        {{#err}}
-        <p>Error: {{message}}</p>
-        {{/err}}
-        {{#data}}
-        <ul>
-        {{#purchaseLinks}}
-          <li><a target="_blank" href="{{url}}">{{name}}</a></li>
-        {{/purchaseLinks}}
-        </ul>
-        {{/data}}
-      </div>
-      <div class="modal-footer">
-        <button action="closeModal">
-            <i class="fa fa-remove"></i>
-        </button>
-      </div>
+    <div class="modal">
+        <div class="panel pointer-events">
+            {{#loading}}
+            <i class="fa fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <ul>
+                {{#purchaseLinks}}
+                <li><a target="_blank" href="{{url}}">{{name}}</a></li>
+                {{/purchaseLinks}}
+            </ul>
+            {{/data}}
+            <button action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="release-art-modal">
+    <div class="center text pointer-events" style="margin: 50px auto 0; width: 720px;">
+        <a href="{{src}}" target="blank">
+            <img src="{{src}}" width="720"/>
+        </a>
     </div>
 </script>
 
@@ -405,6 +423,14 @@
     <div class="page width center">
         <h1>Sign Up</h1>
         <div class="panel">
+            <h2>With Social</h2>
+            <div class="button-group">
+                <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
+                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
+            </div>
+        </div>
+        <div class="panel">
+            <h2>With Email</h2>
             {{#data}}
             <table class="form" data-set="credentials" trigger-target="signUp">
                 <tbody>
@@ -419,7 +445,7 @@
                     <tr>
                         <th>Password</th>
                         <td>
-                            <input type="text"
+                            <input type="password"
                                    name="password"
                                    placeholder="a secret"/>
                             <button
@@ -447,8 +473,6 @@
             </table>
             <div class="button-group">
                 <button class="button--cta" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
-                <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
-                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
             </div>
             {{/data}}
         </div>
@@ -479,19 +503,11 @@
                     <tr>
                         <th>Full Name</th>
                         <td><input type="text"
-                                    name="realName"
-                                    value="{{realName}}"
-                                    data-set-target="account"
-                                    initial-value="{{realName}}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Nickname</th>
-                        <td><input type="text"
-                                    action-enter="saveAccount"
-                                    name="name"
-                                    initial-value="{{name}}"
-                                    value="{{name}}" />
+                                   name="realName"
+                                   value="{{realName}}"
+                                   placeholder="Jon GQ Winter"
+                                   data-set-target="account"
+                                   initial-value="{{realName}}" />
                         </td>
                     </tr>
                     <tr>
@@ -533,6 +549,9 @@
                 Save
             </button>
             <button class="button--danger" action="signOut">Sign Out</button>
+            <br/>
+            <br/>
+            <a href="/account/services">Manage Services</a>
         </div>
         <div class="panel">
             <h2>Two-Factor Auth</h2>
@@ -570,7 +589,6 @@
                  template="account-settings">
             </div>
         </div>
-        <!--<a href="/services">Manage Services</a>-->
         {{/data}}
     </div>
 </script>
@@ -683,12 +701,22 @@
 <!-- SERVICES -->
 
 <script type="text/template"
-        route="^account\/services\/?"
+        route="^account\/services$"
         transform="transformServices">
     {{#data}}
     <div class="page width center">
         <h1>Manage Services</h1>
         {{#user}}
+        {{#hasLegacy}}
+        <div class="panel">
+            <p>
+                You have a legacy account. Please access your subscription from
+                <a target="_blank" href="http://connect.monstercat.com">Monstercat Connect</a>.
+            </p>
+        </div>
+        {{/hasLegacy}}
+
+        {{^hasLegacy}}
         <div class="panel">
             <h2>Gold Access</h2>
             <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
@@ -696,17 +724,25 @@
             <p>You have Gold Membership.</p>
             {{/hasGoldPermanent}}
             {{#goldUnsubscribe}}
-            <label>Gold Subscription Active</label>
-            <p>You are subscribed for $5.00 USD a month.</p>
-            <button action="unsubscribeGold">Cancel Subscription</button>
+            <div source="$endpoint/self/gold-subscription"
+                 template="gold-subscription"
+                 transform="transformGoldSubscription">
+            </div>
             {{/goldUnsubscribe}}
             {{#goldSubscribe}}
             <br/>
+            <ul>
+                <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                <li>Playlist your music directly within Connect</li>
+                <li>Direct support via e-mail and on site.</li>
+            </ul>
+            <br/>
             <div data-set="subscribe-gold">
-                <input type="text" name="trailCode" placeholder="Special Code"/>
+                <input type="text" name="trialCode" placeholder="Special Code"/>
                 <button action="subscribeGold"
                         data-set-target="subscribe-gold">
                     Subscribe for $5.00/month
+                    <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
                 </button>
             </div>
             {{/goldSubscribe}}
@@ -714,17 +750,17 @@
 
         <div class="panel">
             <h2>Licensing Services</h2>
-            <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam Pro.
-                You can also buy a subscription and pay monthly until you pay it off.
-            </p>
+            <p>Buy a whitelisting service for use in online media for YouTube or Twitch.
+               Upon subscribing for 20 months, all your previously uploaded videos within
+               your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
             <br/>
             <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
             <br/>
             <table>
                 <thead>
                     <tr>
-                        <th>Vendor</th>
-                        <th>Identity</th>
+                        <th>Platform</th>
+                        <th>Channel Id</th>
                         <th>Paid Off</th>
                         <th>Remaining</th>
                         <th>Monthly Cost</th>
@@ -740,15 +776,16 @@
             </table>
             <div data-set="new-license">
                 <select name="vendor">
-                    <option value="">Select Vendor</option>
+                    <option value="">Select Platform</option>
                     <option value="YouTube">YouTube</option>
                     <option value="Twitch">Twitch</option>
                 </select>
-                <input type="text" name="identity" placeholder="Identity"/>
+                <input type="text" name="identity" placeholder="Channel Id"/>
                 <button
                     action="subscribeNewLicense"
                     data-set-target="new-license">
-                    Subscribe $5/month
+                    Subscribe $5/month 
+                    <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
                 </button>
             </div>
             <br/>
@@ -769,6 +806,7 @@
                 <tbody role="new-subs">
                 </tbody>
             </table>
+            <div>$<span role="total-cost">0.00</span></div>
             <br/>
             <div data-set="pay-method">
                {{>payment-method}}
@@ -777,6 +815,7 @@
                 </button>
             </div>
         </div>
+        {{/hasLegacy}}
         {{/user}}
         {{^user}}
         <div class="panel">
@@ -784,6 +823,29 @@
         </div>
         {{/user}}
     </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="gold-subscription"
+        transform="transformGoldSubscription">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <label>Gold Subscription Active</label>
+    {{^canceled}}
+    <p>You are subscribed for $5.00 USD a month</p>
+    <p>Your next invoice will be charged on {{nextBillingDate}}</p>
+    <button action="unsubscribeGold">Cancel Subscription</button>
+    {{/canceled}}
+    {{#canceled}}
+    <p>Your gold subscription will expire on {{endDate}}</p>
+    <button action="subscribeGold">Re-Subscribe</button>
+    {{/canceled}}
     {{/data}}
 </script>
 
@@ -940,7 +1002,7 @@
 
 <script type="text/template" template-name="resume-whitelist">
     <div class="modal panel">
-        <div data-set="resume-payment">
+        <div class="pointer-events" data-set="resume-payment">
             <input type="hidden" name="id" value="{{id}}">
             <input type="hidden" name="vendor" value="{{vendor}}">
             <input type="hidden" name="identity" value="{{identity}}">
@@ -949,11 +1011,11 @@
             {{/amount}}
             <table class="form">
                 <tr>
-                    <th>Vendor</th>
+                    <th>Platform</th>
                     <td>{{vendor}}</td>
                 </tr>
                 <tr>
-                    <th>Identity</th>
+                    <th>Channel Id</th>
                     <td>{{identity}}</td>
                 </tr>
             </table>
@@ -967,12 +1029,13 @@
 <script type="text/template"
         route="^account\/services\/buyout\/(.+)"
         transform="transformBuyOut"
-        source="$endpoint/whitelist/$1"
+        source="$endpoint/self/whitelist/$1"
         page-title="Whitelist Buy Out">
     <div class="page center width">
         <h1>Buy Out Whitelist</h1>
         <div class="panel">
-            <p>Buy out the remainder of your whitelist subscription and have it forever!</p>
+            <p>Pre-pay the rest of your whitelist license. All videos created with the
+                cleared Monstercat catalog during this time period will never receive content-ID claims.</p>
             {{#loading}}
             <i class="fa fa-spin fa-refresh"></i>
             {{/loading}}
@@ -986,7 +1049,7 @@
                 <table class="form">
                     <tbody>
                         <tr>
-                            <th>Vendor</th>
+                            <th>Channel Id</th>
                             <td>
                                 <input type="text"
                                        name="vendor"
@@ -1025,19 +1088,21 @@
     <div class="page center width">
         <h1>Purchase Whitelist</h1>
         <div class="panel">
-            <p>Purchase a whitelist license and get whitelisting for that provider forever.</p>
+            <p>Pre-pay your whitelist license for 20 months. All videos created with the
+                cleared Monstercat catalog during this time period will never
+                receive content-ID claims.</p>
             <div data-set="new-license">
                 <input type="hidden" name="amount" value="20000">
                 <table class="form">
                     <tbody>
                         <tr>
-                            <th>Vendor</th>
+                            <th>Platform</th>
                             <td>
                                 {{>vendor-selector}}
                             </td>
                         </tr>
                         <tr>
-                            <th>Identity</th>
+                            <th>Channel Id</th>
                             <td>
                                 <input type="text"
                                        name="identity"
@@ -1156,7 +1221,7 @@
     <ul class="page width center panel art-list">
         {{#results}}
         <li>
-            <a class="silent" href="/release/{{_id}}" title="{{title}} / {{artists}}">
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
                 <img src="{{cover}}"/>
                 <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
@@ -1173,7 +1238,7 @@
           {{#previous}}
             <a href="?{{previous}}">Previous</a>
           {{/previous}}
-          <label>{{skip}} - {{count}} of {{total}}</label>
+          <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
           {{#next}}
             <a href="?{{next}}">Next</a>
           {{/next}}
@@ -1201,7 +1266,7 @@
     <div class="bgbox" style="background-image: url('{{coverBig}}')">
         <div class="bgbox-blanket cl-white">
             <div class="details-box page width center clearfix">
-                <img class="artwork" src="{{cover}}"/>
+                <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
                 <h1 release-id="{{_id}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
                 <label>Released {{releaseDate}}</label>
@@ -1274,6 +1339,7 @@
         title="{{title}}"
         index="{{index}}"
         track-id="{{_id}}"
+        {{#licensable}}licensable{{/licensable}}
         {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
         release-id="{{releaseId}}">
     <i class="fa fa-play-circle inactive"></i>
@@ -1416,7 +1482,7 @@
     <ul class="discography">
         {{#results}}
         <li>
-            <a href="/release/{{_id}}">
+            <a href="/release/{{catalogId}}">
                 <img src="{{cover}}">
             </a>
         </li>
@@ -1965,7 +2031,7 @@
     <ul class="art-list">
         {{#results}}
         <li>
-            <a class="silent" href="/release/{{_id}}" title="{{title}} / {{artists}}">
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
                 <img src="{{cover}}"/>
                 <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>

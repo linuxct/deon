@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
   })
 })
 
+openRoute.completed.push(function () {
+  recordPage()
+})
+
 function bgmebro() {
   if (!lstore) return
   var m = lstore.getItem('bgon') == 'true' ? 'add' : 'remove'
@@ -40,14 +44,29 @@ function isSignedIn () {
   return session && session.user
 }
 
-function hasGoldAccess () {
+function isLegacyUser () {
   if (!isSignedIn()) return false
   var user = session.user
-  // TODO remove temporary support for old checks
-  return !!user.goldService ||
-    user.type.indexOf('gold') > -1 ||
+  // Lolwut
+  return user.type.indexOf('gold') > -1 ||
     user.type.indexOf('golden') > -1 ||
-    user.type.indexOf('license') > -1
+    user.type.indexOf('license') > -1 ||
+    user.type.indexOf('subscriber') > -1 ||
+    user.type.indexOf('admin') > -1 ||
+    user.type.indexOf('admin_readonly') > -1
+}
+
+function hasGoldAccess () {
+  if (!isSignedIn()) return false
+  // TODO remove temporary support for old checks
+  return !!session.user.goldService || hasLegacyAccess()
+}
+
+function hasLegacyAccess () {
+  if (!isLegacyUser()) return false
+  if (session.subscription) return !!session.subscription.subscriptionActive
+  if (session.user) return !!session.user.subscriptionActive
+  return false
 }
 
 function getSession (done) {
@@ -55,6 +74,11 @@ function getSession (done) {
     url: endpoint + '/self/session',
     withCredentials: true
   }, done)
+}
+
+function recordPage () {
+  if (typeof analytics == 'undefined') return
+  analytics.page()
 }
 
 function recordEvent (name, obj, done) {
@@ -65,6 +89,7 @@ function recordEvent (name, obj, done) {
   requestJSON({
     url: endpoint + '/analytics/record/event',
     withCredentials: true,
+    method: 'POST',
     data: {
       event: name,
       properties: obj
@@ -104,37 +129,6 @@ function showIntercom (e, el) {
   if (!window.Intercom)
     return toasty(Error('Intercom disabled by Ad-Block. Please unblock.'))
   window.Intercom('show')
-}
-
-function searchMusic (e, el) {
-  var data   = getTargetDataSet(el, false, true) || {}
-  var q      = queryStringToObject(window.location.search)
-  var filter = []
-  var fuzzy  = []
-  if (data.type) {
-    filter.push('type', data.type)
-  }
-  else {
-    delete q.filters;
-  }
-  if (data.search) {
-    fuzzy.push('title', data.search)
-  }
-  else {
-    delete q.fuzzy;
-  }
-  if (filter.length > 0) {
-    q.filters = filter.join(',')
-  }
-  if (fuzzy.length > 0) {
-    q.fuzzy   = fuzzy.join(',')
-  }
-  //q.skip    = 0
-
-  delete q.skip
-  delete q.limit
-
-  go('/music?' + objectToQueryString(q))
 }
 
 function createCopycredit (title, urls) {
@@ -187,9 +181,9 @@ function getArtistsTitle(artists) {
  *   trackId
  */
 function loadReleaseAndTrack (obj, done) {
-  loadCache(endpoint + '/track/' + obj.trackId, function(err, track) {
+  loadCache(endpoint + '/catalog/track/' + obj.trackId, function(err, track) {
     if (err) return done(err);
-    loadCache(endpoint + '/release/' + obj.releaseId, function(err, release) {
+    loadCache(endpoint + '/catalog/release/' + obj.releaseId, function(err, release) {
       if (err) return done(err)
       var title = track.title + ' by ' + track.artistsTitle + ' from ' + release.title
       track.copycredit = createCopycredit(title, release.urls)
@@ -416,20 +410,33 @@ function transformSocialSettings (obj) {
 function transformServices () {
   var user = isSignedIn() ? session.user : {}
   var opts = {
-    hasGoldPermanent: !!user.goldService && !user.goldSubscriptionId,
-    goldSubscribe: !(!!user.goldService && !!user.goldSubscriptionId),
-    goldUnsubscribe: (!!user.goldService && !!user.goldSubscriptionId)
+    hasGoldPermanent: !!user.goldService && !user.currentGoldSubscription,
+    goldSubscribe: !user.goldService && !user.currentGoldSubscription,
+    goldUnsubscribe: (!!user.goldService && !!user.currentGoldSubscription)
   }
+  if (isLegacyUser())
+    opts = {hasLegacy: true}
   return {
     user: isSignedIn() ? opts : null
   }
 }
 
+function transformGoldSubscription (obj) {
+  var nobj = {
+    nextBillingDate: formatDate(obj.availableUntil),
+  }
+  if (obj.canceled) {
+    nobj.canceled = {
+      endDate: formatDate(obj.availableUntil),
+    }
+  }
+  return nobj
+}
+
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
-  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes'].join(',')
-  q.limit  = 24
-  q.skip   = parseInt(q.skip) || 0
+  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(',')
+  objSetPageQuery(q, q.page, {perPage: 24})
   var fuzzy   = commaStringToObject(q.fuzzy)
   var filters = commaStringToObject(q.filters)
   var type    = filters.type || ""
@@ -450,32 +457,14 @@ function transformMusic () {
 }
 
 function transformMusicReleases (obj) {
-  var q = queryStringToObject(window.location.search)
-  if (!q.limit)
-    q.limit  = 25
-  q.limit = parseInt(q.limit)
-  if (!q.skip)
-    q.skip= 0
-  q.skip = parseInt(q.skip)
-  var next = q.skip + q.limit
-  var prev = q.skip - q.limit
-  if (prev < 0)
-    prev = null
-  if (next > obj.total)
-    next = null
-  var nq    = cloneObject(q)
-  nq.skip   = next
-  var pq    = cloneObject(q)
-  pq.skip   = prev
-  if (next != null) obj.next     = objectToQueryString(nq)
-  if (prev != null) obj.previous = objectToQueryString(pq)
+  setPagination(obj, 24)
   return transformReleases(obj)
 }
 
 function transformReleases (obj) {
-  obj.results = obj.results.sort(sortRelease).map(mapRelease)
-  obj.skip  = (parseInt(obj.skip) || 0) + 1
-  obj.count = obj.skip + obj.results.length - 1
+  obj.results     = obj.results.sort(sortRelease).map(mapRelease)
+  obj.showingFrom = (obj.skip || 0) + 1
+  obj.showingTo   = obj.skip + obj.results.length
   return obj
 }
 
@@ -495,14 +484,14 @@ function transformWhitelists (obj) {
     whitelist.paid = (whitelist.amountPaid / 100).toFixed(2)
     whitelist.remaining = (whitelist.amountRemaining / 100).toFixed(2)
     if (whitelist.availableUntil)
-      whitelist.nextBillingDate = whitelist.availableUntil
+      whitelist.nextBillingDate = formatDate(whitelist.availableUntil)
     if (whitelist.subscriptionActive)
       whitelist.cost = (5).toFixed(2)
     whitelist.monthlyCost = 500
     whitelist.canBuyOut = whitelist.paidInFull ? { _id: whitelist._id } : undefined
     if (whitelist.whitelisted)
       whitelist.licenseUrl = endpoint + '/self/whitelist/' + whitelist._id + '.pdf'
-    if (!whitelist.subscriptionActive && whitelist.amountRemaining > 0)
+    if (whitelist.subscriptionId && !whitelist.subscriptionActive && whitelist.amountRemaining > 0)
       whitelist.resume = { _id: whitelist._id, amount: whitelist.monthlyCost }
     if (whitelist.subscriptionActive)
       whitelist.cancel = { _id: whitelist._id }
@@ -512,9 +501,10 @@ function transformWhitelists (obj) {
 }
 
 function transformReleaseTracks (obj, done) {
+  var h1 = document.querySelector('h1[release-id]')
+  var releaseId = h1 ? h1.getAttribute('release-id') : ''
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
-    var releaseId = getLastPathnameComponent()
     obj.results.forEach(function (track, index, arr) {
       mapReleaseTrack(track, index, arr)
       track.releaseId = releaseId
@@ -629,10 +619,10 @@ function completedMusic (source, obj) {
     //TODO: make this better for if/when fuzzy thing changes
     parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
   }
-  if(qs.skip) {
-    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
-    if(page > 1) {
-      parts.push('Page ' + page)
+  if(qs.page) {
+    qs.page = parseInt(qs.page)
+    if(qs.page > 1) {
+      parts.push('Page ' + qs.page)
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
@@ -682,9 +672,19 @@ function completedMusic (source, obj) {
 /* UI Stuff */
 
 function canAccessGold (e, el) {
-  if (hasGoldAccess()) return
+  var hasit = hasGoldAccess()
+  if (hasit) return
   e.preventDefault()
-  openModal('subscription-required-modal')
+  openModal('subscription-required-modal', {
+    signedIn: isSignedIn(),
+    hasGold: hasGoldAccess()
+  })
+}
+
+function openReleaseArt (e, el) {
+  openModal('release-art-modal', {
+    src: el.getAttribute('big-src')
+  })
 }
 
 function openTrackCopyCredits (e, el) {
@@ -714,4 +714,42 @@ function setPageTitle (title, glue, suffix) {
   if (!glue) glue = pageTitleGlue
   if (!suffix) suffix = pageTitleSuffix
   document.title = (!!title ? (title + glue) : '') + suffix
+}
+
+function pageToQuery (page, opts) {
+  opts = opts || {}
+  opts.perPage = opts.perPage || 25
+  page = page || 1
+
+  return {skip: (page - 1) * opts.perPage, limit: opts.perPage}
+}
+
+function objSetPageQuery (obj, page, opts) {
+  var sl = pageToQuery(page, opts);
+  obj.skip = sl.skip
+  obj.limit = sl.limit
+}
+
+function setPagination (obj, perPage) {
+  var q = queryStringToObject(window.location.search)
+  q.page = parseInt(q.page) || 1
+  //TODO: Calculate whether prev or next are required
+  //based on current page and the numperpage
+  var nq = cloneObject(q)
+  var pq  = cloneObject(q)
+  nq.page = nq.page + 1
+  pq.page = pq.page - 1
+  if (q.page * perPage < obj.total) {
+    obj.next     = objectToQueryString(nq)
+  }
+  if (q.page > 1) {
+    obj.previous = objectToQueryString(pq)
+  }
+  obj.showingFrom = Math.max((q.page - 1) * perPage, 1)
+  if (obj.next) {
+    obj.showingTo = q.page == 1 ? perPage : obj.showingFrom + perPage - 1
+  }
+  else {
+    obj.showingTo = obj.total
+  }
 }
