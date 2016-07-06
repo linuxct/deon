@@ -377,6 +377,14 @@ function transformHome () {
   return {}
 }
 
+function transformBlogPosts (obj) {
+  obj.posts.length = 2
+  obj.posts.forEach(function (i) {
+    i.date = formatDate(i.date)
+  })
+  return obj
+}
+
 function transformRoster () {
   var q = queryStringToObject(window.location.search)
   var thisYear = (new Date()).getFullYear()

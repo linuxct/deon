@@ -1182,6 +1182,8 @@
             Independent labels have the ability to reshape the music industry.
         </p>
     </div>
+    <div source="$endpoint/catalog/news" template="blog-stories">
+    </div>
     <div>
         <div>
             <h2>Listen on Spotify</h2>
@@ -1190,6 +1192,28 @@
             <h2>Join the Family</h2>
         </div>
     </div>
+</script>
+
+<script type="text/template"
+        template-name="blog-stories"
+        transform="transformBlogPosts">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{#posts}}
+    <article>
+        <h3>{{title}}</h3>
+        <label>{{date}}</label>
+        <label>{{subline}}</label>
+        <img src="http://www.monstercat.com{{image}}" width="300"/>
+        <a href="http://www.monstercat.com/blog/{{path}}">Read</a>
+    </article>
+    {{/posts}}
+    {{/data}}
 </script>
 
 <!-- MUSIC -->
