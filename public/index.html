@@ -1204,7 +1204,10 @@
                 <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
                 <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
-                <label>Released {{releaseDate}}</label>
+                <label>
+                    {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                    {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                </label>
                 <div class="options push-children-right">
                     {{#purchase}}
                     <button class="faux" action="openPurchaseRelease">

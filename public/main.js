@@ -340,8 +340,13 @@ function mapReleaseTrack (o, index, arr) {
 }
 
 function mapRelease (o) {
-  o.releaseDate = formatDate(o.releaseDate)
-  o.preReleaseDate = formatDate(o.preReleaseDate)
+  var pdate = typeof o.preReleaseDate != 'undefined' ? new Date(o.preReleaseDate) : undefined
+  var now   = new Date()
+  if (pdate && now < pdate) {
+    o.preReleaseDate = formatDate(pdate)
+  } else {
+    o.releaseDate = formatDate(o.releaseDate)
+  }
   o.artists = o.renderedArtists
   if(o.thumbHashes) {
     o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
