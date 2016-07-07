@@ -116,18 +116,25 @@
 
 <script type="text/template" template-name="subscription-required-modal">
     <div class="modal">
-        <div class="panel panel--dark pointer-events">
+        <div class="panel panel--padded pointer-events">
             <h1>Get Gold!</h1>
             <div class="modal-content">
-                <p>You need a subscription to do that!</p>
+                <h2 class="pricing">$5/month</h2>
+                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+                <br/>
+                <ul>
+                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                    <li>Playlist your music directly within Connect</li>
+                    <li>Direct support via e-mail and on site.</li>
+                </ul>
             </div>
                 {{^hasGold}}
-                <a class="button button--gold" href="/account/services" action="closeModal">Get your Gold membership!</a>
+                <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
                 {{/hasGold}}
                 {{^signedIn}}
                 <a class="button button--cta" href="/sign-up" action="closeModal">Sign up for an account!</a>
                 {{/signedIn}}
-            <button action="closeModal">
+            <button class="button--close faux" action="closeModal">
                 <i class="fa fa-remove"></i>
             </button>
         </div>
@@ -168,8 +175,9 @@
         transform="loadReleaseAndTrack">
     <div class="modal">
         <div class="panel pointer-events">
+            <h1>Video credits</h1>
             {{#loading}}
-            <i class="fa fa-spin fa-refresh"></i>
+            {{>loading-inner-view}}
             {{/loading}}
             {{#error}}
             <p>{{message}}</p>
@@ -177,7 +185,7 @@
             {{#data}}
             <textarea class="copycredits">{{track.copycredit}}</textarea>
             {{/data}}
-            <button action="closeModal">
+            <button class="button--close faux" action="closeModal">
                 <i class="fa fa-remove"></i>
             </button>
         </div>
@@ -702,7 +710,7 @@
         <div class="flex">
 
             <div class="col-xs-12 col-lg-4 col-lg-last panel panel--dark">
-                <h1>Gold Access</h1>
+                <h1>Gold Membership</h1>
                 <h2 class="pricing pricing--gold">$5/month</h2>
                 <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
                 {{#hasGoldPermanent}}
@@ -722,7 +730,7 @@
                     <li>Direct support via e-mail and on site.</li>
                 </ul>
                 <br/>
-                <div data-set="subscribe-gold">
+                <div data-set="subscribe-gold" class="services-form"> 
                     <input type="text" name="trialCode" placeholder="Special Code"/>
                     <button class="button--gold"
                             action="subscribeGold"
@@ -761,7 +769,7 @@
                         transform="transformWhitelists">
                     </tbody>
                 </table>
-                <div data-set="new-license">
+                <div data-set="subscribe-gold" class="services-form"> 
                     <select name="vendor">
                         <option value="">Select Platform</option>
                         <option value="YouTube">YouTube</option>
@@ -794,7 +802,7 @@
                 <tbody role="new-subs">
                 </tbody>
             </table>
-            <div>$<span role="total-cost">0.00</span></div>
+            <div><span class="total-cost">$<span role="total-cost">0.00</span></span>/month</div>
             <br/>
             <div data-set="pay-method">
                {{>payment-method}}

@@ -26,7 +26,6 @@ p, label, a {
   font-size: 16px;
 }
 
-select,
 input,
 textarea{
   box-shadow: 0 0 0;
@@ -64,7 +63,7 @@ a{
   transition: color 0.4s ease;
   color: #000;
 }
-a:focus,
+a:active,
 a:hover{
   color: dodgerblue;
 }
@@ -155,7 +154,7 @@ button,
   background: dodgerblue;
   color: white;
 }
-.button--cta:focus,
+.button--cta:active,
 .button--cta:hover{
   background: black;
   border-color: black;
@@ -165,7 +164,7 @@ button,
   color: #ef6958;
   border-color: #ef6958;
 }
-.button--danger:focus,
+.button--danger:active,
 .button--danger:hover{
   background: #ef6958;
   border-color: #ef6958;
@@ -175,7 +174,7 @@ button,
   border-color: #3b5998;
   color: #3b5998;
 }
-.button--fb:focus,
+.button--fb:active,
 .button--fb:hover{
   color: white;
   background: #3b5998;
@@ -184,7 +183,7 @@ button,
   transition: color 0.4s ease;
   color: #3b5998;
 }
-.button--fb:focus > i,
+.button--fb:active > i,
 .button--fb:hover > i{
   color: white;
 }
@@ -192,7 +191,7 @@ button,
   border-color: #34a853;
   color: #34a853;
 }
-.button--g:focus,
+.button--g:active,
 .button--g:hover{
   color: white;
   background: #34a853;
@@ -201,7 +200,7 @@ button,
   transition: color 0.4s ease;
   color: #34a853;
 }
-.button--g:focus > i,
+.button--g:active > i,
 .button--g:hover > i{
   color: white;
 }
@@ -209,7 +208,7 @@ button,
   color: white;
   border-color: gold;
 }
-.button--gold:focus,
+.button--gold:active,
 .button--gold:hover{
   color: black;
   background: gold;
@@ -222,13 +221,13 @@ button.faux {
   color: #383838;
 }
 
-button:focus,
+button:active,
 button:hover{
   background: dodgerblue;
   color: white;
 }
 
-button.faux:focus,
+button.faux:active,
 button.faux:hover{
   color: dodgerblue;
   background: transparent;
@@ -308,30 +307,39 @@ button,
 [type="radio"]:focus + span{
   position: relative;
 }
+a::after,
+button::after,
+[type="radio"]:focus + span:after{
+  visibility: hidden;
+}
 a:not([role=track-title]):focus::after,
 button:focus::after,
 [type="radio"]:focus + span:after {
-  content: "\f077";
+  content: "\f111";
   font-family: "FontAwesome";
   font-size: .75rem;
   position: absolute;
-  bottom: -15px;
-  color: dodgerblue;
+  top: -10px;
+  visibility: visible;
+  color: gold;
   opacity: 0;
   animation: fadeOff 2s ease 1;
-  text-align: center;
+  text-align: left;
   left: 0;
-  right: 0;
-  margin: auto;
   line-height: 1;
   vertical-align: -0.125em;
 }
-a:not([role=track-title]):active::after,
 button:active::after,
-a:not([role=track-title]):visited::after,
-button:visited::after,
-[type="radio"]:active + span:after {
-  display: none;
+button:focus:hover::after,
+button:focus:active::after,
+a:not([role=track-title]):active::after,
+a:not([role=track-title]):focus:hover::after,
+a:not([role=track-title]):focus:active::after,
+[type="radio"]:active + span:after,
+[type="radio"]:focus:hover + span:after,
+[type="radio"]:focus:active + span:after {
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 @keyframes fadeOff{
   from{
@@ -376,9 +384,9 @@ hr {
 .footer-item:first-child::before{
   display: none;
 }
-.nav-item:focus,
+.nav-item:active,
 .nav-item:hover,
-.footer-item:focus,
+.footer-item:active,
 .footer-item:hover{
   color: dodgerblue;
 }
@@ -480,6 +488,10 @@ hr {
 
 .panel h2{
   margin-bottom: 1rem;
+}
+
+.panel ul{
+  padding-left: 1.1rem;
 }
 
 .pad-vertical {
@@ -679,9 +691,9 @@ header:hover .scrub > .progress {
   color: white;
 }
 
-.cl-white a:focus,
+.cl-white a:active,
 .cl-white a:hover,
-.cl-white button:focus,
+.cl-white button:active,
 .cl-white button:hover{
   color: dodgerblue;
 }
@@ -728,6 +740,7 @@ button > i.active,
 
 textarea.copycredits {
   width: 100%;
+  font-size: 1rem;
   min-height: 150px;
 }
 
@@ -795,42 +808,91 @@ span.note a {
 .modal {
   width: 80%;
   max-width: 1000px;
+  position: relative;
   margin: 50px auto;
+}
+
+.modal > .panel--padded {
+  padding-bottom: 3.5rem;
+}
+
+.modal h1{
+  margin-top: 0;
 }
 
 .modal-content{
   margin-bottom: 2rem;
 }
 
+.modal .button--close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+}
+
+.modal {
+  animation: scalingModal .45s ease 1 forwards;
+  -webkit-backface-visibility: hidden;
+}
+
+@keyframes scalingModal{
+  from{
+    opacity: 0;
+    transform: translateZ(0) perspective(1px) scale(0.9);
+  }
+  to{
+    opacity: 1;
+    transform: translateZ(0) perspective(1px) scale(1);
+  }
+}
+
 .services .panel--dark{
   padding: 2rem 3rem 2.2rem;
 }
-.services select,
-.services input[type="text"]{
+.services .services-form select{
+  box-shadow: 0 0 0;
+  border: 0;
+  background: transparent;
+  vertical-align: bottom;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+.services .services-form select,
+.services .services-form input[type="text"]{
   height: 51px;
   background: #eee;
   padding: 1rem;
   font-size: 1rem;
   width: 100%;
-  margin: .1rem 0;
+}
+.services .services-form select,
+.services .services-form input[type="text"],
+.services .services-form button{
+  margin: .5rem 0;
 }
 .services button{
   width: 100%;
+  margin-top: 1rem;
 }
 .services > p {
   margin-bottom: 1.5rem;
 }
+.services .total-cost{
+  font-size: 2rem;
+  font-weight: bold;
+}
 @media screen and (min-width: 992px){
-  .services select,
-  .services input[type="text"],
-  .services button{
+  .services .services-form select,
+  .services .services-form input[type="text"],
+  .services button,
+  .services .services-form button{
     width: auto;
+    margin: 0;
   }
 }
-.services select{
-  vertical-align: bottom;
-}
-.services .panel--dark input[type="text"]{
+.services .panel--dark .services-form input[type="text"]{
   background: #333;
   color: white;
 }
@@ -972,9 +1034,9 @@ body.bg {
 .bg button:not(.button--social){
   color: white;
 }
-.bg a:focus,
+.bg a:active,
 .bg a:hover,
-.bg button:focus:not(.button--social),
+.bg button:active:not(.button--social),
 .bg button:hover:not(.button--social){
   color: dodgerblue;
 }
@@ -998,21 +1060,21 @@ body.bg {
 .bg .panel a{
   color: black;
 }
-.bg .panel a:focus,
+.bg .panel a:active,
 .bg .panel a:hover{
   color: dodgerblue;
 }
 .bg .panel button:not(.button--social){
   color: dodgerblue;
 }
-.bg .panel button:focus:not(.button--social),
+.bg .panel button:active:not(.button--social),
 .bg .panel button:hover:not(.button--social){
   color: white;
 }
 .bg .panel button.faux {
   color: #383838;
 }
-.bg .panel button.faux:focus,
+.bg .panel button.faux:active,
 .bg .panel button.faux:hover {
   color: dodgerblue;
 }
@@ -1021,7 +1083,7 @@ body.bg {
 .bg .panel button.button--cta{
   color: white;
 }
-.bg .panel button.button--cta:focus,
+.bg .panel button.button--cta:active,
 .bg .panel button.button--cta:hover{
   background: black;
   border-color: black;
@@ -1031,7 +1093,7 @@ body.bg {
   color: #ef6958;
   border-color: #ef6958;
 }
-.bg .panel button.button--danger:focus,
+.bg .panel button.button--danger:active,
 .bg .panel button.button--danger:hover{
   background: #ef6958;
   border-color: #ef6958;
@@ -1042,9 +1104,9 @@ body.bg {
   color: white;
   border-color: gold;
 }
-.bg .panel button.button--gold:focus,
+.bg .panel button.button--gold:active,
 .bg .panel button.button--gold:hover,
-.bg .panel--dark button.button--gold:focus,
+.bg .panel--dark button.button--gold:active,
 .bg .panel--dark button.button--gold:hover{
   background: gold;
   border-color: gold;
