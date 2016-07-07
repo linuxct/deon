@@ -516,11 +516,13 @@ function transformReleaseTracks (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
+      track.time = formatDuration(track.duration)
     })
     done(null, obj)
   })
 }
 
+// TODO Refactor
 function transformTracks (obj, done) {
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
@@ -531,6 +533,7 @@ function transformTracks (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
+      track.time = formatDuration(track.duration)
     })
     done(null, obj)
   })

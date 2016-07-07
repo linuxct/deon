@@ -1265,6 +1265,7 @@
     {{/artists}}
 </td>
 <td class="genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td>{{time}}</td>
 <td>{{bpm}}</td>
 </script>
 
@@ -1315,6 +1316,7 @@
                 <th>Title</th>
                 <th>Artists</th>
                 <th>Genre</th>
+                <th>Time</th>
                 <th>BPM</th>
                 <th></th>
             </tr>
@@ -1606,11 +1608,13 @@
                         <th>Release</th>
                         <th>Artist</th>
                         <th>Genre</th>
+                        <th>Time</th>
                         <th>BPM</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody role="playlist-tracks" source="$endpoint/playlist/{{_id}}/tracks"
+                <tbody role="playlist-tracks"
+                       source="$endpoint/playlist/{{_id}}/tracks"
                        template="playlist-tracks">
                 </tbody>
             </table>
@@ -1935,6 +1939,7 @@
                 <th>Title</th>
                 <th>Artists</th>
                 <th>Genre</th>
+                <th>Time</th>
                 <th>BPM</th>
                 <th></th>
             </tr>
