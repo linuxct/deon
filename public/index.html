@@ -184,12 +184,6 @@
         template-name="release-shopping-modal">
     <div class="modal">
         <div class="panel pointer-events">
-            {{#loading}}
-            <i class="fa fa-spin fa-refresh"></i>
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
             {{#data}}
             <ul>
                 {{#purchaseLinks}}
@@ -1208,7 +1202,7 @@
         <div class="bgbox-blanket cl-white">
             <div class="details-box page width center clearfix">
                 <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
-                <h1 release-id="{{_id}}">{{title}}</h1>
+                <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
                 <label>Released {{releaseDate}}</label>
                 <div class="options push-children-right">

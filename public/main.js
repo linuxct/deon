@@ -300,11 +300,12 @@ function getReleasePurchaseLinks (urls) {
 }
 
 function openPurchaseRelease (e, el) {
-  var id = document.querySelector('h1[release-id]').getAttribute('release-id')
+  var el = document.querySelector('h1[release-id]')
+  var id = el.getAttribute('catalog-id') || el.getAttribute('release-id')
   var url = endpoint + '/catalog/release/' + id
   loadCache(url, function (err, res) {
     openModal('release-shopping-modal', {
-      data: res
+      data: mapRelease(res)
     })
   })
 }
