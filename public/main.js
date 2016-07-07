@@ -353,6 +353,9 @@ function mapRelease (o) {
     o.purchase = !!o.purchaseLinks.length
   }
   o.downloadLink = getDownloadLink(o._id)
+  // Since we use catalogId for links, if not present fallback to id
+  // If causes problems just create new variable to use for the URI piece
+  if (!o.catalogId) o.catalogId = o._id
   return o
 }
 
