@@ -89,7 +89,7 @@ function recordEvent (name, obj, done) {
   if (location.host.indexOf('localhost') == 0)
     return done(Error('Localhost not supported.'))
   requestJSON({
-    url: endpoint + '/analytics/record/event',
+    url: endhost + '/analytics/record/event',
     withCredentials: true,
     method: 'POST',
     data: {
