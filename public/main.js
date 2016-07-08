@@ -4,7 +4,9 @@ var datapoint       = 'https://s3.amazonaws.com/data.monstercat.com'
 var session         = null
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
-var lstore          = window.localStorage
+var lstore          = window.localStorage;
+
+(document.createElement('img')).src = '/artwork.jpg';
 
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()

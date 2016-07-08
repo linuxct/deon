@@ -376,7 +376,7 @@ hr {
   margin-right: auto;
 }
 
-@media screen and (min-width: 768px){
+@media screen and (min-width: 1200px){
   .container{
     width: 80%;
     padding-left: 0;
@@ -594,6 +594,10 @@ td.push-children-right > * {
     margin-right: .5rem;
   }
 
+  .navigation > .nav-item > i {
+    display: inline;
+  }
+
   .navigation > .nav-item::before,
   .global-search::before{
     display: inline-block;
@@ -650,8 +654,11 @@ td.push-children-right > * {
   .controls > a {
     width: auto;
     display: inline-block;
-    margin: 0 .5rem;
+    margin: 0 1rem;
     text-align: left;
+  }
+  .controls > button{
+    margin-right: 1rem;
   }
 }
 
