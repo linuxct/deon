@@ -379,7 +379,7 @@ hr {
   margin-right: auto;
 }
 
-@media screen and (min-width: 1200px){
+@media screen and (min-width: 1441px){
   .container{
     width: 80%;
     padding-left: 0;
