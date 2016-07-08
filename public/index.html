@@ -196,8 +196,9 @@
         template-name="release-shopping-modal">
     <div class="modal">
         <div class="panel pointer-events">
+            <h1>Support this release</h1>
             {{#loading}}
-            <i class="fa fa-spin fa-refresh"></i>
+            {{>loading-inner-view}}
             {{/loading}}
             {{#error}}
             <p>{{message}}</p>
@@ -205,11 +206,11 @@
             {{#data}}
             <ul>
                 {{#purchaseLinks}}
-                <li><a target="_blank" href="{{url}}">{{name}}</a></li>
+                <li><a target="_blank" class="button" href="{{url}}">{{name}}</a></li>
                 {{/purchaseLinks}}
             </ul>
             {{/data}}
-            <button action="closeModal">
+            <button class="button--close faux" action="closeModal">
                 <i class="fa fa-remove"></i>
             </button>
         </div>
@@ -1201,7 +1202,7 @@
           {{#previous}}
             <a href="?{{previous}}">Previous</a>
           {{/previous}}
-          <label>{{skip}} - {{count}} of {{total}}</label>
+          <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
           {{#next}}
             <a href="?{{next}}">Next</a>
           {{/next}}
@@ -1230,9 +1231,12 @@
         <div class="bgbox-blanket cl-white">
             <div class="details-box page width center clearfix">
                 <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
-                <h1 release-id="{{_id}}">{{title}}</h1>
+                <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
-                <label>Released {{releaseDate}}</label>
+                <label>
+                    {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                    {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                </label>
                 <div class="options push-children-right">
                     {{#purchase}}
                     <button class="faux" action="openPurchaseRelease">
@@ -1290,6 +1294,7 @@
     {{/artists}}
 </td>
 <td class="genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td>{{time}}</td>
 <td>{{bpm}}</td>
 </script>
 
@@ -1302,6 +1307,7 @@
         title="{{title}}"
         index="{{index}}"
         track-id="{{_id}}"
+        {{#licensable}}licensable{{/licensable}}
         {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
         release-id="{{releaseId}}">
     <i class="fa fa-play-circle inactive"></i>
@@ -1339,6 +1345,7 @@
                 <th>Title</th>
                 <th>Artists</th>
                 <th>Genre</th>
+                <th>Time</th>
                 <th>BPM</th>
                 <th></th>
             </tr>
@@ -1630,11 +1637,13 @@
                         <th>Release</th>
                         <th>Artist</th>
                         <th>Genre</th>
+                        <th>Time</th>
                         <th>BPM</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody role="playlist-tracks" source="$endpoint/playlist/{{_id}}/tracks"
+                <tbody role="playlist-tracks"
+                       source="$endpoint/playlist/{{_id}}/tracks"
                        template="playlist-tracks">
                 </tbody>
             </table>
@@ -1959,6 +1968,7 @@
                 <th>Title</th>
                 <th>Artists</th>
                 <th>Genre</th>
+                <th>Time</th>
                 <th>BPM</th>
                 <th></th>
             </tr>

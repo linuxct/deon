@@ -89,6 +89,7 @@ function recordEvent (name, obj, done) {
   requestJSON({
     url: endpoint + '/analytics/record/event',
     withCredentials: true,
+    method: 'POST',
     data: {
       event: name,
       properties: obj
@@ -128,37 +129,6 @@ function showIntercom (e, el) {
   if (!window.Intercom)
     return toasty(Error('Intercom disabled by Ad-Block. Please unblock.'))
   window.Intercom('show')
-}
-
-function searchMusic (e, el) {
-  var data   = getTargetDataSet(el, false, true) || {}
-  var q      = queryStringToObject(window.location.search)
-  var filter = []
-  var fuzzy  = []
-  if (data.type) {
-    filter.push('type', data.type)
-  }
-  else {
-    delete q.filters;
-  }
-  if (data.search) {
-    fuzzy.push('title', data.search)
-  }
-  else {
-    delete q.fuzzy;
-  }
-  if (filter.length > 0) {
-    q.filters = filter.join(',')
-  }
-  if (fuzzy.length > 0) {
-    q.fuzzy   = fuzzy.join(',')
-  }
-  //q.skip    = 0
-
-  delete q.skip
-  delete q.limit
-
-  go('/music?' + objectToQueryString(q))
 }
 
 function createCopycredit (title, urls) {
@@ -330,11 +300,12 @@ function getReleasePurchaseLinks (urls) {
 }
 
 function openPurchaseRelease (e, el) {
-  var id = document.querySelector('h1[release-id]').getAttribute('release-id')
+  var el = document.querySelector('h1[release-id]')
+  var id = el.getAttribute('catalog-id') || el.getAttribute('release-id')
   var url = endpoint + '/catalog/release/' + id
   loadCache(url, function (err, res) {
     openModal('release-shopping-modal', {
-      data: res
+      data: mapRelease(res)
     })
   })
 }
@@ -369,8 +340,13 @@ function mapReleaseTrack (o, index, arr) {
 }
 
 function mapRelease (o) {
-  o.releaseDate = formatDate(o.releaseDate)
-  o.preReleaseDate = formatDate(o.preReleaseDate)
+  var pdate = typeof o.preReleaseDate != 'undefined' ? new Date(o.preReleaseDate) : undefined
+  var now   = new Date()
+  if (pdate && now < pdate) {
+    o.preReleaseDate = formatDate(pdate)
+  } else {
+    o.releaseDate = formatDate(o.releaseDate)
+  }
   o.artists = o.renderedArtists
   if(o.thumbHashes) {
     o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
@@ -383,6 +359,9 @@ function mapRelease (o) {
     o.purchase = !!o.purchaseLinks.length
   }
   o.downloadLink = getDownloadLink(o._id)
+  // Since we use catalogId for links, if not present fallback to id
+  // If causes problems just create new variable to use for the URI piece
+  if (!o.catalogId) o.catalogId = o._id
   return o
 }
 
@@ -462,8 +441,7 @@ function transformGoldSubscription (obj) {
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
   q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(',')
-  q.limit  = 24
-  q.skip   = parseInt(q.skip) || 0
+  objSetPageQuery(q, q.page, {perPage: 24})
   var fuzzy   = commaStringToObject(q.fuzzy)
   var filters = commaStringToObject(q.filters)
   var type    = filters.type || ""
@@ -484,32 +462,14 @@ function transformMusic () {
 }
 
 function transformMusicReleases (obj) {
-  var q = queryStringToObject(window.location.search)
-  if (!q.limit)
-    q.limit  = 25
-  q.limit = parseInt(q.limit)
-  if (!q.skip)
-    q.skip= 0
-  q.skip = parseInt(q.skip)
-  var next = q.skip + q.limit
-  var prev = q.skip - q.limit
-  if (prev < 0)
-    prev = null
-  if (next > obj.total)
-    next = null
-  var nq    = cloneObject(q)
-  nq.skip   = next
-  var pq    = cloneObject(q)
-  pq.skip   = prev
-  if (next != null) obj.next     = objectToQueryString(nq)
-  if (prev != null) obj.previous = objectToQueryString(pq)
+  setPagination(obj, 24)
   return transformReleases(obj)
 }
 
 function transformReleases (obj) {
-  obj.results = obj.results.sort(sortRelease).map(mapRelease)
-  obj.skip  = (parseInt(obj.skip) || 0) + 1
-  obj.count = obj.skip + obj.results.length - 1
+  obj.results     = obj.results.sort(sortRelease).map(mapRelease)
+  obj.showingFrom = (obj.skip || 0) + 1
+  obj.showingTo   = obj.skip + obj.results.length
   return obj
 }
 
@@ -546,20 +506,23 @@ function transformWhitelists (obj) {
 }
 
 function transformReleaseTracks (obj, done) {
+  var h1 = document.querySelector('h1[release-id]')
+  var releaseId = h1 ? h1.getAttribute('release-id') : ''
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
-    var releaseId = getLastPathnameComponent()
     obj.results.forEach(function (track, index, arr) {
       mapReleaseTrack(track, index, arr)
       track.releaseId = releaseId
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
+      track.time = formatDuration(track.duration)
     })
     done(null, obj)
   })
 }
 
+// TODO Refactor
 function transformTracks (obj, done) {
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
@@ -570,6 +533,7 @@ function transformTracks (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
+      track.time = formatDuration(track.duration)
     })
     done(null, obj)
   })
@@ -663,10 +627,10 @@ function completedMusic (source, obj) {
     //TODO: make this better for if/when fuzzy thing changes
     parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
   }
-  if(qs.skip) {
-    var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
-    if(page > 1) {
-      parts.push('Page ' + page)
+  if(qs.page) {
+    qs.page = parseInt(qs.page)
+    if(qs.page > 1) {
+      parts.push('Page ' + qs.page)
     }
   }
   setPageTitle(parts.join(pageTitleGlue))
@@ -758,4 +722,42 @@ function setPageTitle (title, glue, suffix) {
   if (!glue) glue = pageTitleGlue
   if (!suffix) suffix = pageTitleSuffix
   document.title = (!!title ? (title + glue) : '') + suffix
+}
+
+function pageToQuery (page, opts) {
+  opts = opts || {}
+  opts.perPage = opts.perPage || 25
+  page = page || 1
+
+  return {skip: (page - 1) * opts.perPage, limit: opts.perPage}
+}
+
+function objSetPageQuery (obj, page, opts) {
+  var sl = pageToQuery(page, opts);
+  obj.skip = sl.skip
+  obj.limit = sl.limit
+}
+
+function setPagination (obj, perPage) {
+  var q = queryStringToObject(window.location.search)
+  q.page = parseInt(q.page) || 1
+  //TODO: Calculate whether prev or next are required
+  //based on current page and the numperpage
+  var nq = cloneObject(q)
+  var pq  = cloneObject(q)
+  nq.page = nq.page + 1
+  pq.page = pq.page - 1
+  if (q.page * perPage < obj.total) {
+    obj.next     = objectToQueryString(nq)
+  }
+  if (q.page > 1) {
+    obj.previous = objectToQueryString(pq)
+  }
+  obj.showingFrom = Math.max((q.page - 1) * perPage, 1)
+  if (obj.next) {
+    obj.showingTo = q.page == 1 ? perPage : obj.showingFrom + perPage - 1
+  }
+  else {
+    obj.showingTo = obj.total
+  }
 }

@@ -123,6 +123,7 @@ function transformPlaylistTracks (obj, done) {
         track.playUrl = getPlayUrl(track.albums, track.releaseId)
         track.canRemove = isMyPlaylist(playlist) ? { index: track.index } : undefined
         track.downloadLink = getDownloadLink(release._id, track._id)
+        track.time = formatDuration(track.duration)
         if (isMyPlaylist(playlist)) {
           track.edit = {
             releaseId: release._id,
