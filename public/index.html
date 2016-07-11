@@ -43,9 +43,9 @@
 
 <header>
     <div class="scrub-container">
-    <div class="scrub" action="scrub">
-        <div class="progress" role="scrub-progress"></div>
-    </div>
+        <div class="scrub" action="scrub">
+            <div class="progress" role="scrub-progress"></div>
+        </div>
     </div>
     <div class="container player">
         <div class="push-children-right flex navigation"
@@ -535,15 +535,15 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="button--cta" 
-                    action="saveAccount"
-                    trigger="saveAccount"
-                    data-set-target="account">
-                Save
-            </button>
-            <button class="button--danger" action="signOut">Sign Out</button>
-            <br/>
-            <br/>
+            <div class="button-group">
+                <button class="button--cta" 
+                        action="saveAccount"
+                        trigger="saveAccount"
+                        data-set-target="account">
+                    Save
+                </button>
+                <button class="button--danger" action="signOut">Sign Out</button>
+            </div>
             <a href="/account/services">Manage Services</a>
         </div>
         <div class="panel">
@@ -573,7 +573,9 @@
                     </tr>
                 </tbody>
             </table>
-            <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+            <div class="button-group">
+                <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+            </div>
             {{/enableTwoFactor}}
         </div>
         <div class="panel">
@@ -654,7 +656,6 @@
     <div source="$endpoint/self/social-signins"
          template="social-settings">
     </div>
-    <br/>
     <button class="button--cta"
             action="saveAccountSettings"
             data-set-target="settings">
@@ -667,27 +668,29 @@
         template-name="social-settings"
         transform="transformSocialSettings">
     {{#data}}
-    {{#facebookEnabled}}
-    <button class="button--social button--fb" action="unlinkFacebook">
-        <i class="fa fa-facebook"></i> Unlink Account
-    </button>
-    {{/facebookEnabled}}
-    {{^facebookEnabled}}
-    <button class="button--social button--fb" action="enableFacebookSignin">
-        <i class="fa fa-facebook"></i> Link Account
-    </button>
-    {{/facebookEnabled}}
+        <div class="button-group">
+        {{#facebookEnabled}}
+        <button class="button--social button--fb" action="unlinkFacebook">
+            <i class="fa fa-facebook"></i> Unlink Account
+        </button>
+        {{/facebookEnabled}}
+        {{^facebookEnabled}}
+        <button class="button--social button--fb" action="enableFacebookSignin">
+            <i class="fa fa-facebook"></i> Link Account
+        </button>
+        {{/facebookEnabled}}
 
-    {{#googleEnabled}}
-    <button class="button--social button--g" action="unlinkGoogle">
-        <i class="fa fa-google"></i> Unlink Account
-    </button>
-    {{/googleEnabled}}
-    {{^googleEnabled}}
-    <button class="button--social button--g" action="enableGoogleSignin">
-        <i class="fa fa-google"></i> Link Account
-    </button>
-    {{/googleEnabled}}
+        {{#googleEnabled}}
+        <button class="button--social button--g" action="unlinkGoogle">
+            <i class="fa fa-google"></i> Unlink Account
+        </button>
+        {{/googleEnabled}}
+        {{^googleEnabled}}
+        <button class="button--social button--g" action="enableGoogleSignin">
+            <i class="fa fa-google"></i> Link Account
+        </button>
+        {{/googleEnabled}}
+    </div>
     {{/data}}
 </script>
 

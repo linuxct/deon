@@ -157,7 +157,7 @@ button:hover,
   color: white;
 }
 .button-group{
-  margin: 1rem 0;
+  margin: 1.5rem 0 1rem;
 }
 .button--cta{
   background: dodgerblue;
@@ -312,7 +312,7 @@ label[for] {
   transition: text-shadow 0.4s ease;
 }
 [type="radio"]:focus + span{
-  text-shadow: 0 0 20px dodgerblue;
+  text-shadow: 0 0 20px rgba(30, 144, 255, 0.41)
 }
 [type="radio"] + span > i {
   font-size: 2rem;
@@ -415,6 +415,12 @@ hr {
 
 .flex .panel:first-child{
   margin-top: 1rem;
+}
+
+@media screen and (min-width: 1650px){
+  .flex .panel.col-lg-last:first-child{
+    margin-top: 0;
+  }
 }
 
 .panel--dark{
@@ -1020,7 +1026,7 @@ span.note a {
   transition: all 0.4s ease;
 }
 .services .services-form select:focus{
-  box-shadow: 0 0 15px dodgerblue;
+  box-shadow: 0 0 15px rgba(30, 144, 255, 0.41);
 }
 .services .services-form select,
 .services .services-form input[type="text"]{
