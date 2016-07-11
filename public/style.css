@@ -17,8 +17,7 @@ body {
 
 body,
 input[type="text"],
-input[type="password"],
-select {
+input[type="password"]{
   font-family: "Proxima Nova", Open Sans, sans-serif;
 }
 
@@ -59,15 +58,19 @@ a.silent {
   color: #383838;
 }
 a{
-  -webkit-transition: color 0.4s ease;
-  transition: color 0.4s ease;
+  -webkit-transition: color 0.4s ease, all 0.4s ease;
+  transition: color 0.4s ease, all 0.4s ease;
   color: #000;
 }
 a:active,
 a:hover{
   color: dodgerblue;
 }
-
+a:focus,
+button:focus,
+[type="radio"]:focus + span{
+  text-shadow: 0 0 20px dodgerblue;
+}
 section > .container{
   margin-top: 2rem;
 }
@@ -143,7 +146,15 @@ button,
   font-size: 0.8rem;
   font-weight: bold;
   padding: 15px 17px 15px 20px;
-  transition: background 0.5s ease, color 0.4s ease, border-color 0.5s ease;
+  -webkit-transition: background 0.5s ease, color 0.4s ease, border-color 0.5s ease, all 0.4s ease;
+  transition: background 0.5s ease, color 0.4s ease, border-color 0.5s ease, all 0.4s ease;
+}
+button:active,
+button:hover,
+.button:active,
+.button:hover{
+  background: dodgerblue;
+  color: white;
 }
 .button-group{
   margin: 1rem 0;
@@ -217,14 +228,6 @@ button.faux {
   font-size: 100%;
   padding: 0;
   color: #383838;
-}
-
-button:active,
-button:hover,
-.button:active,
-.button:hover{
-  background: dodgerblue;
-  color: white;
 }
 
 button.faux:active,
@@ -305,52 +308,11 @@ label[for] {
   box-shadow: 0 0 0 0.25em dodgerblue;
 }
 
-a,
-button,
 [type="radio"]:focus + span{
-  position: relative;
+  transition: text-shadow 0.4s ease;
 }
-a::after,
-button::after,
-[type="radio"]:focus + span:after{
-  visibility: hidden;
-}
-a:not([role=track-title]):focus::after,
-button:focus::after,
-[type="radio"]:focus + span:after {
-  content: "\f111";
-  font-family: "FontAwesome";
-  font-size: .75rem;
-  position: absolute;
-  top: -10px;
-  visibility: visible;
-  color: gold;
-  opacity: 0;
-  animation: fadeOff 2s ease 1;
-  text-align: left;
-  left: 0;
-  line-height: 1;
-  vertical-align: -0.125em;
-}
-button:active::after,
-button:focus:hover::after,
-button:focus:active::after,
-a:not([role=track-title]):active::after,
-a:not([role=track-title]):focus:hover::after,
-a:not([role=track-title]):focus:active::after,
-[type="radio"]:active + span:after,
-[type="radio"]:focus:hover + span:after,
-[type="radio"]:focus:active + span:after {
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-@keyframes fadeOff{
-  from{
-    opacity: 1;
-  }
-  to{
-    opacity: 0;
-  }
+[type="radio"]:focus + span{
+  text-shadow: 0 0 20px dodgerblue;
 }
 [type="radio"] + span > i {
   font-size: 2rem;
@@ -367,20 +329,21 @@ hr {
   border: none;
 }
 
-
 .flex {
   display: flex;
   flex-wrap: wrap;
 }
 
-.container {
+.container,
+.toast{
   width: 95%;
   margin-left: auto;
   margin-right: auto;
 }
 
 @media screen and (min-width: 1441px){
-  .container{
+  .container,
+  .toast{
     width: 80%;
     padding-left: 0;
     padding-right: 0;
@@ -446,6 +409,14 @@ hr {
   box-shadow: 0 0 35px rgba(0,0,0,0.1);
 }
 
+.flex .panel{
+  margin-top: 0;
+}
+
+.flex .panel:first-child{
+  margin-top: 1rem;
+}
+
 .panel--dark{
   background: #181818;
 }
@@ -460,8 +431,8 @@ hr {
   color: white;
 }
 
-.panel table {
-  margin-bottom: 2rem;
+.panel h1{
+  margin-top: 0;
 }
 
 .panel h2{
@@ -639,7 +610,7 @@ td.push-children-right > * {
   .global-search::before {
     content: "";
     display: inline-block;
-    margin: 0 .75rem;
+    margin: 0 .75rem 0 0;
     width: 2px;
     vertical-align: middle;
     height: 18px;
@@ -686,8 +657,12 @@ td.push-children-right > * {
   display: inline-block;
   max-width: initial;
   box-sizing: border-box;
+  position: relative;
   padding: 1.5%;
   width: 50%;
+}
+.art-list li a {
+  position: relative;
 }
 @media screen and (min-width: 768px){
   .art-list li{
@@ -903,13 +878,12 @@ textarea.copycredits {
 
 .toasts > div {
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: 1rem;
   width: 100%;
 }
 
 .toast {
-  width: 100%;
+  box-shadow: 0 0 35px rgba(0,0,0,0.1);
   padding: 1.5rem;
   box-sizing: border-box;
   background: dodgerblue;
@@ -921,7 +895,6 @@ textarea.copycredits {
 }
 
 .toast p{
-  max-width: 80%;
   margin: 0 auto;
 }
 
@@ -978,7 +951,8 @@ span.note a {
   font-size: 1.5rem;
 }
 
-.modal {
+.modal,
+.toast {
   animation: scalingModal .45s ease 1 forwards;
   -webkit-backface-visibility: hidden;
 }
@@ -992,6 +966,20 @@ span.note a {
     opacity: 1;
     transform: translateZ(0) perspective(1px) scale(1);
   }
+}
+
+.modal--artwork{
+  max-width: 800px;
+  width: 80%;
+  width: 90vmin;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.modal--artwork img{
+  width: 100%;
 }
 
 .modal--release {
@@ -1014,10 +1002,14 @@ span.note a {
   margin: 0;
 }
 
+.services table{
+  margin-bottom: 2rem;
+}
 .services .panel--dark{
-  padding: 2rem 3rem 2.2rem;
+  padding: 2rem 2rem 2.5rem;
 }
 .services .services-form select{
+  font-family: "Proxima Nova", Open Sans, sans-serif;
   box-shadow: 0 0 0;
   border: 0;
   background: transparent;
@@ -1025,6 +1017,10 @@ span.note a {
   -webkit-appearance: none;
   -webkit-border-radius: 0px;
   border-radius: 0px;
+  transition: all 0.4s ease;
+}
+.services .services-form select:focus{
+  box-shadow: 0 0 15px dodgerblue;
 }
 .services .services-form select,
 .services .services-form input[type="text"]{
@@ -1050,6 +1046,11 @@ span.note a {
   font-size: 2rem;
   font-weight: bold;
 }
+@media screen and (min-width: 1650px){
+  .services .panel--dark{
+    padding: 2rem 3rem 2.2rem;
+  }
+}
 @media screen and (min-width: 992px){
   .services .services-form select,
   .services .services-form input[type="text"],
@@ -1064,7 +1065,7 @@ span.note a {
   color: white;
 }
 .pricing{
-  font-weight: normal;
+  font-weight: bold;
 }
 .pricing.pricing--gold{
   color: gold;
