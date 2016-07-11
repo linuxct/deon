@@ -4,7 +4,9 @@ var datapoint       = 'https://s3.amazonaws.com/data.monstercat.com'
 var session         = null
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
-var lstore          = window.localStorage
+var lstore          = window.localStorage;
+
+(document.createElement('img')).src = '/img/artwork.jpg';
 
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
@@ -17,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     session = obj
     trackUser()
     renderHeader()
+    renderHeaderMobile()
     window.addEventListener("popstate", function popState (e) {
       stateChange(location.pathname + location.search, e.state)
     })
@@ -719,6 +722,20 @@ function renderHeader () {
   })
   var feedbackBtn = document.querySelector('[role="feedback"]')
   if (feedbackBtn) feedbackBtn.classList.toggle('hide', !isSignedIn())
+}
+
+function renderHeaderMobile () {
+  var el = document.querySelector('#navigation-mobile')
+  var target = '[template-name="' + el.getAttribute('template') + '"]'
+  var template = document.querySelector(target).textContent
+  var data = null
+  if (session) {
+    data = {}
+    data.user = session ? session.user : null
+  }
+  render(el, template, {
+    data: data
+  })
 }
 
 function setPageTitle (title, glue, suffix) {

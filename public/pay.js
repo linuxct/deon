@@ -48,7 +48,7 @@ buyLicense.paypal = function buyLicensePayPal (data) {
 buyLicense.stripe = function buyLicenseStripe (data) {
   var handler = StripeCheckout.configure({
     key: STRIPE_PK,
-    image: '/default.png',
+    image: '/img/default.png',
     locale: 'auto',
     token: function(token) {
       requestJSON({
@@ -114,7 +114,7 @@ checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs)
 checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs) {
   var handler = StripeCheckout.configure({
     key: STRIPE_PK,
-    image: '/default.png',
+    image: '/img/default.png',
     locale: 'auto',
     token: function(token) {
       // TODO handle temporary UX wait here
@@ -194,7 +194,7 @@ resumeLicenseConfirm.paypal = function resumeLicenseConfirmPayPal (data) {
 resumeLicenseConfirm.stripe = function resumeLicenseConfirmStripe (data) {
   var handler = StripeCheckout.configure({
     key: STRIPE_PK,
-    image: '/default.png',
+    image: '/img/default.png',
     locale: 'auto',
     token: function(token) {
       // TODO handle temporary UX wait here

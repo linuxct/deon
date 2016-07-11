@@ -73,3 +73,8 @@ function simpleUpdate (err, obj, xhr) {
 function reloadPage () {
   stateChange(location.pathname + location.search)
 }
+
+function toggleNav(){
+  document.querySelector("[role='nav']").classList.toggle('open')
+  document.querySelector("[role='nav-button']").classList.toggle('active')
+}

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="fragment" content="!" />
     <meta name="google-signin-client_id" content="1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com">
-    <link rel="stylesheet" href="/font-awesome-4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/proxima-nova.css">
-    <link rel="stylesheet" href="/geometry-soft-pro-bold.css">
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/mcat-mast.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript">window.prerenderReady = false</script>
     <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
             defer async></script>
@@ -40,25 +40,61 @@
 </head>
 <body>
 <script type="text/javascript">if (typeof bgmebro == 'function') bgmebro()</script>
-<header>
 
-    <div class="scrub-container">
+<header>
+    <div class="col-xs-hidden col-md-visible scrub-container">
         <div class="scrub" action="scrub">
             <div class="progress" role="scrub-progress"></div>
         </div>
     </div>
 
-    <div class="mcat-mast page width center">
+    <div class="container mcat-mast">
         <div class="mcat-logo">
             <a href="/" class="monstercat-logo">
                 <div class="graphic">
-                    <img src="/monstercat-black.png">
+                    <img src="img/monstercat-black.png">
                 </div>
                 <label>Monstercat</label>
             </a>
         </div>
-        <nav class="mcat-nav">
+
+        <!-- Desktop Global Navigation -->
+        <nav class="mcat-nav col-xs-hidden col-md-visible">
             <ul>
+                <li><a href="/music">Music</a></li>
+                <li><a href="http://www.monstercat.com/blog">News</a></li>
+                <li><a href="http://www.monstercat.com/showcase">Events</a></li>
+                <li><a href="http://www.monstercat.com/podcast">Podcast</a></li>
+                <li><a href="http://shop.monstercat.com">Shop</a></li>
+            </ul>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <nav class="mcat-mobile-nav col-md-hidden">
+            <button action="toggleNav" role="nav-button" class="faux hamburger-icon" title="Menu">
+              <span class="line line-1"></span>
+              <span class="line line-2"></span>
+              <span class="line line-3"></span>
+            </button>
+            <ul role="nav">
+                <li class="global-search global-search--mobile"
+                     trigger-target="searchForm"
+                     data-set="search-form">
+                    <button class="faux"
+                            action="search"
+                            trigger="searchForm"
+                            data-set-target="search-form">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <input data-set-target="search-form"
+                           name="term"
+                           type="text"
+                           placeholder="Search"
+                           value=""/>
+                </li>
+                <li id="navigation-mobile"
+                     template="navigation">
+                </li>
                 <li><a href="/music">Music</a></li>
                 <li><a href="http://www.monstercat.com/blog">News</a></li>
                 <li><a href="http://www.monstercat.com/showcase">Events</a></li>
@@ -68,12 +104,14 @@
         </nav>
     </div>
 
-    <div class="page width center player flex">
-        <div class="push-children-right"
+    <div class="container player">
+
+        <!-- Desktop Contextual Navigation -->
+        <div class="col-xs-hidden col-md-visible push-children-right navigation"
                 id="navigation"
                 template="navigation">
         </div>
-        <div class="global-search"
+        <div class="col-xs-hidden col-md-visible global-search"
              trigger-target="searchForm"
              data-set="search-form">
             <button class="faux"
@@ -88,9 +126,15 @@
                    placeholder="Search"
                    value=""/>
         </div>
-        <div class="flex-strong"></div>
-        <div class="controls push-children-right">
+
+        <!-- Player -->
+        <div class="flex controls push-children-right">
             <a href="#" class="silent" role="track-title"></a>
+            <div class="col-md-hidden scrub-container scrub-container--mobile">
+                <div class="scrub" action="scrub">
+                    <div class="progress" role="scrub-progress"></div>
+                </div>
+            </div>
             <button class="faux" action="toggleShuffle" role="mode">
                 <i class="fa fa-random"></i>
             </button>
@@ -111,12 +155,12 @@
 </header>
 
 <section role="content">
-    <div class="page width center loading">
+    <div class="container loading">
         <span class="loader"></span>
     </div>
 </section>
 
-<footer class="page center width push-children-right">
+<footer class="container push-children-right">
     <label>2016 &copy; Monstercat</label>
     <a href="/help" class="silent footer-item" title="Help">
         <i class="fa fa-question-circle"></i>Help
@@ -138,29 +182,39 @@
 
 <script type="text/template" template-name="subscription-required-modal">
     <div class="modal">
-        <div class="panel pointer-events">
+        <div class="panel panel--padded pointer-events">
             <h1>Get Gold!</h1>
-            <p>You need a subscription to do that!</p>
-            {{^hasGold}}
-            <a href="/account/services" action="closeModal">Get your Gold membership!</a>
-            {{/hasGold}}
-            {{^signedIn}}
-            <a href="/sign-up" action="closeModal">Sign up for an account!</a>
-            {{/signedIn}}
-            <br/>
-            <button action="closeModal">Close</button>
+            <div class="modal-content">
+                <h2 class="pricing">$5/month</h2>
+                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+                <br/>
+                <ul>
+                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                    <li>Playlist your music directly within Connect</li>
+                    <li>Direct support via e-mail and on site.</li>
+                </ul>
+            </div>
+                {{^hasGold}}
+                <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
+                {{/hasGold}}
+                {{^signedIn}}
+                <a class="button button--cta" href="/sign-up" action="closeModal">Sign up for an account!</a>
+                {{/signedIn}}
+            <button class="button--close faux" action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
         </div>
     </div>
 </script>
 
 <script type="text/template" mustache-name="loading-view">
-    <div class="page width center loading">
+    <div class="container loading">
         <span class="loader"></span>
     </div>
 </script>
 
 <script type="text/template" mustache-name="loading-inner-view">
-    <div class="page width center loading loading-inner">
+    <div class="container loading loading-inner">
         <span class="loader"></span>
     </div>
 </script>
@@ -170,6 +224,7 @@
 </script>
 
 <script type="text/template" template-name="navigation">
+    <a class="silent nav-item" href="/"><i class="fa fa-headphones"></i>Browse</a>
     {{#data}}
     {{#user}}
     <a class="silent nav-item" href="/playlists"><i class="fa fa-bars"></i>Playlists</a>
@@ -186,8 +241,9 @@
         transform="loadReleaseAndTrack">
     <div class="modal">
         <div class="panel pointer-events">
+            <h1>Video Credits</h1>
             {{#loading}}
-            <i class="fa fa-spin fa-refresh"></i>
+            {{>loading-inner-view}}
             {{/loading}}
             {{#error}}
             <p>{{message}}</p>
@@ -195,7 +251,7 @@
             {{#data}}
             <textarea class="copycredits">{{track.copycredit}}</textarea>
             {{/data}}
-            <button action="closeModal">
+            <button class="button--close faux" action="closeModal">
                 <i class="fa fa-remove"></i>
             </button>
         </div>
@@ -204,10 +260,11 @@
 
 <script type="text/template"
         template-name="release-shopping-modal">
-    <div class="modal">
+    <div class="modal modal--release">
         <div class="panel pointer-events">
+            <h1>Support this Release</h1>
             {{#loading}}
-            <i class="fa fa-spin fa-refresh"></i>
+            {{>loading-inner-view}}
             {{/loading}}
             {{#error}}
             <p>{{message}}</p>
@@ -215,11 +272,11 @@
             {{#data}}
             <ul>
                 {{#purchaseLinks}}
-                <li><a target="_blank" href="{{url}}">{{name}}</a></li>
+                <li><a target="_blank" class="button" href="{{url}}">{{name}}</a></li>
                 {{/purchaseLinks}}
             </ul>
             {{/data}}
-            <button action="closeModal">
+            <button class="button--close faux" action="closeModal">
                 <i class="fa fa-remove"></i>
             </button>
         </div>
@@ -228,16 +285,18 @@
 
 <script type="text/template"
         template-name="release-art-modal">
-    <div class="center text pointer-events" style="margin: 50px auto 0; width: 720px;">
-        <a href="{{src}}" target="blank">
-            <img src="{{src}}" width="720"/>
-        </a>
+    <div class="modal modal--artwork">
+        <div class="pointer-events">
+            <a href="{{src}}" target="_blank">
+                <img src="{{src}}"/>
+            </a>
+        </div>
     </div>
 </script>
 
 <script type="text/template"
         route="^signin">
-    <div class="page width center">
+    <div class="container">
         <h1>Sign In</h1>
         <div class="panel">
         <table class="form" data-set="credentials" trigger-target="signIn">
@@ -282,8 +341,8 @@
 
 <script type="text/template"
         route="authenticate-token">
-    <div class="page width center">
-        <h1>Authenticate token</h1>
+    <div class="container">
+        <h1>Authenticate Token</h1>
         <div class="panel">
         <table class="form" data-set="auth-token">
             <tr>
@@ -301,7 +360,7 @@
 
 <script type="text/template"
         route="^forgot-password">
-    <div class="page width center">
+    <div class="container">
         <h1>Forgot Password?</h1>
         <div class="panel">
         <table class="form" data-set="credentials">
@@ -324,8 +383,8 @@
 
 <script type="text/template"
         route="^reset-password">
-    <div class="page width center">
-        <h1>Reset password</h1>
+    <div class="container">
+        <h1>Reset Password</h1>
         <div class="panel">
         <table class="form" data-set="password">
             <tbody>
@@ -358,8 +417,8 @@
 <script type="text/template"
         route="^confirm-sign-up"
         transform="mapConfirmSignup">
-    <div class="page width center">
-        <h1>Confirm Sign Up</h1>
+    <div class="container">
+        <h1>Confirm Sign-up</h1>
         <div class="panel">
         {{#data}}
         <table class="form" data-set="credentials" trigger-target="signUpSocial">
@@ -420,8 +479,8 @@
 <script type="text/template"
         route="^sign-up"
         transform="mapSignup">
-    <div class="page width center">
-        <h1>Sign Up</h1>
+    <div class="container">
+        <h1>Sign-up</h1>
         <div class="panel">
             <h2>With Social</h2>
             <div class="button-group">
@@ -484,7 +543,7 @@
         source="$endpoint/self"
         page-title="My Account"
         transform="mapAccount">
-    <div class="page width center">
+    <div class="container">
         <h1>My Account</h1>
         <div class="panel">
             {{#loading}}
@@ -542,15 +601,15 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="button--cta" 
-                    action="saveAccount"
-                    trigger="saveAccount"
-                    data-set-target="account">
-                Save
-            </button>
-            <button class="button--danger" action="signOut">Sign Out</button>
-            <br/>
-            <br/>
+            <div class="button-group">
+                <button class="button--cta" 
+                        action="saveAccount"
+                        trigger="saveAccount"
+                        data-set-target="account">
+                    Save
+                </button>
+                <button class="button--danger" action="signOut">Sign Out</button>
+            </div>
             <a href="/account/services">Manage Services</a>
         </div>
         <div class="panel">
@@ -580,7 +639,9 @@
                     </tr>
                 </tbody>
             </table>
-            <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+            <div class="button-group">
+                <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+            </div>
             {{/enableTwoFactor}}
         </div>
         <div class="panel">
@@ -661,7 +722,6 @@
     <div source="$endpoint/self/social-signins"
          template="social-settings">
     </div>
-    <br/>
     <button class="button--cta"
             action="saveAccountSettings"
             data-set-target="settings">
@@ -674,27 +734,29 @@
         template-name="social-settings"
         transform="transformSocialSettings">
     {{#data}}
-    {{#facebookEnabled}}
-    <button class="button--social button--fb" action="unlinkFacebook">
-        <i class="fa fa-facebook"></i> Unlink Account
-    </button>
-    {{/facebookEnabled}}
-    {{^facebookEnabled}}
-    <button class="button--social button--fb" action="enableFacebookSignin">
-        <i class="fa fa-facebook"></i> Link Account
-    </button>
-    {{/facebookEnabled}}
+        <div class="button-group">
+        {{#facebookEnabled}}
+        <button class="button--social button--fb" action="unlinkFacebook">
+            <i class="fa fa-facebook"></i> Unlink Account
+        </button>
+        {{/facebookEnabled}}
+        {{^facebookEnabled}}
+        <button class="button--social button--fb" action="enableFacebookSignin">
+            <i class="fa fa-facebook"></i> Link Account
+        </button>
+        {{/facebookEnabled}}
 
-    {{#googleEnabled}}
-    <button class="button--social button--g" action="unlinkGoogle">
-        <i class="fa fa-google"></i> Unlink Account
-    </button>
-    {{/googleEnabled}}
-    {{^googleEnabled}}
-    <button class="button--social button--g" action="enableGoogleSignin">
-        <i class="fa fa-google"></i> Link Account
-    </button>
-    {{/googleEnabled}}
+        {{#googleEnabled}}
+        <button class="button--social button--g" action="unlinkGoogle">
+            <i class="fa fa-google"></i> Unlink Account
+        </button>
+        {{/googleEnabled}}
+        {{^googleEnabled}}
+        <button class="button--social button--g" action="enableGoogleSignin">
+            <i class="fa fa-google"></i> Link Account
+        </button>
+        {{/googleEnabled}}
+    </div>
     {{/data}}
 </script>
 
@@ -704,7 +766,7 @@
         route="^account\/services$"
         transform="transformServices">
     {{#data}}
-    <div class="page width center">
+    <div class="container services">
         <h1>Manage Services</h1>
         {{#user}}
         {{#hasLegacy}}
@@ -715,85 +777,91 @@
             </p>
         </div>
         {{/hasLegacy}}
-
+        
         {{^hasLegacy}}
-        <div class="panel">
-            <h2>Gold Access</h2>
-            <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
-            {{#hasGoldPermanent}}
-            <p>You have Gold Membership.</p>
-            {{/hasGoldPermanent}}
-            {{#goldUnsubscribe}}
-            <div source="$endpoint/self/gold-subscription"
-                 template="gold-subscription"
-                 transform="transformGoldSubscription">
-            </div>
-            {{/goldUnsubscribe}}
-            {{#goldSubscribe}}
-            <br/>
-            <ul>
-                <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
-                <li>Playlist your music directly within Connect</li>
-                <li>Direct support via e-mail and on site.</li>
-            </ul>
-            <br/>
-            <div data-set="subscribe-gold">
-                <input type="text" name="trialCode" placeholder="Special Code"/>
-                <button action="subscribeGold"
-                        data-set-target="subscribe-gold">
-                    Subscribe for $5.00/month
-                    <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
-                </button>
-            </div>
-            {{/goldSubscribe}}
-        </div>
+        <div class="flex">
 
-        <div class="panel">
-            <h2>Licensing Services</h2>
-            <p>Buy a whitelisting service for use in online media for YouTube or Twitch.
-               Upon subscribing for 20 months, all your previously uploaded videos within
-               your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
-            <br/>
-            <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
-            <br/>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Platform</th>
-                        <th>Channel Id</th>
-                        <th>Paid Off</th>
-                        <th>Remaining</th>
-                        <th>Monthly Cost</th>
-                        <th>Next Billing Date</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody source="$endpoint/self/whitelist"
-                    template="whitelist-licenses"
-                    role="whitelists"
-                    transform="transformWhitelists">
-                </tbody>
-            </table>
-            <div data-set="new-license">
-                <select name="vendor">
-                    <option value="">Select Platform</option>
-                    <option value="YouTube">YouTube</option>
-                    <option value="Twitch">Twitch</option>
-                </select>
-                <input type="text" name="identity" placeholder="Channel Id"/>
-                <button
-                    action="subscribeNewLicense"
-                    data-set-target="new-license">
-                    Subscribe $5/month 
-                    <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
-                </button>
+            <div class="col-xs-12 col-lg-4 col-lg-last panel panel--dark">
+                <h1>Gold Membership</h1>
+                <h2 class="pricing pricing--gold">$5/month</h2>
+                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+                {{#hasGoldPermanent}}
+                <p>You have Gold Membership.</p>
+                {{/hasGoldPermanent}}
+                {{#goldUnsubscribe}}
+                <div source="$endpoint/self/gold-subscription"
+                     template="gold-subscription"
+                     transform="transformGoldSubscription">
+                </div>
+                {{/goldUnsubscribe}}
+                {{#goldSubscribe}}
+                <br/>
+                <ul>
+                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                    <li>Playlist your music directly within Connect</li>
+                    <li>Direct support via e-mail and on site.</li>
+                </ul>
+                <br/>
+                <div data-set="subscribe-gold" class="services-form"> 
+                    <input type="text" name="trialCode" placeholder="Special Code"/>
+                    <button class="button--gold"
+                            action="subscribeGold"
+                            data-set-target="subscribe-gold">
+                        Subscribe
+                        <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
+                    </button>
+                </div>
+                {{/goldSubscribe}}
             </div>
-            <br/>
-            <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
+    
+            <div class="col-xs-12 col-lg-8 panel">
+                <h1>Licensing Services</h1>
+                <h2 class="pricing">$5/month</h2>
+                <p>Buy a whitelisting service for use in online media for YouTube or Twitch.
+                   Upon subscribing for 20 months, all your previously uploaded videos within
+                   your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
+                <br/>
+                <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
+                <br/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Channel Id</th>
+                            <th>Paid Off</th>
+                            <th>Remaining</th>
+                            <th>Monthly Cost</th>
+                            <th>Next Billing Date</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody source="$endpoint/self/whitelist"
+                        template="whitelist-licenses"
+                        role="whitelists"
+                        transform="transformWhitelists">
+                    </tbody>
+                </table>
+                <div data-set="subscribe-gold" class="services-form"> 
+                    <select name="vendor">
+                        <option value="">Select Platform</option>
+                        <option value="YouTube">YouTube</option>
+                        <option value="Twitch">Twitch</option>
+                    </select>
+                    <input type="text" name="identity" placeholder="Channel Id"/>
+                    <button
+                        action="subscribeNewLicense"
+                        data-set-target="new-license">
+                        Subscribe
+                        <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
+                    </button>
+                </div>
+                <br/>
+                <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
+            </div>
         </div>
 
         <div id="new-subscriptions" class="hide panel">
-            <h2>Checkout</h2>
+            <h1>Checkout</h1>
             <br/>
             <table>
                 <thead>
@@ -806,12 +874,13 @@
                 <tbody role="new-subs">
                 </tbody>
             </table>
-            <div>$<span role="total-cost">0.00</span></div>
+            <div><span class="total-cost">$<span role="total-cost">0.00</span></span>/month</div>
             <br/>
             <div data-set="pay-method">
                {{>payment-method}}
-               <button action="checkoutSubscriptions" data-set-target="pay-method">
-                    Purchase Subscriptions
+               <button class="button--cta"
+                       action="checkoutSubscriptions" data-set-target="pay-method">
+                    Purchase
                 </button>
             </div>
         </div>
@@ -852,11 +921,11 @@
 <script type="text/template" mustache-name="payment-method">
     <label>
         <input type="radio" name="method" value="paypal">
-        <i class="fa fa-fw fa-cc-paypal"></i>
+        <span><i class="fa fa-fw fa-cc-paypal"></i></span>
     </label>
     <label>
         <input type="radio" name="method" value="stripe" checked>
-        <i class="fa fa-fw fa-cc-stripe"></i>
+        <span><i class="fa fa-fw fa-cc-stripe"></i></span>
     </label>
 </script>
 
@@ -949,7 +1018,7 @@
 <script type="text/template"
         route="^account\/services\/processing"
         completed="completedProcessing">
-    <div class="page width center">
+    <div class="container">
         <h1>Payment Processing <i class="fa fa-spin fa-gear"></i></h1>
         <p>Your payment is being processed. Please wait.</p>
     </div>
@@ -958,7 +1027,7 @@
 <script type="text/template"
         route="^account\/services\/subscribed"
         completed="redirectServices">
-    <div class="page width center">
+    <div class="container">
         <h1>Subscribed!</h1>
         <p>You have been succefully subscribed! You will be redirected to your services in 5 seconds.</p>
     </div>
@@ -967,7 +1036,7 @@
 <script type="text/template"
         route="^account\/services\/unsubscribed\/?"
         completed="redirectServices">
-    <div class="page width center">
+    <div class="container">
         <h1>Unsubscribed</h1>
         <p>You have been succefully unsubscribed. You will be redirected to your services in 5 seconds.</p>
     </div>
@@ -975,7 +1044,7 @@
 
 <script type="text/template"
         route="^account\/services\/canceled-payment\/?$">
-    <div class="page width center">
+    <div class="container">
         <h1>Payment Canceled</h1>
         <p>The payment has been canceled. Go back to <a href="/services">services</a>.</p>
     </div>
@@ -985,7 +1054,7 @@
         route="^account\/services\/buyout\/purchased\/?"
         page-title="Purchased Whitelist"
         completed="redirectServices">
-    <div class="page center width">
+    <div class="container">
         <h1>Purchased Whitelist!</h1>
         <p>Whitelist succesfully purchased. You will be redirected to the services page in 5 seconds.</p>
     </div>
@@ -994,7 +1063,7 @@
 <script type="text/template"
         route="account\/services\/error"
         page-title="Payment Error">
-    <div class="page width center">
+    <div class="container">
         <h1>An error occured.</h1>
         <p>An error occured while working with the payment information provided. Please contact support.</p>
     </div>
@@ -1031,7 +1100,7 @@
         transform="transformBuyOut"
         source="$endpoint/self/whitelist/$1"
         page-title="Whitelist Buy Out">
-    <div class="page center width">
+    <div class="container">
         <h1>Buy Out Whitelist</h1>
         <div class="panel">
             <p>Pre-pay the rest of your whitelist license. All videos created with the
@@ -1085,9 +1154,9 @@
 <script type="text/template"
         route="^account\/services\/buyout\/?$"
         page-title="Purchase Whitelist">
-    <div class="page center width">
+    <div class="container">
         <h1>Purchase Whitelist</h1>
-        <div class="panel">
+        <div class="services panel">
             <p>Pre-pay your whitelist license for 20 months. All videos created with the
                 cleared Monstercat catalog during this time period will never
                 receive content-ID claims.</p>
@@ -1127,7 +1196,7 @@
 <script type="text/template"
         route="^release-claim"
         page-title="Remove YouTube Claim">
-    <div class="page center width">
+    <div class="container">
         <h1>YouTube Release Claim</h1>
         <div class="panel">
             <p>If you have recieved a claim on your whitelisted YouTube channel you can release it here. Please fill out the form below.</p>
@@ -1160,7 +1229,7 @@
 <script type="text/template"
         route="^(\?.*)?$"
         page-title="Home">
-    <div>
+    <div class="container">
         <div source="$endpoint/catalog/release?limit=20" template="homeFeatured">
         </div>
         <p><span>We're proudly proving that</span><br/>
@@ -1239,7 +1308,7 @@
 <!-- MUSIC -->
 
 <script type="text/template"
-        route="^music\/?(\?.*)?"
+        route="^(:?(\?.*)?$|music(\?.*)?)"
         page-title="Music"
         completed="completedMusic"
         transform="transformMusic">
@@ -1257,16 +1326,19 @@
     {{>loading-view}}
     {{/loading}}
     {{#error}}
-    <div class="page width center panel">
+    <div class="container panel">
         <p>{{message}}</p>
     </div>
     {{/error}}
     {{#data}}
-    <ul class="page width center panel art-list">
+    <ul class="container panel art-list">
         {{#results}}
         <li>
             <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <img src="{{cover}}"/>
+                <div class="image-wrapper">
+                    <img src="img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
                 <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
                 <label class="artist one-line-ellipsis">{{artists}}</label>
@@ -1275,10 +1347,10 @@
         {{/results}}
     </ul>
     {{^total}}
-    <div class="page width center text center panel">No results found.</div>
+    <div class="container text center panel">No results found.</div>
     {{/total}}
     {{#total}}
-      <div class="page width center pagination pad-vertical text center">
+      <div class="container pagination pad-vertical text center">
           {{#previous}}
             <a href="?{{previous}}">Previous</a>
           {{/previous}}
@@ -1297,23 +1369,26 @@
         transform="mapRelease"
         completed="completedRelease">
     {{#loading}}
-    <div class="page width center loading">
+    <div class="container loading">
         <span class="loader"></span>
     </div>
     {{/loading}}
     {{#error}}
-    <div class="page width center panel">
+    <div class="container panel">
         <p>{{message}}</p>
     </div>
     {{/error}}
     {{#data}}
     <div class="bgbox" style="background-image: url('{{coverBig}}')">
         <div class="bgbox-blanket cl-white">
-            <div class="details-box page width center clearfix">
+            <div class="details-box container clearfix">
                 <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
-                <h1 release-id="{{_id}}">{{title}}</h1>
+                <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
                 <h2>{{artists}}</h2>
-                <label>Released {{releaseDate}}</label>
+                <label>
+                    {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                    {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                </label>
                 <div class="options push-children-right">
                     {{#purchase}}
                     <button class="faux" action="openPurchaseRelease">
@@ -1342,7 +1417,7 @@
             </div>
         </div>
     </div>
-    <div class="release page width center" >
+    <div class="release container" >
         <div class="panel"
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
@@ -1371,6 +1446,7 @@
     {{/artists}}
 </td>
 <td class="genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td>{{time}}</td>
 <td>{{bpm}}</td>
 </script>
 
@@ -1421,6 +1497,7 @@
                 <th>Title</th>
                 <th>Artists</th>
                 <th>Genre</th>
+                <th>Time</th>
                 <th>BPM</th>
                 <th></th>
             </tr>
@@ -1467,14 +1544,14 @@
     {{>loading-view}}
     {{/loading}}
     {{#error}}
-    <div class="page width center panel">
+    <div class="container panel">
         <p>{{message}}</p>
     </div>
     {{/error}}
     {{#data}}
     <div class="bgbox" style="background-image: url('{{image}}')">
         <div class="bgbox-blanket cl-white">
-            <div class="details-box page width center clearfix">
+            <div class="details-box container clearfix">
                 {{#image}}
                 <img class="artwork" src="{{image}}"/>
                 {{/image}}
@@ -1487,7 +1564,7 @@
             </div>
         </div>
     </div>
-    <div class="page width center">
+    <div class="container">
         {{#about}}
         <div calss="panel">
             <h2>About</h2>
@@ -1540,7 +1617,7 @@
 <script type="text/template"
         route="^artists\/?"
         transform="transformRoster">
-    <div class="page width center">
+    <div class="container">
         <h1>Artists</h1>
         <div class="panel">
             {{#data}}
@@ -1605,7 +1682,7 @@
 <script type="text/template"
         page-title="My Playlists"
         route="^playlists">
-    <div class="page width center">
+    <div class="container">
         <h1>My Playlists</h1>
         <div class="panel">
             <div class="options">
@@ -1666,7 +1743,7 @@
         source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
         completed="completedPlaylist"
         transform="transformPlaylist">
-    <div class="page width center">
+    <div class="container">
         {{#loading}}
         {{>loading-view}}
         {{/loading}}
@@ -1712,11 +1789,13 @@
                         <th>Release</th>
                         <th>Artist</th>
                         <th>Genre</th>
+                        <th>Time</th>
                         <th>BPM</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody role="playlist-tracks" source="$endpoint/playlist/{{_id}}/tracks"
+                <tbody role="playlist-tracks"
+                       source="$endpoint/playlist/{{_id}}/tracks"
                        template="playlist-tracks">
                 </tbody>
             </table>
@@ -1796,7 +1875,7 @@
         route="^search\/artists(\?.*)?"
         transform="transformSearchArtistsPage"
         completed="completedSearchArtists">
-    <div class="page width center">
+    <div class="container">
         <h1>Artists</h1>
         {{#loading}}
         <div class="panel">
@@ -1842,7 +1921,7 @@
         route="^search\/songs(\?.*)?"
         transform="transformSearchTracksPage"
         completed="completedSearchTracks">
-    <div class="page width center">
+    <div class="container">
         <h1>Songs</h1>
         {{#loading}}
         <div class="panel">
@@ -1888,7 +1967,7 @@
         route="^search\/releases(\?.*)?"
         transform="transformSearchReleasesPage"
         completed="completedSearchReleases">
-    <div class="page width center">
+    <div class="container">
         <h1>Releases</h1>
         {{#loading}}
         <div class="panel">
@@ -1937,7 +2016,7 @@
         page-title="Search All"
         completed="completedSearchAll"
         transform="transformSearch">
-    <div class="page width center search">
+    <div class="container search">
         <h1>Search</h1>
         {{#data}}
         {{#searches}}
@@ -1973,7 +2052,7 @@
         template-name="search-snippet-releases"
         transform="transformSearchSnippetReleases">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -1993,7 +2072,7 @@
         template-name="search-snippet-artists"
         transform="transformRosterYear">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -2014,7 +2093,7 @@
         template-name="search-snippet-tracks"
         transform="transformSearchSnippetTracks">
     {{#loading}}
-    <i class="fa fa-fw fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
@@ -2041,6 +2120,7 @@
                 <th>Title</th>
                 <th>Artists</th>
                 <th>Genre</th>
+                <th>Time</th>
                 <th>BPM</th>
                 <th></th>
             </tr>
@@ -2076,7 +2156,10 @@
         {{#results}}
         <li>
             <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <img src="{{cover}}"/>
+                <div class="image-wrapper">
+                    <img src="img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
                 <label class="title one-line-ellipsis">{{title}}</label>
                 <br/>
                 <label class="artist one-line-ellipsis">{{artists}}</label>
@@ -2094,7 +2177,10 @@
         <li>
             <a class="silent" href="/artist/{{uri}}" title="{{name}}">
                 {{#image}}
-                <img src="{{image}}"/>
+                <div class="image-wrapper">
+                    <img src="img/artist.jpg" class="preload" />
+                    <img src="{{image}}"/>
+                </div>
                 {{/image}}
                 {{^image}}
                 <div class="no-art">
@@ -2111,7 +2197,7 @@
 <script type="text/template"
         mustache-name="searchPagination">
     {{#total}}
-    <div class="page width center pagination pad-vertical text center">
+    <div class="container pagination pad-vertical text center">
         {{#previous}}
         <a href="?{{previous}}">Previous</a>
         {{/previous}}
@@ -2128,7 +2214,7 @@
 <script type="text/template"
         template-name="404"
         page-title="Page Not Found">
-    <div class="page width center">
+    <div class="container">
         <h1>Page Not Found</h1>
         <div class="panel">
             <p>The page you are looking for is not here.</p>
@@ -2138,7 +2224,7 @@
 
 <script type="text/template"
         route="^help\/?$">
-    <div class="page width center">
+    <div class="container">
         <h1>Help</h1>
         <div class="panel">
             <p>
@@ -2154,7 +2240,7 @@
 
 <script type="text/template"
         mustache-name="markdown-basic">
-    <div class="page width center">
+    <div class="container">
         {{#loading}}
         {{>loading-view}}
         {{/loading}}
