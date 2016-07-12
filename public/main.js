@@ -394,8 +394,9 @@ function transformHome (obj) {
 
 function transformBlogPosts (obj) {
   obj.posts.length = 2
-  obj.posts.forEach(function (i) {
+  obj.posts.forEach(function (i, index, arr) {
     i.date = formatDate(i.date)
+    i.isOdd = !(index % 2 == 0)
   })
   return obj
 }

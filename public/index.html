@@ -1488,45 +1488,26 @@
                 </div>
             </header>
         </div>
-        {{#posts.0}}
+        {{#posts}}
         <article class="flex">
-            <div class="col-xs-12 col-sm-12 col-md-6 article-banner">
-                <div class="side-banner" style="background-image: url(http://www.monstercat.com{{posts.0.image}})"></div>
+            <div class="col-xs-12 col-sm-12 col-md-6 article-banner{{#isOdd}} col-md-last{{/isOdd}}">
+                <div class="side-banner" style="background-image: url(http://www.monstercat.com{{image}})"></div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 article-details">
                 <div class="article-wrapper">
-                    <a class="silent no-hover" href="http://www.monstercat.com/blog/{{posts.0.path}}" target="_BLANK">
-                        <h2>{{posts.0.title}}</h2>
-                        <p class="date">{{posts.0.date}}</p>
+                    <a class="silent no-hover" href="http://www.monstercat.com/blog/{{path}}" target="_BLANK">
+                        <h2>{{title}}</h2>
+                        <p class="date">{{date}}</p>
                         <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                     </a>
-                    <a class="button button--black button--icon" href="http://www.monstercat.com/blog/{{posts.0.path}}" target="_BLANK">
+                    <a class="button button--black button--icon" href="http://www.monstercat.com/blog/{{path}}" target="_BLANK">
                         Read more
                         <i class="fa fa-chevron-right"></i>
                     </a>
                 </div>
             </div>
         </article>
-
-        <article class="flex">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-md-last article-banner">
-                <div class="side-banner" style="background-image: url(http://www.monstercat.com{{posts.1.image}})"></div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 article-details">
-                <div class="article-wrapper">
-                    <a class="silent no-hover" href="http://www.monstercat.com/blog/{{posts.1.path}}" target="_BLANK">
-                        <h2>{{posts.1.title}}</h2>
-                        <p class="date">{{posts.1.date}}</p>
-                        <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                    </a>
-                    <a class="button button--black button--icon" href="http://www.monstercat.com/blog/{{posts.1.path}}" target="_BLANK">
-                        Read more
-                        <i class="fa fa-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-        </article>
-        {{/posts.0}}
+        {{/posts}}
     </section>
     {{/data}}
 </script>
