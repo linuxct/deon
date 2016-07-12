@@ -386,9 +386,12 @@ function mapWebsiteDetails (o) {
 /* Transform Methods */
 
 function transformHome (obj) {
-  var results = obj.results.map(mapRelease)
+  var results = obj.results.map(mapRelease).filter(function (i) {
+    return i.type != "Podcast"
+  })
   obj.featured = results.shift()
   obj.releases = results
+  obj.releases.length = 6
   return obj
 }
 
