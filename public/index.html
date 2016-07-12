@@ -107,7 +107,7 @@
     <div class="container player">
 
         <!-- Desktop Contextual Navigation -->
-        <div class="col-xs-hidden col-md-visible push-children-right navigation"
+        <div class="col-xs-hidden col-md-visible push-right navigation"
                 id="navigation"
                 template="navigation">
         </div>
@@ -128,7 +128,7 @@
         </div>
 
         <!-- Player -->
-        <div class="flex controls push-children-right">
+        <div class="flex controls push-right">
             <a href="#" class="silent" role="track-title"></a>
             <div class="col-md-hidden scrub-container scrub-container--mobile">
                 <div class="scrub" action="scrub">
@@ -155,12 +155,12 @@
 </header>
 
 <section role="content">
-    <div class="container loading">
+    <div class="loading loading">
         <span class="loader"></span>
     </div>
 </section>
 
-<footer class="container push-children-right">
+<footer class="container push-right">
     <label>2016 &copy; Monstercat</label>
     <a href="/help" class="silent footer-item" title="Help">
         <i class="fa fa-question-circle"></i>Help
@@ -208,13 +208,19 @@
 </script>
 
 <script type="text/template" mustache-name="loading-view">
-    <div class="container loading">
+    <div class="loading">
+        <span class="loader"></span>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="loading-view-black">
+    <div class="loading loading--black">
         <span class="loader"></span>
     </div>
 </script>
 
 <script type="text/template" mustache-name="loading-inner-view">
-    <div class="container loading loading-inner">
+    <div class="loading loading-inner">
         <span class="loader"></span>
     </div>
 </script>
@@ -1229,21 +1235,150 @@
 <script type="text/template"
         route="^(\?.*)?$"
         page-title="Home">
-    <div class="container">
-        <div source="$endpoint/catalog/release?limit=20" template="homeFeatured">
+    <div source="$endpoint/catalog/release?limit=9" template="homeFeatured"></div>
+    <div source="$endpoint/catalog/news" template="blog-stories"></div>
+    <div class="flex social">
+        <div class="col-xs-12 col-sm-12 col-md-6 text right cl-white spotify-wrapper">
+            <div class="banner" style="background-image:url(/img/banner.jpg)">
+                <div class="banner-shade"></div>
+                <div class="gradient gradient--inverted"></div>
+            </div>
+            <div class="container-left">
+                <header>
+                    <h2 class="line-top">Listen on Spotify</h2>
+                </header>
+                <ul class="spotify-playlists">
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4kw9kdjzx1UmyWvpysl0y2" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/new-releases.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>New Releases</h2></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4pylRY0ogA4JwC6CplYTxl" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/hype.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>Hype</h2></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4rIPUdx0APV1euj24QR3uN" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/feel-good.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>Feel Good</h2></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/5ox7QhPLaPEuebCnvxNhd0" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/unwind.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>Unwind</h2></div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <p><span>We're proudly proving that</span><br/>
-            Independent labels have the ability to reshape the music industry.
-        </p>
-    </div>
-    <div source="$endpoint/catalog/news" template="blog-stories">
-    </div>
-    <div>
-        <div>
-            <h2>Listen on Spotify</h2>
-        </div>
-        <div>
-            <h2>Join the Family</h2>
+        <div class="col-xs-12 col-sm-12 col-md-6 text left followers">
+            <div class="container-right">
+                <header>
+                    <h2 class="line-top">Join the Family</h2>
+                </header>
+                <ul class="social-grid">
+                    <li>
+                        <a class="social-grid-wrapper youtube">
+                            <div class="icon">
+                                <i class="fa fa-youtube"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>4.2m</h3>
+                                    <p>subscribers</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="social-grid-wrapper twitter">
+                            <div class="icon">
+                                <i class="fa fa-twitter"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>283k</h3>
+                                    <p>followers</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="social-grid-wrapper facebook">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>750k</h3>
+                                    <p>likes</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-facebook"></i>
+                            </div>
+                        </a>
+                        <a class="social-grid-wrapper instagram">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>119k</h3>
+                                    <p>followers</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-instagram"></i>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="social-grid-wrapper spotify">
+                            <div class="icon">
+                                <i class="fa fa-spotify"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>125k</h3>
+                                    <p>listeners</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="social-grid-wrapper twitch">
+                            <div class="icon">
+                                <i class="fa fa-twitch"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>191k</h3>
+                                    <p>streamers</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="social-grid-wrapper soundcloud">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>821k</h3>
+                                    <p>fans</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-soundcloud"></i>
+                            </div>
+                        </a>
+                        <a class="social-grid-wrapper apple">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>139k</h3>
+                                    <p>users</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-apple"></i>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </script>
@@ -1252,33 +1387,79 @@
         template-name="homeFeatured"
         transform="transformHome">
     {{#loading}}
-    <i class="fa fa-spin fa-refresh"></i>
+    {{>loading-view-black}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    {{#featured}}
-    <div>
-        <h1>{{title}}</h1>
-        <img src="{{cover}}"/>
-        <p>By {{artists}}</p>
-        <p>Released {{releaseDate}}</p>
+    <div class="top-banner">
+        {{#featured}}
+        <div class="banner" style="background-image:url({{coverBig}}">
+            <div class="banner-shade"></div>
+            <div class="gradient"></div>
+        </div>
+        <div class="container flex">
+            <div class="col-xs-12 col-sm-12 col-md-4 featured-artwork">
+                <a class="silent" href="/release/{{catalogId}}">
+                    <img class="shadow responsive" src="{{coverBig}}"/>
+                </a>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8 cl-white featured-details">
+                <span class="tag">Featured</span>
+                <a class="silent no-hover" href="/release/{{catalogId}}">
+                    <h1 class="title uppercase">{{title}}</h1>
+                </a>
+                <h3>By {{artists}}</h3>
+                <p class="date">Released on {{releaseDate}}</p>
+                <a href="/release/{{catalogId}}" class="button button--cta button--icon">
+                    View
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+                <a href="/release/{{catalogId}}" class="button button--cta button--black">
+                    <i class="fa fa-play"></i>
+                </a>
+            </div>
+        </div>
+        {{/featured}}
+        <div class="container cl-white">
+            <header class="flex top-cta">
+                <div class="col-xs-6">
+                    <h2 class="line-top">Latest Releases</h2>
+                </div>
+                <div class="col-xs-6 text right">
+                    <a href="/music" class="button button--icon button--transparent">
+                        View all
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </header>
+            <ul class="art-list">
+                {{#releases}}
+                <li>
+                    <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                        <div class="image-wrapper">
+                            <img src="img/artwork.jpg" class="preload" />
+                            <img src="{{cover}}"/>
+                        </div>
+                        <label class="title one-line-ellipsis">{{title}}</label>
+                        <br/>
+                        <label class="artist one-line-ellipsis">{{artists}}</label>
+                    </a>
+                </li>
+                {{/releases}}
+            </ul>
+        </div>
     </div>
-    {{/featured}}
-    <h2>Latest Releases</h2>
-    <div>
-        <ul>
-            {{#releases}}
-            <li>
-                <label>{{title}}</label>
-                <label>{{releaseDate}}</label>
-                <label>{{artists}}</label>
-                <img src="{{cover}}" width="200" />
-                <a href="/release/{{catalogId}}">View</a>
-            </li>
-            {{/releases}}
-        </ul>
+    <div class="hero cl-white">
+        <div class="banner banner--height" style="background-image:url(/img/banner.jpg)">
+            <div class="banner-shade"></div>
+            <div class="gradient gradient--inverted"></div>
+        </div>
+        <div class="container">
+            <h3 class="playfair">We're <em>proudly</em> proving that</h3>
+            <h1 class="line-bottom"> Independent labels have the ability to reshape the music industry.</h1>
+        </div>
     </div>
     {{/data}}
 </script>
@@ -1287,21 +1468,66 @@
         template-name="blog-stories"
         transform="transformBlogPosts">
     {{#loading}}
-    <i class="fa fa-spin fa-refresh"></i>
+    {{>loading-view}}
     {{/loading}}
     {{#error}}
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    {{#posts}}
-    <article>
-        <h3>{{title}}</h3>
-        <label>{{date}}</label>
-        <label>{{subline}}</label>
-        <img src="http://www.monstercat.com{{image}}" width="300"/>
-        <a href="http://www.monstercat.com/blog/{{path}}">Read</a>
-    </article>
-    {{/posts}}
+    <section class="blog">
+        <div class="container">
+            <header class="flex top-cta">
+                <div class="col-xs-6">
+                    <h2 class="line-top">Latest Articles</h2>
+                </div>
+                <div class="col-xs-6 text right">
+                    <a href="/news" class="button button--black button--icon button--transparent">
+                        View all
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </header>
+        </div>
+        {{#posts.0}}
+        <article class="flex">
+            <div class="col-xs-12 col-sm-12 col-md-6 article-banner">
+                <div class="side-banner" style="background-image: url(http://www.monstercat.com{{posts.0.image}})"></div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+                <div class="article-wrapper">
+                    <a class="silent no-hover" href="http://www.monstercat.com/blog/{{posts.0.path}}" target="_BLANK">
+                        <h2>{{posts.0.title}}</h2>
+                        <p class="date">{{posts.0.date}}</p>
+                        <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    </a>
+                    <a class="button button--black button--icon" href="http://www.monstercat.com/blog/{{posts.0.path}}" target="_BLANK">
+                        Read more
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="flex">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-md-last article-banner">
+                <div class="side-banner" style="background-image: url(http://www.monstercat.com{{posts.1.image}})"></div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+                <div class="article-wrapper">
+                    <a class="silent no-hover" href="http://www.monstercat.com/blog/{{posts.1.path}}" target="_BLANK">
+                        <h2>{{posts.1.title}}</h2>
+                        <p class="date">{{posts.1.date}}</p>
+                        <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    </a>
+                    <a class="button button--black button--icon" href="http://www.monstercat.com/blog/{{posts.1.path}}" target="_BLANK">
+                        Read more
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+        {{/posts.0}}
+    </section>
     {{/data}}
 </script>
 
@@ -1369,9 +1595,7 @@
         transform="mapRelease"
         completed="completedRelease">
     {{#loading}}
-    <div class="container loading">
-        <span class="loader"></span>
-    </div>
+    {{>loading-view-black}}
     {{/loading}}
     {{#error}}
     <div class="container panel">
@@ -1389,7 +1613,7 @@
                     {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
                     {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
                 </label>
-                <div class="options push-children-right">
+                <div class="options push-right">
                     {{#purchase}}
                     <button class="faux" action="openPurchaseRelease">
                         <i class="fa fa-shopping-bag"></i>
@@ -1517,7 +1741,7 @@
                   {{>playSong}}
                 </td>
                 {{>trackCells}}
-                <td class="push-children-right">
+                <td class="push-right">
                     {{>trackButtons}}
                     {{#canPlaylist}}
                     <select
@@ -1556,7 +1780,7 @@
                 <img class="artwork" src="{{image}}"/>
                 {{/image}}
                 <h1>{{name}}</h1>
-                <div class="options push-children-right">
+                <div class="options push-right">
                     {{#socials}}
                     <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
                     {{/socials}}
@@ -1718,7 +1942,7 @@
     {{#results}}
     <tr>
         <td><a href="/playlist/{{_id}}">{{name}}</a></td>
-        <td class="push-children-right text right">
+        <td class="push-right text right">
             <button class="faux"
                     action="renamePlaylist"
                     playlist-id="{{_id}}">
@@ -1753,7 +1977,7 @@
         {{#data}}
         <h1 playlist-id="{{_id}}">{{name}}</h1>
         <div class="panel">
-            <div class="options pad-vertical push-children-right">
+            <div class="options pad-vertical push-right">
                 {{#canPublic}}
                 <label>
                     <input
@@ -1849,7 +2073,7 @@
           {{>playSong}}
         </td>
         {{>trackCells}}
-        <td class="push-children-right">
+        <td class="push-right">
             {{>trackButtons}}
             {{#edit}}
             <button class="faux"
@@ -2132,7 +2356,7 @@
                   {{>playSong}}
                 </td>
                 {{>trackCells}}
-                <td class="push-children-right">
+                <td class="push-right">
                     {{>trackButtons}}
                     {{#canPlaylist}}
                     <select

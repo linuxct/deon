@@ -346,7 +346,7 @@ function mapRelease (o) {
   o.preReleaseDate = formatDate(o.preReleaseDate)
   o.artists = o.renderedArtists
   if(o.thumbHashes) {
-    o.cover = datapoint + '/blobs/' + o.thumbHashes["256"]
+    o.cover = datapoint + '/blobs/' + o.thumbHashes["512"]
     o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
   }
   if (o.urls instanceof Array) {
