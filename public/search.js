@@ -1,4 +1,4 @@
-var searchSnippetLimit = 5
+var searchSnippetLimit = 8
 
 
 //TODO: Look at all of this duplicate code. Be the change you want to see in the code.

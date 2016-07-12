@@ -90,7 +90,7 @@ function recordEvent (name, obj, done) {
   if (location.host.indexOf('localhost') == 0)
     return done(Error('Localhost not supported.'))
   requestJSON({
-    url: endpoint + '/analytics/record/event',
+    url: endhost + '/analytics/record/event',
     withCredentials: true,
     method: 'POST',
     data: {
@@ -303,11 +303,12 @@ function getReleasePurchaseLinks (urls) {
 }
 
 function openPurchaseRelease (e, el) {
-  var id = document.querySelector('h1[release-id]').getAttribute('release-id')
+  var el = document.querySelector('h1[release-id]')
+  var id = el.getAttribute('catalog-id') || el.getAttribute('release-id')
   var url = endpoint + '/catalog/release/' + id
   loadCache(url, function (err, res) {
     openModal('release-shopping-modal', {
-      data: res
+      data: mapRelease(res)
     })
   })
 }
@@ -342,8 +343,13 @@ function mapReleaseTrack (o, index, arr) {
 }
 
 function mapRelease (o) {
-  o.releaseDate = formatDate(o.releaseDate)
-  o.preReleaseDate = formatDate(o.preReleaseDate)
+  var pdate = typeof o.preReleaseDate != 'undefined' ? new Date(o.preReleaseDate) : undefined
+  var now   = new Date()
+  if (pdate && now < pdate) {
+    o.preReleaseDate = formatDate(pdate)
+  } else {
+    o.releaseDate = formatDate(o.releaseDate)
+  }
   o.artists = o.renderedArtists
   if(o.thumbHashes) {
     o.cover = datapoint + '/blobs/' + o.thumbHashes["512"]
@@ -356,6 +362,9 @@ function mapRelease (o) {
     o.purchase = !!o.purchaseLinks.length
   }
   o.downloadLink = getDownloadLink(o._id)
+  // Since we use catalogId for links, if not present fallback to id
+  // If causes problems just create new variable to use for the URI piece
+  if (!o.catalogId) o.catalogId = o._id
   return o
 }
 
@@ -525,11 +534,13 @@ function transformReleaseTracks (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
+      track.time = formatDuration(track.duration)
     })
     done(null, obj)
   })
 }
 
+// TODO Refactor
 function transformTracks (obj, done) {
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
@@ -540,6 +551,7 @@ function transformTracks (obj, done) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
+      track.time = formatDuration(track.duration)
     })
     done(null, obj)
   })
