@@ -133,7 +133,8 @@ function updateControls() {
 
   var playing = player.playing || player.loading
   var item = player.items[player.index]
-  var el = item ? document.querySelector(`[role="play-song"][play-link="${item.source}"]`) : undefined
+  var selector = '[role="play-song"][play-link="' + item.source + '"]'
+  var el = item ? document.querySelector(selector) : undefined
   if (el) {
     el.classList.toggle('active', playing)
   }
