@@ -171,10 +171,21 @@ function mapTrackElToPlayer (el) {
 }
 
 function scrub(e, el) {
-  player.seek(e.clientX / el.offsetWidth)
+  if (e.clientY>100){
+    var margin = 0
+    if (document.body) margin = document.body.clientWidth - el.offsetWidth || 0
+    player.seek((e.clientX - margin/2) / el.offsetWidth)
+  } else{
+    player.seek(e.clientX / el.offsetWidth)
+  }
 }
 
 function updatePlayerProgress() {
   requestAnimationFrame(updatePlayerProgress)
-  document.querySelector(sel.scrub).style.width = player.progress * 100 + '%'
+  var scrubs = document.querySelectorAll(sel.scrub)
+  if (scrubs) {
+    for(var i = 0; i<scrubs.length; i++){
+      scrubs[i].style.width = player.progress * 100 + '%'
+    }
+  }
 }

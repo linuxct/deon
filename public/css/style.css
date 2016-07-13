@@ -110,10 +110,6 @@ a.no-hover:focus{
   text-shadow: 0 0 0 !important;
 }
 
-section > .container{
-  margin-top: 2rem;
-}
-
 hr {
   height: 3px;
   background: #d4d4d4;
@@ -597,7 +593,6 @@ td.push-right > * {
 }
 
 .bgbox {
-  margin-top: 1em;
   background-size: 110%;
   background-position: center 60%;
   background-color: black;
@@ -674,6 +669,10 @@ td.push-right > * {
 
 section {
   padding: 2rem 0;
+}
+
+.v-padding{
+  padding: 4rem 0 0;
 }
 
 .container,
@@ -998,8 +997,7 @@ section {
   border: 1px solid #eee;
 }
 
-.nav-item,
-.footer-item {
+.nav-item{
   text-transform: uppercase;
   font-size: .85rem;
   letter-spacing: 2px;
@@ -1034,8 +1032,7 @@ section {
     display: none;
   }
 
-  .nav-item::before,
-  .footer-item::before{
+  .nav-item::before{
     content: "";
     display: inline-block;
     margin-right: .75rem;
@@ -1044,8 +1041,7 @@ section {
     height: 18px;
     background: #eee;
   }
-  .nav-item:first-child::before,
-  .footer-item:first-child::before{
+  .nav-item:first-child::before{
     display: none;
   }
 
@@ -1114,13 +1110,10 @@ section {
 }
 
 .nav-item:active,
-.nav-item:hover,
-.footer-item:active,
-.footer-item:hover{
+.nav-item:hover{
   color: dodgerblue;
 }
-.nav-item>i,
-.footer-item>i{
+.nav-item>i{
   padding-right: .5rem;
   font-size: 1rem;
 }
@@ -1367,19 +1360,91 @@ td.genres span:first-of-type:before {
 }
 
 footer {
-  margin-top: 2em;
   margin-bottom: 2em;
+  text-align: center;
 }
 
-footer > label,
-footer > a,
-footer > button.faux {
-  font-size: 14px;
-  font-weight: normal;
+footer .horizontal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-footer > a,
-footer > button.faux {
-  font-size: 13px;
+footer .horizontal-list > li{
+  display: inline-block;
+  padding: 4px;
+}
+
+footer .icon-list{
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+footer .icon-list > li{
+  padding: 0;
+}
+footer .icon-list > li > a{
+  padding: 4px 8px;
+}
+
+footer .credit,
+footer .copyright {
+  display: block;
+  margin-top: .25rem;
+  font-size: 0.85rem;
+}
+
+footer .credit{
+  font-weight: bold;
+}
+
+footer img {
+  max-width: 40px;
+  margin-top: .5rem;
+  opacity: 0.15;
+}
+
+footer .main-list a {
+  font-weight: bold;
+}
+
+footer .footer-items li a,
+footer .footer-items li button {
+    font-size: 0.85rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+footer .footer-items li a>i,
+footer .footer-items li button>i{
+  padding-right: .25rem;
+  font-size: 1rem;
+}
+
+footer .footer-items li a::after,
+footer .footer-items li button::after {
+    margin: 0 .5rem;
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 15px;
+    background: #eee;
+    vertical-align: sub;
+}
+footer .footer-items li:last-child a::after,
+footer .footer-items li:last-child button::after{
+    display: none;
+}
+
+@media screen and (min-width: 992px){
+  footer {
+    text-align: left;
+  }
+  footer > div:last-child{
+    text-align: right;
+  }
+  footer .icon-list{
+    margin-top: 0;
+  }
 }
 
 /*-----------------------------*\
@@ -1418,14 +1483,14 @@ footer > button.faux {
   font-size: 38px;
 }
 
-.top-banner .art-list li{
+.art-list--full-width.art-list li{
   padding: 0;
   padding-bottom: 2%;
   padding-right: 1%;
 }
 
-.top-banner .art-list li:nth-child(7),
-.top-banner .art-list li:nth-child(8){
+.art-list--full-width.art-list li:nth-child(7),
+.art-list--full-width.art-list li:nth-child(8){
   display: none;
 }
 
@@ -1438,9 +1503,6 @@ p.date{
   color: #aaa;
 }
 
-.blog{
-  padding: 4rem 0 0;
-}
 p.description{
   margin: 0 0 1rem;
 }
@@ -1739,8 +1801,8 @@ ul.social-grid {
   }
 }
 @media screen and (min-width: 1800px){
-  .top-banner .art-list li:nth-child(7),
-  .top-banner .art-list li:nth-child(8){
+  .art-list--full-width.art-list li:nth-child(7),
+  .art-list--full-width.art-list li:nth-child(8){
     display: inline-block;
   }
 }
@@ -2030,8 +2092,7 @@ body.bg {
   border: 0.25em solid rgba(255,255,255, 0.1);
   border-top-color: #fff;
 }
-.bg .nav-item::before,
-.bg .footer-item::before{
+.bg .nav-item::before{
   background: #aaa;
 }
 .bg tr:nth-child(odd) > td {

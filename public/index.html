@@ -50,7 +50,7 @@
 
     <div class="container mcat-mast">
         <div class="mcat-logo">
-            <a href="/" class="monstercat-logo">
+            <a href="/" class="no-hover monstercat-logo">
                 <div class="graphic">
                     <img src="/img/monstercat-black.png">
                 </div>
@@ -160,14 +160,49 @@
     </div>
 </section>
 
-<footer class="container push-right">
-    <label>2016 &copy; Monstercat</label>
-    <a href="/help" class="silent footer-item" title="Help">
-        <i class="fa fa-question-circle"></i>Help
-    </a>
-    <button class="faux footer-item" action="showIntercom" role="feedback">
-        <i class="fa fa-comments-o"></i>Talk to us
-    </button>
+<footer class="flex container">
+    <div class="col-xs-12 col-sm-12 col-md-8">
+        <ul class="horizontal-list main-list">
+            <li><a class="silent" href="/music">Music</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/blog">News</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/showcase">Events</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/podcast">Podcast</a></li>
+            <li><a class="silent" href="https://shop.monstercat.com">Shop</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/careers">Careers</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/contact.html">Contact</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/press.html">Press</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/licensing.html">Licensing</a></li>
+        </ul>
+        <ul class="horizontal-list footer-items">
+            <li>
+                <a href="/help" class="silent" title="Help">
+                    <i class="fa fa-question-circle"></i>
+                    Help
+                </a>
+            </li>
+            <li>
+                <button class="faux" action="showIntercom" role="feedback">
+                    <i class="fa fa-comments-o"></i>
+                    Talk to us
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-4">
+        <ul class="horizontal-list icon-list">
+            <li><a href="https://www.youtube.com/user/MonstercatMedia" target="_BLANK"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="https://twitter.com/monstercat" target="_BLANK"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="https://www.facebook.com/monstercat" target="_BLANK"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="https://www.instagram.com/monstercat/" target="_BLANK"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="https://open.spotify.com/user/monstercatmedia" target="_BLANK"><i class="fa fa-spotify"></i></a></li>
+            <li><a href="https://www.twitch.tv/monstercat/" target="_BLANK"><i class="fa fa-twitch"></i></a></li>
+            <li><a href="https://soundcloud.com/Monstercat" target="_BLANK"><i class="fa fa-soundcloud"></i></a></li>
+            <li><a href="#"><i class="fa fa-apple"></i></a></li>
+        </ul>
+        <label class="credit">2016 © Monstercat</label>
+        <label class="copyright">All Rights Reserved</label>
+        <img src="/img/monstercat-black.png">
+    </div>
 </footer>
 
 <div class="toasts">
@@ -230,7 +265,6 @@
 </script>
 
 <script type="text/template" template-name="navigation">
-    <a class="silent nav-item" href="/"><i class="fa fa-headphones"></i>Browse</a>
     {{#data}}
     {{#user}}
     <a class="silent nav-item" href="/playlists"><i class="fa fa-bars"></i>Playlists</a>
@@ -1236,6 +1270,7 @@
         route="^(\?.*)?$"
         page-title="Home">
     <div source="$endpoint/catalog/release?limit=15" template="homeFeatured"></div>
+    <div source="$endpoint/catalog/release?by_key=type&by_value=Podcast&limit=8" template="homePodcast"></div>
     <div source="$endpoint/catalog/news" template="blog-stories"></div>
     <div class="flex social">
         <div class="col-xs-12 col-sm-12 col-md-6 text right cl-white spotify-wrapper">
@@ -1282,34 +1317,34 @@
                 </header>
                 <ul class="social-grid">
                     <li>
-                        <a class="social-grid-wrapper youtube">
+                        <a class="no-hover social-grid-wrapper youtube" href="https://www.youtube.com/user/MonstercatMedia" target="_BLANK">
                             <div class="icon">
                                 <i class="fa fa-youtube"></i>
                             </div>
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
-                                    <h3>4.2m</h3>
+                                    <h3>4.7m</h3>
                                     <p>subscribers</p>
                                 </div>
                             </div>
                         </a>
-                        <a class="social-grid-wrapper twitter">
+                        <a class="no-hover social-grid-wrapper twitter" href="https://twitter.com/monstercat" target="_BLANK">
                             <div class="icon">
                                 <i class="fa fa-twitter"></i>
                             </div>
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
-                                    <h3>283k</h3>
+                                    <h3>299k</h3>
                                     <p>followers</p>
                                 </div>
                             </div>
                         </a>
                     </li>
                     <li>
-                        <a class="social-grid-wrapper facebook">
+                        <a class="no-hover social-grid-wrapper facebook" href="https://www.facebook.com/monstercat" target="_BLANK">
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
-                                    <h3>750k</h3>
+                                    <h3>800k</h3>
                                     <p>likes</p>
                                 </div>
                             </div>
@@ -1317,10 +1352,10 @@
                                 <i class="fa fa-facebook"></i>
                             </div>
                         </a>
-                        <a class="social-grid-wrapper instagram">
+                        <a class="no-hover social-grid-wrapper instagram" href="https://www.instagram.com/monstercat/" target="_BLANK">
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
-                                    <h3>119k</h3>
+                                    <h3>163k</h3>
                                     <p>followers</p>
                                 </div>
                             </div>
@@ -1330,42 +1365,42 @@
                         </a>
                     </li>
                     <li>
-                        <a class="social-grid-wrapper spotify">
+                        <a class="no-hover social-grid-wrapper spotify" href="https://open.spotify.com/user/monstercatmedia" target="_BLANK">
                             <div class="icon">
                                 <i class="fa fa-spotify"></i>
                             </div>
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
-                                    <h3>125k</h3>
-                                    <p>listeners</p>
+                                    <h3>103k</h3>
+                                    <p>listeners/mo</p>
                                 </div>
                             </div>
                         </a>
-                        <a class="social-grid-wrapper twitch">
+                        <a class="no-hover social-grid-wrapper twitch" href="https://www.twitch.tv/monstercat/" target="_BLANK">
                             <div class="icon">
                                 <i class="fa fa-twitch"></i>
                             </div>
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
-                                    <h3>191k</h3>
-                                    <p>streamers</p>
+                                    <h3>602k</h3>
+                                    <p>followers</p>
                                 </div>
                             </div>
                         </a>
                     </li>
                     <li>
-                        <a class="social-grid-wrapper soundcloud">
+                        <a class="no-hover social-grid-wrapper soundcloud" href="https://soundcloud.com/Monstercat" target="_BLANK">
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
-                                    <h3>821k</h3>
-                                    <p>fans</p>
+                                    <h3>672k</h3>
+                                    <p>followers</p>
                                 </div>
                             </div>
                             <div class="icon">
                                 <i class="fa fa-soundcloud"></i>
                             </div>
                         </a>
-                        <a class="social-grid-wrapper apple">
+                        <a class="no-hover social-grid-wrapper apple">
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
                                     <h3>139k</h3>
@@ -1416,9 +1451,6 @@
                     View
                     <i class="fa fa-chevron-right"></i>
                 </a>
-                <a href="/release/{{catalogId}}" class="button button--cta button--black">
-                    <i class="fa fa-play"></i>
-                </a>
             </div>
         </div>
         {{/featured}}
@@ -1434,7 +1466,7 @@
                     </a>
                 </div>
             </header>
-            <ul class="art-list">
+            <ul class="art-list art-list--full-width">
                 {{#releases}}
                 <li>
                     <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
@@ -1452,7 +1484,7 @@
         </div>
     </div>
     <div class="hero cl-white">
-        <div class="banner banner--height" style="background-image:url(/img/banner.jpg)">
+        <div class="banner" style="background-image:url(/img/banner.jpg)">
             <div class="banner-shade"></div>
             <div class="gradient gradient--inverted"></div>
         </div>
@@ -1461,6 +1493,49 @@
             <h1 class="line-bottom"> Independent labels have the ability to reshape the music industry.</h1>
         </div>
     </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="homePodcast"
+        transform="transformPodcast">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <section class="v-padding podcast">
+        <div class="container">
+            <header class="flex top-cta">
+                <div class="col-xs-6">
+                    <h2 class="line-top">Latest Podcast</h2>
+                </div>
+                <div class="col-xs-6 text right">
+                    <a href="/music" class="button button--black button--icon button--transparent">
+                        View all
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </header>
+            <ul class="art-list art-list--full-width">
+                {{#podcasts}}
+                <li>
+                    <a class="silent" href="/release/{{catalogId}}" title="{{title}}">
+                        <div class="image-wrapper">
+                            <img src="/img/artwork.jpg" class="preload" />
+                            <img src="{{cover}}"/>
+                        </div>
+                        <label class="title one-line-ellipsis">{{episode}}</label>
+                        <br/>
+                        <label class="artist one-line-ellipsis">Monstercat Podcast</label>
+                    </a>
+                </li>
+                {{/podcasts}}
+            </ul>
+        </div>
+    </section>
     {{/data}}
 </script>
 
@@ -1474,7 +1549,7 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <section class="blog">
+    <section class="v-padding blog">
         <div class="container">
             <header class="flex top-cta">
                 <div class="col-xs-6">

@@ -391,7 +391,16 @@ function transformHome (obj) {
   })
   obj.featured = results.shift()
   obj.releases = results
-  obj.releases.length = 6
+  obj.releases.length = 8
+  return obj
+}
+
+function transformPodcast (obj) {
+  obj.podcasts = obj.results.map(mapRelease)
+  obj.podcasts.length = 8
+  obj.podcasts.forEach(function (i, index, arr) {
+    i.episode = (i.title).replace('Monstercat Podcast ','').replace(/[()]/g, '')
+  })
   return obj
 }
 
