@@ -1270,7 +1270,7 @@
         route="^(\?.*)?$"
         page-title="Home">
     <div source="$endpoint/catalog/release?limit=15" template="homeFeatured"></div>
-    <div source="$endpoint/catalog/release?by_key=type&by_value=Podcast&limit=8" template="homePodcast"></div>
+    <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="homePodcast"></div>
     <div source="$endpoint/catalog/news" template="blog-stories"></div>
     <div class="flex social">
         <div class="col-xs-12 col-sm-12 col-md-6 text right cl-white spotify-wrapper">
