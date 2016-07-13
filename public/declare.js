@@ -133,6 +133,9 @@ function elMatches (el, sel) {
 function interceptKeyPress (e) {
   var which = e.which || e.keyCode
   var isAction = null
+  if (!e.path) {
+    addEventPath(e)
+  }
   if(which == 13) {
     if(elMatches(e.path[0], 'input,button:not([action])')) {
       for(var i = 0; i < e.path.length; i++) {
@@ -160,6 +163,9 @@ function interceptClick (e) {
   if (e.metaKey) {
     return true
   }
+  if (!e.path) {
+    addEventPath(e)
+  }
   for (var i = 0; i < e.path.length; i++) {
     t = e.path[i]
     if (t.hasAttribute && t.hasAttribute('action'))
@@ -180,6 +186,14 @@ function interceptClick (e) {
   go(url)
 }
 
+function addEventPath(e) {
+  e.path = []
+  var elem = e.target
+  while (elem) {
+    e.path.push(elem)
+    elem = elem.parentElement
+  }
+}
 function go (url, state) {
   history.pushState(state || {}, "", url)
   stateChange(location.pathname + location.search, state)
