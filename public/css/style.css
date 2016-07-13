@@ -675,6 +675,11 @@ section {
   padding: 4rem 0 0;
 }
 
+.container > h1,
+.container.panel{
+  margin-top: 0;
+}
+
 .container,
 .toast{
   width: 95%;
@@ -1388,22 +1393,27 @@ footer .icon-list > li > a{
 footer .credit,
 footer .copyright {
   display: block;
-  margin-top: .25rem;
+  margin-top: .35rem;
   font-size: 0.85rem;
 }
 
 footer .credit{
   font-weight: bold;
+  margin-top: 1.35rem;
 }
 
 footer img {
   max-width: 40px;
-  margin-top: .5rem;
-  opacity: 0.15;
+  margin-top: 1.35rem;
+  opacity: .15;
 }
 
 footer .main-list a {
   font-weight: bold;
+}
+
+footer .footer-items{
+  margin-top: .65rem;
 }
 
 footer .footer-items li a,
@@ -1436,10 +1446,10 @@ footer .footer-items li:last-child button::after{
 }
 
 @media screen and (min-width: 992px){
-  footer {
+  footer > text.left{
     text-align: left;
   }
-  footer > div:last-child{
+  footer > text.right{
     text-align: right;
   }
   footer .icon-list{
