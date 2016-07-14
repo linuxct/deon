@@ -32,6 +32,7 @@
     <script type="text/javascript" src="/js/ui.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
     <script type="text/javascript" src="/js/search.js"></script>
+    <script type="text/javascript" src="/js/browse.js"></script>
     <script type="text/javascript">
     !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
     analytics.load("FYHmNWDPH4MU44NH03s9EC9arg2Hu8Cr");
@@ -1606,6 +1607,7 @@
     {{/data}}
 </script>
 
+
 <!-- MUSIC -->
 
 <script type="text/template"
@@ -1916,6 +1918,135 @@
         {{/results}}
     </ul>
     {{/data}}
+</script>
+
+
+<!-- BROWSE -->
+
+<script type="text/template"
+        route="^browse"
+        page-title="Browse Music"
+        completed="completedBrowseMusic"
+        transform="transformBrowseMusic">
+    {{#data}}
+    <div class="page width center panel">
+        <table data-set="browse-music" trigger-target="filterBrowseMusic" class="form">
+            <tbody>
+                <tr>
+                    <th>Tags</th>
+                    <td>
+                        <input type="text" name="tags" placeholder="Song Tags" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Genres</th>
+                    <td>
+                        <input type="text" name="genres" placeholder="Song Genres" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Types</th>
+                    <td>
+                        <ul>
+                        {{#releaseTypes}}
+                            <li>
+                                <input type="checkbox" name="types" value="{{key}}" id="type-{{key}}" {{#checked}}checked="true"{{/checked}} />
+                                <label for="type-{{key}}">{{name}}</label>
+                            </li>
+                        {{/releaseTypes}}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button action="filterBrowseMusic" trigger="filterBrowseMusic" data-set-target="browse-music">Filter</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>        
+    <div source="$endpoint/catalog/browse?{{query}}"
+         template="music-browse">
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="music-browse"
+        transform="transformMusicBrowseResults">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="page width center panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    {{#results.length}}
+    <ul class="page width center panel browse-testing">
+        {{> browseMusicTable}}
+    </ul>
+    {{/results.length}}
+    {{^total}}
+    <div class="page width center text center panel">No results found.</div>
+    {{/total}}
+    {{#total}}
+      <div class="page width center pagination pad-vertical text center">
+          {{#previous}}
+            <a href="?{{previous}}">Previous</a>
+          {{/previous}}
+          <label>{{skip}} - {{count}} of {{total}}</label>
+          {{#next}}
+            <a href="?{{next}}">Next</a>
+          {{/next}}
+      </div>
+    {{/total}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="browseMusicTable">
+    {{#results.length}}
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th>Genre</th>
+                <th>BPM</th>
+                <th>Release</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#results}}
+            <tr>
+                <td class="shrink">
+                  {{>playSong}}
+                </td>
+                {{>trackCells}}
+                <td>
+                    <a href="/release/{{release.catalogId}}">{{release.title}}</a>
+                </td>
+                <td class="push-children-right">
+                    {{>trackButtons}}
+                    {{#canPlaylist}}
+                    <select
+                        onchange="addToPlaylist(null, this)"
+                        source="$endpoint/playlist"
+                        template="select-playlist"
+                        track-id="{{_id}}">
+                    </select>
+                    {{/canPlaylist}}
+                </td>
+            </tr>
+            {{/results}}
+        </tbody>
+    </table>
+    {{/results.length}}
 </script>
 
 <!-- ROSTER -->

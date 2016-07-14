@@ -31,7 +31,8 @@ function search (e, el, url) {
     delete q.term
   }
   delete q.page
-  go(url + '?' + objectToQueryString(q))}
+  go(url + '?' + objectToQueryString(q))
+}
 
 function searchAll (e, el) {
   search(e, el, '/search')
