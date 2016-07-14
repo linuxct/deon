@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -e
+
+CYAN="\033[0;36m"
+YELLOW="\033[0;33m"
+GREEN="\033[0;32m"
+RESET="\033[0m"
+
+echo
+echo -e "Making ${YELLOW}/bin${RESET} directory"
+mkdir -p bin
+mkdir -p bin/fonts
+mkdir -p bin/img
+
+echo
+echo -e "${CYAN}JS${RESET}"
+echo -e "Combining all at ${CYAN}public/js/*.js${RESET}"
+cat public/js/*.js > bin/main.js
+echo -e "Minimizing"
+node_modules/.bin/uglifyjs bin/main.js > bin/main.min.js
+
+echo
+echo -e "${GREEN}CSS${RESET}"
+echo -e "Combining all at ${GREEN}public/css/*.css${RESET}"
+cat public/css/*.css > bin/style.css
+echo -e "Minimizing"
+node_modules/.bin/cleancss bin/style.css > bin/style.min.css
+
+echo
+echo -e "Copying assets..."
+cp -fr public/fonts/ bin/fonts/
+cp -fr public/img/ bin/img/
+cp -fr public/favicon.ico bin/favicon.ico
+cp -fr public/index.html bin/index.html
+
+echo
+echo "Please edit the index.html file to support the new combined files."

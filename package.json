@@ -15,5 +15,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.3"
+  },
+  "devDependencies": {
+    "clean-css": "^3.4.18",
+    "uglify-js": "^2.7.0"
   }
 }
