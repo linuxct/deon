@@ -7,7 +7,7 @@ GREEN="\033[0;32m"
 RESET="\033[0m"
 
 echo
-echo -e "Making /bin directory"
+echo -e "Making \"bin\" directory"
 mkdir -p bin
 mkdir -p bin/fonts
 mkdir -p bin/img
