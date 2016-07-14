@@ -1,0 +1,32 @@
+<script type="text/template"
+        route="^release-claim"
+        page-title="Remove YouTube Claim">
+    <div class="container">
+        <h1>YouTube Release Claim</h1>
+        <div class="panel">
+            <p>If you have recieved a claim on your whitelisted YouTube channel you can release it here. Please fill out the form below.</p>
+            <br/>
+            <table class="form mobile">
+                <tbody data-set="youtube-claim">
+                    <tr>
+                        <th>YouTube Video Id</th>
+                        <td>
+                            <input type="text" name="videoId" placeholder="Video Id"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="button-group">
+                <button class="button--full" action="removeYouTubeClaim" data-set-target="youtube-claim">Release Claim</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="vendor-selector">
+    <select name="vendor">
+        <option value="">Select One</option>
+        <option>YouTube</option>
+        <option>Twitch</option>
+    </select>
+</script>

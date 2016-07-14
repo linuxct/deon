@@ -1,0 +1,309 @@
+<script type="text/template"
+        route="^(:?(\?.*)?$|music(\?.*)?)"
+        page-title="Music"
+        completed="completedMusic"
+        transform="transformMusic">
+    {{#data}}
+    <div source="$endpoint/catalog/release?{{query}}"
+         template="music-releases">
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="music-releases"
+        transform="transformMusicReleases">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <ul class="container panel art-list">
+        {{#results}}
+        <li>
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                <div class="image-wrapper">
+                    <img src="/img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br/>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    {{^total}}
+    <div class="container text center panel">No results found.</div>
+    {{/total}}
+    {{#total}}
+      <div class="container pagination pad-vertical text center">
+          {{#previous}}
+            <a href="?{{previous}}">Previous</a>
+          {{/previous}}
+          <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
+          {{#next}}
+            <a href="?{{next}}">Next</a>
+          {{/next}}
+      </div>
+    {{/total}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^release\/(.*)"
+        source="$endpoint/catalog/release/$1"
+        transform="mapRelease"
+        completed="completedRelease">
+    {{#loading}}
+    {{>loading-view-black}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div class="bgbox" style="background-image: url('{{coverBig}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box container clearfix">
+                <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
+                <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
+                <h2>{{artists}}</h2>
+                <label>
+                    {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                    {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                </label>
+                <div class="options push-right">
+                    {{#purchase}}
+                    <button class="faux" action="openPurchaseRelease">
+                        <i class="fa fa-shopping-bag"></i>
+                    </button>
+                    {{/purchase}}
+                    {{#share}}
+                    <a class="silent" href="{{share}}" target="_blank">
+                        <i class="fa fa-spotify"></i>
+                    </a>
+                    {{/share}}
+                    <a class="silent"
+                    href="{{downloadLink}}"
+                    target="_blank"
+                    action="canAccessGold">
+                        <i class="fa fa-cloud-download"></i>
+                    </a>
+                    <button class="faux"
+                            action="playSongs"
+                            role="play-release"
+                            release-id="{{_id}}">
+                        <i class="fa fa-play inactive"></i>
+                        <i class="fa fa-pause active"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="release container" >
+        <div class="panel"
+            source="$endpoint/catalog/release/{{_id}}/tracks"
+            template="release-tracks">
+        </div>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="unlicensable">
+{{^licensable}}<div class="unlicensable">This track can't be licensed. <a href="/non-licensable-tracks">Read more</a></div>{{/licensable}}
+</script>
+
+<script type="text/template"
+        mustache-name="trackCells">
+<td>{{title}}{{>unlicensable}}</td>
+{{#playlistId}}
+<td><a href="/release/{{releaseId}}">{{release}}</a></td>
+{{/playlistId}}
+<td>
+    {{^artists}}
+    Id
+    {{/artists}}
+    {{#artists}}
+    <a href="/artist/{{uri}}">{{name}}</a>
+    {{/artists}}
+</td>
+<td class="col-xs-hidden col-md-visible genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td class="col-xs-hidden col-md-visible">{{time}}</td>
+<td class="col-xs-hidden col-md-visible">{{bpm}}</td>
+</script>
+
+<script type="text/template"
+        mustache-name="playSong">
+<button class="faux button--mobile"
+        action="playSong"
+        role="play-song"
+        play-link="{{playUrl}}"
+        title="{{title}}"
+        index="{{index}}"
+        track-id="{{_id}}"
+        {{#licensable}}licensable{{/licensable}}
+        {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
+        release-id="{{releaseId}}">
+    <i class="fa fa-play-circle inactive"></i>
+    <i class="fa fa-pause-circle active"></i>
+</button>
+</script>
+
+<script type="text/template"
+        mustache-name="trackButtons">
+<a class="silent button--mobile"
+   target="_blank"
+   title="Download Track"
+   action="canAccessGold"
+   href="{{downloadLink}}">
+    <i class="fa fa-cloud-download"></i>
+</a>
+<button
+    class="faux col-xs-hidden col-md-visible inline"
+    action="openTrackCopyCredits"
+    release-id="{{releaseId}}"
+    track-id="{{_id}}">
+    <i class="fa fa-copyright"></i>
+</button>
+</script>
+
+<script type="text/template"
+        template-name="release-tracks"
+        transform="transformReleaseTracks"
+        completed="completedReleaseTracks">
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink">#</th>
+                <th class="shrink nohpad"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th class="col-xs-hidden col-md-visible">Genre</th>
+                <th class="col-xs-hidden col-md-visible">Time</th>
+                <th class="col-xs-hidden col-md-visible">BPM</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#loading}}
+            <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
+            {{/loading}}
+            {{#error}}
+            <tr><td colspan="5"><p>{{message}}</p></td></tr>
+            {{/error}}
+            {{#data}}
+            {{#results}}
+            <tr>
+                <td class="shrink">{{trackNumber}}.</td>
+                <td class="shrink nohpad">
+                  {{>playSong}}
+                </td>
+                {{>trackCells}}
+                <td class="push-right">
+                    {{>trackButtons}}
+                    {{#canPlaylist}}
+                    <select
+                        onchange="addToPlaylist(null, this)"
+                        source="$endpoint/playlist"
+                        class="col-xs-hidden col-md-visible inline"
+                        template="select-playlist"
+                        track-id="{{_id}}">
+                    </select>
+                    {{/canPlaylist}}
+                </td>
+            </tr>
+            {{/results}}
+            {{/data}}
+        </tbody>
+    </table>
+</script>
+
+<script type="text/template"
+        route="^artist\/(.*)"
+        transform="mapWebsiteDetails"
+        completed="completedWebsiteDetails"
+        source="$endpoint/catalog/artist/$1">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div class="bgbox" style="background-image: url('{{image}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box container clearfix">
+                {{#image}}
+                <img class="artwork" src="{{image}}" big-src="{{image}}" action="openReleaseArt"/>
+                {{/image}}
+                <h1>{{name}}</h1>
+                <div class="options push-right">
+                    {{#socials}}
+                    <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
+                    {{/socials}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {{#about}}
+        <div calss="panel">
+            <h2>About</h2>
+            <p>{{about}}</p>
+        </div>
+        {{/about}}
+        {{#contact}}
+        <div class="panel">
+            <h2>Booking & Managment</h2>
+            <br/>
+            <p>{{booking}}</p>
+            <br/>
+            <p>{{management}}</p>
+        </div>
+        {{/contact}}
+        <div class="panel">
+            <h2>Discography</h2>
+            <div source="$endpoint/catalog/artist/{{_id}}/releases"
+                template="user-releases">
+            </div>
+        </div>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="user-releases"
+        transform="transformReleases">
+    {{#loading}}
+    {{>loading-inner-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <ul class="art-list art-list--full-width discography">
+        {{#results}}
+        <li>
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                <div class="image-wrapper">
+                    <img src="/img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br/>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    {{/data}}
+</script>

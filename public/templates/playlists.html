@@ -1,0 +1,204 @@
+<script type="text/template"
+        template-name="select-playlist">
+    {{#loading}}
+    <option disabled checked>Loading...</option>
+    {{/loading}}
+    {{#error}}
+    {{/error}}
+    {{#data}}
+    <option value="" checked>Add to Playlist</option>
+    {{#results}}
+    <option value="{{_id}}">{{name}}</option>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        page-title="My Playlists"
+        route="^playlists">
+    <div class="container">
+        <h1>My Playlists</h1>
+        <div class="panel">
+            <div class="options">
+                <button action="createPlaylist">
+                    Create Playlist
+                </button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody
+                    source="$endpoint/playlist?fields=name,public"
+                    template="playlists">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="playlists">
+    {{#loading}}
+    {{>loading-table-view}}
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="2">{{message}}</td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr>
+        <td><a href="/playlist/{{_id}}">{{name}}</a></td>
+        <td class="push-right text right">
+            <button class="faux button--mobile"
+                    action="renamePlaylist"
+                    playlist-id="{{_id}}">
+                <i class="fa fa-pencil"></i>
+            </button>
+            <button class="faux button--mobile"
+                    action="destroyPlaylist"
+                    playlist-id="{{_id}}">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="2">No Results.</td></tr>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^playlist\/(.*)"
+        source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
+        completed="completedPlaylist"
+        transform="transformPlaylist">
+    <div class="container">
+        {{#loading}}
+        {{>loading-view}}
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <h1 playlist-id="{{_id}}">{{name}}</h1>
+        <div class="panel">
+            <div class="options pad-vertical push-right">
+                {{#canPublic}}
+                <label>
+                    <input
+                        type="checkbox"
+                        action="togglePlaylistPublic"
+                        playlist-id="{{_id}}"
+                        {{#public}}checked{{/public}} />
+                    Public
+                </label>
+                <button action="reorderPlaylistFromInputs" 
+                        trigger="reorderPlaylistFromInputs">
+                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
+                        Save Order</button>
+                {{/canPublic}}
+                {{#downloadUrl}}
+                <a class="silent button--mobile"
+                   title="Download Playlist"
+                   action="canAccessGold"
+                   href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
+                {{/downloadUrl}}
+                <button class="faux button--mobile">
+                    <i class="fa fa-fw fa-play"
+                       action="playSongs"
+                       role="play-playlist"></i>
+                </button>
+            </div>
+            <table class="drag-sortable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="shrink nohpad"></th>
+                        <th>Title</th>
+                        <th>Release</th>
+                        <th>Artist</th>
+                        <th class="col-xs-hidden col-md-visible">Genre</th>
+                        <th class="col-xs-hidden col-md-visible">Time</th>
+                        <th class="col-xs-hidden col-md-visible">BPM</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody role="playlist-tracks"
+                       source="$endpoint/playlist/{{_id}}/tracks"
+                       template="playlist-tracks">
+                </tbody>
+            </table>
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="playlist-tracks"
+        transform="transformPlaylistTracks"
+        completed="updateControls">
+    {{#loading}}
+    {{>loading-table-view}}
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="6">{{message}}</td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr role="playlist-track"
+        track-id="{{_id}}"
+        release-id="{{releaseId}}"
+        {{#edit}}
+        draggable="true"
+        ondrop="playlistDrop(event)"
+        ondragover="playlistAllowDrop(event)"
+        ondragleave="playlistDragLeave(event)"
+        ondragstart="playlistDragStart(event, '{{_id}}', '{{releaseId}}')"
+        {{/edit}}>
+        <td>
+            {{#edit}}
+            <input  type="text"
+                    action-enter="reorderPlaylistFromInputs"
+                    action-enter="reorderPlaylistFromInputs"
+                    onfocus="playlistTrackOrderFocus(event, this)"
+                    onblur="playlistTrackOrderBlur(event, this)"
+                    trigger-target="reorderPlaylistFromInputs"
+                    track-id="{{_id}}"
+                    release-id="{{releaseId}}"
+                    track-title="{{title}}"
+                    name="trackOrder[]"
+                    tabIndex="{{trackNumber}}"
+                    value="{{trackNumber}}" size="2" />
+            {{/edit}}
+            {{#noEdit}}
+            {{trackNumber}}.
+            {{/noEdit}}
+        </td>
+        <td class="shrink nohpad">
+          {{>playSong}}
+        </td>
+        {{>trackCells}}
+        <td class="push-right">
+            {{>trackButtons}}
+            {{#edit}}
+            <button class="faux button--mobile"
+                    action="removeFromPlaylist"
+                    playlist-position="{{index}}">
+                <i class="fa fa-trash-o"></i>
+            </button>
+            {{/edit}}
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr>
+        <td colspan="10">No Results.</td>
+    </tr>
+    {{/results}}
+    {{/data}}
+</script>
