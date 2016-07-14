@@ -1,6 +1,9 @@
 var searchSnippetLimit = 8
 
-
+function searchMobile(e, el, url) {
+  closeNav()
+  search(e, el, url)
+}
 //TODO: Look at all of this duplicate code. Be the change you want to see in the code.
 function search (e, el, url) {
   var data   = getTargetDataSet(el, false, true) || {}
@@ -33,7 +36,6 @@ function search (e, el, url) {
 function searchAll (e, el) {
   search(e, el, '/search')
 }
-
 
 function searchToFuzzy (search, fields) {
   if (!search) return

@@ -61,7 +61,7 @@
         <!-- Desktop Global Navigation -->
         <nav class="mcat-nav col-xs-hidden col-md-visible">
             <ul>
-                <li><a href="/music">Music</a></li>
+                <li><a action="closeNav" href="/music">Music</a></li>
                 <li><a href="http://www.monstercat.com/blog">News</a></li>
                 <li><a href="http://www.monstercat.com/showcase">Events</a></li>
                 <li><a href="http://www.monstercat.com/podcast">Podcast</a></li>
@@ -78,15 +78,15 @@
             </button>
             <ul role="nav">
                 <li class="global-search global-search--mobile"
-                     trigger-target="searchForm"
-                     data-set="search-form">
+                     trigger-target="searchFormMobile"
+                     data-set="search-form-mobile">
                     <button class="faux"
-                            action="search"
-                            trigger="searchForm"
-                            data-set-target="search-form">
+                            action="searchMobile"
+                            trigger="searchFormMobile"
+                            data-set-target="search-form-mobile">
                         <i class="fa fa-search"></i>
                     </button>
-                    <input data-set-target="search-form"
+                    <input data-set-target="search-form-mobile"
                            name="term"
                            type="text"
                            placeholder="Search"
@@ -95,7 +95,7 @@
                 <li id="navigation-mobile"
                      template="navigation">
                 </li>
-                <li><a href="/music">Music</a></li>
+                <li><a action="closeNav" href="/music">Music</a></li>
                 <li><a href="http://www.monstercat.com/blog">News</a></li>
                 <li><a href="http://www.monstercat.com/showcase">Events</a></li>
                 <li><a href="http://www.monstercat.com/podcast">Podcast</a></li>
@@ -197,7 +197,7 @@
             <li><a href="https://open.spotify.com/user/monstercatmedia" target="_BLANK"><i class="fa fa-spotify"></i></a></li>
             <li><a href="https://www.twitch.tv/monstercat/" target="_BLANK"><i class="fa fa-twitch"></i></a></li>
             <li><a href="https://soundcloud.com/Monstercat" target="_BLANK"><i class="fa fa-soundcloud"></i></a></li>
-            <li><a href="#"><i class="fa fa-apple"></i></a></li>
+            <li><a href="http://monster.cat/iTunes-5Year" target="_BLANK"><i class="fa fa-apple"></i></a></li>
         </ul>
         <label class="credit">2016 © Monstercat</label>
         <label class="copyright">All Rights Reserved</label>
@@ -269,11 +269,11 @@
 <script type="text/template" template-name="navigation">
     {{#data}}
     {{#user}}
-    <a class="silent nav-item" href="/playlists"><i class="fa fa-bars"></i>Playlists</a>
-    <a class="silent nav-item" href="/account"><i class="fa fa-gear"></i>Account</a>
+    <a class="silent nav-item" action="closeNav" href="/playlists"><i class="fa fa-bars"></i>Playlists</a>
+    <a class="silent nav-item" action="closeNav" href="/account"><i class="fa fa-gear"></i>Account</a>
     {{/user}}
     {{^user}}
-    <a class="silent nav-item" href="/signin"><i class="fa fa-sign-in"></i>Sign In</a>
+    <a class="silent nav-item" action="closeNav" href="/signin"><i class="fa fa-sign-in"></i>Sign In</a>
     {{/user}}
     {{/data}}
 </script>
@@ -341,7 +341,7 @@
     <div class="container">
         <h1>Sign In</h1>
         <div class="panel">
-        <table class="form" data-set="credentials" trigger-target="signIn">
+        <table class="form mobile" data-set="credentials" trigger-target="signIn">
             <tbody>
                 <tr>
                     <th>Email</th>
@@ -369,10 +369,10 @@
                 </tr>
             </tbody>
         </table>
-        <div class="button-group">
-            <button class="button--cta" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
-            <button class="button--social button--fb" action="signInFacebook"><i class="fa fa-facebook"></i> Sign In</button>
-            <button class="button--social button--g" action="signInGoogle"><i class="fa fa-google"></i> Sign In</button>
+        <div class="button-group button-group--margin">
+            <button class="button--cta button--full" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
+            <button class="button--social button--half button--fb" action="signInFacebook"><i class="fa fa-facebook"></i> Sign In</button>
+            <button class="button--social button--half button--g" action="signInGoogle"><i class="fa fa-google"></i> Sign In</button>
         </div>
         <a href="/forgot-password">Forgot your password?</a>
         <br/>
@@ -386,16 +386,18 @@
     <div class="container">
         <h1>Authenticate Token</h1>
         <div class="panel">
-        <table class="form" data-set="auth-token">
-            <tr>
-                <th>Token</th>
-                <td>
-                    <input type="text" name="token" placeholder="Enter Here"/>
-                </td>
-            </tr>
-        </table>
-        <button action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
-        <button action="resendTwoFactorToken">Resend Token</button>
+            <table class="form mobile" data-set="auth-token">
+                <tr>
+                    <th>Token</th>
+                    <td>
+                        <input type="text" name="token" placeholder="Enter Here"/>
+                    </td>
+                </tr>
+            </table>
+            <div class="button-group">
+                <button class="button--cta button--full">action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
+                <button class="button--full" action="resendTwoFactorToken">Resend Token</button>
+            </div>
         </div>
     </div>
 </script>
@@ -405,7 +407,7 @@
     <div class="container">
         <h1>Forgot Password?</h1>
         <div class="panel">
-        <table class="form" data-set="credentials">
+        <table class="form mobile" data-set="credentials">
             <tbody>
                 <tr>
                     <th>Email</th>
@@ -418,7 +420,9 @@
                 </tr>
             </tbody>
         </table>
-        <button action="recoverPassword" data-set-target="credentials">Send Reset Link</button>
+        <div class="button-group">
+            <button class="button--cta button--full" action="recoverPassword" data-set-target="credentials">Send Reset Link</button>
+        </div>
         </div>
     </div>
 </script>
@@ -428,7 +432,7 @@
     <div class="container">
         <h1>Reset Password</h1>
         <div class="panel">
-        <table class="form" data-set="password">
+        <table class="form mobile" data-set="password">
             <tbody>
                 <tr>
                     <th>Password</th>
@@ -447,11 +451,14 @@
                 </tr>
             </tbody>
         </table>
-        <button
-            action="updatePassword"
-            data-set-target="password">
-            Update Password
-        </button>
+            <div class="button-group">
+                <button
+                    class="button--cta button-full"
+                    action="updatePassword"
+                    data-set-target="password">
+                    Update Password
+                </button>
+            </div>
         </div>
     </div>
 </script>
@@ -463,7 +470,7 @@
         <h1>Confirm Sign-up</h1>
         <div class="panel">
         {{#data}}
-        <table class="form" data-set="credentials" trigger-target="signUpSocial">
+        <table class="form mobile" data-set="credentials" trigger-target="signUpSocial">
             <tbody>
                 <tr>
                     <th>Email</th>
@@ -481,7 +488,7 @@
                                name="password"
                                placeholder="a secret"/>
                         <button
-                            class="faux"
+                            class="faux password"
                             action="togglePassword"
                             toggle-target="password">
                             <i class="fa fa-eye-slash"></i>
@@ -509,7 +516,9 @@
                 </tr>
             </tbody>
         </table>
-        <button action="signUpSocial" trigger="signUpSocial" data-set-target="credentials">Sign Up</button>
+        <div class="button-group">
+            <button class="button--cta button--full" action="signUpSocial" trigger="signUpSocial" data-set-target="credentials">Sign Up</button>
+        </div>
         {{/data}}
         {{^data}}
         <p>Nothing here.</p>
@@ -526,14 +535,14 @@
         <div class="panel">
             <h2>With Social</h2>
             <div class="button-group">
-                <button class="button--social button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
-                <button class="button--social button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
+                <button class="button--social button--half button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
+                <button class="button--social button--half button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
             </div>
         </div>
         <div class="panel">
             <h2>With Email</h2>
             {{#data}}
-            <table class="form" data-set="credentials" trigger-target="signUp">
+            <table class="form mobile" data-set="credentials" trigger-target="signUp">
                 <tbody>
                     <tr>
                         <th>Email</th>
@@ -550,7 +559,7 @@
                                    name="password"
                                    placeholder="a secret"/>
                             <button
-                                class="faux"
+                                class="faux password"
                                 action="togglePassword"
                                 toggle-target="password">
                                 <i class="fa fa-eye-slash"></i>
@@ -573,7 +582,7 @@
                 </tbody>
             </table>
             <div class="button-group">
-                <button class="button--cta" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+                <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
             </div>
             {{/data}}
         </div>
@@ -595,7 +604,7 @@
             <p>{{message}}</p>
             {{/error}}
             {{#data}}
-            <table class="form" trigger-target="saveAccount">
+            <table class="form mobile" trigger-target="saveAccount">
                 <tbody data-set="account">
                     <tr>
                         <th>Email</th>
@@ -634,7 +643,7 @@
                                    name="password"
                                    placeholder="New Password">
                             <button
-                                class="faux"
+                                class="faux password"
                                 action="togglePassword"
                                 toggle-target="password">
                                 <i class="fa fa-eye-slash"></i>
@@ -643,14 +652,14 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="button-group">
-                <button class="button--cta" 
+            <div class="button-group button-group--margin">
+                <button class="button--cta button--full" 
                         action="saveAccount"
                         trigger="saveAccount"
                         data-set-target="account">
                     Save
                 </button>
-                <button class="button--danger" action="signOut">Sign Out</button>
+                <button class="button--danger button--full" action="signOut">Sign Out</button>
             </div>
             <a href="/account/services">Manage Services</a>
         </div>
@@ -660,7 +669,7 @@
             <button action="disableTwoFactor">Disable</button>
             {{/enableTwoFactor}}
             {{#enableTwoFactor}}
-            <table class="form" data-set="2-factor">
+            <table class="form mobile" data-set="2-factor">
                 <tbody>
                     <tr>
                         <th>Country Code</th>
@@ -682,7 +691,7 @@
                 </tbody>
             </table>
             <div class="button-group">
-                <button action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+                <button class="button--full" action="enableTwoFactor" data-set-target="2-factor">Enable</button>
             </div>
             {{/enableTwoFactor}}
         </div>
@@ -706,7 +715,7 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <table class="form">
+    <table class="form mobile">
         <tbody data-set="settings">
             <tr>
                 <th>Prefered Download Format</th>
@@ -764,11 +773,13 @@
     <div source="$endpoint/self/social-signins"
          template="social-settings">
     </div>
-    <button class="button--cta"
-            action="saveAccountSettings"
-            data-set-target="settings">
-        Update Settings
-    </button>
+    <div class="button-group">
+        <button class="button--cta button--full"
+                action="saveAccountSettings"
+                data-set-target="settings">
+            Update Settings
+        </button>
+    </div>
     {{/data}}
 </script>
 
@@ -778,23 +789,23 @@
     {{#data}}
         <div class="button-group">
         {{#facebookEnabled}}
-        <button class="button--social button--fb" action="unlinkFacebook">
+        <button class="button--social button--half button--fb" action="unlinkFacebook">
             <i class="fa fa-facebook"></i> Unlink Account
         </button>
         {{/facebookEnabled}}
         {{^facebookEnabled}}
-        <button class="button--social button--fb" action="enableFacebookSignin">
+        <button class="button--social button--half button--fb" action="enableFacebookSignin">
             <i class="fa fa-facebook"></i> Link Account
         </button>
         {{/facebookEnabled}}
 
         {{#googleEnabled}}
-        <button class="button--social button--g" action="unlinkGoogle">
+        <button class="button--social button--half button--g" action="unlinkGoogle">
             <i class="fa fa-google"></i> Unlink Account
         </button>
         {{/googleEnabled}}
         {{^googleEnabled}}
-        <button class="button--social button--g" action="enableGoogleSignin">
+        <button class="button--social button--half button--g" action="enableGoogleSignin">
             <i class="fa fa-google"></i> Link Account
         </button>
         {{/googleEnabled}}
@@ -1157,7 +1168,7 @@
             <div data-set="buy-out-license">
                 <input type="hidden" name="amount" value="{{amountRemaining}}"/>
                 <input type="hidden" name="id" value="{{_id}}"/>
-                <table class="form">
+                <table class="form mobile">
                     <tbody>
                         <tr>
                             <th>Channel Id</th>
@@ -1186,7 +1197,9 @@
                     </tbody>
                 </table>
                 {{>payment-method}}
-                <button action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
+                <div class="button-group">
+                    <button class="button--full" action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
+                </div>
             </div>
             {{/data}}
         </div>
@@ -1204,7 +1217,7 @@
                 receive content-ID claims.</p>
             <div data-set="new-license">
                 <input type="hidden" name="amount" value="20000">
-                <table class="form">
+                <table class="form mobile">
                     <tbody>
                         <tr>
                             <th>Platform</th>
@@ -1227,7 +1240,9 @@
                     </tbody>
                 </table>
                 {{>payment-method}}
-                <button action="buyLicense" data-set-target="new-license">Purchase Whitelisting</button>
+                <div class="button-group">
+                    <button class="button--full" action="buyLicense" data-set-target="new-license">Purchase Whitelisting</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1243,7 +1258,7 @@
         <div class="panel">
             <p>If you have recieved a claim on your whitelisted YouTube channel you can release it here. Please fill out the form below.</p>
             <br/>
-            <table class="form">
+            <table class="form mobile">
                 <tbody data-set="youtube-claim">
                     <tr>
                         <th>YouTube Video Id</th>
@@ -1253,7 +1268,9 @@
                     </tr>
                 </tbody>
             </table>
-            <button action="removeYouTubeClaim" data-set-target="youtube-claim">Release Claim</button>
+            <div class="button-group">
+                <button class="button--full" action="removeYouTubeClaim" data-set-target="youtube-claim">Release Claim</button>
+            </div>
         </div>
     </div>
 </script>
@@ -1402,7 +1419,7 @@
                                 <i class="fa fa-soundcloud"></i>
                             </div>
                         </a>
-                        <a class="no-hover social-grid-wrapper apple">
+                        <a class="no-hover social-grid-wrapper apple" href="http://monster.cat/iTunes-5Year" target="_BLANK">
                             <div class="stats grey-square">
                                 <div class="stats-wrapper">
                                     <h3>139k</h3>
@@ -1456,7 +1473,7 @@
             </div>
         </div>
         {{/featured}}
-        <div class="container cl-white">
+        <div class="container latest cl-white">
             <header class="flex top-cta">
                 <div class="col-xs-6">
                     <h2 class="line-top">Latest Releases</h2>
@@ -1509,7 +1526,7 @@
     {{/error}}
     {{#data}}
     <section class="v-padding podcast">
-        <div class="container">
+        <div class="container latest">
             <header class="flex top-cta">
                 <div class="col-xs-6">
                     <h2 class="line-top">Latest Podcast</h2>
@@ -1727,14 +1744,14 @@
     <a href="/artist/{{uri}}">{{name}}</a>
     {{/artists}}
 </td>
-<td class="genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
-<td>{{time}}</td>
-<td>{{bpm}}</td>
+<td class="col-xs-hidden col-md-visible genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td class="col-xs-hidden col-md-visible">{{time}}</td>
+<td class="col-xs-hidden col-md-visible">{{bpm}}</td>
 </script>
 
 <script type="text/template"
         mustache-name="playSong">
-<button class="faux"
+<button class="faux button--mobile"
         action="playSong"
         role="play-song"
         play-link="{{playUrl}}"
@@ -1751,7 +1768,7 @@
 
 <script type="text/template"
         mustache-name="trackButtons">
-<a class="silent"
+<a class="silent button--mobile"
    target="_blank"
    title="Download Track"
    action="canAccessGold"
@@ -1759,7 +1776,7 @@
     <i class="fa fa-cloud-download"></i>
 </a>
 <button
-    class="faux"
+    class="faux col-xs-hidden col-md-visible inline"
     action="openTrackCopyCredits"
     release-id="{{releaseId}}"
     track-id="{{_id}}">
@@ -1778,9 +1795,9 @@
                 <th class="shrink nohpad"></th>
                 <th>Title</th>
                 <th>Artists</th>
-                <th>Genre</th>
-                <th>Time</th>
-                <th>BPM</th>
+                <th class="col-xs-hidden col-md-visible">Genre</th>
+                <th class="col-xs-hidden col-md-visible">Time</th>
+                <th class="col-xs-hidden col-md-visible">BPM</th>
                 <th></th>
             </tr>
         </thead>
@@ -1805,6 +1822,7 @@
                     <select
                         onchange="addToPlaylist(null, this)"
                         source="$endpoint/playlist"
+                        class="col-xs-hidden col-md-visible inline"
                         template="select-playlist"
                         track-id="{{_id}}">
                     </select>
@@ -1882,11 +1900,17 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <ul class="discography">
+    <ul class="art-list art-list--full-width discography">
         {{#results}}
         <li>
-            <a href="/release/{{catalogId}}">
-                <img src="{{cover}}">
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                <div class="image-wrapper">
+                    <img src="/img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br/>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
             </a>
         </li>
         {{/results}}
@@ -1903,9 +1927,11 @@
         <h1>Artists</h1>
         <div class="panel">
             {{#data}}
+            <ul class="button-list">
             {{#years}}
-            <a href="/artists/?year={{.}}">{{.}}</a>
+            <li><a class="button" href="/artists/?year={{.}}">{{.}}</a></li>
             {{/years}}
+            </ul>
             <div source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId&filters=years,{{year}}"
                  template="roster-year">
             </div>
@@ -1929,7 +1955,10 @@
         <li>
             <a class="silent" href="/artist/{{uri}}" title="{{name}}">
                 {{#image}}
-                <img src="{{image}}"/>
+                <div class="image-wrapper">
+                    <img src="/img/artist.jpg" class="preload" />
+                    <img src="{{image}}"/>
+                </div>
                 {{/image}}
                 {{^image}}
                 <div class="no-art">
@@ -2001,12 +2030,12 @@
     <tr>
         <td><a href="/playlist/{{_id}}">{{name}}</a></td>
         <td class="push-right text right">
-            <button class="faux"
+            <button class="faux button--mobile"
                     action="renamePlaylist"
                     playlist-id="{{_id}}">
                 <i class="fa fa-pencil"></i>
             </button>
-            <button class="faux"
+            <button class="faux button--mobile"
                     action="destroyPlaylist"
                     playlist-id="{{_id}}">
                 <i class="fa fa-trash-o"></i>
@@ -2051,12 +2080,12 @@
                         Save Order</button>
                 {{/canPublic}}
                 {{#downloadUrl}}
-                <a class="silent"
+                <a class="silent button--mobile"
                    title="Download Playlist"
                    action="canAccessGold"
                    href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
                 {{/downloadUrl}}
-                <button class="faux">
+                <button class="faux button--mobile">
                     <i class="fa fa-fw fa-play"
                        action="playSongs"
                        role="play-playlist"></i>
@@ -2070,9 +2099,9 @@
                         <th>Title</th>
                         <th>Release</th>
                         <th>Artist</th>
-                        <th>Genre</th>
-                        <th>Time</th>
-                        <th>BPM</th>
+                        <th class="col-xs-hidden col-md-visible">Genre</th>
+                        <th class="col-xs-hidden col-md-visible">Time</th>
+                        <th class="col-xs-hidden col-md-visible">BPM</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -2134,7 +2163,7 @@
         <td class="push-right">
             {{>trackButtons}}
             {{#edit}}
-            <button class="faux"
+            <button class="faux button--mobile"
                     action="removeFromPlaylist"
                     playlist-position="{{index}}">
                 <i class="fa fa-trash-o"></i>
@@ -2401,9 +2430,9 @@
                 <th class="shrink"></th>
                 <th>Title</th>
                 <th>Artists</th>
-                <th>Genre</th>
-                <th>Time</th>
-                <th>BPM</th>
+                <th class="col-xs-hidden col-md-visible">Genre</th>
+                <th class="col-xs-hidden col-md-visible">Time</th>
+                <th class="col-xs-hidden col-md-visible">BPM</th>
                 <th></th>
             </tr>
         </thead>
@@ -2434,7 +2463,7 @@
 
 <script type="text/template"
         mustache-name="searchReleasesList">
-    <ul class="art-list">
+    <ul class="art-list art-list--full-width">
         {{#results}}
         <li>
             <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
@@ -2454,7 +2483,7 @@
 
 <script type="text/template"
         mustache-name="searchArtistsList">
-    <ul class="art-list">
+    <ul class="art-list art-list--full-width">
         {{#results}}
         <li>
             <a class="silent" href="/artist/{{uri}}" title="{{name}}">

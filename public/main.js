@@ -405,10 +405,12 @@ function transformPodcast (obj) {
 }
 
 function transformBlogPosts (obj) {
+  var maxLength = 400
   obj.posts.length = 2
   obj.posts.forEach(function (i, index, arr) {
     i.date = formatDate(i.date)
     i.isOdd = !(index % 2 == 0)
+    i.excerpt = i.excerpt.length>maxLength ? i.excerpt.substr(0,maxLength-1)+'...' : i.excerpt;
   })
   return obj
 }

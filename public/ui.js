@@ -78,3 +78,8 @@ function toggleNav(){
   document.querySelector("[role='nav']").classList.toggle('open')
   document.querySelector("[role='nav-button']").classList.toggle('active')
 }
+
+function closeNav(){
+  document.querySelector("[role='nav']").classList.remove('open')
+  document.querySelector("[role='nav-button']").classList.remove('active')
+}

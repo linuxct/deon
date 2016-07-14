@@ -130,6 +130,10 @@ th, td {
   padding: 0.5em 1em;
 }
 
+table select {
+  max-width: 100%; /* make sure selects don't make table collapse beyond parent width */ 
+}
+
 ::selection {
   background: rgba(0,0,0,0.7); 
 }
@@ -209,7 +213,10 @@ button:hover,
   color: white;
 }
 .button-group{
-  margin: 1.5rem 0 1rem;
+  margin: 1.5rem 0 0rem;
+}
+.button-group--margin{
+  margin-bottom: 1rem;
 }
 .button--cta{
   background: dodgerblue;
@@ -414,6 +421,58 @@ label[for] {
   color: dodgerblue;
 }
 
+@media screen and (max-width: 992px){
+  table.form.mobile th,
+  table.form.mobile td{
+    display: block;
+    clear: both;
+    width: 100%;
+    max-width: initial;
+    position: relative;
+  }
+
+  table.form.mobile td > input{
+    width: 100%;
+    max-width: initial;
+    background: #eee;
+    padding: 1rem;
+  }
+  table.form.mobile td > input,
+  table.form.mobile td > button{
+    display: inline-block;
+  }
+  table.form.mobile td > button.password{
+    position: absolute;
+    right: 1rem;
+    top: 1.5rem;
+  }
+  table.form.mobile select{
+    width: 100%;
+    padding: 1rem;
+  }
+  .button-group{
+    font-size: 0;
+  }
+  .button-group .button--full {
+    width: 100%;
+  }
+  .button-group .button--half{
+    width: 50%;
+    margin: 0;
+  }
+  .button-group ~ a{
+    margin: .25rem auto;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+  a.button--mobile,
+  button.button--mobile {
+    padding: .5rem;
+    font-size: 1.65rem;
+  }
+}
+
 /*-----------------------------*\
   HELPERS
 \*-----------------------------*/
@@ -593,13 +652,13 @@ td.push-right > * {
 }
 
 .bgbox {
-  background-size: 110%;
+  background-size: cover;
   background-position: center 60%;
   background-color: black;
 }
 
 .bgbox-blanket {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.65);
   overflow: hidden;
 }
 
@@ -639,7 +698,6 @@ td.push-right > * {
   width: 100%;
   height: 100%;
   background-size: cover;
-  background-size: 110%;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-color: #efefef;
@@ -763,6 +821,10 @@ section {
 
 .panel ul{
   padding-left: 1.1rem;
+}
+
+.panel ul.art-list{
+  padding-left: 0;
 }
 
 .mcat-mast {
@@ -1319,23 +1381,6 @@ table.drag-sortable tr.drag-active-bottom {
   border-bottom: 2px solid #000;
 }
 
-.discography {
-  list-style: none;
-  margin-left: -1em;
-  margin-top: -1em;
-}
-
-.discography li {
-  display: inline-block;
-  margin: 1em 0 0 1em;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
-
-.discography li img {
-  max-width: 147px;
-  display: block;
-}
-
 .unlicensable {
   font-size: 0.8em;
 }
@@ -1430,8 +1475,8 @@ footer .footer-items li button>i{
   font-size: 1rem;
 }
 
-footer .footer-items li a::after,
-footer .footer-items li button::after {
+footer .footer-items li a::before,
+footer .footer-items li button::before {
     margin: 0 .5rem;
     content: "";
     display: inline-block;
@@ -1440,8 +1485,8 @@ footer .footer-items li button::after {
     background: #eee;
     vertical-align: sub;
 }
-footer .footer-items li:last-child a::after,
-footer .footer-items li:last-child button::after{
+footer .footer-items li:first-child a::before,
+footer .footer-items li:first-child button::before{
     display: none;
 }
 
@@ -1499,8 +1544,8 @@ footer .footer-items li:last-child button::after{
   padding-right: 1%;
 }
 
-.art-list--full-width.art-list li:nth-child(7),
-.art-list--full-width.art-list li:nth-child(8){
+.latest .art-list--full-width.art-list li:nth-child(7),
+.latest .art-list--full-width.art-list li:nth-child(8){
   display: none;
 }
 
@@ -1766,6 +1811,9 @@ ul.social-grid {
   .article-wrapper {
     max-width: 80%;
   }
+  .article-banner{
+    height: 500px;
+  }
   .col-md-last + .article-details > .article-wrapper {
     margin-left: auto;
     margin-right: 0;
@@ -1806,13 +1854,16 @@ ul.social-grid {
     width: 50%;
     height: 152px;
   }
+  .article-banner{
+    height: 450px;
+  }
   .social-grid .icon > i {
     font-size: 3rem;
   }
 }
 @media screen and (min-width: 1800px){
-  .art-list--full-width.art-list li:nth-child(7),
-  .art-list--full-width.art-list li:nth-child(8){
+  .latest .art-list--full-width.art-list li:nth-child(7),
+  .latest .art-list--full-width.art-list li:nth-child(8){
     display: inline-block;
   }
 }
@@ -1944,9 +1995,20 @@ ul.social-grid {
 }
 
 .details-box img.artwork {
-  float: right;
-  height: 256px;
-  cursor: pointer;
+  text-align: center;
+  max-width: 100%;
+  display: block;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+@media screen and (min-width: 992px){
+  .details-box img.artwork {
+    float: right;
+    height: 256px;
+    padding: 0;
+    cursor: pointer;
+  }
 }
 
 .details-box .options i {
@@ -1994,6 +2056,45 @@ textarea.copycredits {
 }
 
 /*-----------------------------*\
+  ARTISTS
+\*-----------------------------*/
+
+.panel .button-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 0;
+  margin-bottom: 2rem;
+}
+.panel .button-list > li{
+  display: inline-block;
+  width: 50%;    
+}
+.panel .button-list > li > a{
+  text-align: center;
+  width: 100%;
+  border-right-width: 0px;
+}
+.panel .button-list > li:first-child{
+  width: 100%;
+}
+.panel .button-list > li:nth-child(odd) > a{
+  border-right-width: 3px;
+}
+@media screen and (min-width: 992px){
+  .panel .button-list > li,
+  .panel .button-list > li:first-child{
+    width: 20%;    
+  }
+  .panel .button-list > li:nth-child(odd) > a{
+    border-right-width: 0px;
+  }
+  .panel .button-list > li:last-child > a{
+    border-right: 3px solid;
+  }
+}
+
+/*-----------------------------*\
   SERVICES
 \*-----------------------------*/
 
@@ -2005,17 +2106,16 @@ textarea.copycredits {
 }
 .services .services-form select{
   font-family: "Proxima Nova", Open Sans, sans-serif;
-  box-shadow: 0 0 0;
+  box-shadow: 0 0 0px rgba(30, 144, 255, 0.21);
   border: 0;
   background: transparent;
   vertical-align: bottom;
-  -webkit-appearance: none;
   -webkit-border-radius: 0px;
   border-radius: 0px;
   transition: all 0.4s ease;
 }
 .services .services-form select:focus{
-  box-shadow: 0 0 15px rgba(30, 144, 255, 0.41);
+  box-shadow: 0 0 15px rgba(30, 144, 255, 0.21);
 }
 .services .services-form select,
 .services .services-form input[type="text"]{
