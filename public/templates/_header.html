@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="fragment" content="!" />
+    <meta name="google-signin-client_id" content="1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="stylesheet" href="/css/grid.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="text/javascript">window.prerenderReady = false</script>
+    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
+            defer async></script>
+    <script type="text/javascript" src="https://apis.google.com/js/platform.js"
+            defer></script>
+    <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"
+            defer async></script>
+    <script type="text/javascript" src="/js/marked.js"></script>
+    <script type="text/javascript" src="/js/mustache.js"></script>
+    <script type="text/javascript" src="/js/declare.js"></script>
+    <script type="text/javascript" src="/js/country-codes.js"></script>
+    <script type="text/javascript" src="/js/countries.js"></script>
+    <script type="text/javascript" src="/js/strings.js"></script>
+    <script type="text/javascript" src="/js/helpers.js"></script>
+    <script type="text/javascript" src="/js/account.js"></script>
+    <script type="text/javascript" src="/js/playlist.js"></script>
+    <script type="text/javascript" src="/js/signin.js"></script>
+    <script type="text/javascript" src="/js/social.js"></script>
+    <script type="text/javascript" src="/js/pay.js"></script>
+    <script type="text/javascript" src="/js/player.js"></script>
+    <script type="text/javascript" src="/js/controls.js"></script>
+    <script type="text/javascript" src="/js/ui.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/search.js"></script>
+    <script type="text/javascript" src="/js/browse.js"></script>
+    <script type="text/javascript">
+    !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+    analytics.load("FYHmNWDPH4MU44NH03s9EC9arg2Hu8Cr");
+    }}();
+    </script>
+</head>
+<body>
+<script type="text/javascript">if (typeof bgmebro == 'function') bgmebro()</script>
+
+<header>
+    <div class="col-xs-hidden col-md-visible scrub-container">
+        <div class="scrub" action="scrub">
+            <div class="progress" role="scrub-progress"></div>
+        </div>
+    </div>
+
+    <div class="container mcat-mast">
+        <div class="mcat-logo">
+            <a href="/" class="no-hover monstercat-logo">
+                <div class="graphic">
+                    <img src="/img/monstercat-black.png">
+                </div>
+                <label>Monstercat</label>
+            </a>
+        </div>
+
+        <!-- Desktop Global Navigation -->
+        <nav class="mcat-nav col-xs-hidden col-md-visible">
+            <ul>
+                <li><a action="closeNav" href="/music">Music</a></li>
+                <li><a href="http://www.monstercat.com/blog">News</a></li>
+                <li><a href="http://www.monstercat.com/showcase">Events</a></li>
+                <li><a href="http://www.monstercat.com/podcast">Podcast</a></li>
+                <li><a href="http://shop.monstercat.com">Shop</a></li>
+            </ul>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <nav class="mcat-mobile-nav col-md-hidden">
+            <button action="toggleNav" role="nav-button" class="faux hamburger-icon" title="Menu">
+              <span class="line line-1"></span>
+              <span class="line line-2"></span>
+              <span class="line line-3"></span>
+            </button>
+            <ul role="nav">
+                <li class="global-search global-search--mobile"
+                     trigger-target="searchFormMobile"
+                     data-set="search-form-mobile">
+                    <button class="faux"
+                            action="searchMobile"
+                            trigger="searchFormMobile"
+                            data-set-target="search-form-mobile">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <input data-set-target="search-form-mobile"
+                           name="term"
+                           type="text"
+                           placeholder="Search"
+                           value=""/>
+                </li>
+                <li id="navigation-mobile"
+                     template="navigation">
+                </li>
+                <li><a action="closeNav" href="/music">Music</a></li>
+                <li><a href="http://www.monstercat.com/blog">News</a></li>
+                <li><a href="http://www.monstercat.com/showcase">Events</a></li>
+                <li><a href="http://www.monstercat.com/podcast">Podcast</a></li>
+                <li><a href="http://shop.monstercat.com">Shop</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="container player">
+
+        <!-- Desktop Contextual Navigation -->
+        <div class="col-xs-hidden col-md-visible push-right navigation"
+                id="navigation"
+                template="navigation">
+        </div>
+        <div class="col-xs-hidden col-md-visible global-search"
+             trigger-target="searchForm"
+             data-set="search-form">
+            <button class="faux"
+                    action="search"
+                    trigger="searchForm"
+                    data-set-target="search-form">
+                <i class="fa fa-search"></i>
+            </button>
+            <input data-set-target="search-form"
+                   name="term"
+                   type="text"
+                   placeholder="Search"
+                   value=""/>
+        </div>
+
+        <!-- Player -->
+        <div class="flex controls push-right">
+            <a href="#" class="silent" role="track-title"></a>
+            <div class="col-md-hidden scrub-container scrub-container--mobile">
+                <div class="scrub" action="scrub">
+                    <div class="progress" role="scrub-progress"></div>
+                </div>
+            </div>
+            <button class="faux" action="toggleShuffle" role="mode">
+                <i class="fa fa-random"></i>
+            </button>
+            <button class="faux" action="previous" role="previous">
+                <i class="fa fa-step-backward"></i>
+            </button>
+            <button class="faux" action="togglePlay">
+                <i class="fa fa-play" role="play"></i>
+            </button>
+            <button class="faux" action="next" role="next">
+                <i class="fa fa-step-forward"></i>
+            </button>
+            <button class="faux" action="toggleRepeat">
+                <i class="fa fa-repeat"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<section role="content">
+    <div class="loading">
+        <span class="loader"></span>
+    </div>
+</section>
+
+<footer class="flex container">
+    <div class="col-xs-12 col-sm-12 col-md-8 text left">
+        <ul class="horizontal-list main-list">
+            <li><a class="silent" href="/music">Music</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/blog">News</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/showcase">Events</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/podcast">Podcast</a></li>
+            <li><a class="silent" href="https://shop.monstercat.com">Shop</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/careers">Careers</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/contact.html">Contact</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/press.html">Press</a></li>
+            <li><a class="silent" href="https://www.monstercat.com/licensing.html">Licensing</a></li>
+        </ul>
+        <ul class="horizontal-list footer-items">
+            <li>
+                <a href="/help" class="silent" title="Help">
+                    <i class="fa fa-question-circle"></i>
+                    Help
+                </a>
+            </li>
+            <li>
+                <button class="faux" action="showIntercom" role="feedback">
+                    <i class="fa fa-comments-o"></i>
+                    Talk to us
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-4 text right">
+        <ul class="horizontal-list icon-list">
+            <li><a href="https://www.youtube.com/user/MonstercatMedia" target="_BLANK"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="https://twitter.com/monstercat" target="_BLANK"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="https://www.facebook.com/monstercat" target="_BLANK"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="https://www.instagram.com/monstercat/" target="_BLANK"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="https://open.spotify.com/user/monstercatmedia" target="_BLANK"><i class="fa fa-spotify"></i></a></li>
+            <li><a href="https://www.twitch.tv/monstercat/" target="_BLANK"><i class="fa fa-twitch"></i></a></li>
+            <li><a href="https://soundcloud.com/Monstercat" target="_BLANK"><i class="fa fa-soundcloud"></i></a></li>
+            <li><a href="http://monster.cat/iTunes-5Year" target="_BLANK"><i class="fa fa-apple"></i></a></li>
+        </ul>
+        <label class="credit">2016 © Monstercat</label>
+        <label class="copyright">All Rights Reserved</label>
+    </div>
+    <div class="col-xs-12">
+        <img src="/img/monstercat-black.png">
+    </div>
+</footer>
+
+<div class="toasts">
+    <div role="toasts">
+    </div>
+</div>
+
+<div role="modals" class="modal-layer">
+    <div class="modal-escape-layer" action="closeModal"></div>
+    <div class="modal-content-layer" role="container"></div>
+</div>
+
+<script type="text/template" template-name="subscription-required-modal">
+    <div class="modal">
+        <div class="panel panel--padded pointer-events">
+            <h1>Get Gold!</h1>
+            <div class="modal-content">
+                <h2 class="pricing">$5/month</h2>
+                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+                <br/>
+                <ul>
+                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                    <li>Playlist your music directly within Connect</li>
+                    <li>Direct support via e-mail and on site.</li>
+                </ul>
+            </div>
+                {{^hasGold}}
+                <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
+                {{/hasGold}}
+                {{^signedIn}}
+                <a class="button button--cta" href="/sign-up" action="closeModal">Sign up for an account!</a>
+                {{/signedIn}}
+            <button class="button--close faux" action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="loading-view">
+    <div class="loading">
+        <span class="loader"></span>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="loading-view-black">
+    <div class="loading loading--black">
+        <span class="loader"></span>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="loading-inner-view">
+    <div class="loading loading-inner">
+        <span class="loader"></span>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="loading-table-view">
+    <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
+</script>
+
+<script type="text/template" template-name="navigation">
+    {{#data}}
+    {{#user}}
+    <a class="silent nav-item" action="closeNav" href="/playlists"><i class="fa fa-bars"></i>Playlists</a>
+    <a class="silent nav-item" action="closeNav" href="/account"><i class="fa fa-gear"></i>Account</a>
+    {{/user}}
+    {{^user}}
+    <a class="silent nav-item" action="closeNav" href="/signin"><i class="fa fa-sign-in"></i>Sign In</a>
+    {{/user}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="track-copycredits-modal"
+        transform="loadReleaseAndTrack">
+    <div class="modal">
+        <div class="panel pointer-events">
+            <h1>Video Credits</h1>
+            {{#loading}}
+            {{>loading-inner-view}}
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <textarea class="copycredits">{{track.copycredit}}</textarea>
+            {{/data}}
+            <button class="button--close faux" action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="release-shopping-modal">
+    <div class="modal modal--release">
+        <div class="panel pointer-events">
+            <h1>Support this Release</h1>
+            {{#loading}}
+            {{>loading-inner-view}}
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <ul>
+                {{#purchaseLinks}}
+                <li><a target="_blank" class="button" href="{{url}}">{{name}}</a></li>
+                {{/purchaseLinks}}
+            </ul>
+            {{/data}}
+            <button class="button--close faux" action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="release-art-modal">
+    <div class="modal modal--artwork">
+        <div class="pointer-events">
+            <a href="{{src}}" target="_blank">
+                <img src="{{src}}"/>
+            </a>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/template"
+        template-name="404"
+        page-title="Page Not Found">
+    <div class="container">
+        <h1>Page Not Found</h1>
+        <div class="panel">
+            <p>The page you are looking for is not here.</p>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^help\/?$">
+    <div class="container">
+        <h1>Help</h1>
+        <div class="panel">
+            <p>
+            Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
+            Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
+            <a href="/twitch-policy">Twitch Policy</a><br/>
+            <a href="/privacy-policy">Privacy Policy</a><br/>
+            <a href="/terms-of-service">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        mustache-name="markdown-basic">
+    <div class="container">
+        {{#loading}}
+        {{>loading-view}}
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <div class="panel md-container">
+        {{{data}}}
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^faqs\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^faqs\/whitelisting\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^twitch-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^privacy-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Privacy%20Policy.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^terms-of-service\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^non-licensable-tracks\/?$"
+        source-type="markdown"
+        transform="transformMarkdown"
+        source="https://connect.monstercat.com/handbook/licensing">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template" template-name="toast">
+    <div class="toast{{#error}} error{{/error}}" >
+        <p>{{message}}</p>
+    </div>
+</script>

@@ -1,0 +1,476 @@
+<script type="text/template"
+        route="^signin">
+    <div class="container">
+        <h1>Sign In</h1>
+        <div class="panel">
+        <table class="form mobile" data-set="credentials" trigger-target="signIn">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="kitty@monstercat.com"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Password</th>
+                    <td>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="a secret"/>
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="button-group button-group--margin">
+            <button class="button--cta button--full" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
+            <button class="button--social button--half button--fb" action="signInFacebook"><i class="fa fa-facebook"></i> Sign In</button>
+            <button class="button--social button--half button--g" action="signInGoogle"><i class="fa fa-google"></i> Sign In</button>
+        </div>
+        <a href="/forgot-password">Forgot your password?</a>
+        <br/>
+        <a href="/sign-up">Don't have an account? Sign up!</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="authenticate-token">
+    <div class="container">
+        <h1>Authenticate Token</h1>
+        <div class="panel">
+            <table class="form mobile" data-set="auth-token">
+                <tr>
+                    <th>Token</th>
+                    <td>
+                        <input type="text" name="token" placeholder="Enter Here"/>
+                    </td>
+                </tr>
+            </table>
+            <div class="button-group">
+                <button class="button--cta button--full">action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
+                <button class="button--full" action="resendTwoFactorToken">Resend Token</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^forgot-password">
+    <div class="container">
+        <h1>Forgot Password?</h1>
+        <div class="panel">
+        <table class="form mobile" data-set="credentials">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="kitty@monstercat.com"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="button-group">
+            <button class="button--cta button--full" action="recoverPassword" data-set-target="credentials">Send Reset Link</button>
+        </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^reset-password">
+    <div class="container">
+        <h1>Reset Password</h1>
+        <div class="panel">
+        <table class="form mobile" data-set="password">
+            <tbody>
+                <tr>
+                    <th>Password</th>
+                    <td>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="New Password"/>
+                        <button
+                            class="faux"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+            <div class="button-group">
+                <button
+                    class="button--cta button-full"
+                    action="updatePassword"
+                    data-set-target="password">
+                    Update Password
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^confirm-sign-up"
+        transform="mapConfirmSignup">
+    <div class="container">
+        <h1>Confirm Sign-up</h1>
+        <div class="panel">
+        {{#data}}
+        <table class="form mobile" data-set="credentials" trigger-target="signUpSocial">
+            <tbody>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input type="text"
+                               name="email"
+                               placeholder="kitty@monstercat.com"
+                               value="{{email}}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Password (Optional)</th>
+                    <td>
+                        <input type="text"
+                               name="password"
+                               placeholder="a secret"/>
+                        <button
+                            class="faux password"
+                            action="togglePassword"
+                            toggle-target="password">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td>
+                        <select name="location">
+                            <option disabled selected>Select One</option>
+                            {{#countries}}
+                            <option value="{{name}}">
+                                {{name}}
+                            </option>
+                            {{/countries}}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="hidden" name="token" value="{{token}}"/>
+                        <input type="hidden" name="submitWhere" value="{{submitWhere}}"/>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <div class="button-group">
+            <button class="button--cta button--full" action="signUpSocial" trigger="signUpSocial" data-set-target="credentials">Sign Up</button>
+        </div>
+        {{/data}}
+        {{^data}}
+        <p>Nothing here.</p>
+        {{/data}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^sign-up"
+        transform="mapSignup">
+    <div class="container">
+        <h1>Sign-up</h1>
+        <div class="panel">
+            <h2>With Social</h2>
+            <div class="button-group">
+                <button class="button--social button--half button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
+                <button class="button--social button--half button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
+            </div>
+        </div>
+        <div class="panel">
+            <h2>With Email</h2>
+            {{#data}}
+            <table class="form mobile" data-set="credentials" trigger-target="signUp">
+                <tbody>
+                    <tr>
+                        <th>Email</th>
+                        <td>
+                            <input type="text"
+                                   name="email"
+                                   placeholder="kitty@monstercat.com"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Password</th>
+                        <td>
+                            <input type="password"
+                                   name="password"
+                                   placeholder="a secret"/>
+                            <button
+                                class="faux password"
+                                action="togglePassword"
+                                toggle-target="password">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>
+                            <select name="location">
+                                <option disabled selected>Select One</option>
+                                {{#countries}}
+                                <option value="{{name}}">
+                                    {{name}}
+                                </option>
+                                {{/countries}}
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="button-group">
+                <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+            </div>
+            {{/data}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/?$"
+        source="$endpoint/self"
+        page-title="My Account"
+        transform="mapAccount">
+    <div class="container">
+        <h1>My Account</h1>
+        <div class="panel">
+            {{#loading}}
+            {{>/loading-view}}
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <table class="form mobile" trigger-target="saveAccount">
+                <tbody data-set="account">
+                    <tr>
+                        <th>Email</th>
+                        <td>{{email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Full Name</th>
+                        <td><input type="text"
+                                   name="realName"
+                                   value="{{realName}}"
+                                   placeholder="Jon GQ Winter"
+                                   data-set-target="account"
+                                   initial-value="{{realName}}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>
+                            <select name="location"
+                                    initial-value="{{location}}">
+                                <option disabled>Select One</option>
+                                {{#countries}}
+                                <option
+                                    value="{{name}}"
+                                    {{#selected}}selected{{/selected}}>
+                                    {{name}}
+                                </option>
+                                {{/countries}}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Change Password</th>
+                        <td>
+                            <input type="password"
+                                   name="password"
+                                   placeholder="New Password">
+                            <button
+                                class="faux password"
+                                action="togglePassword"
+                                toggle-target="password">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="button-group button-group--margin">
+                <button class="button--cta button--full" 
+                        action="saveAccount"
+                        trigger="saveAccount"
+                        data-set-target="account">
+                    Save
+                </button>
+                <button class="button--danger button--full" action="signOut">Sign Out</button>
+            </div>
+            <a href="/account/services">Manage Services</a>
+        </div>
+        <div class="panel">
+            <h2>Two-Factor Auth</h2>
+            {{^enableTwoFactor}}
+            <button action="disableTwoFactor">Disable</button>
+            {{/enableTwoFactor}}
+            {{#enableTwoFactor}}
+            <table class="form mobile" data-set="2-factor">
+                <tbody>
+                    <tr>
+                        <th>Country Code</th>
+                        <td>
+                            <select name="countryCode">
+                                <option value="" selected>Select</option>
+                                {{#countries}}
+                                <option value="{{dial_code}}">{{name}} ({{dial_code}})</option>
+                                {{/countries}}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Phone Number</th>
+                        <td>
+                            <input type="text" name="number" placeholder="Phone Number"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="button-group">
+                <button class="button--full" action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+            </div>
+            {{/enableTwoFactor}}
+        </div>
+        <div class="panel">
+            <h2>Settings</h2>
+            <div source="$endpoint/self/settings"
+                 template="account-settings">
+            </div>
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="account-settings"
+        transform="transformAccountSettings">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <table class="form mobile">
+        <tbody data-set="settings">
+            <tr>
+                <th>Prefered Download Format</th>
+                <td>
+                    <select name="preferredDownloadFormat"
+                            initial-value="{{preferredDownloadFormat}}">
+                        {{#downloadOptions}}
+                        <option value="{{value}}"
+                                {{#selected}}selected{{/selected}}>
+                            {{name}}
+                        </option>
+                        {{/downloadOptions}}
+                    </select>
+                    <span class="note">
+                    See more about MP3 quality
+                    <a href="http://wiki.hydrogenaud.io/index.php?title=LAME#Recommended_encoder_settings"
+                       target="_blank">here</a>.
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <label>
+                        <input type="checkbox"
+                               name="hideNonLicensableTracks"
+                               initial-value="{{hideNonLicensableTracks}}"
+                            {{#hideNonLicensableTracks}}checked{{/hideNonLicensableTracks}}/>
+                        Skip Non-licensable Tracks
+                    </label>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <label>
+                        <input type="checkbox"
+                               name="playlistPublicByDefault"
+                               initial-value="{{playlistPublicByDefault}}"
+                            {{#playlistPublicByDefault}}checked{{/playlistPublicByDefault}}/>
+                        Make Playlists Public By Default
+                    </label>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <label>
+                        <input type="checkbox"
+                               action="updateBackground"
+                               {{#bgon}}checked{{/bgon}}/>
+                        I Like Backgrounds
+                    </label>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    <div source="$endpoint/self/social-signins"
+         template="social-settings">
+    </div>
+    <div class="button-group">
+        <button class="button--cta button--full"
+                action="saveAccountSettings"
+                data-set-target="settings">
+            Update Settings
+        </button>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="social-settings"
+        transform="transformSocialSettings">
+    {{#data}}
+        <div class="button-group">
+        {{#facebookEnabled}}
+        <button class="button--social button--half button--fb" action="unlinkFacebook">
+            <i class="fa fa-facebook"></i> Unlink Account
+        </button>
+        {{/facebookEnabled}}
+        {{^facebookEnabled}}
+        <button class="button--social button--half button--fb" action="enableFacebookSignin">
+            <i class="fa fa-facebook"></i> Link Account
+        </button>
+        {{/facebookEnabled}}
+
+        {{#googleEnabled}}
+        <button class="button--social button--half button--g" action="unlinkGoogle">
+            <i class="fa fa-google"></i> Unlink Account
+        </button>
+        {{/googleEnabled}}
+        {{^googleEnabled}}
+        <button class="button--social button--half button--g" action="enableGoogleSignin">
+            <i class="fa fa-google"></i> Link Account
+        </button>
+        {{/googleEnabled}}
+    </div>
+    {{/data}}
+</script>

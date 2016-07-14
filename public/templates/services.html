@@ -1,0 +1,432 @@
+<script type="text/template"
+        route="^account\/services$"
+        transform="transformServices">
+    {{#data}}
+    <div class="container services">
+        <h1>Manage Services</h1>
+        {{#user}}
+        {{#hasLegacy}}
+        <div class="panel">
+            <p>
+                You have a legacy account. Please access your subscription from
+                <a target="_blank" href="http://connect.monstercat.com">Monstercat Connect</a>.
+            </p>
+        </div>
+        {{/hasLegacy}}
+        
+        {{^hasLegacy}}
+        <div class="flex">
+
+            <div class="col-xs-12 col-lg-4 col-lg-last panel panel--dark">
+                <h1>Gold Membership</h1>
+                <h2 class="pricing pricing--gold">$5/month</h2>
+                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+                {{#hasGoldPermanent}}
+                <p>You have Gold Membership.</p>
+                {{/hasGoldPermanent}}
+                {{#goldUnsubscribe}}
+                <div source="$endpoint/self/gold-subscription"
+                     template="gold-subscription"
+                     transform="transformGoldSubscription">
+                </div>
+                {{/goldUnsubscribe}}
+                {{#goldSubscribe}}
+                <br/>
+                <ul>
+                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                    <li>Playlist your music directly within Connect</li>
+                    <li>Direct support via e-mail and on site.</li>
+                </ul>
+                <br/>
+                <div data-set="subscribe-gold" class="services-form"> 
+                    <input type="text" name="trialCode" placeholder="Special Code"/>
+                    <button class="button--gold"
+                            action="subscribeGold"
+                            data-set-target="subscribe-gold">
+                        Subscribe
+                        <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
+                    </button>
+                </div>
+                {{/goldSubscribe}}
+            </div>
+    
+            <div class="col-xs-12 col-lg-8 panel">
+                <h1>Licensing Services</h1>
+                <h2 class="pricing">$5/month</h2>
+                <p>Buy a whitelisting service for use in online media for YouTube or Twitch.
+                   Upon subscribing for 20 months, all your previously uploaded videos within
+                   your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
+                <br/>
+                <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
+                <br/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Channel Id</th>
+                            <th>Paid Off</th>
+                            <th>Remaining</th>
+                            <th>Monthly Cost</th>
+                            <th>Next Billing Date</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody source="$endpoint/self/whitelist"
+                        template="whitelist-licenses"
+                        role="whitelists"
+                        transform="transformWhitelists">
+                    </tbody>
+                </table>
+                <div data-set="subscribe-gold" class="services-form"> 
+                    <select name="vendor">
+                        <option value="">Select Platform</option>
+                        <option value="YouTube">YouTube</option>
+                        <option value="Twitch">Twitch</option>
+                    </select>
+                    <input type="text" name="identity" placeholder="Channel Id"/>
+                    <button
+                        action="subscribeNewLicense"
+                        data-set-target="new-license">
+                        Subscribe
+                        <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
+                    </button>
+                </div>
+                <br/>
+                <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
+            </div>
+        </div>
+
+        <div id="new-subscriptions" class="hide panel">
+            <h1>Checkout</h1>
+            <br/>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subscription</th>
+                        <th>Monthly Cost</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody role="new-subs">
+                </tbody>
+            </table>
+            <div><span class="total-cost">$<span role="total-cost">0.00</span></span>/month</div>
+            <br/>
+            <div data-set="pay-method">
+               {{>payment-method}}
+               <button class="button--cta"
+                       action="checkoutSubscriptions" data-set-target="pay-method">
+                    Purchase
+                </button>
+            </div>
+        </div>
+        {{/hasLegacy}}
+        {{/user}}
+        {{^user}}
+        <div class="panel">
+            <p>You need to be logged in to access this page.</p>
+        </div>
+        {{/user}}
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="gold-subscription"
+        transform="transformGoldSubscription">
+    {{#loading}}
+    <i class="fa fa-spin fa-refresh"></i>
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <label>Gold Subscription Active</label>
+    {{^canceled}}
+    <p>You are subscribed for $5.00 USD a month</p>
+    <p>Your next invoice will be charged on {{nextBillingDate}}</p>
+    <button action="unsubscribeGold">Cancel Subscription</button>
+    {{/canceled}}
+    {{#canceled}}
+    <p>Your gold subscription will expire on {{endDate}}</p>
+    <button action="subscribeGold">Re-Subscribe</button>
+    {{/canceled}}
+    {{/data}}
+</script>
+
+<script type="text/template" mustache-name="payment-method">
+    <label>
+        <input type="radio" name="method" value="paypal">
+        <span><i class="fa fa-fw fa-cc-paypal"></i></span>
+    </label>
+    <label>
+        <input type="radio" name="method" value="stripe" checked>
+        <span><i class="fa fa-fw fa-cc-stripe"></i></span>
+    </label>
+</script>
+
+<script type="text/template" template-name="subscription-row">
+    <tr>
+        <td>
+            {{name}}
+        </td>
+        <td>
+            {{#fields}}
+            <input type="hidden" name="{{key}}" value="{{value}}">
+            {{/fields}}
+            ${{cost}}
+        </td>
+        <td>
+            <button class="faux" action="removeSub">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
+</script>
+
+<script type="text/template"
+        template-name="whitelist-licenses"
+        transform="transformWhitelists">
+    {{#loading}}
+    <tr><td colspan="8"><i class="fa fa-refresh fa-spin"></i></td></tr>
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="8"><p>{{message}}</p></td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr s-data-set data-set="whitelist-{{_id}}">
+        <td>
+            {{#resume}}
+            <input type="hidden" name="id" value="{{_id}}"/>
+            <input type="hidden" name="amount" value="{{amount}}"/>
+            {{/resume}}
+            <input type="hidden" name="vendor" value="{{vendor}}"/>
+            {{vendor}}
+        </td>
+        <td>
+            <input type="hidden" name="identity" value="{{identity}}"/>
+            {{identity}}
+        </td>
+        <td>${{paid}}</td>
+        <td>${{remaining}}</td>
+        <td>
+            {{#cost}}
+            ${{cost}}
+            {{/cost}}
+            {{^cost}}
+            N/A
+            {{/cost}}
+        </td>
+        <td>{{nextBillingDate}}</td>
+        <td>
+            {{#licenseUrl}}
+            <a href="{{licenseUrl}}"
+               title="Open license document."
+               target="_blank">View License</a>
+            {{/licenseUrl}}
+            {{^canBuyOut}}
+            <a href="/account/services/buyout/{{_id}}">Buy Out</a>
+            {{/canBuyOut}}
+            {{#cancel}}
+            <button class="faux"
+                    action="cancelLicenseSubscription"
+                    whitelist-id="{{_id}}">
+                Cancel Subscription
+            </button>
+            {{/cancel}}
+            {{#resume}}
+            <button class="faux"
+                    action="resumeLicenseSubscription"
+                    data-set-target="whitelist-{{_id}}">
+                Resume Subscription
+            </button>
+            {{/resume}}
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="8">You have no licenses.</td></tr>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^account\/services\/processing"
+        completed="completedProcessing">
+    <div class="container">
+        <h1>Payment Processing <i class="fa fa-spin fa-gear"></i></h1>
+        <p>Your payment is being processed. Please wait.</p>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/services\/subscribed"
+        completed="redirectServices">
+    <div class="container">
+        <h1>Subscribed!</h1>
+        <p>You have been succefully subscribed! You will be redirected to your services in 5 seconds.</p>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/services\/unsubscribed\/?"
+        completed="redirectServices">
+    <div class="container">
+        <h1>Unsubscribed</h1>
+        <p>You have been succefully unsubscribed. You will be redirected to your services in 5 seconds.</p>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/services\/canceled-payment\/?$">
+    <div class="container">
+        <h1>Payment Canceled</h1>
+        <p>The payment has been canceled. Go back to <a href="/services">services</a>.</p>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/services\/buyout\/purchased\/?"
+        page-title="Purchased Whitelist"
+        completed="redirectServices">
+    <div class="container">
+        <h1>Purchased Whitelist!</h1>
+        <p>Whitelist succesfully purchased. You will be redirected to the services page in 5 seconds.</p>
+    </div>
+</script>
+
+<script type="text/template"
+        route="account\/services\/error"
+        page-title="Payment Error">
+    <div class="container">
+        <h1>An error occured.</h1>
+        <p>An error occured while working with the payment information provided. Please contact support.</p>
+    </div>
+</script>
+
+<script type="text/template" template-name="resume-whitelist">
+    <div class="modal panel">
+        <div class="pointer-events" data-set="resume-payment">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="vendor" value="{{vendor}}">
+            <input type="hidden" name="identity" value="{{identity}}">
+            {{#amount}}
+            <input type="hidden" name="amount" value="{{amount}}">
+            {{/amount}}
+            <table class="form">
+                <tr>
+                    <th>Platform</th>
+                    <td>{{vendor}}</td>
+                </tr>
+                <tr>
+                    <th>Channel Id</th>
+                    <td>{{identity}}</td>
+                </tr>
+            </table>
+            {{>payment-method}}
+        </div>
+        <button action="resumeLicenseConfirm" data-set-target="resume-payment">Resume Payments</button>
+        <button action="closeModal">Cancel</button>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/services\/buyout\/(.+)"
+        transform="transformBuyOut"
+        source="$endpoint/self/whitelist/$1"
+        page-title="Whitelist Buy Out">
+    <div class="container">
+        <h1>Buy Out Whitelist</h1>
+        <div class="panel">
+            <p>Pre-pay the rest of your whitelist license. All videos created with the
+                cleared Monstercat catalog during this time period will never receive content-ID claims.</p>
+            {{#loading}}
+            <i class="fa fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <div data-set="buy-out-license">
+                <input type="hidden" name="amount" value="{{amountRemaining}}"/>
+                <input type="hidden" name="id" value="{{_id}}"/>
+                <table class="form mobile">
+                    <tbody>
+                        <tr>
+                            <th>Channel Id</th>
+                            <td>
+                                <input type="text"
+                                       name="vendor"
+                                       value="{{vendor}}"
+                                       disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Identity</th>
+                            <td>
+                                <input type="text"
+                                       name="identity"
+                                       value="{{identity}}"
+                                       disabled />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total Cost</th>
+                            <td>
+                                ${{cost}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{>payment-method}}
+                <div class="button-group">
+                    <button class="button--full" action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
+                </div>
+            </div>
+            {{/data}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/services\/buyout\/?$"
+        page-title="Purchase Whitelist">
+    <div class="container">
+        <h1>Purchase Whitelist</h1>
+        <div class="services panel">
+            <p>Pre-pay your whitelist license for 20 months. All videos created with the
+                cleared Monstercat catalog during this time period will never
+                receive content-ID claims.</p>
+            <div data-set="new-license">
+                <input type="hidden" name="amount" value="20000">
+                <table class="form mobile">
+                    <tbody>
+                        <tr>
+                            <th>Platform</th>
+                            <td>
+                                {{>vendor-selector}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Channel Id</th>
+                            <td>
+                                <input type="text"
+                                       name="identity"
+                                       placeholder="Put here."/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total Cost</th>
+                            <td>$200.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{>payment-method}}
+                <div class="button-group">
+                    <button class="button--full" action="buyLicense" data-set-target="new-license">Purchase Whitelisting</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

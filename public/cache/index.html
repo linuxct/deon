@@ -337,6 +337,101 @@
     </div>
 </script>
 
+
+<script type="text/template"
+        template-name="404"
+        page-title="Page Not Found">
+    <div class="container">
+        <h1>Page Not Found</h1>
+        <div class="panel">
+            <p>The page you are looking for is not here.</p>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        route="^help\/?$">
+    <div class="container">
+        <h1>Help</h1>
+        <div class="panel">
+            <p>
+            Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
+            Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
+            <a href="/twitch-policy">Twitch Policy</a><br/>
+            <a href="/privacy-policy">Privacy Policy</a><br/>
+            <a href="/terms-of-service">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        mustache-name="markdown-basic">
+    <div class="container">
+        {{#loading}}
+        {{>loading-view}}
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <div class="panel md-container">
+        {{{data}}}
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^faqs\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^faqs\/whitelisting\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^twitch-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^privacy-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Privacy%20Policy.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^terms-of-service\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^non-licensable-tracks\/?$"
+        source-type="markdown"
+        transform="transformMarkdown"
+        source="https://connect.monstercat.com/handbook/licensing">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template" template-name="toast">
+    <div class="toast{{#error}} error{{/error}}" >
+        <p>{{message}}</p>
+    </div>
+</script>
+<!-- START:accounts.html -->
+
 <script type="text/template"
         route="^signin">
     <div class="container">
@@ -813,7 +908,1417 @@
     </div>
     {{/data}}
 </script>
+<!-- END:accounts.html -->
+<!-- START:browse.html -->
+<!-- BROWSE -->
 
+<script type="text/template"
+        route="^browse"
+        page-title="Browse Music"
+        completed="completedBrowseMusic"
+        transform="transformBrowseMusic">
+    {{#data}}
+    <div class="page width center panel">
+        <table data-set="browse-music" trigger-target="filterBrowseMusic" class="form">
+            <tbody>
+                <tr>
+                    <th>Tags</th>
+                    <td>
+                        <input type="text" name="tags" placeholder="Song Tags" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Genres</th>
+                    <td>
+                        <input type="text" name="genres" placeholder="Song Genres" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Types</th>
+                    <td>
+                        <ul>
+                        {{#releaseTypes}}
+                            <li>
+                                <input type="checkbox" name="types" value="{{key}}" id="type-{{key}}" {{#checked}}checked="true"{{/checked}} />
+                                <label for="type-{{key}}">{{name}}</label>
+                            </li>
+                        {{/releaseTypes}}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button action="filterBrowseMusic" trigger="filterBrowseMusic" data-set-target="browse-music">Filter</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>        
+    <div source="$endpoint/catalog/browse?{{query}}"
+         template="music-browse">
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="music-browse"
+        transform="transformMusicBrowseResults">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="page width center panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    {{#results.length}}
+    <ul class="page width center panel browse-testing">
+        {{> browseMusicTable}}
+    </ul>
+    {{/results.length}}
+    {{^total}}
+    <div class="page width center text center panel">No results found.</div>
+    {{/total}}
+    {{#total}}
+      <div class="page width center pagination pad-vertical text center">
+          {{#previous}}
+            <a href="?{{previous}}">Previous</a>
+          {{/previous}}
+          <label>{{skip}} - {{count}} of {{total}}</label>
+          {{#next}}
+            <a href="?{{next}}">Next</a>
+          {{/next}}
+      </div>
+    {{/total}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="browseMusicTable">
+    {{#results.length}}
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th>Genre</th>
+                <th>BPM</th>
+                <th>Release</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#results}}
+            <tr>
+                <td class="shrink">
+                  {{>playSong}}
+                </td>
+                {{>trackCells}}
+                <td>
+                    <a href="/release/{{release.catalogId}}">{{release.title}}</a>
+                </td>
+                <td class="push-children-right">
+                    {{>trackButtons}}
+                    {{#canPlaylist}}
+                    <select
+                        onchange="addToPlaylist(null, this)"
+                        source="$endpoint/playlist"
+                        template="select-playlist"
+                        track-id="{{_id}}">
+                    </select>
+                    {{/canPlaylist}}
+                </td>
+            </tr>
+            {{/results}}
+        </tbody>
+    </table>
+    {{/results.length}}
+</script>
+<!-- END:browse.html -->
+<!-- START:claims.html -->
+<!-- CLAIMS -->
+
+<script type="text/template"
+        route="^release-claim"
+        page-title="Remove YouTube Claim">
+    <div class="container">
+        <h1>YouTube Release Claim</h1>
+        <div class="panel">
+            <p>If you have recieved a claim on your whitelisted YouTube channel you can release it here. Please fill out the form below.</p>
+            <br/>
+            <table class="form mobile">
+                <tbody data-set="youtube-claim">
+                    <tr>
+                        <th>YouTube Video Id</th>
+                        <td>
+                            <input type="text" name="videoId" placeholder="Video Id"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="button-group">
+                <button class="button--full" action="removeYouTubeClaim" data-set-target="youtube-claim">Release Claim</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" mustache-name="vendor-selector">
+    <select name="vendor">
+        <option value="">Select One</option>
+        <option>YouTube</option>
+        <option>Twitch</option>
+    </select>
+</script>
+<!-- END:claims.html -->
+<!-- START:home.html -->
+<!-- HOME -->
+
+<script type="text/template"
+        route="^(\?.*)?$"
+        page-title="Home">
+    <div source="$endpoint/catalog/release?limit=15" template="homeFeatured"></div>
+    <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="homePodcast"></div>
+    <div source="$endpoint/catalog/news" template="blog-stories"></div>
+    <div class="flex social">
+        <div class="col-xs-12 col-sm-12 col-md-6 text right cl-white spotify-wrapper">
+            <div class="banner" style="background-image:url(/img/banner.jpg)">
+                <div class="banner-shade"></div>
+                <div class="gradient gradient--inverted"></div>
+            </div>
+            <div class="container-left">
+                <header>
+                    <h2 class="line-top">Listen on Spotify</h2>
+                </header>
+                <ul class="spotify-playlists">
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4kw9kdjzx1UmyWvpysl0y2" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/new-releases.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>New Releases</h2></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4pylRY0ogA4JwC6CplYTxl" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/hype.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>Hype</h2></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4rIPUdx0APV1euj24QR3uN" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/feel-good.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>Feel Good</h2></div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/5ox7QhPLaPEuebCnvxNhd0" target="_BLANK">
+                            <div style="background-image:url(/img/spotify/unwind.jpg)" class="spotify-artwork"/></div>
+                            <div class="spotify-title"><h2>Unwind</h2></div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 text left followers">
+            <div class="container-right">
+                <header>
+                    <h2 class="line-top">Join the Family</h2>
+                </header>
+                <ul class="social-grid">
+                    <li>
+                        <a class="no-hover social-grid-wrapper youtube" href="https://www.youtube.com/user/MonstercatMedia" target="_BLANK">
+                            <div class="icon">
+                                <i class="fa fa-youtube"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>4.7m</h3>
+                                    <p>subscribers</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="no-hover social-grid-wrapper twitter" href="https://twitter.com/monstercat" target="_BLANK">
+                            <div class="icon">
+                                <i class="fa fa-twitter"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>299k</h3>
+                                    <p>followers</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="no-hover social-grid-wrapper facebook" href="https://www.facebook.com/monstercat" target="_BLANK">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>800k</h3>
+                                    <p>likes</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-facebook"></i>
+                            </div>
+                        </a>
+                        <a class="no-hover social-grid-wrapper instagram" href="https://www.instagram.com/monstercat/" target="_BLANK">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>163k</h3>
+                                    <p>followers</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-instagram"></i>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="no-hover social-grid-wrapper spotify" href="https://open.spotify.com/user/monstercatmedia" target="_BLANK">
+                            <div class="icon">
+                                <i class="fa fa-spotify"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>103k</h3>
+                                    <p>listeners/mo</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="no-hover social-grid-wrapper twitch" href="https://www.twitch.tv/monstercat/" target="_BLANK">
+                            <div class="icon">
+                                <i class="fa fa-twitch"></i>
+                            </div>
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>602k</h3>
+                                    <p>followers</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="no-hover social-grid-wrapper soundcloud" href="https://soundcloud.com/Monstercat" target="_BLANK">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>672k</h3>
+                                    <p>followers</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-soundcloud"></i>
+                            </div>
+                        </a>
+                        <a class="no-hover social-grid-wrapper apple" href="http://monster.cat/iTunes-5Year" target="_BLANK">
+                            <div class="stats grey-square">
+                                <div class="stats-wrapper">
+                                    <h3>139k</h3>
+                                    <p>users</p>
+                                </div>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-apple"></i>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="homeFeatured"
+        transform="transformHome">
+    {{#loading}}
+    {{>loading-view-black}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <div class="top-banner">
+        {{#featured}}
+        <div class="banner" style="background-image:url({{coverBig}}">
+            <div class="banner-shade"></div>
+            <div class="gradient"></div>
+        </div>
+        <div class="container flex">
+            <div class="col-xs-12 col-sm-12 col-md-4 featured-artwork">
+                <a class="silent" href="/release/{{catalogId}}">
+                    <img class="shadow responsive" src="{{coverBig}}"/>
+                </a>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8 cl-white featured-details">
+                <span class="tag">Featured</span>
+                <a class="silent no-hover" href="/release/{{catalogId}}">
+                    <h1 class="title uppercase">{{title}}</h1>
+                </a>
+                <h3>By {{artists}}</h3>
+                <p class="date">Released on {{releaseDate}}</p>
+                <a href="/release/{{catalogId}}" class="button button--cta button--icon">
+                    View
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+        {{/featured}}
+        <div class="container latest cl-white">
+            <header class="flex top-cta">
+                <div class="col-xs-6">
+                    <h2 class="line-top">Latest Releases</h2>
+                </div>
+                <div class="col-xs-6 text right">
+                    <a href="/music" class="button button--icon button--transparent">
+                        View all
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </header>
+            <ul class="art-list art-list--full-width">
+                {{#releases}}
+                <li>
+                    <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                        <div class="image-wrapper">
+                            <img src="/img/artwork.jpg" class="preload" />
+                            <img src="{{cover}}"/>
+                        </div>
+                        <label class="title one-line-ellipsis">{{title}}</label>
+                        <br/>
+                        <label class="artist one-line-ellipsis">{{artists}}</label>
+                    </a>
+                </li>
+                {{/releases}}
+            </ul>
+        </div>
+    </div>
+    <div class="hero cl-white">
+        <div class="banner" style="background-image:url(/img/banner.jpg)">
+            <div class="banner-shade"></div>
+            <div class="gradient gradient--inverted"></div>
+        </div>
+        <div class="container">
+            <h3 class="playfair">We're <em>proudly</em> proving that</h3>
+            <h1 class="line-bottom"> Independent labels have the ability to reshape the music industry.</h1>
+        </div>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="homePodcast"
+        transform="transformPodcast">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <section class="v-padding podcast">
+        <div class="container latest">
+            <header class="flex top-cta">
+                <div class="col-xs-6">
+                    <h2 class="line-top">Latest Podcast</h2>
+                </div>
+                <div class="col-xs-6 text right">
+                    <a href="https://www.monstercat.com/podcast" class="button button--black button--icon button--transparent">
+                        View all
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </header>
+            <ul class="art-list art-list--full-width">
+                {{#podcasts}}
+                <li>
+                    <a class="silent" href="/release/{{catalogId}}" title="{{title}}">
+                        <div class="image-wrapper">
+                            <img src="/img/artwork.jpg" class="preload" />
+                            <img src="{{cover}}"/>
+                        </div>
+                        <label class="title one-line-ellipsis">{{episode}}</label>
+                        <br/>
+                        <label class="artist one-line-ellipsis">Monstercat Podcast</label>
+                    </a>
+                </li>
+                {{/podcasts}}
+            </ul>
+        </div>
+    </section>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="blog-stories"
+        transform="transformBlogPosts">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <section class="v-padding blog">
+        <div class="container">
+            <header class="flex top-cta">
+                <div class="col-xs-6">
+                    <h2 class="line-top">Latest Articles</h2>
+                </div>
+                <div class="col-xs-6 text right">
+                    <a href="/news" class="button button--black button--icon button--transparent">
+                        View all
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </header>
+        </div>
+        {{#posts}}
+        <article class="flex">
+            <div class="col-xs-12 col-sm-12 col-md-6 article-banner{{#isOdd}} col-md-last{{/isOdd}}">
+                <div class="side-banner" style="background-image: url(http://www.monstercat.com{{image}})"></div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+                <div class="article-wrapper">
+                    <a class="silent no-hover" href="http://www.monstercat.com/blog/{{path}}" target="_BLANK">
+                        <h2>{{title}}</h2>
+                        <p class="date">{{date}}</p>
+                        <p class="description">{{excerpt}}</p>
+                    </a>
+                    <a class="button button--black button--icon" href="http://www.monstercat.com/blog/{{path}}" target="_BLANK">
+                        Read more
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+        {{/posts}}
+    </section>
+    {{/data}}
+</script>
+<!-- END:home.html -->
+<!-- START:music.html -->
+<!-- MUSIC -->
+
+<script type="text/template"
+        route="^(:?(\?.*)?$|music(\?.*)?)"
+        page-title="Music"
+        completed="completedMusic"
+        transform="transformMusic">
+    {{#data}}
+    <div source="$endpoint/catalog/release?{{query}}"
+         template="music-releases">
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="music-releases"
+        transform="transformMusicReleases">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <ul class="container panel art-list">
+        {{#results}}
+        <li>
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                <div class="image-wrapper">
+                    <img src="/img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br/>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    {{^total}}
+    <div class="container text center panel">No results found.</div>
+    {{/total}}
+    {{#total}}
+      <div class="container pagination pad-vertical text center">
+          {{#previous}}
+            <a href="?{{previous}}">Previous</a>
+          {{/previous}}
+          <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
+          {{#next}}
+            <a href="?{{next}}">Next</a>
+          {{/next}}
+      </div>
+    {{/total}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^release\/(.*)"
+        source="$endpoint/catalog/release/$1"
+        transform="mapRelease"
+        completed="completedRelease">
+    {{#loading}}
+    {{>loading-view-black}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div class="bgbox" style="background-image: url('{{coverBig}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box container clearfix">
+                <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
+                <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
+                <h2>{{artists}}</h2>
+                <label>
+                    {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                    {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                </label>
+                <div class="options push-right">
+                    {{#purchase}}
+                    <button class="faux" action="openPurchaseRelease">
+                        <i class="fa fa-shopping-bag"></i>
+                    </button>
+                    {{/purchase}}
+                    {{#share}}
+                    <a class="silent" href="{{share}}" target="_blank">
+                        <i class="fa fa-spotify"></i>
+                    </a>
+                    {{/share}}
+                    <a class="silent"
+                    href="{{downloadLink}}"
+                    target="_blank"
+                    action="canAccessGold">
+                        <i class="fa fa-cloud-download"></i>
+                    </a>
+                    <button class="faux"
+                            action="playSongs"
+                            role="play-release"
+                            release-id="{{_id}}">
+                        <i class="fa fa-play inactive"></i>
+                        <i class="fa fa-pause active"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="release container" >
+        <div class="panel"
+            source="$endpoint/catalog/release/{{_id}}/tracks"
+            template="release-tracks">
+        </div>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="unlicensable">
+{{^licensable}}<div class="unlicensable">This track can't be licensed. <a href="/non-licensable-tracks">Read more</a></div>{{/licensable}}
+</script>
+
+<script type="text/template"
+        mustache-name="trackCells">
+<td>{{title}}{{>unlicensable}}</td>
+{{#playlistId}}
+<td><a href="/release/{{releaseId}}">{{release}}</a></td>
+{{/playlistId}}
+<td>
+    {{^artists}}
+    Id
+    {{/artists}}
+    {{#artists}}
+    <a href="/artist/{{uri}}">{{name}}</a>
+    {{/artists}}
+</td>
+<td class="col-xs-hidden col-md-visible genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td class="col-xs-hidden col-md-visible">{{time}}</td>
+<td class="col-xs-hidden col-md-visible">{{bpm}}</td>
+</script>
+
+<script type="text/template"
+        mustache-name="playSong">
+<button class="faux button--mobile"
+        action="playSong"
+        role="play-song"
+        play-link="{{playUrl}}"
+        title="{{title}}"
+        index="{{index}}"
+        track-id="{{_id}}"
+        {{#licensable}}licensable{{/licensable}}
+        {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
+        release-id="{{releaseId}}">
+    <i class="fa fa-play-circle inactive"></i>
+    <i class="fa fa-pause-circle active"></i>
+</button>
+</script>
+
+<script type="text/template"
+        mustache-name="trackButtons">
+<a class="silent button--mobile"
+   target="_blank"
+   title="Download Track"
+   action="canAccessGold"
+   href="{{downloadLink}}">
+    <i class="fa fa-cloud-download"></i>
+</a>
+<button
+    class="faux col-xs-hidden col-md-visible inline"
+    action="openTrackCopyCredits"
+    release-id="{{releaseId}}"
+    track-id="{{_id}}">
+    <i class="fa fa-copyright"></i>
+</button>
+</script>
+
+<script type="text/template"
+        template-name="release-tracks"
+        transform="transformReleaseTracks"
+        completed="completedReleaseTracks">
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink">#</th>
+                <th class="shrink nohpad"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th class="col-xs-hidden col-md-visible">Genre</th>
+                <th class="col-xs-hidden col-md-visible">Time</th>
+                <th class="col-xs-hidden col-md-visible">BPM</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#loading}}
+            <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
+            {{/loading}}
+            {{#error}}
+            <tr><td colspan="5"><p>{{message}}</p></td></tr>
+            {{/error}}
+            {{#data}}
+            {{#results}}
+            <tr>
+                <td class="shrink">{{trackNumber}}.</td>
+                <td class="shrink nohpad">
+                  {{>playSong}}
+                </td>
+                {{>trackCells}}
+                <td class="push-right">
+                    {{>trackButtons}}
+                    {{#canPlaylist}}
+                    <select
+                        onchange="addToPlaylist(null, this)"
+                        source="$endpoint/playlist"
+                        class="col-xs-hidden col-md-visible inline"
+                        template="select-playlist"
+                        track-id="{{_id}}">
+                    </select>
+                    {{/canPlaylist}}
+                </td>
+            </tr>
+            {{/results}}
+            {{/data}}
+        </tbody>
+    </table>
+</script>
+
+<script type="text/template"
+        route="^artist\/(.*)"
+        transform="mapWebsiteDetails"
+        completed="completedWebsiteDetails"
+        source="$endpoint/catalog/artist/$1">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div class="bgbox" style="background-image: url('{{image}}')">
+        <div class="bgbox-blanket cl-white">
+            <div class="details-box container clearfix">
+                {{#image}}
+                <img class="artwork" src="{{image}}" big-src="{{image}}" action="openReleaseArt"/>
+                {{/image}}
+                <h1>{{name}}</h1>
+                <div class="options push-right">
+                    {{#socials}}
+                    <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
+                    {{/socials}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {{#about}}
+        <div calss="panel">
+            <h2>About</h2>
+            <p>{{about}}</p>
+        </div>
+        {{/about}}
+        {{#contact}}
+        <div class="panel">
+            <h2>Booking & Managment</h2>
+            <br/>
+            <p>{{booking}}</p>
+            <br/>
+            <p>{{management}}</p>
+        </div>
+        {{/contact}}
+        <div class="panel">
+            <h2>Discography</h2>
+            <div source="$endpoint/catalog/artist/{{_id}}/releases"
+                template="user-releases">
+            </div>
+        </div>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="user-releases"
+        transform="transformReleases">
+    {{#loading}}
+    {{>loading-inner-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <ul class="art-list art-list--full-width discography">
+        {{#results}}
+        <li>
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                <div class="image-wrapper">
+                    <img src="/img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br/>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    {{/data}}
+</script>
+<!-- END:music.html -->
+<!-- START:playlists.html -->
+<!-- PLAYLIST STUFF -->
+
+<script type="text/template"
+        template-name="select-playlist">
+    {{#loading}}
+    <option disabled checked>Loading...</option>
+    {{/loading}}
+    {{#error}}
+    {{/error}}
+    {{#data}}
+    <option value="" checked>Add to Playlist</option>
+    {{#results}}
+    <option value="{{_id}}">{{name}}</option>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        page-title="My Playlists"
+        route="^playlists">
+    <div class="container">
+        <h1>My Playlists</h1>
+        <div class="panel">
+            <div class="options">
+                <button action="createPlaylist">
+                    Create Playlist
+                </button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody
+                    source="$endpoint/playlist?fields=name,public"
+                    template="playlists">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="playlists">
+    {{#loading}}
+    {{>loading-table-view}}
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="2">{{message}}</td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr>
+        <td><a href="/playlist/{{_id}}">{{name}}</a></td>
+        <td class="push-right text right">
+            <button class="faux button--mobile"
+                    action="renamePlaylist"
+                    playlist-id="{{_id}}">
+                <i class="fa fa-pencil"></i>
+            </button>
+            <button class="faux button--mobile"
+                    action="destroyPlaylist"
+                    playlist-id="{{_id}}">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr><td colspan="2">No Results.</td></tr>
+    {{/results}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^playlist\/(.*)"
+        source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
+        completed="completedPlaylist"
+        transform="transformPlaylist">
+    <div class="container">
+        {{#loading}}
+        {{>loading-view}}
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <h1 playlist-id="{{_id}}">{{name}}</h1>
+        <div class="panel">
+            <div class="options pad-vertical push-right">
+                {{#canPublic}}
+                <label>
+                    <input
+                        type="checkbox"
+                        action="togglePlaylistPublic"
+                        playlist-id="{{_id}}"
+                        {{#public}}checked{{/public}} />
+                    Public
+                </label>
+                <button action="reorderPlaylistFromInputs" 
+                        trigger="reorderPlaylistFromInputs">
+                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
+                        Save Order</button>
+                {{/canPublic}}
+                {{#downloadUrl}}
+                <a class="silent button--mobile"
+                   title="Download Playlist"
+                   action="canAccessGold"
+                   href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
+                {{/downloadUrl}}
+                <button class="faux button--mobile">
+                    <i class="fa fa-fw fa-play"
+                       action="playSongs"
+                       role="play-playlist"></i>
+                </button>
+            </div>
+            <table class="drag-sortable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="shrink nohpad"></th>
+                        <th>Title</th>
+                        <th>Release</th>
+                        <th>Artist</th>
+                        <th class="col-xs-hidden col-md-visible">Genre</th>
+                        <th class="col-xs-hidden col-md-visible">Time</th>
+                        <th class="col-xs-hidden col-md-visible">BPM</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody role="playlist-tracks"
+                       source="$endpoint/playlist/{{_id}}/tracks"
+                       template="playlist-tracks">
+                </tbody>
+            </table>
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="playlist-tracks"
+        transform="transformPlaylistTracks"
+        completed="updateControls">
+    {{#loading}}
+    {{>loading-table-view}}
+    {{/loading}}
+    {{#error}}
+    <tr><td colspan="6">{{message}}</td></tr>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    <tr role="playlist-track"
+        track-id="{{_id}}"
+        release-id="{{releaseId}}"
+        {{#edit}}
+        draggable="true"
+        ondrop="playlistDrop(event)"
+        ondragover="playlistAllowDrop(event)"
+        ondragleave="playlistDragLeave(event)"
+        ondragstart="playlistDragStart(event, '{{_id}}', '{{releaseId}}')"
+        {{/edit}}>
+        <td>
+            {{#edit}}
+            <input  type="text"
+                    action-enter="reorderPlaylistFromInputs"
+                    action-enter="reorderPlaylistFromInputs"
+                    onfocus="playlistTrackOrderFocus(event, this)"
+                    onblur="playlistTrackOrderBlur(event, this)"
+                    trigger-target="reorderPlaylistFromInputs"
+                    track-id="{{_id}}"
+                    release-id="{{releaseId}}"
+                    track-title="{{title}}"
+                    name="trackOrder[]"
+                    tabIndex="{{trackNumber}}"
+                    value="{{trackNumber}}" size="2" />
+            {{/edit}}
+            {{#noEdit}}
+            {{trackNumber}}.
+            {{/noEdit}}
+        </td>
+        <td class="shrink nohpad">
+          {{>playSong}}
+        </td>
+        {{>trackCells}}
+        <td class="push-right">
+            {{>trackButtons}}
+            {{#edit}}
+            <button class="faux button--mobile"
+                    action="removeFromPlaylist"
+                    playlist-position="{{index}}">
+                <i class="fa fa-trash-o"></i>
+            </button>
+            {{/edit}}
+        </td>
+    </tr>
+    {{/results}}
+    {{^results}}
+    <tr>
+        <td colspan="10">No Results.</td>
+    </tr>
+    {{/results}}
+    {{/data}}
+</script>
+<!-- END:playlists.html -->
+<!-- START:roster.html -->
+<!-- ROSTER -->
+
+<script type="text/template"
+        route="^artists\/?"
+        transform="transformRoster">
+    <div class="container">
+        <h1>Artists</h1>
+        <div class="panel">
+            {{#data}}
+            <ul class="button-list">
+            {{#years}}
+            <li><a class="button" href="/artists/?year={{.}}">{{.}}</a></li>
+            {{/years}}
+            </ul>
+            <div source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId&filters=years,{{year}}"
+                 template="roster-year">
+            </div>
+            {{/data}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="roster-year"
+        transform="transformRosterYear">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <ul class="art-list">
+        {{#results}}
+        <li>
+            <a class="silent" href="/artist/{{uri}}" title="{{name}}">
+                {{#image}}
+                <div class="image-wrapper">
+                    <img src="/img/artist.jpg" class="preload" />
+                    <img src="{{image}}"/>
+                </div>
+                {{/image}}
+                {{^image}}
+                <div class="no-art">
+                    <label>No image.</label>
+                </div>
+                {{/image}}
+                <label class="title one-line-ellipsis">{{name}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+    {{/data}}
+</script>
+<!-- END:roster.html -->
+<!-- START:search.html -->
+<!-- SEARCH -->
+
+<script type="text/template"
+        route="^search\/artists(\?.*)?"
+        transform="transformSearchArtistsPage"
+        completed="completedSearchArtists">
+    <div class="container">
+        <h1>Artists</h1>
+        {{#loading}}
+        <div class="panel">
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        </div>
+        {{/loading}}
+        {{#error}}
+        <div class="panel">
+            <p>{{message}}</p>
+        </div>
+        {{/error}}
+        {{#data}}
+        <div source="$endpoint/catalog/artist?{{query}}"
+             template="search-artists">
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-artists"
+        transform="transformRosterYear">
+    <div class="panel">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{>searchArtistsList}}
+        {{^total}}
+        <p>No artists found.</p>
+        {{/total}}
+        {{/data}}
+    </div>
+    {{#data}}
+    {{>searchPagination}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^search\/songs(\?.*)?"
+        transform="transformSearchTracksPage"
+        completed="completedSearchTracks">
+    <div class="container">
+        <h1>Songs</h1>
+        {{#loading}}
+        <div class="panel">
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        </div>
+        {{/loading}}
+        {{#error}}
+        <div class="panel">
+            <p>{{message}}</p>
+        </div>
+        {{/error}}
+        {{#data}}
+        <div source="$endpoint/catalog/track?{{query}}"
+             template="search-tracks">
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-tracks"
+        transform="transformSearchTrackResults">
+    <div class="panel">
+        {{#loading}}
+        <i class="fa fa-fw fa-spin fa-refresh"></i>
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        {{>searchTracksTable}}
+        {{^total}}
+        <p>No songs found.</p>
+        {{/total}}
+        {{/data}}
+    </div>
+    {{#data}}
+    {{>searchPagination}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^search\/releases(\?.*)?"
+        transform="transformSearchReleasesPage"
+        completed="completedSearchReleases">
+    <div class="container">
+        <h1>Releases</h1>
+        {{#loading}}
+        <div class="panel">
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+        </div>
+        {{/loading}}
+        {{#error}}
+        <div class="panel">
+            <p>{{message}}</p>
+        </div>
+        {{/error}}
+        {{#data}}
+        <div source="$endpoint/catalog/release?{{query}}"
+             template="search-releases"></div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-releases"
+        transform="transformSearchReleaseResults">
+        <div class="panel">
+            {{#loading}}
+            <i class="fa fa-fw fa-spin fa-refresh"></i>
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            {{>searchReleasesList}}
+            {{^total}}
+            <p>No releases found.</p>
+            {{/total}}
+            {{/data}}
+        </div>
+        {{#data}}
+        {{#total}}
+        {{>searchPagination}}
+        {{/total}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^search(\?.*)?"
+        page-title="Search All"
+        completed="completedSearchAll"
+        transform="transformSearch">
+    <div class="container search">
+        <h1>Search</h1>
+        {{#data}}
+        {{#searches}}
+        <div class="panel">
+            <h2>Songs</h2>
+            <div source="$endpoint/catalog/track?{{tracks.query}}"
+                 template="search-snippet-tracks">
+            </div>
+        </div>
+        <div class="panel">
+            <h2>Releases</h2>
+            <div source="$endpoint/catalog/release?{{releases.query}}"
+                 template="search-snippet-releases">
+            </div>
+        </div>
+        <div class="panel">
+            <h2>Artists</h2>
+            <div source="$endpoint/catalog/artist?{{artists.query}}"
+                 template="search-snippet-artists">
+            </div>
+        </div>
+        {{/searches}}
+        {{^searches}}
+        <div class="panel">
+            <p>Please enter a search term at the top of the page.</p>
+        </div>
+        {{/searches}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="search-snippet-releases"
+        transform="transformSearchSnippetReleases">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchReleasesList}}
+    {{^total}}
+    <p>No releases found.</p>
+    {{/total}}
+    {{#more}}
+    <a href="/search/releases?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="search-snippet-artists"
+        transform="transformRosterYear">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchArtistsList}}
+    {{^total}}
+    <p>No artists found.</p>
+    {{/total}}
+    {{#more}}
+    <br/>
+    <a href="/search/artists?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="search-snippet-tracks"
+        transform="transformSearchSnippetTracks">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    {{>searchTracksTable}}
+    {{^total}}
+    <p>No songs found.</p>
+    {{/total}}
+    {{#more}}
+    <br/>
+    <a href="/search/songs?{{query}}">{{message}}</a>
+    {{/more}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="searchTracksTable">
+    {{#results.length}}
+    <table>
+        <thead>
+            <tr>
+                <th class="shrink"></th>
+                <th>Title</th>
+                <th>Artists</th>
+                <th class="col-xs-hidden col-md-visible">Genre</th>
+                <th class="col-xs-hidden col-md-visible">Time</th>
+                <th class="col-xs-hidden col-md-visible">BPM</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#results}}
+            <tr>
+                <td class="shrink">
+                  {{>playSong}}
+                </td>
+                {{>trackCells}}
+                <td class="push-right">
+                    {{>trackButtons}}
+                    {{#canPlaylist}}
+                    <select
+                        onchange="addToPlaylist(null, this)"
+                        source="$endpoint/playlist"
+                        template="select-playlist"
+                        track-id="{{_id}}">
+                    </select>
+                    {{/canPlaylist}}
+                </td>
+            </tr>
+            {{/results}}
+        </tbody>
+    </table>
+    {{/results.length}}
+</script>
+
+<script type="text/template"
+        mustache-name="searchReleasesList">
+    <ul class="art-list art-list--full-width">
+        {{#results}}
+        <li>
+            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                <div class="image-wrapper">
+                    <img src="/img/artwork.jpg" class="preload" />
+                    <img src="{{cover}}"/>
+                </div>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br/>
+                <label class="artist one-line-ellipsis">{{artists}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+</script>
+
+
+<script type="text/template"
+        mustache-name="searchArtistsList">
+    <ul class="art-list art-list--full-width">
+        {{#results}}
+        <li>
+            <a class="silent" href="/artist/{{uri}}" title="{{name}}">
+                {{#image}}
+                <div class="image-wrapper">
+                    <img src="/img/artist.jpg" class="preload" />
+                    <img src="{{image}}"/>
+                </div>
+                {{/image}}
+                {{^image}}
+                <div class="no-art">
+                    <label>No image.</label>
+                </div>
+                {{/image}}
+                <label class="title one-line-ellipsis">{{name}}</label>
+            </a>
+        </li>
+        {{/results}}
+    </ul>
+</script>
+
+<script type="text/template"
+        mustache-name="searchPagination">
+    {{#total}}
+    <div class="container pagination pad-vertical text center">
+        {{#previous}}
+        <a href="?{{previous}}">Previous</a>
+        {{/previous}}
+        <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
+        {{#next}}
+        <a href="?{{next}}">Next</a>
+        {{/next}}
+    </div>
+    {{/total}}
+</script>
+
+<!-- END SEARCH -->
+<!-- END:search.html -->
+<!-- START:services.html -->
 <!-- SERVICES -->
 
 <script type="text/template"
@@ -1248,1503 +2753,7 @@
         </div>
     </div>
 </script>
-
-<!-- CLAIMS -->
-
-<script type="text/template"
-        route="^release-claim"
-        page-title="Remove YouTube Claim">
-    <div class="container">
-        <h1>YouTube Release Claim</h1>
-        <div class="panel">
-            <p>If you have recieved a claim on your whitelisted YouTube channel you can release it here. Please fill out the form below.</p>
-            <br/>
-            <table class="form mobile">
-                <tbody data-set="youtube-claim">
-                    <tr>
-                        <th>YouTube Video Id</th>
-                        <td>
-                            <input type="text" name="videoId" placeholder="Video Id"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="button-group">
-                <button class="button--full" action="removeYouTubeClaim" data-set-target="youtube-claim">Release Claim</button>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/template" mustache-name="vendor-selector">
-    <select name="vendor">
-        <option value="">Select One</option>
-        <option>YouTube</option>
-        <option>Twitch</option>
-    </select>
-</script>
-
-<!-- HOME -->
-
-<script type="text/template"
-        route="^(\?.*)?$"
-        page-title="Home">
-    <div source="$endpoint/catalog/release?limit=15" template="homeFeatured"></div>
-    <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="homePodcast"></div>
-    <div source="$endpoint/catalog/news" template="blog-stories"></div>
-    <div class="flex social">
-        <div class="col-xs-12 col-sm-12 col-md-6 text right cl-white spotify-wrapper">
-            <div class="banner" style="background-image:url(/img/banner.jpg)">
-                <div class="banner-shade"></div>
-                <div class="gradient gradient--inverted"></div>
-            </div>
-            <div class="container-left">
-                <header>
-                    <h2 class="line-top">Listen on Spotify</h2>
-                </header>
-                <ul class="spotify-playlists">
-                    <li>
-                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4kw9kdjzx1UmyWvpysl0y2" target="_BLANK">
-                            <div style="background-image:url(/img/spotify/new-releases.jpg)" class="spotify-artwork"/></div>
-                            <div class="spotify-title"><h2>New Releases</h2></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4pylRY0ogA4JwC6CplYTxl" target="_BLANK">
-                            <div style="background-image:url(/img/spotify/hype.jpg)" class="spotify-artwork"/></div>
-                            <div class="spotify-title"><h2>Hype</h2></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/4rIPUdx0APV1euj24QR3uN" target="_BLANK">
-                            <div style="background-image:url(/img/spotify/feel-good.jpg)" class="spotify-artwork"/></div>
-                            <div class="spotify-title"><h2>Feel Good</h2></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="silent" href="https://open.spotify.com/user/monstercatmedia/playlist/5ox7QhPLaPEuebCnvxNhd0" target="_BLANK">
-                            <div style="background-image:url(/img/spotify/unwind.jpg)" class="spotify-artwork"/></div>
-                            <div class="spotify-title"><h2>Unwind</h2></div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 text left followers">
-            <div class="container-right">
-                <header>
-                    <h2 class="line-top">Join the Family</h2>
-                </header>
-                <ul class="social-grid">
-                    <li>
-                        <a class="no-hover social-grid-wrapper youtube" href="https://www.youtube.com/user/MonstercatMedia" target="_BLANK">
-                            <div class="icon">
-                                <i class="fa fa-youtube"></i>
-                            </div>
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>4.7m</h3>
-                                    <p>subscribers</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="no-hover social-grid-wrapper twitter" href="https://twitter.com/monstercat" target="_BLANK">
-                            <div class="icon">
-                                <i class="fa fa-twitter"></i>
-                            </div>
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>299k</h3>
-                                    <p>followers</p>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="no-hover social-grid-wrapper facebook" href="https://www.facebook.com/monstercat" target="_BLANK">
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>800k</h3>
-                                    <p>likes</p>
-                                </div>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-facebook"></i>
-                            </div>
-                        </a>
-                        <a class="no-hover social-grid-wrapper instagram" href="https://www.instagram.com/monstercat/" target="_BLANK">
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>163k</h3>
-                                    <p>followers</p>
-                                </div>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-instagram"></i>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="no-hover social-grid-wrapper spotify" href="https://open.spotify.com/user/monstercatmedia" target="_BLANK">
-                            <div class="icon">
-                                <i class="fa fa-spotify"></i>
-                            </div>
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>103k</h3>
-                                    <p>listeners/mo</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="no-hover social-grid-wrapper twitch" href="https://www.twitch.tv/monstercat/" target="_BLANK">
-                            <div class="icon">
-                                <i class="fa fa-twitch"></i>
-                            </div>
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>602k</h3>
-                                    <p>followers</p>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="no-hover social-grid-wrapper soundcloud" href="https://soundcloud.com/Monstercat" target="_BLANK">
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>672k</h3>
-                                    <p>followers</p>
-                                </div>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-soundcloud"></i>
-                            </div>
-                        </a>
-                        <a class="no-hover social-grid-wrapper apple" href="http://monster.cat/iTunes-5Year" target="_BLANK">
-                            <div class="stats grey-square">
-                                <div class="stats-wrapper">
-                                    <h3>139k</h3>
-                                    <p>users</p>
-                                </div>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-apple"></i>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="homeFeatured"
-        transform="transformHome">
-    {{#loading}}
-    {{>loading-view-black}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    <div class="top-banner">
-        {{#featured}}
-        <div class="banner" style="background-image:url({{coverBig}}">
-            <div class="banner-shade"></div>
-            <div class="gradient"></div>
-        </div>
-        <div class="container flex">
-            <div class="col-xs-12 col-sm-12 col-md-4 featured-artwork">
-                <a class="silent" href="/release/{{catalogId}}">
-                    <img class="shadow responsive" src="{{coverBig}}"/>
-                </a>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-8 cl-white featured-details">
-                <span class="tag">Featured</span>
-                <a class="silent no-hover" href="/release/{{catalogId}}">
-                    <h1 class="title uppercase">{{title}}</h1>
-                </a>
-                <h3>By {{artists}}</h3>
-                <p class="date">Released on {{releaseDate}}</p>
-                <a href="/release/{{catalogId}}" class="button button--cta button--icon">
-                    View
-                    <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-        </div>
-        {{/featured}}
-        <div class="container latest cl-white">
-            <header class="flex top-cta">
-                <div class="col-xs-6">
-                    <h2 class="line-top">Latest Releases</h2>
-                </div>
-                <div class="col-xs-6 text right">
-                    <a href="/music" class="button button--icon button--transparent">
-                        View all
-                        <i class="fa fa-chevron-right"></i>
-                    </a>
-                </div>
-            </header>
-            <ul class="art-list art-list--full-width">
-                {{#releases}}
-                <li>
-                    <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                        <div class="image-wrapper">
-                            <img src="/img/artwork.jpg" class="preload" />
-                            <img src="{{cover}}"/>
-                        </div>
-                        <label class="title one-line-ellipsis">{{title}}</label>
-                        <br/>
-                        <label class="artist one-line-ellipsis">{{artists}}</label>
-                    </a>
-                </li>
-                {{/releases}}
-            </ul>
-        </div>
-    </div>
-    <div class="hero cl-white">
-        <div class="banner" style="background-image:url(/img/banner.jpg)">
-            <div class="banner-shade"></div>
-            <div class="gradient gradient--inverted"></div>
-        </div>
-        <div class="container">
-            <h3 class="playfair">We're <em>proudly</em> proving that</h3>
-            <h1 class="line-bottom"> Independent labels have the ability to reshape the music industry.</h1>
-        </div>
-    </div>
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="homePodcast"
-        transform="transformPodcast">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    <section class="v-padding podcast">
-        <div class="container latest">
-            <header class="flex top-cta">
-                <div class="col-xs-6">
-                    <h2 class="line-top">Latest Podcast</h2>
-                </div>
-                <div class="col-xs-6 text right">
-                    <a href="https://www.monstercat.com/podcast" class="button button--black button--icon button--transparent">
-                        View all
-                        <i class="fa fa-chevron-right"></i>
-                    </a>
-                </div>
-            </header>
-            <ul class="art-list art-list--full-width">
-                {{#podcasts}}
-                <li>
-                    <a class="silent" href="/release/{{catalogId}}" title="{{title}}">
-                        <div class="image-wrapper">
-                            <img src="/img/artwork.jpg" class="preload" />
-                            <img src="{{cover}}"/>
-                        </div>
-                        <label class="title one-line-ellipsis">{{episode}}</label>
-                        <br/>
-                        <label class="artist one-line-ellipsis">Monstercat Podcast</label>
-                    </a>
-                </li>
-                {{/podcasts}}
-            </ul>
-        </div>
-    </section>
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="blog-stories"
-        transform="transformBlogPosts">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    <section class="v-padding blog">
-        <div class="container">
-            <header class="flex top-cta">
-                <div class="col-xs-6">
-                    <h2 class="line-top">Latest Articles</h2>
-                </div>
-                <div class="col-xs-6 text right">
-                    <a href="/news" class="button button--black button--icon button--transparent">
-                        View all
-                        <i class="fa fa-chevron-right"></i>
-                    </a>
-                </div>
-            </header>
-        </div>
-        {{#posts}}
-        <article class="flex">
-            <div class="col-xs-12 col-sm-12 col-md-6 article-banner{{#isOdd}} col-md-last{{/isOdd}}">
-                <div class="side-banner" style="background-image: url(http://www.monstercat.com{{image}})"></div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 article-details">
-                <div class="article-wrapper">
-                    <a class="silent no-hover" href="http://www.monstercat.com/blog/{{path}}" target="_BLANK">
-                        <h2>{{title}}</h2>
-                        <p class="date">{{date}}</p>
-                        <p class="description">{{excerpt}}</p>
-                    </a>
-                    <a class="button button--black button--icon" href="http://www.monstercat.com/blog/{{path}}" target="_BLANK">
-                        Read more
-                        <i class="fa fa-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-        </article>
-        {{/posts}}
-    </section>
-    {{/data}}
-</script>
-
-
-<!-- MUSIC -->
-
-<script type="text/template"
-        route="^(:?(\?.*)?$|music(\?.*)?)"
-        page-title="Music"
-        completed="completedMusic"
-        transform="transformMusic">
-    {{#data}}
-    <div source="$endpoint/catalog/release?{{query}}"
-         template="music-releases">
-    </div>
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="music-releases"
-        transform="transformMusicReleases">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <div class="container panel">
-        <p>{{message}}</p>
-    </div>
-    {{/error}}
-    {{#data}}
-    <ul class="container panel art-list">
-        {{#results}}
-        <li>
-            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <div class="image-wrapper">
-                    <img src="/img/artwork.jpg" class="preload" />
-                    <img src="{{cover}}"/>
-                </div>
-                <label class="title one-line-ellipsis">{{title}}</label>
-                <br/>
-                <label class="artist one-line-ellipsis">{{artists}}</label>
-            </a>
-        </li>
-        {{/results}}
-    </ul>
-    {{^total}}
-    <div class="container text center panel">No results found.</div>
-    {{/total}}
-    {{#total}}
-      <div class="container pagination pad-vertical text center">
-          {{#previous}}
-            <a href="?{{previous}}">Previous</a>
-          {{/previous}}
-          <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
-          {{#next}}
-            <a href="?{{next}}">Next</a>
-          {{/next}}
-      </div>
-    {{/total}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        route="^release\/(.*)"
-        source="$endpoint/catalog/release/$1"
-        transform="mapRelease"
-        completed="completedRelease">
-    {{#loading}}
-    {{>loading-view-black}}
-    {{/loading}}
-    {{#error}}
-    <div class="container panel">
-        <p>{{message}}</p>
-    </div>
-    {{/error}}
-    {{#data}}
-    <div class="bgbox" style="background-image: url('{{coverBig}}')">
-        <div class="bgbox-blanket cl-white">
-            <div class="details-box container clearfix">
-                <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
-                <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
-                <h2>{{artists}}</h2>
-                <label>
-                    {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
-                    {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
-                </label>
-                <div class="options push-right">
-                    {{#purchase}}
-                    <button class="faux" action="openPurchaseRelease">
-                        <i class="fa fa-shopping-bag"></i>
-                    </button>
-                    {{/purchase}}
-                    {{#share}}
-                    <a class="silent" href="{{share}}" target="_blank">
-                        <i class="fa fa-spotify"></i>
-                    </a>
-                    {{/share}}
-                    <a class="silent"
-                    href="{{downloadLink}}"
-                    target="_blank"
-                    action="canAccessGold">
-                        <i class="fa fa-cloud-download"></i>
-                    </a>
-                    <button class="faux"
-                            action="playSongs"
-                            role="play-release"
-                            release-id="{{_id}}">
-                        <i class="fa fa-play inactive"></i>
-                        <i class="fa fa-pause active"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="release container" >
-        <div class="panel"
-            source="$endpoint/catalog/release/{{_id}}/tracks"
-            template="release-tracks">
-        </div>
-    </div>
-    {{/data}}
-</script>
-
-<script type="text/template"
-        mustache-name="unlicensable">
-{{^licensable}}<div class="unlicensable">This track can't be licensed. <a href="/non-licensable-tracks">Read more</a></div>{{/licensable}}
-</script>
-
-<script type="text/template"
-        mustache-name="trackCells">
-<td>{{title}}{{>unlicensable}}</td>
-{{#playlistId}}
-<td><a href="/release/{{releaseId}}">{{release}}</a></td>
-{{/playlistId}}
-<td>
-    {{^artists}}
-    Id
-    {{/artists}}
-    {{#artists}}
-    <a href="/artist/{{uri}}">{{name}}</a>
-    {{/artists}}
-</td>
-<td class="col-xs-hidden col-md-visible genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
-<td class="col-xs-hidden col-md-visible">{{time}}</td>
-<td class="col-xs-hidden col-md-visible">{{bpm}}</td>
-</script>
-
-<script type="text/template"
-        mustache-name="playSong">
-<button class="faux button--mobile"
-        action="playSong"
-        role="play-song"
-        play-link="{{playUrl}}"
-        title="{{title}}"
-        index="{{index}}"
-        track-id="{{_id}}"
-        {{#licensable}}licensable{{/licensable}}
-        {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
-        release-id="{{releaseId}}">
-    <i class="fa fa-play-circle inactive"></i>
-    <i class="fa fa-pause-circle active"></i>
-</button>
-</script>
-
-<script type="text/template"
-        mustache-name="trackButtons">
-<a class="silent button--mobile"
-   target="_blank"
-   title="Download Track"
-   action="canAccessGold"
-   href="{{downloadLink}}">
-    <i class="fa fa-cloud-download"></i>
-</a>
-<button
-    class="faux col-xs-hidden col-md-visible inline"
-    action="openTrackCopyCredits"
-    release-id="{{releaseId}}"
-    track-id="{{_id}}">
-    <i class="fa fa-copyright"></i>
-</button>
-</script>
-
-<script type="text/template"
-        template-name="release-tracks"
-        transform="transformReleaseTracks"
-        completed="completedReleaseTracks">
-    <table>
-        <thead>
-            <tr>
-                <th class="shrink">#</th>
-                <th class="shrink nohpad"></th>
-                <th>Title</th>
-                <th>Artists</th>
-                <th class="col-xs-hidden col-md-visible">Genre</th>
-                <th class="col-xs-hidden col-md-visible">Time</th>
-                <th class="col-xs-hidden col-md-visible">BPM</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#loading}}
-            <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
-            {{/loading}}
-            {{#error}}
-            <tr><td colspan="5"><p>{{message}}</p></td></tr>
-            {{/error}}
-            {{#data}}
-            {{#results}}
-            <tr>
-                <td class="shrink">{{trackNumber}}.</td>
-                <td class="shrink nohpad">
-                  {{>playSong}}
-                </td>
-                {{>trackCells}}
-                <td class="push-right">
-                    {{>trackButtons}}
-                    {{#canPlaylist}}
-                    <select
-                        onchange="addToPlaylist(null, this)"
-                        source="$endpoint/playlist"
-                        class="col-xs-hidden col-md-visible inline"
-                        template="select-playlist"
-                        track-id="{{_id}}">
-                    </select>
-                    {{/canPlaylist}}
-                </td>
-            </tr>
-            {{/results}}
-            {{/data}}
-        </tbody>
-    </table>
-</script>
-
-<script type="text/template"
-        route="^artist\/(.*)"
-        transform="mapWebsiteDetails"
-        completed="completedWebsiteDetails"
-        source="$endpoint/catalog/artist/$1">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <div class="container panel">
-        <p>{{message}}</p>
-    </div>
-    {{/error}}
-    {{#data}}
-    <div class="bgbox" style="background-image: url('{{image}}')">
-        <div class="bgbox-blanket cl-white">
-            <div class="details-box container clearfix">
-                {{#image}}
-                <img class="artwork" src="{{image}}" big-src="{{image}}" action="openReleaseArt"/>
-                {{/image}}
-                <h1>{{name}}</h1>
-                <div class="options push-right">
-                    {{#socials}}
-                    <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
-                    {{/socials}}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        {{#about}}
-        <div calss="panel">
-            <h2>About</h2>
-            <p>{{about}}</p>
-        </div>
-        {{/about}}
-        {{#contact}}
-        <div class="panel">
-            <h2>Booking & Managment</h2>
-            <br/>
-            <p>{{booking}}</p>
-            <br/>
-            <p>{{management}}</p>
-        </div>
-        {{/contact}}
-        <div class="panel">
-            <h2>Discography</h2>
-            <div source="$endpoint/catalog/artist/{{_id}}/releases"
-                template="user-releases">
-            </div>
-        </div>
-    </div>
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="user-releases"
-        transform="transformReleases">
-    {{#loading}}
-    {{>loading-inner-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    <ul class="art-list art-list--full-width discography">
-        {{#results}}
-        <li>
-            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <div class="image-wrapper">
-                    <img src="/img/artwork.jpg" class="preload" />
-                    <img src="{{cover}}"/>
-                </div>
-                <label class="title one-line-ellipsis">{{title}}</label>
-                <br/>
-                <label class="artist one-line-ellipsis">{{artists}}</label>
-            </a>
-        </li>
-        {{/results}}
-    </ul>
-    {{/data}}
-</script>
-
-
-<!-- BROWSE -->
-
-<script type="text/template"
-        route="^browse"
-        page-title="Browse Music"
-        completed="completedBrowseMusic"
-        transform="transformBrowseMusic">
-    {{#data}}
-    <div class="page width center panel">
-        <table data-set="browse-music" trigger-target="filterBrowseMusic" class="form">
-            <tbody>
-                <tr>
-                    <th>Tags</th>
-                    <td>
-                        <input type="text" name="tags" placeholder="Song Tags" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Genres</th>
-                    <td>
-                        <input type="text" name="genres" placeholder="Song Genres" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Types</th>
-                    <td>
-                        <ul>
-                        {{#releaseTypes}}
-                            <li>
-                                <input type="checkbox" name="types" value="{{key}}" id="type-{{key}}" {{#checked}}checked="true"{{/checked}} />
-                                <label for="type-{{key}}">{{name}}</label>
-                            </li>
-                        {{/releaseTypes}}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>
-                        <button action="filterBrowseMusic" trigger="filterBrowseMusic" data-set-target="browse-music">Filter</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>        
-    <div source="$endpoint/catalog/browse?{{query}}"
-         template="music-browse">
-    </div>
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="music-browse"
-        transform="transformMusicBrowseResults">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <div class="page width center panel">
-        <p>{{message}}</p>
-    </div>
-    {{/error}}
-    {{#data}}
-    {{#results.length}}
-    <ul class="page width center panel browse-testing">
-        {{> browseMusicTable}}
-    </ul>
-    {{/results.length}}
-    {{^total}}
-    <div class="page width center text center panel">No results found.</div>
-    {{/total}}
-    {{#total}}
-      <div class="page width center pagination pad-vertical text center">
-          {{#previous}}
-            <a href="?{{previous}}">Previous</a>
-          {{/previous}}
-          <label>{{skip}} - {{count}} of {{total}}</label>
-          {{#next}}
-            <a href="?{{next}}">Next</a>
-          {{/next}}
-      </div>
-    {{/total}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        mustache-name="browseMusicTable">
-    {{#results.length}}
-    <table>
-        <thead>
-            <tr>
-                <th class="shrink"></th>
-                <th>Title</th>
-                <th>Artists</th>
-                <th>Genre</th>
-                <th>BPM</th>
-                <th>Release</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#results}}
-            <tr>
-                <td class="shrink">
-                  {{>playSong}}
-                </td>
-                {{>trackCells}}
-                <td>
-                    <a href="/release/{{release.catalogId}}">{{release.title}}</a>
-                </td>
-                <td class="push-children-right">
-                    {{>trackButtons}}
-                    {{#canPlaylist}}
-                    <select
-                        onchange="addToPlaylist(null, this)"
-                        source="$endpoint/playlist"
-                        template="select-playlist"
-                        track-id="{{_id}}">
-                    </select>
-                    {{/canPlaylist}}
-                </td>
-            </tr>
-            {{/results}}
-        </tbody>
-    </table>
-    {{/results.length}}
-</script>
-
-<!-- ROSTER -->
-
-<script type="text/template"
-        route="^artists\/?"
-        transform="transformRoster">
-    <div class="container">
-        <h1>Artists</h1>
-        <div class="panel">
-            {{#data}}
-            <ul class="button-list">
-            {{#years}}
-            <li><a class="button" href="/artists/?year={{.}}">{{.}}</a></li>
-            {{/years}}
-            </ul>
-            <div source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId&filters=years,{{year}}"
-                 template="roster-year">
-            </div>
-            {{/data}}
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="roster-year"
-        transform="transformRosterYear">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    <ul class="art-list">
-        {{#results}}
-        <li>
-            <a class="silent" href="/artist/{{uri}}" title="{{name}}">
-                {{#image}}
-                <div class="image-wrapper">
-                    <img src="/img/artist.jpg" class="preload" />
-                    <img src="{{image}}"/>
-                </div>
-                {{/image}}
-                {{^image}}
-                <div class="no-art">
-                    <label>No image.</label>
-                </div>
-                {{/image}}
-                <label class="title one-line-ellipsis">{{name}}</label>
-            </a>
-        </li>
-        {{/results}}
-    </ul>
-    {{/data}}
-</script>
-
-<!-- PLAYLIST STUFF -->
-
-<script type="text/template"
-        template-name="select-playlist">
-    {{#loading}}
-    <option disabled checked>Loading...</option>
-    {{/loading}}
-    {{#error}}
-    {{/error}}
-    {{#data}}
-    <option value="" checked>Add to Playlist</option>
-    {{#results}}
-    <option value="{{_id}}">{{name}}</option>
-    {{/results}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        page-title="My Playlists"
-        route="^playlists">
-    <div class="container">
-        <h1>My Playlists</h1>
-        <div class="panel">
-            <div class="options">
-                <button action="createPlaylist">
-                    Create Playlist
-                </button>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody
-                    source="$endpoint/playlist?fields=name,public"
-                    template="playlists">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="playlists">
-    {{#loading}}
-    {{>loading-table-view}}
-    {{/loading}}
-    {{#error}}
-    <tr><td colspan="2">{{message}}</td></tr>
-    {{/error}}
-    {{#data}}
-    {{#results}}
-    <tr>
-        <td><a href="/playlist/{{_id}}">{{name}}</a></td>
-        <td class="push-right text right">
-            <button class="faux button--mobile"
-                    action="renamePlaylist"
-                    playlist-id="{{_id}}">
-                <i class="fa fa-pencil"></i>
-            </button>
-            <button class="faux button--mobile"
-                    action="destroyPlaylist"
-                    playlist-id="{{_id}}">
-                <i class="fa fa-trash-o"></i>
-            </button>
-        </td>
-    </tr>
-    {{/results}}
-    {{^results}}
-    <tr><td colspan="2">No Results.</td></tr>
-    {{/results}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        route="^playlist\/(.*)"
-        source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
-        completed="completedPlaylist"
-        transform="transformPlaylist">
-    <div class="container">
-        {{#loading}}
-        {{>loading-view}}
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <h1 playlist-id="{{_id}}">{{name}}</h1>
-        <div class="panel">
-            <div class="options pad-vertical push-right">
-                {{#canPublic}}
-                <label>
-                    <input
-                        type="checkbox"
-                        action="togglePlaylistPublic"
-                        playlist-id="{{_id}}"
-                        {{#public}}checked{{/public}} />
-                    Public
-                </label>
-                <button action="reorderPlaylistFromInputs" 
-                        trigger="reorderPlaylistFromInputs">
-                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
-                        Save Order</button>
-                {{/canPublic}}
-                {{#downloadUrl}}
-                <a class="silent button--mobile"
-                   title="Download Playlist"
-                   action="canAccessGold"
-                   href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
-                {{/downloadUrl}}
-                <button class="faux button--mobile">
-                    <i class="fa fa-fw fa-play"
-                       action="playSongs"
-                       role="play-playlist"></i>
-                </button>
-            </div>
-            <table class="drag-sortable">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th class="shrink nohpad"></th>
-                        <th>Title</th>
-                        <th>Release</th>
-                        <th>Artist</th>
-                        <th class="col-xs-hidden col-md-visible">Genre</th>
-                        <th class="col-xs-hidden col-md-visible">Time</th>
-                        <th class="col-xs-hidden col-md-visible">BPM</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody role="playlist-tracks"
-                       source="$endpoint/playlist/{{_id}}/tracks"
-                       template="playlist-tracks">
-                </tbody>
-            </table>
-        </div>
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="playlist-tracks"
-        transform="transformPlaylistTracks"
-        completed="updateControls">
-    {{#loading}}
-    {{>loading-table-view}}
-    {{/loading}}
-    {{#error}}
-    <tr><td colspan="6">{{message}}</td></tr>
-    {{/error}}
-    {{#data}}
-    {{#results}}
-    <tr role="playlist-track"
-        track-id="{{_id}}"
-        release-id="{{releaseId}}"
-        {{#edit}}
-        draggable="true"
-        ondrop="playlistDrop(event)"
-        ondragover="playlistAllowDrop(event)"
-        ondragleave="playlistDragLeave(event)"
-        ondragstart="playlistDragStart(event, '{{_id}}', '{{releaseId}}')"
-        {{/edit}}>
-        <td>
-            {{#edit}}
-            <input  type="text"
-                    action-enter="reorderPlaylistFromInputs"
-                    action-enter="reorderPlaylistFromInputs"
-                    onfocus="playlistTrackOrderFocus(event, this)"
-                    onblur="playlistTrackOrderBlur(event, this)"
-                    trigger-target="reorderPlaylistFromInputs"
-                    track-id="{{_id}}"
-                    release-id="{{releaseId}}"
-                    track-title="{{title}}"
-                    name="trackOrder[]"
-                    tabIndex="{{trackNumber}}"
-                    value="{{trackNumber}}" size="2" />
-            {{/edit}}
-            {{#noEdit}}
-            {{trackNumber}}.
-            {{/noEdit}}
-        </td>
-        <td class="shrink nohpad">
-          {{>playSong}}
-        </td>
-        {{>trackCells}}
-        <td class="push-right">
-            {{>trackButtons}}
-            {{#edit}}
-            <button class="faux button--mobile"
-                    action="removeFromPlaylist"
-                    playlist-position="{{index}}">
-                <i class="fa fa-trash-o"></i>
-            </button>
-            {{/edit}}
-        </td>
-    </tr>
-    {{/results}}
-    {{^results}}
-    <tr>
-        <td colspan="10">No Results.</td>
-    </tr>
-    {{/results}}
-    {{/data}}
-</script>
-
-<!-- SEARCH -->
-
-<script type="text/template"
-        route="^search\/artists(\?.*)?"
-        transform="transformSearchArtistsPage"
-        completed="completedSearchArtists">
-    <div class="container">
-        <h1>Artists</h1>
-        {{#loading}}
-        <div class="panel">
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-        </div>
-        {{/loading}}
-        {{#error}}
-        <div class="panel">
-            <p>{{message}}</p>
-        </div>
-        {{/error}}
-        {{#data}}
-        <div source="$endpoint/catalog/artist?{{query}}"
-             template="search-artists">
-        </div>
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="search-artists"
-        transform="transformRosterYear">
-    <div class="panel">
-        {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        {{>searchArtistsList}}
-        {{^total}}
-        <p>No artists found.</p>
-        {{/total}}
-        {{/data}}
-    </div>
-    {{#data}}
-    {{>searchPagination}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        route="^search\/songs(\?.*)?"
-        transform="transformSearchTracksPage"
-        completed="completedSearchTracks">
-    <div class="container">
-        <h1>Songs</h1>
-        {{#loading}}
-        <div class="panel">
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-        </div>
-        {{/loading}}
-        {{#error}}
-        <div class="panel">
-            <p>{{message}}</p>
-        </div>
-        {{/error}}
-        {{#data}}
-        <div source="$endpoint/catalog/track?{{query}}"
-             template="search-tracks">
-        </div>
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="search-tracks"
-        transform="transformSearchTrackResults">
-    <div class="panel">
-        {{#loading}}
-        <i class="fa fa-fw fa-spin fa-refresh"></i>
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        {{>searchTracksTable}}
-        {{^total}}
-        <p>No songs found.</p>
-        {{/total}}
-        {{/data}}
-    </div>
-    {{#data}}
-    {{>searchPagination}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        route="^search\/releases(\?.*)?"
-        transform="transformSearchReleasesPage"
-        completed="completedSearchReleases">
-    <div class="container">
-        <h1>Releases</h1>
-        {{#loading}}
-        <div class="panel">
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-        </div>
-        {{/loading}}
-        {{#error}}
-        <div class="panel">
-            <p>{{message}}</p>
-        </div>
-        {{/error}}
-        {{#data}}
-        <div source="$endpoint/catalog/release?{{query}}"
-             template="search-releases"></div>
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="search-releases"
-        transform="transformSearchReleaseResults">
-        <div class="panel">
-            {{#loading}}
-            <i class="fa fa-fw fa-spin fa-refresh"></i>
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            {{>searchReleasesList}}
-            {{^total}}
-            <p>No releases found.</p>
-            {{/total}}
-            {{/data}}
-        </div>
-        {{#data}}
-        {{#total}}
-        {{>searchPagination}}
-        {{/total}}
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        route="^search(\?.*)?"
-        page-title="Search All"
-        completed="completedSearchAll"
-        transform="transformSearch">
-    <div class="container search">
-        <h1>Search</h1>
-        {{#data}}
-        {{#searches}}
-        <div class="panel">
-            <h2>Songs</h2>
-            <div source="$endpoint/catalog/track?{{tracks.query}}"
-                 template="search-snippet-tracks">
-            </div>
-        </div>
-        <div class="panel">
-            <h2>Releases</h2>
-            <div source="$endpoint/catalog/release?{{releases.query}}"
-                 template="search-snippet-releases">
-            </div>
-        </div>
-        <div class="panel">
-            <h2>Artists</h2>
-            <div source="$endpoint/catalog/artist?{{artists.query}}"
-                 template="search-snippet-artists">
-            </div>
-        </div>
-        {{/searches}}
-        {{^searches}}
-        <div class="panel">
-            <p>Please enter a search term at the top of the page.</p>
-        </div>
-        {{/searches}}
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="search-snippet-releases"
-        transform="transformSearchSnippetReleases">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    {{>searchReleasesList}}
-    {{^total}}
-    <p>No releases found.</p>
-    {{/total}}
-    {{#more}}
-    <a href="/search/releases?{{query}}">{{message}}</a>
-    {{/more}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="search-snippet-artists"
-        transform="transformRosterYear">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    {{>searchArtistsList}}
-    {{^total}}
-    <p>No artists found.</p>
-    {{/total}}
-    {{#more}}
-    <br/>
-    <a href="/search/artists?{{query}}">{{message}}</a>
-    {{/more}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        template-name="search-snippet-tracks"
-        transform="transformSearchSnippetTracks">
-    {{#loading}}
-    {{>loading-view}}
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
-    {{>searchTracksTable}}
-    {{^total}}
-    <p>No songs found.</p>
-    {{/total}}
-    {{#more}}
-    <br/>
-    <a href="/search/songs?{{query}}">{{message}}</a>
-    {{/more}}
-    {{/data}}
-</script>
-
-<script type="text/template"
-        mustache-name="searchTracksTable">
-    {{#results.length}}
-    <table>
-        <thead>
-            <tr>
-                <th class="shrink"></th>
-                <th>Title</th>
-                <th>Artists</th>
-                <th class="col-xs-hidden col-md-visible">Genre</th>
-                <th class="col-xs-hidden col-md-visible">Time</th>
-                <th class="col-xs-hidden col-md-visible">BPM</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#results}}
-            <tr>
-                <td class="shrink">
-                  {{>playSong}}
-                </td>
-                {{>trackCells}}
-                <td class="push-right">
-                    {{>trackButtons}}
-                    {{#canPlaylist}}
-                    <select
-                        onchange="addToPlaylist(null, this)"
-                        source="$endpoint/playlist"
-                        template="select-playlist"
-                        track-id="{{_id}}">
-                    </select>
-                    {{/canPlaylist}}
-                </td>
-            </tr>
-            {{/results}}
-        </tbody>
-    </table>
-    {{/results.length}}
-</script>
-
-<script type="text/template"
-        mustache-name="searchReleasesList">
-    <ul class="art-list art-list--full-width">
-        {{#results}}
-        <li>
-            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <div class="image-wrapper">
-                    <img src="/img/artwork.jpg" class="preload" />
-                    <img src="{{cover}}"/>
-                </div>
-                <label class="title one-line-ellipsis">{{title}}</label>
-                <br/>
-                <label class="artist one-line-ellipsis">{{artists}}</label>
-            </a>
-        </li>
-        {{/results}}
-    </ul>
-</script>
-
-
-<script type="text/template"
-        mustache-name="searchArtistsList">
-    <ul class="art-list art-list--full-width">
-        {{#results}}
-        <li>
-            <a class="silent" href="/artist/{{uri}}" title="{{name}}">
-                {{#image}}
-                <div class="image-wrapper">
-                    <img src="/img/artist.jpg" class="preload" />
-                    <img src="{{image}}"/>
-                </div>
-                {{/image}}
-                {{^image}}
-                <div class="no-art">
-                    <label>No image.</label>
-                </div>
-                {{/image}}
-                <label class="title one-line-ellipsis">{{name}}</label>
-            </a>
-        </li>
-        {{/results}}
-    </ul>
-</script>
-
-<script type="text/template"
-        mustache-name="searchPagination">
-    {{#total}}
-    <div class="container pagination pad-vertical text center">
-        {{#previous}}
-        <a href="?{{previous}}">Previous</a>
-        {{/previous}}
-        <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
-        {{#next}}
-        <a href="?{{next}}">Next</a>
-        {{/next}}
-    </div>
-    {{/total}}
-</script>
-
-<!-- END SEARCH -->
-
-<script type="text/template"
-        template-name="404"
-        page-title="Page Not Found">
-    <div class="container">
-        <h1>Page Not Found</h1>
-        <div class="panel">
-            <p>The page you are looking for is not here.</p>
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
-        route="^help\/?$">
-    <div class="container">
-        <h1>Help</h1>
-        <div class="panel">
-            <p>
-            Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
-            Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
-            <a href="/twitch-policy">Twitch Policy</a><br/>
-            <a href="/privacy-policy">Privacy Policy</a><br/>
-            <a href="/terms-of-service">Terms of Service</a>
-            </p>
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
-        mustache-name="markdown-basic">
-    <div class="container">
-        {{#loading}}
-        {{>loading-view}}
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <div class="panel md-container">
-        {{{data}}}
-        </div>
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        route="^faqs\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^faqs\/whitelisting\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^twitch-policy\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^privacy-policy\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Privacy%20Policy.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^terms-of-service\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^non-licensable-tracks\/?$"
-        source-type="markdown"
-        transform="transformMarkdown"
-        source="https://connect.monstercat.com/handbook/licensing">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template" template-name="toast">
-    <div class="toast{{#error}} error{{/error}}" >
-        <p>{{message}}</p>
-    </div>
-</script>
+<!-- END:services.html -->
 
 </body>
 </html>
