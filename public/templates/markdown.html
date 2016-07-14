@@ -1,0 +1,61 @@
+
+<script type="text/template"
+        mustache-name="markdown-basic">
+    <div class="container">
+        {{#loading}}
+        {{>loading-view}}
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <div class="panel md-container">
+        {{{data}}}
+        </div>
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^faqs\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^faqs\/whitelisting\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^twitch-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^privacy-policy\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Privacy%20Policy.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^terms-of-service\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^non-licensable-tracks\/?$"
+        source-type="markdown"
+        transform="transformMarkdown"
+        source="https://connect.monstercat.com/handbook/licensing">
+    {{>markdown-basic}}
+</script>
+

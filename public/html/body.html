@@ -1,47 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="fragment" content="!" />
-    <meta name="google-signin-client_id" content="1045912784861-pq08ad3cuglsfta2cea54ffurpmihpr9.apps.googleusercontent.com">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/fonts.css">
-    <link rel="stylesheet" href="/css/grid.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <script type="text/javascript">window.prerenderReady = false</script>
-    <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"
-            defer async></script>
-    <script type="text/javascript" src="https://apis.google.com/js/platform.js"
-            defer></script>
-    <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"
-            defer async></script>
-    <script type="text/javascript" src="/js/marked.js"></script>
-    <script type="text/javascript" src="/js/mustache.js"></script>
-    <script type="text/javascript" src="/js/declare.js"></script>
-    <script type="text/javascript" src="/js/country-codes.js"></script>
-    <script type="text/javascript" src="/js/countries.js"></script>
-    <script type="text/javascript" src="/js/strings.js"></script>
-    <script type="text/javascript" src="/js/helpers.js"></script>
-    <script type="text/javascript" src="/js/account.js"></script>
-    <script type="text/javascript" src="/js/playlist.js"></script>
-    <script type="text/javascript" src="/js/signin.js"></script>
-    <script type="text/javascript" src="/js/social.js"></script>
-    <script type="text/javascript" src="/js/pay.js"></script>
-    <script type="text/javascript" src="/js/player.js"></script>
-    <script type="text/javascript" src="/js/controls.js"></script>
-    <script type="text/javascript" src="/js/ui.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
-    <script type="text/javascript" src="/js/search.js"></script>
-    <script type="text/javascript" src="/js/browse.js"></script>
-    <script type="text/javascript">
-    !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
-    analytics.load("FYHmNWDPH4MU44NH03s9EC9arg2Hu8Cr");
-    }}();
-    </script>
-</head>
-<body>
-<script type="text/javascript">if (typeof bgmebro == 'function') bgmebro()</script>
-
 <header>
     <div class="col-xs-hidden col-md-visible scrub-container">
         <div class="scrub" action="scrub">
@@ -218,33 +174,6 @@
     <div class="modal-content-layer" role="container"></div>
 </div>
 
-<script type="text/template" template-name="subscription-required-modal">
-    <div class="modal">
-        <div class="panel panel--padded pointer-events">
-            <h1>Get Gold!</h1>
-            <div class="modal-content">
-                <h2 class="pricing">$5/month</h2>
-                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
-                <br/>
-                <ul>
-                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
-                    <li>Playlist your music directly within Connect</li>
-                    <li>Direct support via e-mail and on site.</li>
-                </ul>
-            </div>
-                {{^hasGold}}
-                <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
-                {{/hasGold}}
-                {{^signedIn}}
-                <a class="button button--cta" href="/sign-up" action="closeModal">Sign up for an account!</a>
-                {{/signedIn}}
-            <button class="button--close faux" action="closeModal">
-                <i class="fa fa-remove"></i>
-            </button>
-        </div>
-    </div>
-</script>
-
 <script type="text/template" mustache-name="loading-view">
     <div class="loading">
         <span class="loader"></span>
@@ -280,65 +209,6 @@
 </script>
 
 <script type="text/template"
-        template-name="track-copycredits-modal"
-        transform="loadReleaseAndTrack">
-    <div class="modal">
-        <div class="panel pointer-events">
-            <h1>Video Credits</h1>
-            {{#loading}}
-            {{>loading-inner-view}}
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            <textarea class="copycredits">{{track.copycredit}}</textarea>
-            {{/data}}
-            <button class="button--close faux" action="closeModal">
-                <i class="fa fa-remove"></i>
-            </button>
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="release-shopping-modal">
-    <div class="modal modal--release">
-        <div class="panel pointer-events">
-            <h1>Support this Release</h1>
-            {{#loading}}
-            {{>loading-inner-view}}
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            <ul>
-                {{#purchaseLinks}}
-                <li><a target="_blank" class="button" href="{{url}}">{{name}}</a></li>
-                {{/purchaseLinks}}
-            </ul>
-            {{/data}}
-            <button class="button--close faux" action="closeModal">
-                <i class="fa fa-remove"></i>
-            </button>
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
-        template-name="release-art-modal">
-    <div class="modal modal--artwork">
-        <div class="pointer-events">
-            <a href="{{src}}" target="_blank">
-                <img src="{{src}}"/>
-            </a>
-        </div>
-    </div>
-</script>
-
-
-<script type="text/template"
         template-name="404"
         page-title="Page Not Found">
     <div class="container">
@@ -363,66 +233,6 @@
             </p>
         </div>
     </div>
-</script>
-
-<script type="text/template"
-        mustache-name="markdown-basic">
-    <div class="container">
-        {{#loading}}
-        {{>loading-view}}
-        {{/loading}}
-        {{#error}}
-        <p>{{message}}</p>
-        {{/error}}
-        {{#data}}
-        <div class="panel md-container">
-        {{{data}}}
-        </div>
-        {{/data}}
-    </div>
-</script>
-
-<script type="text/template"
-        route="^faqs\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^faqs\/whitelisting\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^twitch-policy\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^privacy-policy\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Privacy%20Policy.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^terms-of-service\/?$"
-        transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/Terms%20of%20Service.md">
-    {{>markdown-basic}}
-</script>
-
-<script type="text/template"
-        route="^non-licensable-tracks\/?$"
-        source-type="markdown"
-        transform="transformMarkdown"
-        source="https://connect.monstercat.com/handbook/licensing">
-    {{>markdown-basic}}
 </script>
 
 <script type="text/template" template-name="toast">
