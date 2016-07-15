@@ -39,8 +39,8 @@ mv bin/tmp.html bin/index.html
 
 echo
 echo -e "Copying assets..."
-cp -fr public/fonts/ bin/fonts/
-cp -fr public/img/ bin/img/
+cp -fr public/fonts/* bin/fonts/
+cp -fr public/img/* bin/img/
 cp -fr public/favicon.ico bin/favicon.ico
 
 echo
