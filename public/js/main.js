@@ -431,7 +431,7 @@ function transformRoster () {
   var thisYear = (new Date()).getFullYear()
   var arr = []
   var i = thisYear
-  while (i >= 2012) {
+  while (i >= 2011) {
     arr.push(i)
     i--
   }
