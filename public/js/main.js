@@ -447,6 +447,13 @@ function transformRosterYear (obj) {
       doc.uri = doc.vanityUri || doc.websiteDetailsId || doc._id
       doc.image = datapoint + '/blobs/' + doc.profileImageBlobId
   })
+  obj.results.sort(function (a, b) {
+    a = a.name.toLowerCase()
+    b = b.name.toLowerCase()
+    if (a < b) return -1
+    if (a > b) return 1
+    return 0
+  })
   return obj
 }
 
