@@ -2129,10 +2129,7 @@ textarea.copycredits {
   width: 100%;
   border-right-width: 0px;
 }
-.panel .button-list > li:first-child{
-  width: 100%;
-}
-.panel .button-list > li:nth-child(odd) > a{
+.panel .button-list > li:nth-child(even) > a{
   border-right-width: 3px;
 }
 
@@ -2152,13 +2149,13 @@ textarea.copycredits {
 @media screen and (min-width: 992px){
   .panel .button-list > li,
   .panel .button-list > li:first-child{
-    width: 20%;    
+    width: 16.66%;    
   }
-  .panel .button-list > li:nth-child(odd) > a{
+  .panel .button-list > li:nth-child(even) > a{
     border-right-width: 0px;
   }
   .panel .button-list > li:last-child > a{
-    border-right: 3px solid;
+    border-right: 3px solid dodgerblue;
   }
   .artist-list li a {
     position: relative;
@@ -2420,6 +2417,19 @@ body.bg {
   border-color: gold;
   color: black;
 }
+.bg .panel .button-list > li > a.button{
+  color: dodgerblue;
+  border-color: dodgerblue;
+}
+.bg .panel .button-list > li > a.button:active,
+.bg .panel .button-list > li > a.button:hover{
+  color: white;
+  background: dodgerblue;
+  border-color: dodgerblue;
+}
+.bg .panel .hover-wrapper label{
+  color: white;
+} 
 .bg .panel .loader{
   border: 0.25em solid rgba(0,0,0, 0.1);
   border-top-color: #000;
