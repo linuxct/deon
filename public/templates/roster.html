@@ -28,7 +28,7 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <ul class="art-list">
+    <ul class="art-list artist-list">
         {{#results}}
         <li>
             <a class="silent" href="/artist/{{uri}}" title="{{name}}">
@@ -43,7 +43,9 @@
                     <label>No image.</label>
                 </div>
                 {{/image}}
-                <label class="title one-line-ellipsis">{{name}}</label>
+                <div class="hover-wrapper">
+                    <label class="title one-line-ellipsis">{{name}}</label>
+                </div>
             </a>
         </li>
         {{/results}}

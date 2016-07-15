@@ -7,6 +7,7 @@ var pageTitleGlue   = ' - '
 var lstore          = window.localStorage;
 
 (document.createElement('img')).src = '/img/artwork.jpg';
+(document.createElement('img')).src = '/img/artist.jpg';
 
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
