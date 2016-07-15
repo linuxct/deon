@@ -2287,6 +2287,9 @@ body.bg {
 .bg .mcat-logo .logo-white{
   display: block;
 }
+.bg a.no-hover.monstercat-logo:focus {
+    color: white;
+}
 .bg .mcat-mast .mcat-mobile-nav .hamburger-icon .line{
   background: #fff;
 }
