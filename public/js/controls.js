@@ -1,4 +1,3 @@
-var player = new MusicPlayer()
 
 var sel = {
   play: '[role="play"]',
@@ -22,7 +21,9 @@ var playerAnalyticEvents = [
   'ended'
 ]
 
+var player
 document.addEventListener('DOMContentLoaded', function(e) {
+  player = new MusicPlayer()
   var events = Object.keys(playerEvents)
   events.forEach(function (name) {
     player.addEventListener(name, playerEvents[name])
