@@ -864,6 +864,10 @@ section {
   position: relative;
 }
 
+.mcat-logo .logo-white{
+  display: none;
+}
+
 .mcat-logo .graphic img {
   position: absolute;
   width: 100%;
@@ -1477,6 +1481,10 @@ footer img {
   max-width: 40px;
   margin-top: 1.35rem;
   opacity: .15;
+}
+
+footer .logo-white{
+  display: none;
 }
 
 footer .main-list a {
@@ -2273,6 +2281,15 @@ body.bg {
   background-blend-mode: overlay;
   background-attachment: fixed;
 }
+.bg .mcat-logo .logo-black{
+  display: none;
+}
+.bg .mcat-logo .logo-white{
+  display: block;
+}
+.bg .mcat-mast .mcat-mobile-nav .hamburger-icon .line{
+  background: #fff;
+}
 .bg .scrub{
   background: rgba(255, 255, 255, 0.5);
 }
@@ -2304,6 +2321,43 @@ body.bg {
 }
 .bg tr:nth-child(odd) > td {
   background: rgba(255,255,255,0.1);
+}
+.bg .line-bottom::after,
+.bg .line-top::before{
+  background: white;
+}
+.bg .button--black:hover {
+  color: dodgerblue;
+  border-color: dodgerblue;
+}
+.bg .button--transparent:hover {
+  border-color: transparent;
+}
+.bg a.no-hover:hover {
+  color: white;
+}
+.bg .social-grid .grey-square {
+  background: rgba(255,255,255,0.08);
+}
+.bg .social-grid .social-grid-wrapper {
+  border-color: rgba(255,255,255,0.08);
+  color: white;
+}
+.bg .scrub-container--mobile .scrub{
+  background: rgba(255,255,255,0.25);
+}
+.bg .mcat-mast .mcat-nav ul li a {
+  color: #fff;
+}
+.bg .mcat-mast .mcat-nav ul li a::after {
+  background: #fff;
+}
+.bg footer .logo-black{
+  display: none;
+}
+.bg footer .logo-white{
+  display: inline;
+  opacity: 0.5;
 }
 .bg .panel,
 .bg .panel p,
