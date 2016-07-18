@@ -159,6 +159,42 @@ table select {
 ::-moz-selection {
   background: rgba(0,0,0,0.7); 
 }
+/* youtube-play */
+.fa-social-y:before{ 
+  content: "\f16a";
+}
+/* twitter */
+.fa-social-t:before{
+  content: "\f099";
+}
+/* facebook */
+.fa-social-f:before{
+  content: "\f09a";
+}
+/* instagram */
+.fa-social-i:before{
+  content: "\f16d";
+}
+/* spotify */
+.fa-social-sp:before{
+  content: "\f1bc";
+}
+/* twitch */
+.fa-social-tw:before{
+  content: "\f1e8";
+}
+/* soundcloud */
+.fa-social-so:before{
+  content: "\f1be";
+}
+/* apple */
+.fa-social-a:before{
+  content: "\f179";
+}
+/* google */
+.fa-social-g:before{
+  content: "\f1a0";
+}
 
 /*-----------------------------*\
   TABLES, INPUTS AND BUTTONS
@@ -876,6 +912,9 @@ section {
 }
 
 .mcat-mast .mcat-logo label {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 0 0 1px rgba(0,0,0,0.08); 
   font-family: "Geometry Soft Pro Bold", Impact, "Arial Black", sans-serif;
   text-transform: lowercase;
   font-size: 28px;
@@ -1189,15 +1228,27 @@ section {
 .global-search--mobile > button,
 .global-search--mobile > input[type="text"]{
   color: #000;
-  padding: 0;
-  padding-right: .65rem;
   margin: 0;
   vertical-align: middle;
   font-weight: bold;
 }
 
 .global-search--mobile {
-  padding: 1rem 5%;
+  padding: 0;
+  position: relative;
+}
+
+.global-search--mobile > button {
+  position: absolute;
+  left: 5%;
+  top: 0;
+  padding: 1.35rem 0;
+}
+
+.global-search--mobile > input[type="text"] {
+  width: 100%;
+  padding: 1rem;
+  padding-left: calc(5% + 1.9rem);
 }
 
 .nav-item:active,
@@ -1319,10 +1370,16 @@ span.note a {
 }
 
 .modal {
-  width: 80%;
+  width: 90%;
   max-width: 1000px;
   position: relative;
   margin: 50px auto;
+}
+
+@media screen and (min-width: 768px){
+  .modal {
+    width: 80%;
+  }
 }
 
 .modal > .panel--padded {
@@ -1478,7 +1535,7 @@ footer .credit{
 }
 
 footer img {
-  max-width: 40px;
+  max-width: 25px;
   margin-top: 1.35rem;
   opacity: .15;
 }
@@ -1907,6 +1964,28 @@ ul.social-grid {
 }
 
 /*-----------------------------*\
+  ACCOUNTS
+\*-----------------------------*/
+
+.sign-split {
+  margin-top: 2rem;
+}
+.flex.sign-split > .panel > h2 {
+  margin-top: 0;
+}
+.flex.sign-split > .panel {
+  margin-top: 0;
+}
+@media screen and (min-width: 992px){
+  .flex.sign-split > .panel {
+    max-width: 48.75%;
+  }
+  .flex.sign-split > .panel:first-child {
+    margin-right: 2.5%;
+  }
+}
+
+/*-----------------------------*\
   RELEASE
 \*-----------------------------*/
 
@@ -2177,7 +2256,7 @@ textarea.copycredits {
   .hover-wrapper {
     transition: bottom 0.4s ease;
     position: absolute;
-    bottom: -40%;
+    bottom: 0px;
     padding: 1rem;
   }
   .artist-list li a:hover .hover-wrapper{
@@ -2194,7 +2273,6 @@ textarea.copycredits {
     width: 16.66%;
   }
 }
-
 
 /*-----------------------------*\
   SERVICES

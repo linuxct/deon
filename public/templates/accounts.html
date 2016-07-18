@@ -2,43 +2,51 @@
         route="^signin">
     <div class="container">
         <h1>Sign In</h1>
-        <div class="panel">
-        <table class="form mobile" data-set="credentials" trigger-target="signIn">
-            <tbody>
-                <tr>
-                    <th>Email</th>
-                    <td>
-                        <input
-                            type="text"
-                            name="email"
-                            placeholder="kitty@monstercat.com"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Password</th>
-                    <td>
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="a secret"/>
-                        <button
-                            class="faux password"
-                            action="togglePassword"
-                            toggle-target="password">
-                            <i class="fa fa-eye-slash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="button-group button-group--margin">
-            <button class="button--cta button--full" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
-            <button class="button--social button--half button--fb" action="signInFacebook"><i class="fa fa-facebook"></i> Sign In</button>
-            <button class="button--social button--half button--g" action="signInGoogle"><i class="fa fa-google"></i> Sign In</button>
-        </div>
-        <a href="/forgot-password">Forgot your password?</a>
-        <br/>
-        <a href="/sign-up">Don't have an account? Sign up!</a>
+        <div class="flex sign-split">
+            <div class="col-xs-12 col-md-6 panel">
+                <h2>With Email</h2>
+                <table class="form mobile" data-set="credentials" trigger-target="signIn">
+                    <tbody>
+                        <tr>
+                            <th>Email</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="email"
+                                    placeholder="kitty@monstercat.com"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Password</th>
+                            <td>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder="a secret"/>
+                                <button
+                                    class="faux password"
+                                    action="togglePassword"
+                                    toggle-target="password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="button-group button-group--margin">
+                    <button class="button--cta button--full" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
+                </div>
+                <a href="/forgot-password">Forgot your password?</a>
+                <br/>
+                <a href="/sign-up">Don't have an account? Sign up!</a>
+            </div>
+            <div class="col-xs-12 col-md-6 panel">
+                <h2>With Social</h2>
+                <div class="button-group button-group--margin">
+                    <button class="button--social button--half button--fb" action="signInFacebook"><i class="fa fa-social-f"></i> Sign In</button>
+                    <button class="button--social button--half button--g" action="signInGoogle"><i class="fa fa-social-g"></i> Sign In</button>
+                </div>
+            </div>
         </div>
     </div>
 </script>
@@ -129,7 +137,7 @@
         route="^confirm-sign-up"
         transform="mapConfirmSignup">
     <div class="container">
-        <h1>Confirm Sign-up</h1>
+        <h1>Confirm Sign Up</h1>
         <div class="panel">
         {{#data}}
         <table class="form mobile" data-set="credentials" trigger-target="signUpSocial">
@@ -193,60 +201,62 @@
         route="^sign-up"
         transform="mapSignup">
     <div class="container">
-        <h1>Sign-up</h1>
-        <div class="panel">
-            <h2>With Social</h2>
-            <div class="button-group">
-                <button class="button--social button--half button--fb" action="signUpFacebook"><i class="fa fa-facebook"></i> Sign Up</button>
-                <button class="button--social button--half button--g" action="signUpGoogle"><i class="fa fa-google"></i> Sign Up</button>
+        <h1>Sign Up</h1>
+        <div class="flex sign-split">
+            <div class="col-xs-12 col-md-6 panel">
+                <h2>With Email</h2>
+                {{#data}}
+                <table class="form mobile" data-set="credentials" trigger-target="signUp">
+                    <tbody>
+                        <tr>
+                            <th>Email</th>
+                            <td>
+                                <input type="text"
+                                       name="email"
+                                       placeholder="kitty@monstercat.com"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Password</th>
+                            <td>
+                                <input type="password"
+                                       name="password"
+                                       placeholder="a secret"/>
+                                <button
+                                    class="faux password"
+                                    action="togglePassword"
+                                    toggle-target="password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td>
+                                <select name="location">
+                                    <option disabled selected>Select One</option>
+                                    {{#countries}}
+                                    <option value="{{name}}">
+                                        {{name}}
+                                    </option>
+                                    {{/countries}}
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="button-group">
+                    <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+                </div>
+                {{/data}}
             </div>
-        </div>
-        <div class="panel">
-            <h2>With Email</h2>
-            {{#data}}
-            <table class="form mobile" data-set="credentials" trigger-target="signUp">
-                <tbody>
-                    <tr>
-                        <th>Email</th>
-                        <td>
-                            <input type="text"
-                                   name="email"
-                                   placeholder="kitty@monstercat.com"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Password</th>
-                        <td>
-                            <input type="password"
-                                   name="password"
-                                   placeholder="a secret"/>
-                            <button
-                                class="faux password"
-                                action="togglePassword"
-                                toggle-target="password">
-                                <i class="fa fa-eye-slash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Country</th>
-                        <td>
-                            <select name="location">
-                                <option disabled selected>Select One</option>
-                                {{#countries}}
-                                <option value="{{name}}">
-                                    {{name}}
-                                </option>
-                                {{/countries}}
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="button-group">
-                <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+            <div class="col-xs-12 col-md-6 panel">
+                <h2>With Social</h2>
+                <div class="button-group">
+                    <button class="button--social button--half button--fb" action="signUpFacebook"><i class="fa fa-social-f"></i> Sign Up</button>
+                    <button class="button--social button--half button--g" action="signUpGoogle"><i class="fa fa-social-g"></i> Sign Up</button>
+                </div>
             </div>
-            {{/data}}
         </div>
     </div>
 </script>
@@ -452,23 +462,23 @@
         <div class="button-group">
         {{#facebookEnabled}}
         <button class="button--social button--half button--fb" action="unlinkFacebook">
-            <i class="fa fa-facebook"></i> Unlink Account
+            <i class="fa fa-social-f"></i> Unlink Account
         </button>
         {{/facebookEnabled}}
         {{^facebookEnabled}}
         <button class="button--social button--half button--fb" action="enableFacebookSignin">
-            <i class="fa fa-facebook"></i> Link Account
+            <i class="fa fa-social-f"></i> Link Account
         </button>
         {{/facebookEnabled}}
 
         {{#googleEnabled}}
         <button class="button--social button--half button--g" action="unlinkGoogle">
-            <i class="fa fa-google"></i> Unlink Account
+            <i class="fa fa-social-g"></i> Unlink Account
         </button>
         {{/googleEnabled}}
         {{^googleEnabled}}
         <button class="button--social button--half button--g" action="enableGoogleSignin">
-            <i class="fa fa-google"></i> Link Account
+            <i class="fa fa-social-g"></i> Link Account
         </button>
         {{/googleEnabled}}
     </div>
