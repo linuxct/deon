@@ -1,4 +1,8 @@
 var STRIPE_PK = 'pk_live_4afTMPX9ckO9an6kq9zGz0QQ' //'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
+var vendorPrices = {
+  YouTube: 200.00,
+  Twitch: 100.00
+}
 
 function isValidPayMethod (str, obj) {
   if (str != 'stripe' && str != 'paypal') return false
@@ -402,4 +406,11 @@ function subscribeNewLicense (e, el) {
     })
     toasty(strings.whitelistAdded)
   })
+}
+
+function selectServiceBuyout (e, el) {
+  var id = el.value
+  if (!vendorPrices[id]) return
+
+  document.querySelector('[role="buyout-price"]').textContent = '$' + vendorPrices[id].toFixed(2)
 }
