@@ -54,7 +54,7 @@ function pageIsReady () {
 }
 
 function isSignedIn () {
-  return session && session.user
+  return !!(session && session.user)
 }
 
 function isLegacyUser () {
@@ -78,8 +78,8 @@ function hasGoldAccess () {
 function hasLegacyAccess () {
   if (!isLegacyUser()) return false
   if (session.subscription) return !!session.subscription.subscriptionActive
-  if (session.user) return !!session.user.subscriptionActive
-  return false
+  if (session.user && typeof session.user.subscriptionActive != 'undefined') return !!session.user.subscriptionActive
+  return true
 }
 
 function getSession (done) {
