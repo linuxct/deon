@@ -1,105 +1,105 @@
 var browseMusicLimit = 25
 
 function transformBrowseMusic (obj) {
-	obj = obj || {}
+  obj = obj || {}
   var q    = queryStringToObject(window.location.search)
   q.limit  = browseMusicLimit
   q.skip   = parseInt(q.skip) || 0
-	obj.query = objectToQueryString(q)
-	obj.releaseTypes = releaseTypesList
-	checkedTypes = q.types ? q.types.split(',') : []
-	obj.releaseTypes.forEach(function (item) {
+  obj.query = objectToQueryString(q)
+  obj.releaseTypes = releaseTypesList
+  checkedTypes = q.types ? q.types.split(',') : []
+  obj.releaseTypes.forEach(function (item) {
     item.checked = checkedTypes.indexOf(item.key) >= 0
   })
-	return obj
+  return obj
 }
 
 function completedBrowseMusic () {
-  var q    = queryStringToObject(window.location.search)
-
-	if (q.tags) {
-		document.querySelector('input[name="tags"]').value = q.tags
-	}
-	if (q.genres) {
-		document.querySelector('input[name="genres"]').value = q.genres
-	}
+  var q = queryStringToObject(window.location.search)
+  if (q.tags) {
+    document.querySelector('input[name="tags"]').value = q.tags
+  }
+  if (q.genres) {
+    document.querySelector('input[name="genres"]').value = q.genres
+  }
 }
 
 function transformMusicBrowseResults (obj, done) {
-	tracks = obj.results
+  tracks = obj.results
 
   var q = queryStringToObject(window.location.search)
   if (!q.limit)
-    q.limit  = browseMusicLimit
+    q.limit = browseMusicLimit
   q.limit = parseInt(q.limit)
   if (!q.skip)
     q.skip= 0
   q.skip = parseInt(q.skip)
 
-	var next = obj.skip + browseMusicLimit
-	var prev = obj.skip - browseMusicLimit
+  var next = obj.skip + browseMusicLimit
+  var prev = obj.skip - browseMusicLimit
 
-	if(next <= obj.total) {
-		var nq = cloneObject(q)	
-		nq.skip = next
-		obj.next = objectToQueryString(nq)
-	}
+  if(next <= obj.total) {
+    var nq = cloneObject(q)
+    nq.skip = next
+    obj.next = objectToQueryString(nq)
+  }
 
-	if(prev >= 0) {
-		var pq = cloneObject(q)
-		pq.skip = prev
-		obj.previous = objectToQueryString(pq)
-	}
+  if(prev >= 0) {
+    var pq = cloneObject(q)
+    pq.skip = prev
+    obj.previous = objectToQueryString(pq)
+  }
 
-	getArtistsAtlas(tracks, function (err, atlas) {
+  getArtistsAtlas(tracks, function (err, atlas) {
     if (!atlas) atlas = {}
+    var rmap = {}
     tracks.forEach(function (track, index, arr) {
-      var releaseId = track.release._id
-      mapReleaseTrack(track, index)
-      track.releaseId = releaseId
-      track.playUrl = getPlayUrl(track.albums, releaseId)
-      track.artists = mapTrackArtists(track, atlas)
-      track.downloadLink = getDownloadLink(releaseId, track._id)
-      track.genresList = track.genres.filter(function (i) { return i !== track.genre }).join(", ")
-      track.genreBonus = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
-      track.genreLink = encodeURIComponent(track.genre)
+      var release = track.release
+      if (!rmap[release._id]) rmap[release._id] = track.release
+      delete track.release
+      release = rmap[release._id]
+      if (!release.tracks) release.tracks = []
+      release.tracks.push(track)
     })
-    obj.results = tracks
+    var releases = Object.keys(rmap).map(function (key) { return rmap[key] })
+    releases.forEach(function(release) {
+      mapRelease(release)
+      release.tracks.forEach(function (track) {
+        mapReleaseTrack(track)
+        track.releaseId    = release._id
+        track.trackNumber  = getTrackNumber(track, release._id)
+        track.playUrl      = getPlayUrl(track.albums, release._id)
+        track.artists      = mapTrackArtists(track, atlas)
+        track.downloadLink = getDownloadLink(release._id, track._id)
+        track.genresList   = track.genres.filter(function (i) { return i !== track.genre }).join(", ")
+        track.genreBonus   = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
+        track.genreLink    = encodeURIComponent(track.genre)
+      })
+      release.tracks.sort(sortTracks)
+    })
+    releases.sort(sortRelease)
+
+    obj.results = releases
     obj.skip = obj.skip + 1
-	  obj.total = obj.total
+    obj.total = obj.total
     done(null, obj)
   })
-
-	obj.data = {results: [{name: 'fake', album: 'faker'}]}
-
-	return obj
 }
 
 function filterBrowseMusic (e, el) {
-  var data   = getTargetDataSet(el, false, true) || {}
+  var data = getTargetDataSet(el, false, true) || {}
   var q = queryStringToObject(window.location.search)
-  
-  if(data.tags && data.tags.length > 0) {
-  	q.tags = data.tags
-  }
-  else {
-  	delete q.tags
-  } 
-
-  if(data.genres && data.genres.length > 0) {
-  	q.genres = data.genres
-  }
-  else {
-  	delete q.genres
-  }   
-
-  if(data.types && data.types.length > 0) {
-  	q.types = data.types
-  }
-  else {
-  	delete q.types
-  } 
-  var qs = objectToQueryString(q)
-
-	go('/browse?' + qs)
+  filterBrowseMusic.filters.forEach(function (key) {
+    if (data[key] && data[key].length > 0) {
+      q[key] = data[key]
+    } else {
+      delete q[key]
+    }
+  })
+  go('/browse?' + objectToQueryString(q))
 }
+filterBrowseMusic.filters = [
+  'tags',
+  'genres',
+  'types'
+]

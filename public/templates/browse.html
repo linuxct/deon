@@ -4,8 +4,10 @@
         completed="completedBrowseMusic"
         transform="transformBrowseMusic">
     {{#data}}
-    <div class="page width center panel">
-        <table data-set="browse-music" trigger-target="filterBrowseMusic" class="form">
+    <div class="container">
+        <table data-set="browse-music"
+               trigger-target="filterBrowseMusic"
+               class="form">
             <tbody>
                 <tr>
                     <th>Tags</th>
@@ -40,8 +42,9 @@
                 </tr>
             </tbody>
         </table>
-    </div>        
-    <div source="$endpoint/catalog/browse?{{query}}"
+    </div>
+    <div class="container"
+         source="$endpoint/catalog/browse?{{query}}"
          template="music-browse">
     </div>
     {{/data}}
@@ -54,72 +57,46 @@
     {{>loading-view}}
     {{/loading}}
     {{#error}}
-    <div class="page width center panel">
-        <p>{{message}}</p>
-    </div>
+    <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    {{#results.length}}
-    <ul class="page width center panel browse-testing">
-        {{> browseMusicTable}}
+    <ul>
+        {{#results}}
+        <li>
+            <a href="/release/{{catalogId}}">{{title}}</a>
+            <label>{{artists}}</label>
+            <label>{{type}}</label>
+            <label>
+                {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+            </label>
+            <img src="{{cover}}" />
+            <table>
+                <tbody>
+                    {{#tracks}}
+                    <tr>
+                        <td class="shrink">{{>playSong}}</td>
+                        {{>trackCells}}
+                        <td>
+                            {{>trackButtons}}
+                            {{#canPlaylist}}
+                            <select
+                                onchange="addToPlaylist(null, this)"
+                                source="$endpoint/playlist"
+                                template="select-playlist"
+                                track-id="{{_id}}">
+                            </select>
+                            {{/canPlaylist}}
+                        </td>
+                    </tr>
+                    {{/tracks}}
+                </tbody>
+            </table>
+        </li>
+        {{/results}}
     </ul>
-    {{/results.length}}
     {{^total}}
-    <div class="page width center text center panel">No results found.</div>
-    {{/total}}
-    {{#total}}
-      <div class="page width center pagination pad-vertical text center">
-          {{#previous}}
-            <a href="?{{previous}}">Previous</a>
-          {{/previous}}
-          <label>{{skip}} - {{count}} of {{total}}</label>
-          {{#next}}
-            <a href="?{{next}}">Next</a>
-          {{/next}}
-      </div>
+    <div>No results found.</div>
     {{/total}}
     {{/data}}
-</script>
-
-<script type="text/template"
-        mustache-name="browseMusicTable">
-    {{#results.length}}
-    <table>
-        <thead>
-            <tr>
-                <th class="shrink"></th>
-                <th>Title</th>
-                <th>Artists</th>
-                <th>Genre</th>
-                <th>BPM</th>
-                <th>Release</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#results}}
-            <tr>
-                <td class="shrink">
-                  {{>playSong}}
-                </td>
-                {{>trackCells}}
-                <td>
-                    <a href="/release/{{release.catalogId}}">{{release.title}}</a>
-                </td>
-                <td class="push-children-right">
-                    {{>trackButtons}}
-                    {{#canPlaylist}}
-                    <select
-                        onchange="addToPlaylist(null, this)"
-                        source="$endpoint/playlist"
-                        template="select-playlist"
-                        track-id="{{_id}}">
-                    </select>
-                    {{/canPlaylist}}
-                </td>
-            </tr>
-            {{/results}}
-        </tbody>
-    </table>
-    {{/results.length}}
 </script>

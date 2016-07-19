@@ -168,3 +168,18 @@ function sortRelease (a, b) {
   if (a < b) return 1
   return 0
 }
+
+function sortTracks (a, b) {
+    if (a.trackNumber < b.trackNumber) return -1
+    if (a.trackNumber > b.trackNumber) return 1
+    return 0
+}
+
+function getTrackNumber (track, releaseId) {
+    var arr = track.albums || []
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i].albumId == releaseId)
+            return arr[i].trackNumber
+    }
+    return 9999
+}
