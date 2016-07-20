@@ -4,10 +4,10 @@ var datapoint       = 'https://s3.amazonaws.com/data.monstercat.com'
 var session         = null
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
-var lstore          = window.localStorage;
+var lstore          = window.localStorage
 
-(document.createElement('img')).src = '/img/artwork.jpg';
-(document.createElement('img')).src = '/img/artist.jpg';
+preLoadImage('/img/artwork.jpg')
+preLoadImage('/img/artist.jpg')
 
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
@@ -42,6 +42,10 @@ var releaseTypes = {
 }
 
 var releaseTypesList = [releaseTypes.album, releaseTypes.ep, releaseTypes.single, releaseTypes.podcast]
+
+function preLoadImage (src) {
+  (document.createElement('img')).src = src
+}
 
 function bgmebro() {
   if (!lstore) return

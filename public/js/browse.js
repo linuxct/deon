@@ -6,22 +6,29 @@ function transformBrowseMusic (obj) {
   q.limit  = browseMusicLimit
   q.skip   = parseInt(q.skip) || 0
   obj.query = objectToQueryString(q)
-  obj.releaseTypes = releaseTypesList
-  checkedTypes = q.types ? q.types.split(',') : []
-  obj.releaseTypes.forEach(function (item) {
-    item.checked = checkedTypes.indexOf(item.key) >= 0
-  })
   return obj
 }
 
 function completedBrowseMusic () {
   var q = queryStringToObject(window.location.search)
-  if (q.tags) {
-    document.querySelector('input[name="tags"]').value = q.tags
-  }
-  if (q.genres) {
-    document.querySelector('input[name="genres"]').value = q.genres
-  }
+  var cel = document.querySelector('[role="filters-list"]')
+  filterBrowseMusic.filters.forEach(function (filter) {
+    var values = (q[filter] || '').split(',').map(mapStringTrim).filter(filterNil)
+    values.forEach(function (value) {
+      var el = createFilterItem (filter, value)
+      cel.appendChild(el)
+    })
+  })
+}
+
+function createFilterItem (type, value) {
+  var div = document.createElement('div')
+  var template = getTemplateEl('browse-filter-item')
+  render(div, template.textContent, {
+    type: type,
+    value: value
+  })
+  return div.firstElementChild
 }
 
 function transformMusicBrowseResults (obj, done) {
@@ -86,9 +93,20 @@ function transformMusicBrowseResults (obj, done) {
   })
 }
 
+function addBrowseFilter (e, el) {
+  var cel = document.querySelector('[role="filters-list"]')
+  var el = createFilterItem(el.name, el.value)
+  cel.appendChild(el)
+}
+
+function removeBrowseFilter (e, el) {
+  var li = el.parentElement
+  li.parentElement.removeChild(li)
+}
+
 function filterBrowseMusic (e, el) {
-  var data = getTargetDataSet(el, false, true) || {}
   var q = queryStringToObject(window.location.search)
+  var data = getTargetDataSet(el) || {}
   filterBrowseMusic.filters.forEach(function (key) {
     if (data[key] && data[key].length > 0) {
       q[key] = data[key]

@@ -1,53 +1,60 @@
 <script type="text/template"
         route="^browse"
         page-title="Browse Music"
-        completed="completedBrowseMusic"
         transform="transformBrowseMusic">
     {{#data}}
     <div class="container">
-        <table data-set="browse-music"
-               trigger-target="filterBrowseMusic"
-               class="form">
-            <tbody>
-                <tr>
-                    <th>Tags</th>
-                    <td>
-                        <input type="text" name="tags" placeholder="Song Tags" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Genres</th>
-                    <td>
-                        <input type="text" name="genres" placeholder="Song Genres" />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Types</th>
-                    <td>
-                        <ul>
-                        {{#releaseTypes}}
-                            <li>
-                                <input type="checkbox" name="types" value="{{key}}" id="type-{{key}}" {{#checked}}checked="true"{{/checked}} />
-                                <label for="type-{{key}}">{{name}}</label>
-                            </li>
-                        {{/releaseTypes}}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>
-                        <button action="filterBrowseMusic" trigger="filterBrowseMusic" data-set-target="browse-music">Filter</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="container"
-         source="$endpoint/catalog/browse?{{query}}"
-         template="music-browse">
+        <div source="$endpoint/catalog/browse/filters"
+             template="browse-filters">
+        </div>
+        <div source="$endpoint/catalog/browse?{{query}}"
+             template="music-browse">
+        </div>
     </div>
     {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="browse-filters"
+        completed="completedBrowseMusic">
+    {{#loading}}{{>loading-view}}{{/loading}}
+    {{#error}}<p>{{message}}</p>{{/error}}
+    {{#data}}
+    <ul role="filters-list" data-set="browse-filters"></ul>
+    Add Filters: 
+    <select name="genre" onchange="addBrowseFilter(null, this)">
+        <option value="">Genre</option>
+        {{#genres}}
+        <option value="{{name}}">{{name}}</option>
+        {{/genres}}
+    </select>
+    <select name="tag" onchange="addBrowseFilter(null, this)">
+        <option value="">Tag</option>
+        {{#tags}}
+        <option>{{.}}</option>
+        {{/tags}}
+    </select>
+    <select name="type" onchange="addBrowseFilter(null, this)">
+        <option value="">Release Type</option>
+        {{#types}}
+        <option>{{.}}</option>
+        {{/types}}
+    </select>
+    <button action="filterBrowseMusic" data-set-target="browse-filters">Filter</button>
+    {{/data}}
+</script>
+
+<script type="text/template" template-name="browse-filter-item">
+    <li>
+        <input type="hidden" name="{{type}}s" value="{{value}}"/>
+        <label>
+            <span>{{type}}: </span>
+            <span>{{value}}</span>
+        </label>
+        <button class="faux" action="removeBrowseFilter">
+            <i class="fa fa-trash-o"></i>
+        </button>
+    </li>
 </script>
 
 <script type="text/template"

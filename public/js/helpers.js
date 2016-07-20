@@ -23,6 +23,14 @@ flattenObject.dive = function (flat, val, chain, sep) {
   }
 }
 
+function filterNil (i) {
+  return !!i
+}
+
+function mapStringTrim (str) {
+  return str.trim()
+}
+
 function toArray (nl) {
   var arr = []
   for (var i = 0, ref = arr.length = nl.length; i < ref; i++) {
