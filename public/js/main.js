@@ -542,8 +542,8 @@ function transformWhitelists (obj) {
     if (whitelist.availableUntil)
       whitelist.nextBillingDate = formatDate(whitelist.availableUntil)
     if (whitelist.subscriptionActive)
-      whitelist.cost = (5).toFixed(2)
-    whitelist.monthlyCost = 500
+      whitelist.cost = (whitelist.amount / 100).toFixed(2)
+    whitelist.monthlyCost = whitelist.amount
     whitelist.canBuyOut = whitelist.paidInFull ? { _id: whitelist._id } : undefined
     if (whitelist.whitelisted)
       whitelist.licenseUrl = endpoint + '/self/whitelist/' + whitelist._id + '.pdf'

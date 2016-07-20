@@ -24,7 +24,8 @@
 </script>
 
 <script type="text/template" mustache-name="vendor-selector">
-    <select name="vendor">
+    <select name="vendor"
+            onchange="selectServiceBuyout(null, this)">
         <option value="">Select One</option>
         <option>YouTube</option>
         <option>Twitch</option>
