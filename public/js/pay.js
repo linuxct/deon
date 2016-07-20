@@ -1,7 +1,13 @@
 var STRIPE_PK = 'pk_live_4afTMPX9ckO9an6kq9zGz0QQ' //'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
 var vendorPrices = {
-  YouTube: 200.00,
-  Twitch: 100.00
+  YouTube: {
+    monthly: 1000,
+    total: 20000
+  },
+  Twitch: {
+    monthly: 500,
+    total: 10000
+  }
 }
 
 function isValidPayMethod (str, obj) {
@@ -396,9 +402,9 @@ function subscribeNewLicense (e, el) {
     var name = "Whitelisting for " + data.identity + " on " + data.vendor
     addSub({
       name: name,
-      cost: "5.00",
+      cost: (vendorPrices[data.vendor].monthly / 100).toFixed(2),
       fields: [
-        { key: "amount", value: 500 },
+        { key: "amount", value: vendorPrices[data.vendor].monthly },
         { key: "type", value: 'whitelist'},
         { key: "vendor", value: data.vendor },
         { key: "identity", value: data.identity }
@@ -412,5 +418,5 @@ function selectServiceBuyout (e, el) {
   var id = el.value
   if (!vendorPrices[id]) return
 
-  document.querySelector('[role="buyout-price"]').textContent = '$' + vendorPrices[id].toFixed(2)
+  document.querySelector('[role="buyout-price"]').textContent = '$' + (vendorPrices[id].total / 100).toFixed(2)
 }
