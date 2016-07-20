@@ -9,13 +9,18 @@ function transformBrowseMusic (obj) {
   return obj
 }
 
+function mapFilterString (str) {
+  return str.substr(0, str.lastIndexOf('s'))
+}
+
 function completedBrowseMusic () {
   var q = queryStringToObject(window.location.search)
   var cel = document.querySelector('[role="filters-list"]')
+  if (!cel) return
   filterBrowseMusic.filters.forEach(function (filter) {
     var values = (q[filter] || '').split(',').map(mapStringTrim).filter(filterNil)
     values.forEach(function (value) {
-      var el = createFilterItem (filter, value)
+      var el = createFilterItem(mapFilterString(filter), value)
       cel.appendChild(el)
     })
   })
