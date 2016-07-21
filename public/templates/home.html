@@ -1,6 +1,6 @@
 <script type="text/template"
         route="^(\?.*)?$"
-        page-title="Home">
+        page-title="Monstercat">
     <div source="$endpoint/catalog/release?limit=15" template="homeFeatured"></div>
     <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="homePodcast"></div>
     <div source="$endpoint/catalog/news" template="blog-stories"></div>

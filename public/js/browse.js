@@ -198,6 +198,8 @@ function browseMore (e, el) {
   delete q.limit
   delete q.skip
   q.pages = pages + 1
+  var title = "Browse Music - " + q.pages + " Pages"
   var url = window.location.origin + window.location.pathname + '?' + objectToQueryString(q)
-  history.pushState({}, "", url)
+  document.title = title
+  history.pushState({}, title, url)
 }
