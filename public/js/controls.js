@@ -116,6 +116,7 @@ function playSongs(e, el) {
 
 function onNewSong(e) {
   document.querySelector(sel.title).textContent = e.detail.item.title
+  if (typeof autoBrowseMore == 'function') autoBrowseMore()
 }
 
 function updateControls() {

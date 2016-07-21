@@ -1,4 +1,5 @@
 var browseMusicLimit = 25
+var browseUri = '/browse' // TODO 'music'
 
 function transformBrowseMusic (obj) {
   obj = obj || {}
@@ -137,7 +138,7 @@ function filterBrowseMusic (e, el) {
     }
   })
   delete q.pages
-  go('/browse?' + objectToQueryString(q))
+  go(browseUri + '?' + objectToQueryString(q))
 }
 filterBrowseMusic.filters = [
   'tags',
@@ -145,9 +146,19 @@ filterBrowseMusic.filters = [
   'types'
 ]
 
+function autoBrowseMore () {
+  var btn = getBrowseMoreButton()
+  if (!player) return
+  if (window.location.path != browseUri) return
+  if (player.index < player.items.length) return
+  // Simple logic to avoid retrigger if not available or already loading
+  if (btn && btn.classList.contains('hide')) return
+  browseMore()
+}
+
 function browseMore (e, el) {
   var btn = getBrowseMoreButton()
-  btn.classList.add('hide')
+  if (btn) btn.classList.add('hide')
   var q = getBrowseMusicQuery()
   var pages = parseInt(q.pages) || 0
   q.limit = browseMusicLimit
