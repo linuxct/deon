@@ -190,7 +190,7 @@ function browseMore (e, el) {
   var btn = getBrowseMoreButton()
   if (btn) btn.classList.add('hide')
   var q = getBrowseMusicQuery()
-  var pages = parseInt(q.pages) || 0
+  var pages = parseInt(q.pages) || 1
   q.limit = browseMusicLimit
   q.skip = pages * q.limit
   delete q.pages
