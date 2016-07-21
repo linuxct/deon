@@ -134,17 +134,10 @@ filterBrowseMusic.filters = [
 ]
 
 function browseMore (e, el) {
-  /*
-  TODO
-  * load next page results
-  * set current amount of pages viewing
-  * add new results to player
-  */
   var q = getBrowseMusicQuery()
   var pages = parseInt(q.pages) || 0
   q.limit = browseMusicLimit
   q.skip = pages * q.limit
-  //if (q.skip) q.skip++
   delete q.pages
   openBrowsePage(q)
   delete q.limit
