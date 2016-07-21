@@ -58,7 +58,8 @@ function openBrowsePage (q) {
 }
 
 function transformMusicBrowseResults (obj, done) {
-  tracks = obj.results
+  var tracks = obj.results
+  var playIndexOffset = obj.skip || 0
   getArtistsAtlas(tracks, function (err, atlas) {
     if (!atlas) atlas = {}
     var rmap = {}
@@ -73,8 +74,9 @@ function transformMusicBrowseResults (obj, done) {
     var releases = Object.keys(rmap).map(function (key) { return rmap[key] })
     releases.forEach(function(release) {
       mapRelease(release)
-      release.tracks.forEach(function (track) {
+      release.tracks.forEach(function (track, index, arr) {
         mapReleaseTrack(track)
+        track.index        = playIndexOffset
         track.releaseId    = release._id
         track.trackNumber  = getTrackNumber(track, release._id)
         track.playUrl      = getPlayUrl(track.albums, release._id)
@@ -83,6 +85,7 @@ function transformMusicBrowseResults (obj, done) {
         track.genresList   = track.genres.filter(function (i) { return i !== track.genre }).join(", ")
         track.genreBonus   = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
         track.genreLink    = encodeURIComponent(track.genre)
+        playIndexOffset++
       })
       release.tracks.sort(sortTracks)
     })
@@ -94,6 +97,7 @@ function transformMusicBrowseResults (obj, done) {
 }
 
 function completedMusicBrowseResults () {
+  player.set(buildTracks())
   var el = document.querySelector('[role="browse-more"]')
   if (!el) return
   el.disabled = false
