@@ -110,6 +110,36 @@ function completedMusicBrowseResults (source, obj) {
   var method = data && data.results && data.skip + data.results.length >= data.total ? "add" : "remove"
   el.disabled = false
   el.classList[method]('hide')
+  mergeBrowseResults()
+}
+
+function mergeBrowseResults () {
+  var map = {}
+  var els = toArray(document.querySelectorAll('li[catalog-id]'))
+  els.forEach(function (el) {
+    var id = el.getAttribute('catalog-id')
+    if (!map[id]) map[id] = []
+    map[id].push(el)
+  })
+  Object.keys(map).map(function (key) {
+    return map[key]
+  }).filter(function (arr) {
+    return arr.length > 1
+  }).forEach(mergeBrowseResults.forEachMerger)
+}
+mergeBrowseResults.forEachMerger = function forEachMerger (arr) {
+  var a = arr.shift()
+  var tbody = a.querySelector('tbody')
+  var frag = document.createDocumentFragment()
+  for (var j = 0; j < arr.length; j++) {
+    var b = arr[j]
+    var trs = toArray(b.querySelectorAll('tbody > tr'))
+    for (var i = 0; i < trs.length; i++) {
+      frag.appendChild(trs[i])
+    }
+    b.parentElement.removeChild(b)
+  }
+  tbody.appendChild(frag)
 }
 
 function addBrowseFilter (e, el) {
