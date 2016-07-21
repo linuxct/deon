@@ -85,6 +85,7 @@ function transformMusicBrowseResults (obj, done) {
         track.genresList   = track.genres.filter(function (i) { return i !== track.genre }).join(", ")
         track.genreBonus   = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
         track.genreLink    = encodeURIComponent(track.genre)
+        track.time         = formatDuration(track.duration)
         playIndexOffset++
       })
       release.tracks.sort(sortTracks)
