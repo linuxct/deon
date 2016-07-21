@@ -96,11 +96,18 @@ function transformMusicBrowseResults (obj, done) {
   })
 }
 
-function completedMusicBrowseResults () {
+function getBrowseMoreButton () {
+  return document.querySelector('[role="browse-more"]')
+}
+
+function completedMusicBrowseResults (source, obj) {
   player.set(buildTracks())
-  var el = document.querySelector('[role="browse-more"]')
+  var el = getBrowseMoreButton()
   if (!el) return
+  var data = obj.data
+  var method = data && data.results && data.skip + data.results.length >= data.total ? "add" : "remove"
   el.disabled = false
+  el.classList[method]('hide')
 }
 
 function addBrowseFilter (e, el) {
@@ -138,6 +145,8 @@ filterBrowseMusic.filters = [
 ]
 
 function browseMore (e, el) {
+  var btn = getBrowseMoreButton()
+  btn.classList.add('hide')
   var q = getBrowseMusicQuery()
   var pages = parseInt(q.pages) || 0
   q.limit = browseMusicLimit
