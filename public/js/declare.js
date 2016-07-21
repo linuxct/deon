@@ -61,13 +61,7 @@ function requestDetect (opts, done, fallback) {
 }
 
 function requestJSON (opts, done) {
-  if (typeof opts.headers != 'object') opts.headers = {}
-  opts.headers['Accept'] = 'application/json'
-  if (opts.data) {
-    opts.headers['Content-Type'] = 'application/json'
-    opts.data = JSON.stringify(opts.data)
-  }
-  return request(opts, function (err, body, xhr) {
+  function resolve (err, body, xhr) {
     var obj
     var parseErr
     if (xhr.responseText) {
@@ -88,7 +82,14 @@ function requestJSON (opts, done) {
       err = parseErr
     }
     done(err, obj, xhr)
-  })
+  }
+  if (typeof opts.headers != 'object') opts.headers = {}
+  opts.headers['Accept'] = 'application/json'
+  if (opts.data) {
+    opts.headers['Content-Type'] = 'application/json'
+    opts.data = JSON.stringify(opts.data)
+  }
+  return request(opts, resolve)
 }
 
 function loadCache (source, done, reset, fallback) {
@@ -112,7 +113,7 @@ function loadCache (source, done, reset, fallback) {
     url: source,
     withCredentials: true
   }, function (err, obj, xhr) {
-    if (obj) cache(source, obj)
+    if (obj) cache(source, cloneObject(obj))
     callbacks.forEach(function (fn) {
       fn(err, obj)
     })
@@ -461,7 +462,7 @@ function cloneObject (obj) {
   if (!obj || type == 'function' || type == 'string' || type == 'number') return obj
   if (obj instanceof Date) return new Date(obj)
   if (obj instanceof RegExp) return new RegExp(obj)
-  if (obj instanceof Array) return obj.slice()
+  if (obj instanceof Array) return obj.map(cloneObject)
   var nobj = {}
   for (var key in obj) {
     nobj[key] = cloneObject(obj[key])

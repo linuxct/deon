@@ -173,7 +173,8 @@ function getArtistsAtlas (tks, done) {
       return artist.artistId || artist._id
     }))
   })
-  ids = uniqueArray(ids)
+  ids = uniqueArray(ids).filter(filterNil)
+  if (!ids.length) return done(null, [])
   var url = endpoint + '/catalog/artists-by-users?ids=' + ids.join(',')
   loadCache(url, function (err, aobj) {
     if (err) return done(err)

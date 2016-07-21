@@ -1,22 +1,22 @@
 <script type="text/template"
         route="^browse"
         page-title="Browse Music"
-        transform="transformBrowseMusic">
+        transform="transformBrowseMusic"
+        completed="completedBrowseMusic">
     {{#data}}
     <div class="container">
         <div source="$endpoint/catalog/browse/filters"
              template="browse-filters">
         </div>
-        <div source="$endpoint/catalog/browse?{{query}}"
-             template="music-browse">
-        </div>
+        <div role="browse-pages"></div>
+        <button action="browseMore" role="browse-more" disabled>Show More</button>
     </div>
     {{/data}}
 </script>
 
 <script type="text/template"
         template-name="browse-filters"
-        completed="completedBrowseMusic">
+        completed="completedBrowseFilters">
     {{#loading}}{{>loading-view}}{{/loading}}
     {{#error}}<p>{{message}}</p>{{/error}}
     {{#data}}
@@ -58,52 +58,57 @@
 </script>
 
 <script type="text/template"
+        template-name="browse-page">
+    <ul source="{{source}}" template="music-browse"></ul>
+</script>
+
+<script type="text/template"
         template-name="music-browse"
-        transform="transformMusicBrowseResults">
+        transform="transformMusicBrowseResults"
+        completed="completedMusicBrowseResults">
     {{#loading}}
-    {{>loading-view}}
+    <li>{{>loading-view}}</li>
     {{/loading}}
     {{#error}}
-    <p>{{message}}</p>
+    <li><p>{{message}}</p></li>
     {{/error}}
     {{#data}}
-    <ul>
-        {{#results}}
-        <li>
-            <a href="/release/{{catalogId}}">{{title}}</a>
-            <label>{{artists}}</label>
-            <label>{{type}}</label>
-            <label>
-                {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
-                {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
-            </label>
-            <img src="{{cover}}" />
-            <table>
-                <tbody>
-                    {{#tracks}}
-                    <tr>
-                        <td class="shrink">{{>playSong}}</td>
-                        {{>trackCells}}
-                        <td>
-                            {{>trackButtons}}
-                            {{#canPlaylist}}
-                            <select
-                                onchange="addToPlaylist(null, this)"
-                                source="$endpoint/playlist"
-                                template="select-playlist"
-                                track-id="{{_id}}">
-                            </select>
-                            {{/canPlaylist}}
-                        </td>
-                    </tr>
-                    {{/tracks}}
-                </tbody>
-            </table>
-        </li>
-        {{/results}}
-    </ul>
-    {{^total}}
-    <div>No results found.</div>
-    {{/total}}
+    {{#results}}
+    <li>
+        <a href="/release/{{catalogId}}">{{title}}</a>
+        <label>{{artists}}</label>
+        <label>{{type}}</label>
+        <label>
+            {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+            {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+        </label>
+        <img src="{{cover}}" width="100"/>
+        <table>
+            <tbody>
+                {{#tracks}}
+                <tr>
+                    <td>{{trackNumber}}.</td>
+                    <td class="shrink">{{>playSong}}</td>
+                    {{>trackCells}}
+                    <td>
+                        {{>trackButtons}}
+                        {{#canPlaylist}}
+                        <select
+                            onchange="addToPlaylist(null, this)"
+                            source="$endpoint/playlist"
+                            template="select-playlist"
+                            track-id="{{_id}}">
+                        </select>
+                        {{/canPlaylist}}
+                    </td>
+                </tr>
+                {{/tracks}}
+            </tbody>
+        </table>
+    </li>
+    {{/results}}
+    {{^results}}
+    <li><p>No results found.</li>
+    {{/results}}
     {{/data}}
 </script>

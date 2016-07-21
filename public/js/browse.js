@@ -3,8 +3,8 @@ var browseMusicLimit = 25
 function transformBrowseMusic (obj) {
   obj = obj || {}
   var q    = queryStringToObject(window.location.search)
-  q.limit  = browseMusicLimit
-  q.skip   = parseInt(q.skip) || 0
+  q.limit  = (q.pages || 0) * browseMusicLimit
+  q.skip   = 0
   obj.query = objectToQueryString(q)
   return obj
 }
@@ -13,7 +13,7 @@ function mapFilterString (str) {
   return str.substr(0, str.lastIndexOf('s'))
 }
 
-function completedBrowseMusic () {
+function completedBrowseFilters () {
   var q = queryStringToObject(window.location.search)
   var cel = document.querySelector('[role="filters-list"]')
   if (!cel) return
@@ -36,32 +36,29 @@ function createFilterItem (type, value) {
   return div.firstElementChild
 }
 
+function completedBrowseMusic () {
+  var q = getBrowseMusicQuery()
+  q.limit = browseMusicLimit * (parseInt(q.pages) || 1)
+  q.skip = 0
+  delete q.pages
+  openBrowsePage(q)
+}
+
+function openBrowsePage (q) {
+  var cel = document.querySelector('[role="browse-pages"]')
+  if (!cel) return
+  var tel = getTemplateEl('browse-page')
+  var div = document.createElement('div')
+  render(div, tel.textContent, {
+    source: endpoint + '/catalog/browse/?' + objectToQueryString(q)
+  })
+  var ul = div.firstElementChild
+  cel.appendChild(ul)
+  loadSubSources(ul)
+}
+
 function transformMusicBrowseResults (obj, done) {
   tracks = obj.results
-
-  var q = queryStringToObject(window.location.search)
-  if (!q.limit)
-    q.limit = browseMusicLimit
-  q.limit = parseInt(q.limit)
-  if (!q.skip)
-    q.skip= 0
-  q.skip = parseInt(q.skip)
-
-  var next = obj.skip + browseMusicLimit
-  var prev = obj.skip - browseMusicLimit
-
-  if(next <= obj.total) {
-    var nq = cloneObject(q)
-    nq.skip = next
-    obj.next = objectToQueryString(nq)
-  }
-
-  if(prev >= 0) {
-    var pq = cloneObject(q)
-    pq.skip = prev
-    obj.previous = objectToQueryString(pq)
-  }
-
   getArtistsAtlas(tracks, function (err, atlas) {
     if (!atlas) atlas = {}
     var rmap = {}
@@ -90,12 +87,16 @@ function transformMusicBrowseResults (obj, done) {
       release.tracks.sort(sortTracks)
     })
     releases.sort(sortRelease)
-
     obj.results = releases
-    obj.skip = obj.skip + 1
     obj.total = obj.total
     done(null, obj)
   })
+}
+
+function completedMusicBrowseResults () {
+  var el = document.querySelector('[role="browse-more"]')
+  if (!el) return
+  el.disabled = false
 }
 
 function addBrowseFilter (e, el) {
@@ -109,8 +110,12 @@ function removeBrowseFilter (e, el) {
   li.parentElement.removeChild(li)
 }
 
+function getBrowseMusicQuery () {
+  return queryStringToObject(window.location.search)
+}
+
 function filterBrowseMusic (e, el) {
-  var q = queryStringToObject(window.location.search)
+  var q = getBrowseMusicQuery()
   var data = getTargetDataSet(el) || {}
   filterBrowseMusic.filters.forEach(function (key) {
     if (data[key] && data[key].length > 0) {
@@ -119,6 +124,7 @@ function filterBrowseMusic (e, el) {
       delete q[key]
     }
   })
+  delete q.pages
   go('/browse?' + objectToQueryString(q))
 }
 filterBrowseMusic.filters = [
@@ -126,3 +132,24 @@ filterBrowseMusic.filters = [
   'genres',
   'types'
 ]
+
+function browseMore (e, el) {
+  /*
+  TODO
+  * load next page results
+  * set current amount of pages viewing
+  * add new results to player
+  */
+  var q = getBrowseMusicQuery()
+  var pages = parseInt(q.pages) || 0
+  q.limit = browseMusicLimit
+  q.skip = pages * q.limit
+  //if (q.skip) q.skip++
+  delete q.pages
+  openBrowsePage(q)
+  delete q.limit
+  delete q.skip
+  q.pages = pages + 1
+  var url = window.location.origin + window.location.pathname + '?' + objectToQueryString(q)
+  history.pushState({}, "", url)
+}
