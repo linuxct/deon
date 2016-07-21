@@ -214,15 +214,19 @@ function loadReleaseAndTrack (obj, done) {
 }
 
 function getPlayUrl (arr, releaseId) {
-  if (!(arr instanceof Array)) arr = []
-  var release
-  for (var i=0; i<arr.length; i++) {
-    if (arr[i].albumId == releaseId) {
-      release = arr[i]
-      break
+  var hash
+  if (arr instanceof Array) {
+    var release
+    for (var i=0; i<arr.length; i++) {
+      if (arr[i].albumId == releaseId) {
+        hash = (arr[i] || {}).streamHash
+        break
+      }
     }
+  } else if (arr.streamHash) {
+    hash = arr.streamHash
   }
-  return release ? datapoint + '/blobs/' + release.streamHash : undefined
+  return hash ? datapoint + '/blobs/' + hash : undefined
 }
 
 function getMyPreferedDownloadOption () {
