@@ -900,6 +900,12 @@ section {
   position: relative;
 }
 
+.mcat-logo .text{
+  display: inline-block;
+  min-width: 141px;
+  margin-top: .25rem;
+}
+
 .mcat-logo .logo-white{
   display: none;
 }
@@ -909,17 +915,6 @@ section {
   width: 100%;
   top: -100%;
   left: 0;
-}
-
-.mcat-mast .mcat-logo label {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-shadow: 0 0 1px rgba(0,0,0,0.08); 
-  font-family: "Geometry Soft Pro Bold", Impact, "Arial Black", sans-serif;
-  text-transform: lowercase;
-  font-size: 28px;
-  letter-spacing: 1px;
-  cursor: pointer;
 }
 
 .mcat-mast .mcat-nav {
