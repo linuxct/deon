@@ -1399,7 +1399,7 @@ span.note a {
 }
 
 .modal,
-.f {
+.toast {
   animation: scalingModal .45s ease 1 forwards;
   -webkit-backface-visibility: hidden;
 }
