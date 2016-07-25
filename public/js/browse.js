@@ -16,9 +16,9 @@ function mapFilterString (str) {
 
 function completedBrowseFilters () {
   var q = queryStringToObject(window.location.search)
-  var cel = document.querySelector('[role="filters-list"]')
-  if (!cel) return
   filterBrowseMusic.filters.forEach(function (filter) {
+    var cel = document.querySelector('[role="filters-list-' + filter + '"]')
+    if (!cel) return
     var values = (q[filter] || '').split(',').map(mapStringTrim).filter(filterNil)
     values.forEach(function (value) {
       var el = createFilterItem(mapFilterString(filter), value)
@@ -143,7 +143,7 @@ mergeBrowseResults.forEachMerger = function forEachMerger (arr) {
 }
 
 function addBrowseFilter (e, el) {
-  var cel = document.querySelector('[role="filters-list"]')
+  var cel = document.querySelector('[role="filters-list-' + el.name + 's"]')
   var el = createFilterItem(el.name, el.value)
   cel.appendChild(el)
 }

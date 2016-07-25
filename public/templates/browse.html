@@ -5,11 +5,19 @@
         completed="completedBrowseMusic">
     {{#data}}
     <div class="container">
-        <div source="$endpoint/catalog/browse/filters"
-             template="browse-filters">
+        <h1>Browse</h1>
+        <div class="flex panel">
+            <div class="col-xs-12 col-sm-12 col-md-2 browse-filters" source="$endpoint/catalog/browse/filters"
+                 template="browse-filters">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-10" role="browse-pages"></div>
+            <div class="col-xs-12 col-sm-12 col-md-2"></div>
+            <div class="col-xs-12 col-sm-12 col-md-10">
+                <div class="button-group text center">
+                    <button action="browseMore" role="browse-more" class="hide" disabled>Show More</button>
+                </div>
+            </div>
         </div>
-        <div role="browse-pages"></div>
-        <button action="browseMore" role="browse-more" class="hide" disabled>Show More</button>
     </div>
     {{/data}}
 </script>
@@ -20,46 +28,55 @@
     {{#loading}}{{>loading-view}}{{/loading}}
     {{#error}}<p>{{message}}</p>{{/error}}
     {{#data}}
-    <ul role="filters-list" data-set="browse-filters"></ul>
-    Add Filters: 
-    <select name="genre" onchange="addBrowseFilter(null, this)">
+    <div data-set="browse-filters">
+    <fieldset class="filter-group">
+      <h4>Release Type</h4>
+      <ul class="filter-list" role="filters-list-types"></ul>
+      <select name="type" onchange="addBrowseFilter(null, this)">
+        <option value="">Release Type</option>
+        {{#types}}
+        <option value="{{.}}">{{.}}</option>
+        {{/types}}
+      </select>
+    </fieldset>
+    <fieldset class="filter-group">
+      <h4>Genre</h4>
+      <ul class="filter-list" role="filters-list-genres"></ul>
+      <select name="genre" onchange="addBrowseFilter(null, this)">
         <option value="">Genre</option>
         {{#genres}}
         <option value="{{name}}">{{name}}</option>
-        {{/genres}}
-    </select>
-    <select name="tag" onchange="addBrowseFilter(null, this)">
+        {{/genres}} 
+      </select>
+    </fieldset>
+    <fieldset class="filter-group">
+      <h4>Tag</h4>
+      <ul class="filter-list" role="filters-list-tags"></ul>
+      <select name="tag" onchange="addBrowseFilter(null, this)">
         <option value="">Tag</option>
         {{#tags}}
-        <option>{{.}}</option>
+        <option value="{{.}}">{{.}}</option>
         {{/tags}}
-    </select>
-    <select name="type" onchange="addBrowseFilter(null, this)">
-        <option value="">Release Type</option>
-        {{#types}}
-        <option>{{.}}</option>
-        {{/types}}
-    </select>
-    <button action="filterBrowseMusic" data-set-target="browse-filters">Filter</button>
+      </select>
+    </fieldset>
+    </div>
+    <div class="button-group button-group--filters">
+        <button class="button--cta button--full" action="filterBrowseMusic" data-set-target="browse-filters">Filter</button>
+        <button class="button--full" action="filterBrowseMusic">Clear</button>
+    </div>
     {{/data}}
 </script>
 
 <script type="text/template" template-name="browse-filter-item">
     <li>
         <input type="hidden" name="{{type}}s" value="{{value}}"/>
-        <label>
-            <span>{{type}}: </span>
-            <span>{{value}}</span>
-        </label>
-        <button class="faux" action="removeBrowseFilter">
-            <i class="fa fa-trash-o"></i>
-        </button>
+        <button action="removeBrowseFilter">{{value}} <i class="fa fa-close"></i></button>
     </li>
 </script>
 
 <script type="text/template"
         template-name="browse-page">
-    <ul source="{{source}}" template="music-browse"></ul>
+    <ul source="{{source}}" template="music-browse" class="music-browse"></ul>
 </script>
 
 <script type="text/template"
@@ -75,14 +92,22 @@
     {{#data}}
     {{#results}}
     <li catalog-id="{{catalogId}}">
-        <a href="/release/{{catalogId}}">{{title}}</a>
-        <label>{{artists}}</label>
-        <label>{{type}}</label>
-        <label>
-            {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
-            {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
-        </label>
-        <img src="{{cover}}" width="100"/>
+        <div class="bgbox bgbox--browse" style="background-image: url('{{coverBig}}')">
+            <div class="bgbox-blanket cl-white">
+                <div class="details-box clearfix">
+                    <a href="/release/{{catalogId}}">
+                        <img class="artwork" src="{{cover}}"/>
+                        <h2 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h2>
+                    </a>
+                    <h3>{{artists}}</h3>
+                    <label>
+                        {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                        {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                    </label>
+                    <label>{{type}}</label>
+                </div>
+            </div>
+        </div>
         <table>
             <tbody>
                 {{#tracks}}
@@ -108,7 +133,7 @@
     </li>
     {{/results}}
     {{^results}}
-    <li><p>No results found.</li>
+    <li class="error"><p>No results found.</li>
     {{/results}}
     {{/data}}
 </script>
