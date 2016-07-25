@@ -1,5 +1,6 @@
 <script type="text/template"
-        route="^signin">
+        route="^(signin|sign-in)"
+        page-title="Sign In">
     <div class="container">
         <h1>Sign In</h1>
         <div class="flex sign-split">
@@ -52,7 +53,8 @@
 </script>
 
 <script type="text/template"
-        route="authenticate-token">
+        route="authenticate-token"
+        page-title="Sign In 2 Factor">
     <div class="container">
         <h1>Authenticate Token</h1>
         <div class="panel">
@@ -65,7 +67,7 @@
                 </tr>
             </table>
             <div class="button-group">
-                <button class="button--cta button--full">action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
+                <button class="button--cta button--full" action="authenticateTwoFactorToken" data-set-target="auth-token">Authorize</button>
                 <button class="button--full" action="resendTwoFactorToken">Resend Token</button>
             </div>
         </div>
@@ -73,7 +75,8 @@
 </script>
 
 <script type="text/template"
-        route="^forgot-password">
+        route="^forgot-password"
+        page-title="Forgot Password?">
     <div class="container">
         <h1>Forgot Password?</h1>
         <div class="panel">
@@ -98,7 +101,8 @@
 </script>
 
 <script type="text/template"
-        route="^reset-password">
+        route="^reset-password"
+        page-title="Reset Password">
     <div class="container">
         <h1>Reset Password</h1>
         <div class="panel">
@@ -135,6 +139,7 @@
 
 <script type="text/template"
         route="^confirm-sign-up"
+        page-title="Confirm Sign Up"
         transform="mapConfirmSignup">
     <div class="container">
         <h1>Confirm Sign Up</h1>
@@ -199,6 +204,7 @@
 
 <script type="text/template"
         route="^sign-up"
+        page-title="Sign Up"
         transform="mapSignup">
     <div class="container">
         <h1>Sign Up</h1>

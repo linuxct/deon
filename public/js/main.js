@@ -648,24 +648,6 @@ function completedReleaseTracks (source, obj) {
   pageIsReady()
 }
 
-function completedWebsiteDetails (source, obj) {
-  if (obj.error) return
-  var r = obj.data
-  appendMetaData({
-    'og:image': r.image,
-  })
-  if(r.title && r.artists) {
-    setPageTitle(r.title + ' by ' + r.artists)
-  }
-  pageIsReady()
-}
-
-function completedArtist (source, obj) {
-  if(obj.error) return
-  setPageTitle(obj.data.name)
-  pageIsReady()
-}
-
 function completedMusic (source, obj) {
   if(obj.error) return
   var parts = []
@@ -700,7 +682,8 @@ function completedArtist (source, obj) {
     'og:title': obj.data.name,
     'og:description': 'Bio and discography for ' + obj.data.name,
     'og:type': 'profile',
-    'og:url': location.toString()
+    'og:url': location.toString(),
+    'og:image': obj.data.image
   }
   setMetaData(meta)
   pageIsReady()

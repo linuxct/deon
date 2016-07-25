@@ -141,9 +141,9 @@ function appendMetaData (meta) {
 }
 
 function formatDuration (duration) {
-  var mins    = (duration / 60).toFixed()
-  var seconds = (duration % 60).toFixed()
-  return  mins + ':' + ("00" + seconds).slice(-2)
+  var mins    = Math.floor(duration / 60)
+  var seconds = duration - (mins * 60)
+  return  mins + ':' + ("00" + seconds.toFixed()).slice(-2)
 }
 
 function formatDate (date) {
