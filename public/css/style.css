@@ -758,6 +758,7 @@ td.push-right > * {
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-color: #efefef;
+  display: block;
 }
 .shadow{
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
@@ -2021,6 +2022,11 @@ ul.social-grid {
     width: 12.5%;
   }
 }
+
+.art-lsit li {
+  position: relative;
+}
+
 .art-list li .image-wrapper{
   position: relative;
 }
@@ -2040,6 +2046,33 @@ ul.social-grid {
   position: absolute; 
   top: 0;
   left: 0;
+}
+
+.art-list li button.play-release {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 50px;
+  left: 50%;
+  margin-left: -25px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  opacity: 0;
+  text-align: center;
+  -webkit-transition: opacity 0.1s linear;
+  transition: opacity 0.1s linear;
+  font-size: 22px;
+  padding-left: 4px;
+}
+
+.art-list li:hover button.play-release {
+  opacity: 0.8;
+}
+
+
+.art-list li:hover button.play-release:hover {
+  opacity: 1;
 }
 
 .art-list li label.title {
