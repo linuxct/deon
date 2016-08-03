@@ -293,18 +293,24 @@
     {{#data}}
     <ul class="art-list art-list--full-width discography">
         {{#results}}
-        <li>
-            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <div class="image-wrapper">
-                    <img src="/img/artwork.jpg" class="preload" />
-                    <img src="{{cover}}"/>
-                </div>
-                <label class="title one-line-ellipsis">{{title}}</label>
-                <br/>
-                <label class="artist one-line-ellipsis">{{artists}}</label>
-            </a>
-        </li>
+            {{>release-list-item}}
         {{/results}}
     </ul>
     {{/data}}
+</script>
+
+
+<script type="text/template"
+        mustache-name="release-list-item">
+    <li>
+        <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+            <div class="image-wrapper">
+                <img src="/img/artwork.jpg" class="preload" />
+                <img src="{{cover}}"/>
+            </div>
+            <label class="title one-line-ellipsis">{{title}}</label>
+            <br/>
+            <label class="artist one-line-ellipsis">{{artists}}</label>
+        </a>
+    </li>        
 </script>

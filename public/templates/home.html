@@ -200,17 +200,7 @@
             </header>
             <ul class="art-list art-list--full-width">
                 {{#releases}}
-                <li>
-                    <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                        <div class="image-wrapper">
-                            <img src="/img/artwork.jpg" class="preload" />
-                            <img src="{{cover}}"/>
-                        </div>
-                        <label class="title one-line-ellipsis">{{title}}</label>
-                        <br/>
-                        <label class="artist one-line-ellipsis">{{artists}}</label>
-                    </a>
-                </li>
+                    {{>release-list-item}}
                 {{/releases}}
             </ul>
         </div>
