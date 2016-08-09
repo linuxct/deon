@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 openRoute.completed.push(function () {
   recordPage()
+  if (location.pathname == "/") getStats()
 })
 
 var releaseTypes = {
