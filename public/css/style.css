@@ -778,6 +778,20 @@ td.push-right > * {
 .top-cta{
   margin-bottom: 1rem;
 }
+.top-title h1{
+  margin-top: 0;
+}
+.top-title + .panel{
+  margin-top: 1rem;
+}
+.top-title .button--transparent {
+  padding: .5rem 0;
+}
+@media screen and (min-width: 768px){
+  .top-title .button--transparent{
+    padding: 15px 17px 15px 20px;
+  }
+}
 
 /*-----------------------------*\
   LAYOUT
@@ -905,7 +919,7 @@ section {
 
 .mcat-logo .text{
   display: inline-block;
-  min-width: 141px;
+  width: 141px;
   margin-top: .25rem;
 }
 

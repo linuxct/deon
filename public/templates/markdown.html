@@ -31,6 +31,14 @@
 </script>
 
 <script type="text/template"
+        route="^faqs/migration-notice\/?$"
+        source-type="markdown"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Migration%20Notice.md">
+    {{>markdown-basic}}
+</script>
+
+<script type="text/template"
         route="^twitch-policy\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">

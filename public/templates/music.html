@@ -22,21 +22,34 @@
     </div>
     {{/error}}
     {{#data}}
-    <ul class="container panel art-list">
-        {{#results}}
-        <li>
-            <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                <div class="image-wrapper">
-                    <img src="/img/artwork.jpg" class="preload" />
-                    <img src="{{cover}}"/>
-                </div>
-                <label class="title one-line-ellipsis">{{title}}</label>
-                <br/>
-                <label class="artist one-line-ellipsis">{{artists}}</label>
-            </a>
-        </li>
-        {{/results}}
-    </ul>
+    <div class="container">
+        <header class="flex top-title">
+            <div class="col-xs-6">
+                <h1>Releases</h1>
+            </div>
+            <div class="col-xs-6 text right">
+                <a href="/browse" class="button button--black button--icon button--transparent">
+                    Browse Advanced Options
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </header>
+        <ul class="panel art-list">
+            {{#results}}
+            <li>
+                <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
+                    <div class="image-wrapper">
+                        <img src="/img/artwork.jpg" class="preload" />
+                        <img src="{{cover}}"/>
+                    </div>
+                    <label class="title one-line-ellipsis">{{title}}</label>
+                    <br/>
+                    <label class="artist one-line-ellipsis">{{artists}}</label>
+                </a>
+            </li>
+            {{/results}}
+        </ul>
+    </div>
     {{^total}}
     <div class="container text center panel">No results found.</div>
     {{/total}}

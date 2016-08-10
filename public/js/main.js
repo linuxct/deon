@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 openRoute.completed.push(function () {
   recordPage()
+  if (location.pathname == "/") getStats()
 })
 
 var releaseTypes = {
@@ -813,4 +814,36 @@ function setPagination (obj, perPage) {
   else {
     obj.showingTo = obj.total
   }
+}
+
+function getStats () {
+  requestJSON({
+    url: 'https://www.monstercat.com/stats.json',
+  }, function (err, obj) {
+    if (err) return // Silently don't worry.
+    getStats.fulfill(obj) 
+  })
+}
+
+getStats.fulfill = function (map) {
+  Object.keys(map).forEach(function (key) {
+    var stat = map[key]
+    var el = document.querySelector('[stats-name="'+key+'"]')
+    if (!el) return
+    var h3 = el.querySelector('h3')
+    var p = el.querySelector('p')
+    if (!h3 || !p) return
+    h3.textContent = getStats.translate(stat.value)
+    p.textContent  = stat.name
+  })
+}
+
+getStats.translate = function (value) {
+  if (isNaN(value)) return value
+  if (value >= 1000000 ) {
+    return (value / 1000000).toFixed(1) + 'm'
+  } else if (value >= 100000) {
+    return (value / 1000).toFixed(0) + 'k'
+  }
+  return value
 }
