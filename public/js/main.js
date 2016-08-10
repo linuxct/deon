@@ -370,6 +370,7 @@ function mapRelease (o) {
     o.preReleaseDate = formatDate(pdate)
   } else {
     o.releaseDate = formatDate(o.releaseDate)
+    o.preReleaseDate = null
   }
   o.artists = o.renderedArtists
   if(o.thumbHashes) {
