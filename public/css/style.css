@@ -918,7 +918,7 @@ section {
 
 .mcat-logo .text{
   display: inline-block;
-  min-width: 141px;
+  width: 141px;
   margin-top: .25rem;
 }
 
