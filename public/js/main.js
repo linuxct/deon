@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
       stateChange(location.pathname + location.search, e.state)
     })
     document.addEventListener("click", interceptClick)
+    document.addEventListener("dblclick", interceptDoubleClick)
     document.addEventListener("keypress", interceptKeyPress)
     stateChange(location.pathname + location.search)
   })

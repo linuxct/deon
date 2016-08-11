@@ -187,6 +187,22 @@ function interceptClick (e) {
   go(url)
 }
 
+function interceptDoubleClick (e, el) {
+  var isAction = null
+  for (var i = 0; i < e.path.length; i++) {
+    var t = e.path[i]
+    if (t.hasAttribute && t.hasAttribute('dblc-action')) {
+      isAction = t
+    }
+  }
+  if(isAction) {
+    runDblCAction(e, isAction)
+  }
+  //TODO: Make exceptions for things people actually double click
+  e.preventDefault()
+  return
+}
+
 function addEventPath(e) {
   e.path = []
   var elem = e.target
@@ -208,6 +224,11 @@ function getMethod(el, attr) {
 
 function runAction (e, el) {
   var fn = getMethod(el, 'action')
+  if (fn) fn(e, el)
+}
+
+function runDblCAction (e, el) {
+  var fn = getMethod(el, 'dblc-action')
   if (fn) fn(e, el)
 }
 

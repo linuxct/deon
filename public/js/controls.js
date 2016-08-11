@@ -83,6 +83,11 @@ function playSong(e, el) {
     loadAndPlayTracks(index)
 }
 
+function playSongDblC (e, el) {
+  var button = el.querySelector('[role="play-song"]')
+  playSong(e, button)
+}
+
 function loadAndPlayTracks(index) {
   var tracks = buildTracks()
   if (areTracksLoaded(tracks)) {
