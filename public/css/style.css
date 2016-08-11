@@ -1500,12 +1500,22 @@ td.genres span:first-of-type:before {
   font-size: 22px; 
   margin-bottom: .5rem;
 }
+.md-container p + h1,
+.md-container p + h2,
+.md-container p + h3,
+.md-container p + h4{
+  margin-top: 1.5rem;
+}
 .md-container p {
   line-height: 1.5;
   margin-bottom: 1.5rem;
 }
 .md-container p:last-child {
   margin-bottom: 0;
+}
+.md-container ul,
+.md-container ol{
+  margin-bottom: 1.5rem;
 }
 
 footer {
