@@ -7,6 +7,10 @@ var vendorPrices = {
   Twitch: {
     monthly: 500,
     total: 10000
+  },
+  Beam: {
+    monthly: 500,
+    total: 10000
   }
 }
 
