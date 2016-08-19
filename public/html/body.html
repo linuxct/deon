@@ -136,6 +136,7 @@
             <li><a class="silent" href="https://www.monstercat.com/contact.html">Contact</a></li>
             <li><a class="silent" href="https://www.monstercat.com/press.html">Press</a></li>
             <li><a class="silent" href="https://www.monstercat.com/licensing.html">Licensing</a></li>
+            <li><a class="silent" href="/api">API</a></li>
         </ul>
         <ul class="horizontal-list footer-items">
             <li>
@@ -228,19 +229,47 @@
 </script>
 
 <script type="text/template"
-        route="^help\/?$">
-    <div class="container">
-        <h1>Help</h1>
-        <div class="panel">
-            <p>
-            Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
-            Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
-            <a href="/twitch-policy">Twitch Policy</a><br/>
-            <a href="/privacy-policy">Privacy Policy</a><br/>
-            <a href="/terms-of-service">Terms of Service</a>
-            </p>
-        </div>
+  route="^help\/?$" 
+  page-title="Help">
+  <div class="container">
+    <h1>Help</h1>
+    <div class="panel">
+      <p>
+        Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
+        Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
+        <a href="/faqs/migration-notice">Connect Migration Notice</a><br/>
+        <a href="/api">Monstercat Developer API Information</a><br/>
+        <a href="/twitch-policy">Twitch Policy</a><br/>
+        <a href="/privacy-policy">Privacy Policy</a><br/>
+        <a href="/terms-of-service">Terms of Service</a>
+      </p>
     </div>
+  </div>
+</script>
+
+<script type="text/template"
+  route="^api\/?$"
+  page-title="Developer API">
+  <div class="container">
+    <h1>Monstercat Developer API Information</h1>
+    <div class="panel">
+      <h2>Developer Community</h2>
+      <p>
+        Monstercat hosts it's public projects on GitHub and has a developer
+        channel on Discord where help can be found.
+      </p>
+      <a href="https://www.github.com/monstercat" target="_BLANK">Github Page</a><br/>
+      <a href="https://discord.gg/P5GMu8c" target="_BLANK">Discord Developer Channel</a>
+
+      <h2>Public APIs</h2>
+      <p>
+        Monstercat offers a small set of public APIs for developers to use to
+        fetch public information about our content.
+      </p>
+      <a href="/api/connect">Monstercat Connect API Documentation</a>
+      </p>
+    </div>
+  </div>
 </script>
 
 <script type="text/template" template-name="toast">
