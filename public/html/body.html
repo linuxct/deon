@@ -136,6 +136,7 @@
             <li><a class="silent" href="https://www.monstercat.com/contact.html">Contact</a></li>
             <li><a class="silent" href="https://www.monstercat.com/press.html">Press</a></li>
             <li><a class="silent" href="https://www.monstercat.com/licensing.html">Licensing</a></li>
+            <li><a class="silent" href="/dev">Dev</a></li>
         </ul>
         <ul class="horizontal-list footer-items">
             <li>
@@ -228,19 +229,63 @@
 </script>
 
 <script type="text/template"
-        route="^help\/?$">
-    <div class="container">
-        <h1>Help</h1>
-        <div class="panel">
-            <p>
-            Have a question about this platform? <a href="/faqs">Check our FAQs.</a><br/>
-            Need an answer about the Whitelist License? <a href="/faqs/whitelisting">See here.</a><br/>
-            <a href="/twitch-policy">Twitch Policy</a><br/>
-            <a href="/privacy-policy">Privacy Policy</a><br/>
-            <a href="/terms-of-service">Terms of Service</a>
-            </p>
-        </div>
+  route="^help\/?$" 
+  page-title="Help">
+  <div class="container">
+    <h1>Help</h1>
+    <div class="panel md-container">
+      <h2>Notices & Important Information</h2>
+      <ul>
+        <li><a href="/faqs/migration-notice">Connect Migration Notice</a></li>
+        <li><a href="/twitch-policy">Twitch Policy</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/terms-of-service">Terms of Service</a></li>
+      </ul>
+      <h2>Questions?</h2>
+      <p>
+        Have any questions about this platform or the services provided? Please
+        check the links below that may point you in the right direction. If you
+        still have a question please contact us at <a
+          href="mailto:connect@monstercat.com">connect@monstercat.com</a>.
+      </p>
+      <ul>
+        <li><a href="/faqs">Frequently Asked Questions</a></li>
+        <li><a href="/faqs/whitelisting">Whitelist Licenses</a></li>
+      </ul>
+      <h2>Other Links</h2>
+      <ul>
+        <li><a href="/dev">Monstercat Developer Community</a></li>
+      </ul>
     </div>
+  </div>
+</script>
+
+<script type="text/template"
+  route="^dev\/?$"
+  page-title="Monstercat Developer Community">
+  <div class="container">
+    <h1>Developer Information</h1>
+    <div class="panel md-container">
+      <h2>Community</h2>
+      <p>
+        Monstercat hosts its public projects on GitHub and has a developer
+        channel on Discord where help can be found.
+      </p>
+      <p>
+        <a href="https://www.github.com/monstercat" target="_BLANK">Github Page</a><br/>
+        <a href="https://discord.gg/P5GMu8c" target="_BLANK">Discord Developer Channel</a>
+      </p>
+
+      <h2>Public APIs</h2>
+      <p>
+        Monstercat offers a small set of public APIs for developers to use to
+        fetch public information about our content.
+      </p>
+      <p>
+        <a href="/dev/api/connect">Monstercat Connect API Documentation</a>
+      </p>
+    </div>
+  </div>
 </script>
 
 <script type="text/template" template-name="toast">
