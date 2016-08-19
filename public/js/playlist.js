@@ -42,10 +42,9 @@ function addToPlaylist (e, el) {
   if (!id) return
   var url   = endpoint + '/playlist/' + id
   var index = parseInt(el.getAttribute('playlist-position'))
-  var rel   = document.querySelector('[release-id]')
   var item  = {
     trackId: el.getAttribute('track-id'),
-    releaseId: rel ? rel.getAttribute('release-id') : ""
+    releaseId: el.getAttribute('release-id')
   }
   if (!item.releaseId || !item.trackId) return window.alert(strings.error)
   el.disabled = true
