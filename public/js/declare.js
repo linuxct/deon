@@ -189,6 +189,9 @@ function interceptClick (e) {
 
 function interceptDoubleClick (e, el) {
   var isAction = null
+  if (!e.path) {
+    addEventPath(e)
+  }
   for (var i = 0; i < e.path.length; i++) {
     var t = e.path[i]
     if (t.hasAttribute && t.hasAttribute('dblc-action')) {
