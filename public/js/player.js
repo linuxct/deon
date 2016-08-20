@@ -1,4 +1,15 @@
 var MusicPlayer = (function () {
+
+  function createEvent(event, props) {
+    if (typeof CustomEvent === 'function') {
+      return new CustomEvent(event, props)
+    }
+
+    var evt = document.createEvent('CustomEvent')
+    evt.initCustomEvent(event, false, false, props.detail)
+    return evt
+  }
+
   function MusicPlayer () {
     constructEmitter(this)
     MusicPlayer.define(this)
@@ -28,7 +39,7 @@ var MusicPlayer = (function () {
       return duplicate
 
     this.items.push(item)
-    this.dispatchEvent(new CustomEvent('add', {detail: {item: item}}))
+    this.dispatchEvent(createEvent('add', {detail: {item: item}}))
     return this.items.length - 1
   }
 
@@ -62,7 +73,7 @@ var MusicPlayer = (function () {
   }
 
   MusicPlayer.prototype.trigger = function (name) {
-    this.dispatchEvent(new CustomEvent(name, {detail: {item: this.currentItem}}))
+    this.dispatchEvent(createEvent(name, {detail: {item: this.currentItem}}))
   }
 
   MusicPlayer.prototype.clear = function () {
@@ -116,7 +127,7 @@ var MusicPlayer = (function () {
   MusicPlayer.prototype.next = function () {
     var old = this.currentItem
     this.advance(1)
-    this.dispatchEvent(new CustomEvent('next', {detail: {
+    this.dispatchEvent(createEvent('next', {detail: {
       was: old,
       item: this.currentItem
     }}))
@@ -125,7 +136,7 @@ var MusicPlayer = (function () {
   MusicPlayer.prototype.previous = function () {
     var old = this.currentItem
     this.advance(-1)
-    this.dispatchEvent(new CustomEvent('previous', {detail: {
+    this.dispatchEvent(createEvent('previous', {detail: {
       was: old,
       item: this.currentItem
     }}))
@@ -248,9 +259,11 @@ var MusicPlayer = (function () {
   }
 
   function cloneAndDispatch(e) {
-    var ev = new e.constructor(e.type, e)
-    ev.detail = e.detail
-    this.dispatchEvent(ev)
+    if (typeof e.constructor === 'function') {
+      var ev = new e.constructor(e.type, e)
+      ev.detail = e.detail
+      this.dispatchEvent(ev)
+    }
   }
 
   function clamp(a, min, max) {
@@ -258,7 +271,7 @@ var MusicPlayer = (function () {
   }
 
   function onStateChange(e) {
-    this.dispatchEvent(new CustomEvent('statechange'), {details: { player: this }})
+    this.dispatchEvent(createEvent('statechange', {detail: { player: this }}))
   }
 
   function onTimeUpdate(e) {
