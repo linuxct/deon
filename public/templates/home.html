@@ -179,7 +179,10 @@
                     <h1 class="title uppercase">{{title}}</h1>
                 </a>
                 <h3>By {{artists}}</h3>
-                <p class="date">Released on {{releaseDate}}</p>
+                <p class="date">
+                    {{#preReleaseDate}}Pre-Released on {{preReleaseDate}}{{/preReleaseDate}}
+                    {{#releaseDate}}Released on {{releaseDate}}{{/releaseDate}}
+                </p>
                 <a href="/release/{{catalogId}}" class="button button--cta button--icon">
                     View
                     <i class="fa fa-chevron-right"></i>
