@@ -413,6 +413,7 @@ function transformHome (obj) {
   var results = obj.results.map(mapRelease).filter(function (i) {
     return i.type != "Podcast"
   })
+  results.sort(sortRelease)
   obj.featured = results.shift()
   obj.releases = results
   obj.releases.length = 8
