@@ -1464,6 +1464,12 @@ span.note a {
   margin: 0;
 }
 
+.modal--copy-credit textarea {
+  border: 1px solid #ddd;
+  padding: 5px;
+  margin-top: 10px;
+}
+
 table.drag-sortable tr {
   border-top: 2px solid transparent;
   border-bottom: 1px solid transparent;
