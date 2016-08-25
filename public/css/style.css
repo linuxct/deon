@@ -2687,3 +2687,11 @@ body.bg {
 .bg .panel table.form tr:nth-child(odd) > td{
   background: transparent;
 }
+.anchor-highlight {
+  background: #ffffad;
+  transition: background 0.5s linear;
+  -webkit-transition: background 0.5s linear;
+}
+.anchor-highlight.anchor-highlight-off {
+  background: transparent;
+}

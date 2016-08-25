@@ -536,6 +536,20 @@ function transformMarkdown (obj) {
   return marked(obj)
 }
 
+function completedMarkdown (obj) {
+  if(location.hash) {
+    var el = document.querySelector(location.hash)
+    if(el) {
+      var top = el.offsetTop; //Getting Y of target element
+      window.scrollTo(0, top);
+      el.classList.add('anchor-highlight')
+      setTimeout(function () {
+        el.classList.add('anchor-highlight-off')
+      }, 2000)
+    }
+  }
+}
+
 function transformBuyOut (obj) {
   if (!obj)
     return queryStringToObject(window.location.search)
