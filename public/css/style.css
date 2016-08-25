@@ -732,6 +732,17 @@ td.push-right > * {
   min-height: 100%;
   height: auto;
 }
+.banner--scaled{
+  overflow: hidden;
+}
+.banner--scaled .banner,
+.banner--scaled .side-banner,
+.banner--scaled .bgbox{
+  transform: perspective(1px) scale(1.1);
+}
+.banner--scaled .bgbox .details-box {
+  transform: perspective(1px) scale(0.909);
+}
 @media screen and (min-width: 992px){
   .banner--height{
     min-height: auto;
@@ -879,7 +890,8 @@ section {
 .panel--dark h5,
 .panel--dark p,
 .panel--dark span,
-.panel--dark ul{
+.panel--dark ul,
+.panel--dark label{
   color: white;
 }
 
@@ -892,7 +904,8 @@ section {
   margin-bottom: 1rem;
 }
 
-.panel ul{
+.panel ul,
+.panel ol{
   padding-left: 1.1rem;
 }
 
@@ -1218,10 +1231,16 @@ section {
   }
 
   .controls > a {
-    width: auto;
+    width: 0;
     display: inline-block;
-    margin: 0 1rem;
+    margin: 0 0;
+    padding: 0;
     text-align: left;
+    transition: width 0.3s ease, margin 0.3s ease;
+  }
+  .controls > a.playing-track{
+    width: auto;
+    margin: 0 1rem 0 0;
   }
   .controls > button{
     margin-right: 1rem;
@@ -1315,6 +1334,40 @@ header:hover .scrub > .progress,
 @media screen and (min-width: 992px){
   .player {
     padding: 1em 0 0;
+  }
+}
+
+/* Fixed player */
+
+@media screen and (min-width: 992px){
+  .scrub {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+  }
+
+  .player.player--fixed {
+    position: fixed;
+  }
+
+  .controls.fixed {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    padding: .85rem .75rem .75rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    background: #fff;
+    animation: slideDown .45s ease;
+  }
+
+  @keyframes slideDown{
+    from{
+      transform: translateY(-50px);
+    }
+    to{
+      transform: translateY(0px);
+    }
   }
 }
 
@@ -1679,6 +1732,14 @@ p.date{
 }
 .cl-white p.date{
   color: #aaa;
+}
+
+h1.title {
+  margin: 1rem 0 .35rem;
+}
+
+p.date{
+  margin: .5rem 0 1rem;
 }
 
 p.description{
@@ -2171,6 +2232,16 @@ ul.social-grid {
   margin-top: 0.75rem;
 }
 
+.details-box h2 {
+  margin-top: 0;
+  margin-bottom: .5rem;
+}
+
+
+.details-box h2 + label {
+  margin: .65rem 0 1rem;
+}
+
 .details-box label,
 .cl-white .details-box label{
   color: #aaa;
@@ -2402,6 +2473,9 @@ textarea.copycredits {
 .bgbox--browse .details-box img.artwork {
   height: 159px;
 }
+.bgbox--browse a > h2 {
+  margin-bottom: .3rem;
+}
 .bgbox--browse .details-box {
   padding: 2em;
   text-align: center;
@@ -2412,7 +2486,7 @@ textarea.copycredits {
 }
 .bgbox--browse label{
   display: inline-block;
-  margin-right: 1em;
+  margin: .5rem 1em .5em 0;
 }
 
 .music-browse li.error {
@@ -2523,9 +2597,8 @@ textarea.copycredits {
 \*-----------------------------*/
 
 body.bg {
-  background: rgba(0, 0, 0, 0.6) url(https://connect.monstercat.com/img/DSC02629.JPG) 50% 50%;
+  background: #000 url("../img/bgon.jpg") 50% 50%;
   background-size: cover;
-  background-blend-mode: overlay;
   background-attachment: fixed;
 }
 .bg .mcat-logo .logo-black{
@@ -2693,6 +2766,56 @@ body.bg {
 .bg .panel table.form tr:nth-child(odd) > td{
   background: transparent;
 }
+.bg .top-banner .banner-shade {
+  background: rgba(255,255,255,0.75);
+}
+.bg .spotify-wrapper .banner-shade {
+  background: rgba(255,255,255,0.85);
+}
+.bg .top-banner .featured-details h1, 
+.bg .top-banner .featured-details h3, 
+.bg .top-banner .featured-details p {
+  color: #000;
+}
+.bg .top-banner .gradient,
+.bg .spotify-wrapper .gradient {
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+.bg .top-banner .latest.cl-white *:not(i):not(:hover) {
+  color: #000;
+}
+.bg .top-banner .line-top,
+.bg .spotify-wrapper .line-top{
+  color: #000;
+}
+.bg .top-banner .line-top::before,
+.bg .spotify-wrapper .line-top::before{
+  background: #000;
+}
+.bg .top-banner .button--cta:active,
+.bg .top-banner .button--cta:hover{
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+.bg .hero .banner .banner-shade {
+  background: rgba(255,255,255,0.65);
+}
+.bg .hero .banner .gradient--inverted {
+  background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 60%, rgba(255,255,255,1) 100%);
+}
+.bg .hero h3.playfair,
+.bg .hero h3.playfair em,
+.bg .hero h1.line-bottom{
+  color: #000;
+}
+.bg .hero h1.line-bottom::after{
+  background: #000;
+}
+.bg .controls.fixed {
+  background: #000;
+}
+
 .anchor-highlight {
   background: #ffffad;
   transition: background 0.5s linear;

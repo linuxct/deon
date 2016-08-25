@@ -163,9 +163,11 @@
     {{#data}}
     <div class="top-banner">
         {{#featured}}
-        <div class="banner" style="background-image:url({{coverBig}}">
-            <div class="banner-shade"></div>
-            <div class="gradient"></div>
+        <div class="banner banner--scaled">
+            <div class="banner" style="background-image:url({{coverBig}}">
+                <div class="banner-shade"></div>
+                <div class="gradient"></div>
+            </div>
         </div>
         <div class="container flex">
             <div class="col-xs-12 col-sm-12 col-md-4 featured-artwork">
@@ -291,7 +293,7 @@
         </div>
         {{#posts}}
         <article class="flex">
-            <div class="col-xs-12 col-sm-12 col-md-6 article-banner{{#isOdd}} col-md-last{{/isOdd}}">
+            <div class="col-xs-12 col-sm-12 col-md-6 article-banner{{#isOdd}} col-md-last{{/isOdd}} banner--scaled">
                 <a href="https://www.monstercat.com/blog/{{path}}" class="side-banner" style="background-image: url(https://www.monstercat.com{{image}});"></a>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 article-details">

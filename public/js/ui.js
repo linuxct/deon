@@ -83,3 +83,12 @@ function closeNav(){
   document.querySelector("[role='nav']").classList.remove('open')
   document.querySelector("[role='nav-button']").classList.remove('active')
 }
+
+function stickyPlayer(){
+  var threshold = 150
+  var el = document.querySelector("[role='fixed']")
+  window.addEventListener('scroll', function(){
+    if(window.scrollY >= threshold) el.classList.add('fixed')
+    else el.classList.remove('fixed')
+  })
+}

@@ -144,11 +144,12 @@
     {{^canceled}}
     <p>You are subscribed for $5.00 USD a month</p>
     <p>Your next invoice will be charged on {{nextBillingDate}}</p>
-    <button action="unsubscribeGold">Cancel Subscription</button>
+    <br>
+    <button class="button--gold" action="unsubscribeGold">Cancel Subscription</button>
     {{/canceled}}
     {{#canceled}}
     <p>Your gold subscription will expire on {{endDate}}</p>
-    <button action="subscribeGold">Re-Subscribe</button>
+    <button class="button--gold" action="subscribeGold">Re-Subscribe</button>
     {{/canceled}}
     {{/data}}
 </script>
