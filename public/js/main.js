@@ -495,7 +495,7 @@ function transformGoldSubscription (obj) {
   var nobj = {
     nextBillingDate: formatDate(obj.availableUntil),
   }
-  if (obj.canceled) {
+  if (!obj.subscriptionActive) {
     nobj.canceled = {
       endDate: formatDate(obj.availableUntil),
     }
