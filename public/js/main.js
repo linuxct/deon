@@ -561,7 +561,7 @@ function transformBuyOut (obj) {
 
 function transformWhitelists (obj) {
   obj.results = obj.results.map(function (whitelist) {
-    whitelist.paid = (whitelist.amountPaid / 100).toFixed(2)
+    whitelist.paid = whitelist.paidInFull ? 'PAID' : '$' + (whitelist.amountPaid / 100).toFixed(2)
     whitelist.remaining = (whitelist.amountRemaining / 100).toFixed(2)
     if (whitelist.availableUntil)
       whitelist.nextBillingDate = formatDate(whitelist.availableUntil)
