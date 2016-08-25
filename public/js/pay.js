@@ -36,6 +36,14 @@ function buyLicense (e, el) {
   buyLicense[data.method](data)
 }
 
+function buyNewLicense (e, el) {
+  var data = getTargetDataSet(el)
+  validateLicense(data.identity, data.vendor, function (err) {
+    if (err) return window.alert(err.message)
+    buyLicense(e, el)
+  })
+}
+
 buyLicense.paypal = function buyLicensePayPal (data) {
   requestJSON({
     url: buyoutUrl(data.id),
@@ -91,6 +99,18 @@ buyLicense.stripe = function buyLicenseStripe (data) {
     amount: data.amount,
     email: session.user.email,
     panelLabel: "Pay {{amount}}"
+  })
+}
+
+function validateLicense(identity, vendor, done) {
+  requestJSON({
+    url: endpoint + '/whitelist/status/?vendor=' + vendor + '&identity=' + (vendor !== 'YouTube' ? identity : identity.toLowerCase())
+  }, function (err, obj, xhr) {
+    if (err) return done(err)
+    if (!obj) return done(Error(strings.error))
+    if (!obj.valid) return done(Error(strings.invalidIdentity))
+    if (!obj.available) return done(Error(strings.unavailableIdentity))
+    done(null)
   })
 }
 
@@ -395,14 +415,10 @@ function subscribeNewLicense (e, el) {
 
   el.classList.add('working')
   el.disabled = true
-  requestJSON({
-    url: endpoint + '/whitelist/status/?vendor=' + data.vendor.toLowerCase() + '&identity=' + data.identity
-  }, function (err, obj, xhr) {
+  validateLicense(data.identity, data.vendor, function (err) {
     el.classList.remove('working')
     el.disabled = false
     if (err) return window.alert(err.message)
-    if (!obj) return window.alert(strings.error)
-    if (!obj.valid) return window.alert(strings.invalidIdentity)
     var name = "Whitelisting for " + data.identity + " on " + data.vendor
     addSub({
       name: name,

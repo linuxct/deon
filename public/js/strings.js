@@ -26,5 +26,6 @@ var strings = {
   "cancelWhitelistSub": "Are you sure you want to cancel this subscription?",
   "codeNotFound": "The code you entered does not exist.",
   "codeNotValid": "The code you entered is not valid any more.",
-  "invalidIdentity": "The channel you tried to add is not valid."
+  "invalidIdentity": "The channel you tried to add is not valid.",
+  "unavailableIdentity": "The identity is already in use."
 }
