@@ -120,7 +120,9 @@ function playSongs(e, el) {
 }
 
 function onNewSong(e) {
-  document.querySelector(sel.title).textContent = e.detail.item.title
+  var el = document.querySelector(sel.title)
+  el.textContent = e.detail.item.title
+  el.classList.add('playing-track')
   if (typeof autoBrowseMore == 'function') autoBrowseMore()
 }
 

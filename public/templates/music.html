@@ -81,40 +81,42 @@
     </div>
     {{/error}}
     {{#data}}
-    <div class="bgbox" style="background-image: url('{{coverBig}}')">
-        <div class="bgbox-blanket cl-white">
-            <div class="details-box container clearfix">
-                <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
-                <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
-                <h2>{{artists}}</h2>
-                <label>
-                    {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
-                    {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
-                </label>
-                <div class="options push-right">
-                    {{#purchase}}
-                    <button class="faux" action="openPurchaseRelease">
-                        <i class="fa fa-shopping-bag"></i>
-                    </button>
-                    {{/purchase}}
-                    {{#share}}
-                    <a class="silent" href="{{share}}" target="_blank">
-                        <i class="fa fa-social-sp"></i>
-                    </a>
-                    {{/share}}
-                    <a class="silent"
-                    href="{{downloadLink}}"
-                    target="_blank"
-                    action="canAccessGold">
-                        <i class="fa fa-cloud-download"></i>
-                    </a>
-                    <button class="faux"
-                            action="playSongs"
-                            role="play-release"
-                            release-id="{{_id}}">
-                        <i class="fa fa-play inactive"></i>
-                        <i class="fa fa-pause active"></i>
-                    </button>
+    <div class="bgbox banner--scaled">
+        <div class="bgbox" style="background-image: url('{{coverBig}}')">
+            <div class="bgbox-blanket cl-white">
+                <div class="details-box container clearfix">
+                    <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
+                    <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
+                    <h2>{{artists}}</h2>
+                    <label>
+                        {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
+                        {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                    </label>
+                    <div class="options push-right">
+                        {{#purchase}}
+                        <button class="faux" action="openPurchaseRelease">
+                            <i class="fa fa-shopping-bag"></i>
+                        </button>
+                        {{/purchase}}
+                        {{#share}}
+                        <a class="silent" href="{{share}}" target="_blank">
+                            <i class="fa fa-social-sp"></i>
+                        </a>
+                        {{/share}}
+                        <a class="silent"
+                        href="{{downloadLink}}"
+                        target="_blank"
+                        action="canAccessGold">
+                            <i class="fa fa-cloud-download"></i>
+                        </a>
+                        <button class="faux"
+                                action="playSongs"
+                                role="play-release"
+                                release-id="{{_id}}">
+                            <i class="fa fa-play inactive"></i>
+                            <i class="fa fa-pause active"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -254,17 +256,19 @@
     </div>
     {{/error}}
     {{#data}}
-    <div class="bgbox" style="background-image: url('{{image}}')">
-        <div class="bgbox-blanket cl-white">
-            <div class="details-box container clearfix">
-                {{#image}}
-                <img class="artwork" src="{{image}}" big-src="{{image}}" action="openReleaseArt"/>
-                {{/image}}
-                <h1>{{name}}</h1>
-                <div class="options push-right">
-                    {{#socials}}
-                    <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
-                    {{/socials}}
+    <div class="bgbox banner--scaled">
+        <div class="bgbox" style="background-image: url('{{image}}')">
+            <div class="bgbox-blanket cl-white">
+                <div class="details-box container clearfix">
+                    {{#image}}
+                    <img class="artwork" src="{{image}}" big-src="{{image}}" action="openReleaseArt"/>
+                    {{/image}}
+                    <h1>{{name}}</h1>
+                    <div class="options push-right">
+                        {{#socials}}
+                        <a href="{{link}}" target="_blank"><i class="fa fa-{{icon}}"></i></a>
+                        {{/socials}}
+                    </div>
                 </div>
             </div>
         </div>
