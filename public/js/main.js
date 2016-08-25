@@ -366,9 +366,10 @@ function mapReleaseTrack (o, index) {
 
 function mapRelease (o) {
   var pdate = typeof o.preReleaseDate != 'undefined' ? new Date(o.preReleaseDate) : undefined
-  var now   = new Date()
-  if (pdate && now < pdate) {
+  var rdate = new Date(o.releaseDate)
+  if (pdate && rdate > Date.now()) {
     o.preReleaseDate = formatDate(pdate)
+    o.releaseDate = null
   } else {
     o.releaseDate = formatDate(o.releaseDate)
     o.preReleaseDate = null
@@ -412,6 +413,7 @@ function transformHome (obj) {
   var results = obj.results.map(mapRelease).filter(function (i) {
     return i.type != "Podcast"
   })
+  results.sort(sortRelease)
   obj.featured = results.shift()
   obj.releases = results
   obj.releases.length = 8
@@ -493,7 +495,7 @@ function transformGoldSubscription (obj) {
   var nobj = {
     nextBillingDate: formatDate(obj.availableUntil),
   }
-  if (obj.canceled) {
+  if (!obj.subscriptionActive) {
     nobj.canceled = {
       endDate: formatDate(obj.availableUntil),
     }
