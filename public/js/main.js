@@ -543,6 +543,11 @@ function completedMarkdown (obj) {
     var el = document.querySelector(location.hash)
     if(el) {
       var top = el.offsetTop; //Getting Y of target element
+      top -= 20
+      if(top < 0) {
+        top = 0
+      }
+      console.log('top', top)
       window.scrollTo(0, top);
       el.classList.add('anchor-highlight')
       setTimeout(function () {
