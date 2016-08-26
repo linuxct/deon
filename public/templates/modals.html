@@ -66,23 +66,23 @@
         <div class="panel panel--padded pointer-events">
             <h1>Get Gold!</h1>
             <div class="modal-content">
-                <h2 class="pricing">$5/month</h2>
-                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
-                <br/>
-                <ul>
-                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
-                    <li>Playlist your music directly within Connect</li>
-                    <li>Direct support via e-mail and on site.</li>
-                </ul>
+              <h2 class="pricing">$5/month</h2>
+              <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+              <br/>
+              <ul>
+                  <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                  <li>Playlist your music directly within Connect</li>
+                  <li>Direct support via e-mail and on site.</li>
+              </ul>
             </div>
-                {{^hasGold}}
-                <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
-                {{/hasGold}}
-                {{^signedIn}}
-                <a class="button button--cta" href="/sign-up" action="closeModal">Sign up for an account!</a>
-                {{/signedIn}}
+            {{#signedIn}}
+            <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
+            {{/signedIn}}
+            {{^signedIn}}
+            <a class="button button--cta" href="/sign-up" action="closeModal">Sign up for an account!</a>
+            {{/signedIn}}
             <button class="button--close faux" action="closeModal">
-                <i class="fa fa-remove"></i>
+              <i class="fa fa-remove"></i>
             </button>
         </div>
     </div>

@@ -743,8 +743,7 @@ function canAccessGold (e, el) {
   if (hasit) return
   e.preventDefault()
   openModal('subscription-required-modal', {
-    signedIn: isSignedIn(),
-    hasGold: hasGoldAccess()
+    signedIn: isSignedIn()
   })
 }
 
