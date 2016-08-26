@@ -17,16 +17,16 @@
 </script>
 
 <script type="text/template"
-        route="^faqs\/?$"
+        route="^faqs(?:\/|\/general)?$"
         transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/README.md">
+        source="https://raw.githubusercontent.com/monstercat/docs/master/site/General%20Questions.md">
     {{>markdown-basic}}
 </script>
 
 <script type="text/template"
         route="^faqs\/whitelisting\/?$"
         transform="transformMarkdown"
-        source="https://raw.githubusercontent.com/monstercat/docs/master/connect/FAQ/Licensing%20%26%20Whitelist.md">
+        source="https://raw.githubusercontent.com/monstercat/docs/master/site/Whitelisting.md">
     {{>markdown-basic}}
 </script>
 
