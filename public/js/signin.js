@@ -102,7 +102,7 @@ function signUpAt (e, el, where) {
       if (err) return window.alert(err.message)
       session = sess
       renderHeader()
-      go("/")
+      go(queryStringToObject(window.location.search).redirect || "/")
     })
   })
 }
