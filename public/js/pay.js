@@ -104,7 +104,7 @@ buyLicense.stripe = function buyLicenseStripe (data) {
 
 function validateLicense(identity, vendor, done) {
   requestJSON({
-    url: endpoint + '/whitelist/status/?vendor=' + vendor + '&identity=' + (vendor !== 'YouTube' ? identity : identity.toLowerCase())
+    url: endpoint + '/whitelist/status/?vendor=' + vendor + '&identity=' + (vendor == 'YouTube' ? identity : identity.toLowerCase())
   }, function (err, obj, xhr) {
     if (err) return done(err)
     if (!obj) return done(Error(strings.error))
