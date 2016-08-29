@@ -36,8 +36,7 @@
                     <li>Playlist your music directly within Connect</li>
                     <li>Direct support via e-mail and on site.</li>
                 </ul>
-                <br/>
-                <div data-set="subscribe-gold" class="services-form"> 
+                <div data-set="subscribe-gold" class="services-form">
                     <input type="text" name="trialCode" placeholder="Special Code"/>
                     <button class="button--gold"
                             action="subscribeGold"
@@ -149,7 +148,10 @@
     {{/canceled}}
     {{#canceled}}
     <p>Your gold subscription will expire on {{endDate}}</p>
-    <button class="button--gold" action="subscribeGold">Re-Subscribe</button>
+    <div data-set="subscribe-gold" class="services-form">
+        <input type="text" name="trialCode" placeholder="Special Code"/>
+        <button class="button--gold" action="subscribeGold" data-set-target="subscribe-gold">Re-Subscribe</button>
+    </div>
     {{/canceled}}
     {{/data}}
 </script>
