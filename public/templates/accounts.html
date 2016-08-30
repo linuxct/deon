@@ -271,6 +271,7 @@
         route="^account\/?$"
         source="$endpoint/self"
         page-title="My Account"
+        completed="completedAccount"
         transform="mapAccount">
     <div class="container">
         <h1>My Account</h1>
@@ -339,7 +340,7 @@
                 </button>
                 <button class="button--danger button--full" action="signOut">Sign Out</button>
             </div>
-            <a href="/account/services">Manage Services</a>
+            <a href="/account/services" class="button--manage-services">Manage Services</a>
         </div>
         <div class="panel">
             <h2>Two-Factor Auth</h2>

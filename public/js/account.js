@@ -64,6 +64,11 @@ function mapAccount (o) {
   return o
 }
 
+function completedAccount () {
+  window['optimizely'] = window['optimizely'] || [];
+  window.optimizely.push(["activate", 7219990760]);
+}
+
 function transformAccountSettings(obj) {
   obj.bgon = false
   if (lstore)
