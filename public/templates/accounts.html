@@ -268,7 +268,7 @@
 </script>
 
 <script type="text/template"
-        route="^account\/?$"
+        route="^(account\/?$|account\/?\?(.*)$)"
         source="$endpoint/self"
         page-title="My Account"
         completed="completedAccount"
