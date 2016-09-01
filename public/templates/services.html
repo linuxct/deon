@@ -1,5 +1,6 @@
 <script type="text/template"
-        route="^account\/services$"
+        route="^account\/services(\?.*)?$"
+        completed="completedServices"
         transform="transformServices">
     {{#data}}
     <div class="container services">
@@ -74,20 +75,25 @@
                         transform="transformWhitelists">
                     </tbody>
                 </table>
-                <div data-set="new-license" class="services-form">
+                <div data-set="new-license" class="services-form" trigger-target="subscribeNewLicense">
                     <select name="vendor">
                         <option value="">Select Platform</option>
                         <option value="YouTube">YouTube</option>
                         <option value="Twitch">Twitch</option>
                         <option value="Beam">Beam</option>
                     </select>
-                    <input type="text" name="identity" placeholder="Channel Id"/>
+                    <input type="text" name="identity" placeholder="Channel_ID" size="30" />
                     <button
                         action="subscribeNewLicense"
+                        trigger="subscribeNewLicense"
                         data-set-target="new-license">
                         Subscribe
                         <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
                     </button>
+                    <div class="help-text YouTube hide">http:s//www.youtube.com/channel/<strong>Channel_ID</strong></div>
+                    <div class="help-text Twitch hide">https://www.twitch.tv/<strong>Channel_ID</strong></div>
+                    <div class="help-text Beam hide">https://beam.pro/<strong>Channel_ID</strong></div>
+                    <div class="help-text none hide">&nbsp;</div>
                 </div>
                 <br/>
                 <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>

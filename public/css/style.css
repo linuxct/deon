@@ -2592,6 +2592,16 @@ textarea.copycredits {
   color: gold;
 }
 
+.help-text {
+  font-size: 0.9em;
+  padding: 5px 0 0 2px;
+  color: #333;
+}
+
+.help-text strong {
+  color: #666;
+}
+
 /*-----------------------------*\
   BG IMAGE STYLES
 \*-----------------------------*/

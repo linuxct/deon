@@ -485,8 +485,10 @@ function transformServices () {
     goldSubscribe: !user.goldService && !user.currentGoldSubscription,
     goldUnsubscribe: (!!user.goldService && !!user.currentGoldSubscription)
   }
-  if (isLegacyUser())
+  if (isLegacyUser()) {
     opts = {hasLegacy: true}
+  }
+
   return {
     user: isSignedIn() ? opts : null
   }
@@ -629,6 +631,38 @@ function appendSongMetaData (tracks) {
 }
 
 /* Completed Methods */
+
+function completedServices (source, obj) {
+  var vendorSelect = document.querySelector('select[name=vendor]')
+  var qp = queryStringToObject(window.location.search)
+  if(qp.vendor) {
+    var vendor = qp.vendor.toLowerCase()
+    if(vendor == 'youtube') {
+      vendorSelect.value = 'YouTube'
+    }
+    else if(vendor == 'twitch') {
+      vendorSelect.value = 'Twitch'
+    }
+    else if(vendor == 'beam') {
+      vendorSelect.value = 'Beam'
+    }
+  }
+
+  var vendorChanged = function () {
+    var vendor = vendorSelect.value
+    if(vendor == "" ) {
+      vendor = "none"
+    }
+    var els = document.querySelectorAll('.help-text')
+    for(var i = 0; i < els.length; i++) {
+      els[i].classList.toggle('hide', true)
+    }
+    document.querySelector('.help-text.' + vendor).classList.toggle('hide', false)
+  }
+
+  vendorSelect.addEventListener('change', vendorChanged)
+  vendorChanged()
+}
 
 function completedRelease (source, obj) {
   if (obj.error) return

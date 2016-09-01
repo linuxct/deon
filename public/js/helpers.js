@@ -195,3 +195,11 @@ function getTrackNumber (track, releaseId) {
   }
   return 0
 }
+
+function serviceUrlToChannelId (string) {
+  var no = ['https://', 'http://', 'www.', 'twitch.tv/', 'youtube.com/channel/', 'beam.pro/', '/profile']
+  no.forEach(function (val) {
+    string = string.replace(val, '')
+  })
+  return string
+}

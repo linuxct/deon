@@ -413,6 +413,10 @@ function subscribeNewLicense (e, el) {
   if (alreadyInCart(data))
     return window.alert(strings.licenseInCart)
 
+  //This strips https://twitch/tv and http://youtube.com/channel/ stuff from the identity
+  data.identity = serviceUrlToChannelId(data.identity)
+  document.querySelector('input[name=identity]').value = data.identity
+  
   el.classList.add('working')
   el.disabled = true
   validateLicense(data.identity, data.vendor, function (err) {
