@@ -117,7 +117,7 @@ function signUpGoogle (e, el) {
 function signUpFacebook (e, el) {
   function handle(res) {
     if (res.status != 'connected' || !res.authResponse)
-      return done(Error('User did not authorize.'))
+      return
 
     FB.api('/me?fields=name,email', function (ares) {
       var obj = {

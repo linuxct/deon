@@ -634,6 +634,7 @@ function appendSongMetaData (tracks) {
 
 function completedServices (source, obj) {
   var vendorSelect = document.querySelector('select[name=vendor]')
+  if (!vendorSelect) return
   var qp = queryStringToObject(window.location.search)
   if(qp.vendor) {
     var vendor = qp.vendor.toLowerCase()
@@ -872,8 +873,8 @@ function getStats () {
   requestJSON({
     url: 'https://www.monstercat.com/stats.json',
   }, function (err, obj) {
-    if (err) return // Silently don't worry.
-    getStats.fulfill(obj) 
+    if (err || !obj) return // Silently don't worry.
+    getStats.fulfill(obj)
   })
 }
 
