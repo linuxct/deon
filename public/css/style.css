@@ -36,6 +36,14 @@ p, label, a {
   font-size: 16px;
 }
 
+small {
+  font-size: 14px;
+}
+
+small a {
+  font-size: 14px;
+}
+
 input,
 textarea{
   box-shadow: 0 0 0;

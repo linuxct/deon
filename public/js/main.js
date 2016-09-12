@@ -210,7 +210,8 @@ function loadReleaseAndTrack (obj, done) {
       track.copycredit = createCopycredit(title, release.urls)
       done(null, {
         track: track,
-        release: release
+        release: release,
+        signedIn: isSignedIn()
       })
     })
   })
@@ -791,9 +792,12 @@ function openReleaseArt (e, el) {
 }
 
 function openTrackCopyCredits (e, el) {
+  console.log('isSignedIn', isSignedIn())
   openModal('track-copycredits-modal', {
+    colin: 'Vindexus',
     trackId:   el.getAttribute('track-id'),
-    releaseId: el.getAttribute('release-id')
+    releaseId: el.getAttribute('release-id'),
+    signedIn: isSignedIn()
   })
 }
 
