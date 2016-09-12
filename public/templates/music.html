@@ -257,7 +257,8 @@
     {{/error}}
     {{#data}}
     <div class="bgbox banner--scaled">
-        <div class="bgbox" style="background-image: url('{{image}}')">
+        <div class="bgbox" style="background-image: url('{{image}}');
+          background-position: center {{imagePositionY}}%;">
             <div class="bgbox-blanket cl-white">
                 <div class="details-box container clearfix">
                     {{#image}}

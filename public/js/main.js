@@ -396,6 +396,8 @@ function mapRelease (o) {
 function mapWebsiteDetails (o) {
   if (o.profileImageBlobId)
     o.image = datapoint + '/blobs/' + o.profileImageBlobId
+  if (isNaN(o.imagePositionY))
+    o.imagePositionY = 60
   if (o.bookings || o.managementDetail) {
     o.contact = {
       booking: o.bookings,
