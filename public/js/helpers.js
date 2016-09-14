@@ -150,7 +150,7 @@ function formatDate (date) {
   if (!formatDate.months) {
     formatDate.months = [
       "January",
-      "Feburary",
+      "February",
       "March",
       "April",
       "May",
