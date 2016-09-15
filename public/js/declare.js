@@ -173,6 +173,9 @@ function interceptClick (e) {
       isAction = t
     if (t.tagName == "A") {
       isAnchor = true
+      if(t.getAttribute('redirect-to')) {
+        session.signInRedirectTo = t.getAttribute('redirect-to')
+      }
       break
     }
   }
@@ -215,6 +218,9 @@ function addEventPath(e) {
   }
 }
 function go (url, state) {
+  if(url == '/signin') {
+    session.signInRedirectTo = window.location.pathname + window.location.search
+  }  
   history.pushState(state || {}, "", url)
   stateChange(location.pathname + location.search, state)
 }
@@ -264,6 +270,10 @@ function openRoute (target, container, matches) {
     transform: getMethod(target, 'transform'),
     template:  target.textContent,
     sourceType: target.getAttribute('source-type')
+  }
+  if(target.getAttribute('require-login') && !isSignedIn()) {
+    session.signInRedirectTo = window.location.pathname + window.location.search
+    return go('/sign-in')
   }
   opts.completed = function () {
     var fn = getMethod(target, 'completed')

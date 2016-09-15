@@ -1,5 +1,6 @@
 <script type="text/template"
-        route="^account\/services(\?.*)?$"
+        require-login="true"
+s        route="^account\/services(\?.*)?$"
         completed="completedServices"
         transform="transformServices">
     {{#data}}
@@ -98,7 +99,6 @@
                 <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
             </div>
         </div>
-
         <div id="new-subscriptions" class="hide panel">
             <h1>Checkout</h1>
             <br/>
@@ -341,6 +341,7 @@
 <script type="text/template"
         route="^account\/services\/buyout\/(.+)"
         transform="transformBuyOut"
+        require-login="true"
         source="$endpoint/self/whitelist/$1"
         page-title="Whitelist Buy Out">
     <div class="container">
@@ -398,6 +399,7 @@
 
 <script type="text/template"
         route="^account\/services\/buyout\/?$"
+        require-login="true"
         page-title="Purchase Whitelist">
     <div class="container">
         <h1>Purchase Whitelist</h1>

@@ -54,6 +54,7 @@
 
 <script type="text/template"
         route="authenticate-token"
+        require-login="true"
         page-title="Sign In 2 Factor">
     <div class="container">
         <h1>Authenticate Token</h1>
@@ -76,6 +77,7 @@
 
 <script type="text/template"
         route="^forgot-password"
+        require-login="true"
         page-title="Forgot Password?">
     <div class="container">
         <h1>Forgot Password?</h1>
@@ -102,6 +104,7 @@
 
 <script type="text/template"
         route="^reset-password"
+        require-login="true"
         page-title="Reset Password">
     <div class="container">
         <h1>Reset Password</h1>
@@ -139,6 +142,7 @@
 
 <script type="text/template"
         route="^confirm-sign-up"
+        require-login="true"
         page-title="Confirm Sign Up"
         transform="mapConfirmSignup">
     <div class="container">
@@ -271,6 +275,7 @@
         route="^(account\/?$|account\/?\?(.*)$)"
         source="$endpoint/self"
         page-title="My Account"
+        require-login="true"
         completed="completedAccount"
         transform="mapAccount">
     <div class="container">

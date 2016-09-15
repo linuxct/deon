@@ -36,12 +36,13 @@ function resendTwoFactorToken (e, el) {
 }
 
 function onSignIn() {
+  var redirectTo = session.signInRedirectTo || "/"
   getSession(function (err, sess) {
     if (err) return window.alert(err.message)
     session = sess
     trackUser()
     renderHeader()
-    go("/")
+    go(redirectTo)
   })
 }
 
@@ -91,6 +92,14 @@ function updatePassword (e, el) {
 
 
 function signUpAt (e, el, where) {
+  var redirectTo
+  var qo = queryStringToObject(window.location.search)
+  if(qo.redirect) {
+    redirectTo = qo.redirect
+  }
+  else {
+    redirectTo = session.signInRedirectTo || "/"
+  }
   requestJSON({
     url: endpoint + where,
     method: 'POST',
@@ -102,7 +111,7 @@ function signUpAt (e, el, where) {
       if (err) return window.alert(err.message)
       session = sess
       renderHeader()
-      go(queryStringToObject(window.location.search).redirect || "/")
+      go(redirectTo)
     })
   })
 }
