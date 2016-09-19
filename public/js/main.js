@@ -494,7 +494,8 @@ function transformServices () {
   }
 
   return {
-    user: isSignedIn() ? opts : null
+    user: isSignedIn() ? opts : null,
+    qs: encodeURIComponent(window.location.search)
   }
 }
 

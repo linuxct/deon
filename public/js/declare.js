@@ -271,10 +271,6 @@ function openRoute (target, container, matches) {
     template:  target.textContent,
     sourceType: target.getAttribute('source-type')
   }
-  if(target.getAttribute('require-login') && !isSignedIn()) {
-    session.signInRedirectTo = window.location.pathname + window.location.search
-    return go('/sign-in')
-  }
   opts.completed = function () {
     var fn = getMethod(target, 'completed')
     if (fn) {
