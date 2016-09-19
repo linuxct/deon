@@ -74,11 +74,13 @@
                   <li>Direct support via e-mail and on site.</li>
               </ul>
             </div>
-            {{#signedIn}}
-            <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
-            {{/signedIn}}
+            {{^hasGold}}
+                {{#signedIn}}
+                    <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
+                {{/signedIn}}
+            {{/hasGold}}
             {{^signedIn}}
-            <a class="button button--cta" href="/sign-up?redirect=%2faccount%2fservices" action="closeModal">Sign up for an account!</a>
+            <a class="button button--cta" href="/sign-up" redirect-to="/account/services" action="closeModal">Sign up for an account!</a>
             {{/signedIn}}
             <button class="button--close faux" action="closeModal">
               <i class="fa fa-remove"></i>
