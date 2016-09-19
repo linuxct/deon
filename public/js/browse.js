@@ -72,7 +72,7 @@ function transformMusicBrowseResults (obj, done) {
       if (!release.tracks) release.tracks = []
       release.tracks.push(track)
     })
-    var releases = Object.keys(rmap).map(function (key) { return rmap[key] })
+    var releases = Object.keys(rmap).map(function (key) { return rmap[key] }).sort(sortRelease)
     releases.forEach(function(release) {
       mapRelease(release)
       release.tracks.forEach(function (track, index, arr) {
@@ -91,7 +91,6 @@ function transformMusicBrowseResults (obj, done) {
       })
       release.tracks.sort(sortTracks)
     })
-    releases.sort(sortRelease)
     obj.results = releases
     obj.total = obj.total
     done(null, obj)
