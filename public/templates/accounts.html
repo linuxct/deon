@@ -1,6 +1,8 @@
 <script type="text/template"
         route="^(signin|sign-in)"
+        transform="transformSignIn"
         page-title="Sign In">
+    {{#data}}
     <div class="container">
         <h1>Sign In</h1>
         <div class="flex sign-split">
@@ -39,7 +41,7 @@
                 </div>
                 <a href="/forgot-password">Forgot your password?</a>
                 <br/>
-                <a href="/sign-up">Don't have an account? Sign up!</a>
+                <a href="/sign-up?redirect={{redirectTo}}">Don't have an account? Sign up!</a>
             </div>
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Social</h2>
@@ -50,6 +52,7 @@
             </div>
         </div>
     </div>
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -257,6 +260,7 @@
                 </table>
                 <div class="button-group">
                     <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+                    or <a href="/signin?redirect={{redirectTo}}">sign in</a>
                 </div>
                 {{/data}}
             </div>
@@ -286,6 +290,7 @@
             {{/loading}}
             {{#error}}
             <p>{{message}}</p>
+            <p><a href="/signin?redirect=account">Sign in</a> to view this page.</a></p>
             {{/error}}
             {{#data}}
             <table class="form mobile" trigger-target="saveAccount">

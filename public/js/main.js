@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 openRoute.completed.push(function () {
   recordPage()
+  renderHeader()
   if (location.pathname == "/") getStats()
 })
 
@@ -792,22 +793,25 @@ function openReleaseArt (e, el) {
 }
 
 function openTrackCopyCredits (e, el) {
-  console.log('isSignedIn', isSignedIn())
   openModal('track-copycredits-modal', {
-    colin: 'Vindexus',
     trackId:   el.getAttribute('track-id'),
     releaseId: el.getAttribute('release-id'),
     signedIn: isSignedIn()
   })
 }
 
+function transformCurrentUrl (data) {
+  data = data || {}
+  data.currentUrl = encodeURIComponent(window.location.pathname + window.location.search)
+  return data
+}
+
 function renderHeader () {
   var el = document.querySelector('#navigation')
   var target = '[template-name="' + el.getAttribute('template') + '"]'
   var template = document.querySelector(target).textContent
-  var data = null
+  var data = transformCurrentUrl()
   if (session) {
-    data = {}
     data.user = session ? session.user : null
   }
   render(el, template, {

@@ -1,3 +1,15 @@
+function transformRedirectTo (obj) {
+  obj = obj || {}
+  var url = getRedirectTo()
+  obj.redirectTo = encodeURIComponent(url)
+  return obj
+}
+
+function transformSignIn (o) {
+  o = transformRedirectTo(o)
+  return o
+}
+
 function signIn (e, el) {
   requestJSON({
     url: endhost + '/signin',
@@ -36,13 +48,12 @@ function resendTwoFactorToken (e, el) {
 }
 
 function onSignIn() {
-  var redirectTo = session.signInRedirectTo || "/"
   getSession(function (err, sess) {
     if (err) return window.alert(err.message)
     session = sess
     trackUser()
     renderHeader()
-    go(redirectTo)
+    go(getRedirectTo())
   })
 }
 
@@ -92,14 +103,6 @@ function updatePassword (e, el) {
 
 
 function signUpAt (e, el, where) {
-  var redirectTo
-  var qo = queryStringToObject(window.location.search)
-  if(qo.redirect) {
-    redirectTo = qo.redirect
-  }
-  else {
-    redirectTo = session.signInRedirectTo || "/"
-  }
   requestJSON({
     url: endpoint + where,
     method: 'POST',
@@ -111,7 +114,7 @@ function signUpAt (e, el, where) {
       if (err) return window.alert(err.message)
       session = sess
       renderHeader()
-      go(redirectTo)
+      go(getRedirectTo())
     })
   })
 }
@@ -120,9 +123,14 @@ function signUp (e, el) {
   signUpAt(e, el, '/signup')
 }
 
+function getRedirectTo() {
+  return queryStringToObject(window.location.search).redirect || "/"
+}
+
 function mapSignup () {
   return {
-    countries: getAccountCountries()
+    countries: getAccountCountries(),
+    redirectTo: encodeURIComponent(getRedirectTo())
   }
 }
 
