@@ -173,9 +173,6 @@ function interceptClick (e) {
       isAction = t
     if (t.tagName == "A") {
       isAnchor = true
-      if(t.getAttribute('redirect-to')) {
-        session.signInRedirectTo = t.getAttribute('redirect-to')
-      }
       break
     }
   }
@@ -218,9 +215,6 @@ function addEventPath(e) {
   }
 }
 function go (url, state) {
-  if(url == '/signin') {
-    session.signInRedirectTo = window.location.pathname + window.location.search
-  }  
   history.pushState(state || {}, "", url)
   stateChange(location.pathname + location.search, state)
 }
