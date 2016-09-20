@@ -1,6 +1,6 @@
 var endhost         = 'https://connect.monstercat.com'
 var endpoint        = endhost + '/api'
-var datapoint       = 'https://s3.amazonaws.com/data.monstercat.com'
+var datapoint       = 'https://blobcache.monstercat.com'
 var session         = null
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
