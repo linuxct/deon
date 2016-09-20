@@ -210,11 +210,20 @@
         page-title="Sign Up"
         transform="mapSignup">
     <div class="container">
-        <h1>Sign Up</h1>
+        {{#data}}
+            {{^buying}}
+            <h1>Sign Up</h1>
+            {{/buying}}
+
+            {{#buying}}
+            <div class="panel">
+                <h1>Sign Up to Continue</h2>
+                <p>Create an account or sigin to continue buying a <strong>{{vendor}}</strong> license for <strong>{{identity}}</strong>.</p>
+            </div>
+            {{/buying}}
         <div class="flex sign-split">
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>
-                {{#data}}
                 <table class="form mobile" data-set="credentials" trigger-target="signUp">
                     <tbody>
                         <tr>
@@ -258,7 +267,6 @@
                     <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
                     or <a href="/signin?redirect={{redirectTo}}">sign in</a>
                 </div>
-                {{/data}}
             </div>
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Social</h2>
@@ -268,6 +276,7 @@
                 </div>
             </div>
         </div>
+        {{/data}}
     </div>
 </script>
 

@@ -128,9 +128,25 @@ function getRedirectTo() {
 }
 
 function mapSignup () {
+  var redirectTo = getRedirectTo()
+  var buying = false
+
+  console.log('redirectTo', redirectTo)
+
+  if(redirectTo.substr(0, '/account/services'.length) == '/account/services') {
+    var qos = redirectTo.substr(redirectTo.indexOf('?')+1)
+    var qo = queryStringToObject(qos)
+    console.log('qos', qos)
+    console.log('qo', qo)
+    buying = qo
+  }
+
+  console.log('buying', buying)
+
   return {
     countries: getAccountCountries(),
-    redirectTo: encodeURIComponent(getRedirectTo())
+    buying: buying,
+    redirectTo: encodeURIComponent(redirectTo)
   }
 }
 

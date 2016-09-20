@@ -423,6 +423,12 @@ function subscribeNewLicense (e, el) {
     el.classList.remove('working')
     el.disabled = false
     if (err) return window.alert(err.message)
+
+    if(!isSignedIn()) {
+      var url = '/account/services?vendor=' + data.vendor + '&identity=' + data.identity
+      return go('/sign-up?redirect=' + encodeURIComponent(url))
+    }
+
     var name = "Whitelisting for " + data.identity + " on " + data.vendor
     addSub({
       name: name,

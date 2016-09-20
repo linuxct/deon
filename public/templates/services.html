@@ -5,7 +5,6 @@
     {{#data}}
     <div class="container services">
         <h1>Manage Services</h1>
-        {{#user}}
         {{#hasLegacy}}
         <div class="panel">
             <p>
@@ -17,6 +16,7 @@
         {{^hasLegacy}}
         <div class="flex">
 
+            {{#user}}
             <div class="col-xs-12 col-lg-4 col-lg-last panel panel--dark">
                 <h1>Gold Membership</h1>
                 <h2 class="pricing pricing--gold">$5/month</h2>
@@ -47,6 +47,7 @@
                 </div>
                 {{/goldSubscribe}}
             </div>
+            {{/user}}
 
             <div class="col-xs-12 col-lg-8 panel">
                 <h1>Licensing Services</h1>
@@ -123,13 +124,6 @@
             </div>
         </div>
         {{/hasLegacy}}
-        {{/user}}
-        {{^user}}
-        <div class="panel">
-            <p>You need to be logged in to access this page.</p>
-            <p><a href="/signin?redirect=account%2Fservices{{qs}}">Sign in</a> to view this page.</a></p>
-        </div>
-        {{/user}}
     </div>
     {{/data}}
 </script>
