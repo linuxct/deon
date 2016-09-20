@@ -4,7 +4,15 @@
         page-title="Sign In">
     {{#data}}
     <div class="container">
-        <h1>Sign In</h1>
+        {{^buying}}
+        <h1>Sign Up</h1>
+        {{/buying}}
+        {{#buying}}
+        <div class="panel">
+            <h1>Sign In to Continue</h2>
+            <p>Sign in or create an account to continue buying a <strong>{{vendor}}</strong> license for <strong>{{identity}}</strong>.</p>
+        </div>
+        {{/buying}}        
         <div class="flex sign-split">
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>

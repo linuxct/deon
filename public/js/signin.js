@@ -7,6 +7,7 @@ function transformRedirectTo (obj) {
 
 function transformSignIn (o) {
   o = transformRedirectTo(o)
+  o.buying = getSignInBuying()
   return o
 }
 
@@ -127,7 +128,7 @@ function getRedirectTo() {
   return queryStringToObject(window.location.search).redirect || "/"
 }
 
-function mapSignup () {
+function getSignInBuying () {
   var redirectTo = getRedirectTo()
   var buying = false
 
@@ -136,6 +137,13 @@ function mapSignup () {
     var qo = queryStringToObject(qos)
     buying = qo
   }
+
+  return buying
+}
+
+function mapSignup () {
+  var redirectTo = getRedirectTo()
+  var buying = getSignInBuying()
 
   return {
     countries: getAccountCountries(),
