@@ -348,7 +348,7 @@
                 <p>Pre-pay your whitelist license for 20 months. All videos created with the
                     cleared Monstercat catalog during this time period will never
                     receive content-ID claims.</p>
-                <div data-set="new-license">
+                <div data-set="new-license" trigger-target="buyNewLicense">
                     <input type="hidden" name="amount" value="20000">
                     <table class="form mobile">
                         <tbody>
@@ -375,7 +375,7 @@
                     </table>
                     {{>payment-method}}
                     <div class="button-group">
-                        <button class="button--full" action="buyNewLicense" data-set-target="new-license">Purchase Whitelisting</button>
+                        <button class="button--full" trigger="buyNewLicense" action="buyNewLicense" data-set-target="new-license">Purchase Whitelisting</button>
                     </div>
                 </div>
             </div>
@@ -401,7 +401,7 @@
             <p>{{message}}</p>
             {{/error}}
             {{#data}}
-            <div data-set="buy-out-license">
+            <div data-set="buy-out-license" trigger-target="buyLicense">
                 <input type="hidden" name="amount" value="{{amountRemaining}}"/>
                 <input type="hidden" name="id" value="{{_id}}"/>
                 <table class="form mobile">
@@ -434,7 +434,7 @@
                 </table>
                 {{>payment-method}}
                 <div class="button-group">
-                    <button class="button--full" action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
+                    <button class="button--full" trigger="buyLicense" action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
                 </div>
             </div>
             {{/data}}
