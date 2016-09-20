@@ -512,6 +512,10 @@ function queryStringToObject (str) {
   return obj
 }
 
+function searchStringToObject () {
+  return queryStringToObject(window.location.search)
+}
+
 //Loads templates to be used with the {{>partial}} mustache feature
 document.addEventListener("DOMContentLoaded", function (e) {
   var mTemplateEls = document.querySelectorAll('script[mustache-name]')

@@ -1,5 +1,5 @@
 <script type="text/template"
-        route="^account\/services(\?.*)?$"
+        route="^account\/services\/?(\?.*)?$"
         completed="completedServices"
         transform="transformServices">
     {{#data}}
@@ -335,7 +335,7 @@
 </script>
 
 <script type="text/template"
-        route="^account\/services\/buyout\/(.+)"
+        route="^account\/services\/buyout\/^\?(.+)$"
         transform="transformBuyOut"
         source="$endpoint/self/whitelist/$1"
         page-title="Whitelist Buy Out">
@@ -357,7 +357,7 @@
                 <table class="form mobile">
                     <tbody>
                         <tr>
-                            <th>Channel Id</th>
+                            <th>Vendor</th>
                             <td>
                                 <input type="text"
                                        name="vendor"
@@ -393,54 +393,49 @@
 </script>
 
 <script type="text/template"
-        route="^account\/services\/buyout\/?$"
-        transform="transformServices"
+        route="^account\/services\/buyout\/?(\?.*)?$"
+        transform="transformBuyWhitelist"
+        completed="buyWhitelistComplete"
         page-title="Purchase Whitelist">
     <div class="container">
         {{#data}}
             <h1>Purchase Whitelist</h1>
-            {{#user}}
-                <div class="services panel">
-                    <p>Pre-pay your whitelist license for 20 months. All videos created with the
-                        cleared Monstercat catalog during this time period will never
-                        receive content-ID claims.</p>
-                    <div data-set="new-license">
-                        <input type="hidden" name="amount" value="20000">
-                        <table class="form mobile">
-                            <tbody>
-                                <tr>
-                                    <th>Platform</th>
-                                    <td>
-                                        {{>vendor-selector}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Channel Id</th>
-                                    <td>
-                                        <input type="text"
-                                               name="identity"
-                                               placeholder="Put here."/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Total Cost</th>
-                                    <td role="buyout-price">$200.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {{>payment-method}}
-                        <div class="button-group">
-                            <button class="button--full" action="buyNewLicense" data-set-target="new-license">Purchase Whitelisting</button>
-                        </div>
+            <div class="services panel">
+                <p>Pre-pay your whitelist license for 20 months. All videos created with the
+                    cleared Monstercat catalog during this time period will never
+                    receive content-ID claims.</p>
+                <div data-set="new-license">
+                    <input type="hidden" name="amount" value="20000">
+                    <table class="form mobile">
+                        <tbody>
+                            <tr>
+                                <th>Platform</th>
+                                <td>
+                                    {{>vendor-selector}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Channel Id</th>
+                                <td>
+                                    <input type="text"
+                                           name="identity"
+                                           value="{{identity}}"
+                                           placeholder="Put here."/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Total Cost</th>
+                                <td role="buyout-price">$200.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {{>payment-method}}
+                    <div class="button-group">
+                        <button class="button--full" action="buyNewLicense" data-set-target="new-license">Purchase Whitelisting</button>
                     </div>
                 </div>
-            {{/user}}
-            {{^user}}
-                <div class="panel">
-                    <p>You need to be logged in to access this page.</p>
-                    <p><a href="/signin?redirect=account%2Fservices%2Fbuyout">Sign in</a> to view this page.</a></p>
-                </div>
-            {{/user}}
+            </div>
+
         {{/data}}
     </div>
 </script>

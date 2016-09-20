@@ -27,12 +27,48 @@ function buyoutUrl (id) {
   return url
 }
 
+function transformBuyOut (obj) {
+  if (!obj) {
+    var o = searchStringToObject()
+    o.cost = 100
+    return o
+  }
+  obj.cost = (obj.amountRemaining / 100).toFixed(2)
+  return obj
+}
+
+function transformBuyWhitelist (obj) {
+  obj = transformServices(obj)
+  var qo = searchStringToObject()
+  for(var i in qo) {
+    obj[i] = qo[i]
+  }
+  return obj
+}
+
+function buyWhitelistComplete (obj) {
+  var qo = searchStringToObject()
+  if(qo.vendor) {
+    document.querySelector('select[name=vendor]').value = qo.vendor
+  }
+
+  if(qo.vendor && qo.method && qo.identity) {
+    buyNewLicense({}, document.querySelector('[action=buyNewLicense]'))
+  }
+}
+
 function buyLicense (e, el) {
   var data = getTargetDataSet(el)
   if (!data.vendor) return
   if (!data.identity) return
   if (!data.amount) return
   if (!isValidPayMethod(data.method, buyLicense)) return
+
+  if(!isSignedIn()) {
+    var url = encodeURIComponent('/account/services/buyout?vendor=' + data.vendor + '&identity=' + data.identity + '&method=' + data.method)
+    return go('/sign-up?redirect=' + url)
+  }
+
   buyLicense[data.method](data)
 }
 

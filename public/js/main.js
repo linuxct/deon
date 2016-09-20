@@ -560,12 +560,6 @@ function completedMarkdown (obj) {
   }
 }
 
-function transformBuyOut (obj) {
-  if (!obj)
-    return queryStringToObject(window.location.search)
-  obj.cost = (obj.amountRemaining / 100).toFixed(2)
-  return obj
-}
 
 function transformWhitelists (obj) {
   obj.results = obj.results.map(function (whitelist) {
