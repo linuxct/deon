@@ -55,7 +55,8 @@
                    Upon subscribing for 20 months, all your previously uploaded videos within
                    your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
                 <br/>
-                <p>To buy a license at full go <a href="/account/services/buyout">here</a>.</p>
+                <p>To buy a license in full go <a href="/account/services/buyout">here</a>.</p>
+                {{#user}}
                 <br/>
                 <table>
                     <thead>
@@ -75,6 +76,7 @@
                         transform="transformWhitelists">
                     </tbody>
                 </table>
+                {{/user}}
                 <div data-set="new-license" class="services-form" trigger-target="subscribeNewLicense">
                     <select name="vendor">
                         <option value="">Select Platform</option>
