@@ -206,6 +206,49 @@ function resumeLicenseConfirm (e, el) {
   resumeLicenseConfirm[data.method](data)
 }
 
+
+function completedServices (source, obj) {
+  var vendorSelect = document.querySelector('select[name=vendor]')
+  if (!vendorSelect) return
+  var qp = queryStringToObject(window.location.search)
+  if(qp.vendor) {
+    var vendor = qp.vendor.toLowerCase()
+    var valid = true
+    if(vendor == 'youtube') {
+      vendorSelect.value = 'YouTube'
+    }
+    else if(vendor == 'twitch') {
+      vendorSelect.value = 'Twitch'
+    }
+    else if(vendor == 'beam') {
+      vendorSelect.value = 'Beam'
+    }
+    else {
+      valid = false
+    }
+
+    if(qp.identity && valid) {
+      document.querySelector('input[name=identity]').value = qp.identity
+      subscribeNewLicense({}, document.querySelector('[action=subscribeNewLicense]'))
+    }
+  }
+
+  var vendorChanged = function () {
+    var vendor = vendorSelect.value
+    if(vendor == "" ) {
+      vendor = "none"
+    }
+    var els = document.querySelectorAll('.help-text')
+    for(var i = 0; i < els.length; i++) {
+      els[i].classList.toggle('hide', true)
+    }
+    document.querySelector('.help-text.' + vendor).classList.toggle('hide', false)
+  }
+
+  vendorSelect.addEventListener('change', vendorChanged)
+  vendorChanged()
+}
+
 resumeLicenseConfirm.paypal = function resumeLicenseConfirmPayPal (data) {
   requestJSON({
     url: endpoint + '/self/whitelist/' + data.id + '/resume',
