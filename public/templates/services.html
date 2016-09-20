@@ -335,7 +335,55 @@
 </script>
 
 <script type="text/template"
-        route="^account\/services\/buyout\/^\?(.+)$"
+        route="^account\/services\/buyout\/?(\?.*)?$"
+        transform="transformBuyWhitelist"
+        completed="buyWhitelistComplete"
+        page-title="Purchase Whitelist">
+    <div class="container">
+        {{#data}}
+            <h1>Purchase Whitelist</h1>
+            <div class="services panel">
+                <p>Pre-pay your whitelist license for 20 months. All videos created with the
+                    cleared Monstercat catalog during this time period will never
+                    receive content-ID claims.</p>
+                <div data-set="new-license">
+                    <input type="hidden" name="amount" value="20000">
+                    <table class="form mobile">
+                        <tbody>
+                            <tr>
+                                <th>Platform</th>
+                                <td>
+                                    {{>vendor-selector}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Channel Id</th>
+                                <td>
+                                    <input type="text"
+                                           name="identity"
+                                           value="{{identity}}"
+                                           placeholder="Put here."/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Total Cost</th>
+                                <td role="buyout-price">$200.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {{>payment-method}}
+                    <div class="button-group">
+                        <button class="button--full" action="buyNewLicense" data-set-target="new-license">Purchase Whitelisting</button>
+                    </div>
+                </div>
+            </div>
+
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
+        route="^account\/services\/buyout\/(.+)$"
         transform="transformBuyOut"
         source="$endpoint/self/whitelist/$1"
         page-title="Whitelist Buy Out">
@@ -392,50 +440,3 @@
     </div>
 </script>
 
-<script type="text/template"
-        route="^account\/services\/buyout\/?(\?.*)?$"
-        transform="transformBuyWhitelist"
-        completed="buyWhitelistComplete"
-        page-title="Purchase Whitelist">
-    <div class="container">
-        {{#data}}
-            <h1>Purchase Whitelist</h1>
-            <div class="services panel">
-                <p>Pre-pay your whitelist license for 20 months. All videos created with the
-                    cleared Monstercat catalog during this time period will never
-                    receive content-ID claims.</p>
-                <div data-set="new-license">
-                    <input type="hidden" name="amount" value="20000">
-                    <table class="form mobile">
-                        <tbody>
-                            <tr>
-                                <th>Platform</th>
-                                <td>
-                                    {{>vendor-selector}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Channel Id</th>
-                                <td>
-                                    <input type="text"
-                                           name="identity"
-                                           value="{{identity}}"
-                                           placeholder="Put here."/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Total Cost</th>
-                                <td role="buyout-price">$200.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {{>payment-method}}
-                    <div class="button-group">
-                        <button class="button--full" action="buyNewLicense" data-set-target="new-license">Purchase Whitelisting</button>
-                    </div>
-                </div>
-            </div>
-
-        {{/data}}
-    </div>
-</script>
