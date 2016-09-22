@@ -480,6 +480,15 @@ function alreadyInCart (data) {
     !!document.querySelector('[type="hidden"][value="'+data.identity+'"]')
 }
 
+function buyoutNewLicense (e, el) {
+  var data = getTargetDataSet(el)
+  if (!data) return
+  if (!data.vendor) return
+  if (!data.identity) return  
+  data.identity = serviceUrlToChannelId(data.identity)
+  return go('/account/services/buyout?vendor=' + data.vendor + '&identity=' + data.identity)
+}
+
 function subscribeNewLicense (e, el) {
   if (reachedMaxCartSubscriptions())
     return window.alert(strings.cart5)

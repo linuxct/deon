@@ -2842,3 +2842,8 @@ body.bg {
 .anchor-highlight.anchor-highlight-off {
   background: transparent;
 }
+
+.or {
+  padding: 0 0.5em;
+  color: #666;
+}
