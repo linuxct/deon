@@ -546,20 +546,27 @@ function transformMarkdown (obj) {
   return marked(obj)
 }
 
+function scrollToAnimated (el, opts) {
+  opts = opts || {}
+  var duration = opts.duration || 1000
+  var padding = opts.padding || -20
+  animatedScrollTo(document.body, el.offsetTop + padding, duration)
+  //var top = el.offsetTop; //Getting Y of target element
+  //window.scrollTo(0, top);
+}
+
 function completedMarkdown (obj) {
   if(location.hash) {
     var el = document.querySelector(location.hash)
     if(el) {
-      var top = el.offsetTop; //Getting Y of target element
-      window.scrollTo(0, top);
       el.classList.add('anchor-highlight')
+      scrollToAnimated(el)
       setTimeout(function () {
         el.classList.add('anchor-highlight-off')
       }, 2000)
     }
   }
 }
-
 
 function transformWhitelists (obj) {
   obj.results = obj.results.map(function (whitelist) {

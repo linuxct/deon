@@ -454,6 +454,7 @@ function subscribeGold (e, el) {
   var fin = function (opts) {
     addSub(opts)
     toasty(strings.goldAdded)
+    scrollToCheckout()
   }
   if (data.trialCode) {
     el.classList.add('working')
@@ -529,6 +530,7 @@ function subscribeNewLicense (e, el) {
       ]
     })
     toasty(strings.whitelistAdded)
+    scrollToCheckout()
   })
 }
 
@@ -537,4 +539,8 @@ function selectServiceBuyout (e, el) {
   if (!vendorPrices[id]) return
 
   document.querySelector('[role="buyout-price"]').textContent = '$' + (vendorPrices[id].total / 100).toFixed(2)
+}
+
+function scrollToCheckout () {
+  scrollToAnimated(document.querySelector('#new-subscriptions'))
 }
