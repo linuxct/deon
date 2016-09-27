@@ -92,6 +92,13 @@
 
         <!-- Player -->
         <div class="flex controls push-right" role='fixed'>
+            <div class="volume-slider-container" unselectable="on" onselectstart="return false;">
+                <div class="volume-slider-outer">
+                    <div class="volume-slider-inner">
+                        <div class="volume-slider-handle"></div>
+                    </div>                    
+                </div>
+            </div> 
             <a href="#" class="silent" role="track-title"></a>
             <div class="col-md-hidden scrub-container scrub-container--mobile">
                 <div class="scrub" action="scrub">
@@ -113,6 +120,9 @@
             <button class="faux" action="toggleRepeat">
                 <i class="fa fa-repeat"></i>
             </button>
+            <button class="faux volume-toggle" action="toggleVolume" role="volumeControl" onmouseover="startVolumeSliderShow(event)" onmouseleave="startVolumeSliderHide()">
+                <i class="fa fa-volume-up"></i>
+            </button>            
         </div>
     </div>
 </header>

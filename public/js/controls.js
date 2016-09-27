@@ -4,7 +4,13 @@ var sel = {
   playPlaylist: '[role="play-playlist"]',
   playRelease: '[role="play-release"]',
   scrub: '[role="scrub-progress"]',
-  title: '[role="track-title"]'
+  title: '[role="track-title"]',
+  volume: '[role="volumeControl"]',
+  volumeI: '[role="volumeControl"] > i',
+  volumeInnerSlider: '.volume-slider-inner',
+  volumeOuterSlider: '.volume-slider-outer',
+  volumeSliderContainer: '.volume-slider-container',
+  controls: '.controls'  
 }
 
 var playerEvents = {
@@ -34,6 +40,14 @@ document.addEventListener('DOMContentLoaded', function(e) {
   player.addEventListener('error', recordPlayerError)
   player.addEventListener('play', recordPlayerPlayLegacy)
   requestAnimationFrame(updatePlayerProgress)
+  var volume = getCookie('volume')
+  if(!volume) {
+    volume = 1
+  }
+  player.setStoredVolume(volume)
+  player.setVolume(volume)
+  bindVolumeEvents()
+  setVolumeDisplay()  
 })
 
 function recordPlayerEvent (e) {
@@ -83,6 +97,118 @@ function playSong(e, el) {
     loadAndPlayTracks(index)
 }
 
+function toggleVolume (e, el) {
+  if(!e.target.matches('i,button')) {
+    return
+  }
+
+  var volume = player.getVolume()
+  if(volume > 0) {
+    player.setStoredVolume(volume)
+    player.setVolume(0)
+  }
+  else {
+    player.setVolume(player.getStoredVolume())
+  }
+  setVolumeDisplay()
+}
+
+function bindVolumeEvents(){
+  var container = document.querySelector(sel.volumeSliderContainer)
+  var outer = document.querySelector(sel.volumeOuterSlider)
+
+  // non-touch events
+  container.addEventListener('mouseover', volumeSliderRemain)
+  container.addEventListener('mouseleave', startVolumeSliderHide)
+  outer.addEventListener('mousedown', startVolumeDrag)
+  outer.addEventListener('mousemove', calculateVolumeDrag)
+
+  // touch events
+  container.addEventListener('touchstart', initVolumeMobile)
+}
+
+function initVolumeMobile(e){
+  // if they're on touch devices, let's put the volume at 100%
+  e.preventDefault();
+  player.setVolume(1)
+}
+
+function startVolumeSliderShow (e) {
+  clearTimeout(startVolumeSliderHide.timeout)
+  var controls = document.querySelector(sel.controls)
+  controls.classList.toggle('show-slider', true)
+}
+
+function volumeSliderRemain (e) {
+  clearTimeout(startVolumeSliderHide.timeout)
+}
+
+function startVolumeSliderHide () {
+  if(startVolumeDrag.dragging) {
+    return false
+  }
+  startVolumeSliderHide.timeout = setTimeout(function () {
+    volumeSliderHide()
+  }, 500)
+}
+startVolumeSliderHide.timeout = null
+
+function volumeSliderHide () {
+  var controls = document.querySelector(sel.controls)
+  controls.classList.toggle('show-slider', false)
+}
+
+function startVolumeDrag (e) {
+  startVolumeDrag.dragging = true
+  calculateVolumeDrag(e)
+  window.addEventListener("mouseup", stopVolumeDrag)
+}
+startVolumeDrag.dragging = false
+
+function calculateVolumeDrag (e) {
+  if(!startVolumeDrag.dragging) {
+    return
+  }
+  if(e.path[0].matches('.volume-slider-handle')) {
+    return
+  }
+  var outer = document.querySelector(sel.volumeOuterSlider)
+  var style = window.getComputedStyle(outer)
+  var height = parseInt(style.getPropertyValue('height'))
+  var offset = e.offsetY
+  var newVolume = offset / height
+
+  //Dragging off the edge sometimes messes up, so we'll round for the user here
+  //TODO: Change this to check to see if the mouse is outside the range of offsetY (past the slider container)
+  if(height - offset <= 1) {
+    newVolume = 1
+  }
+
+  player.setStoredVolume(newVolume)
+  player.setVolume(newVolume)
+  setCookie('volume', newVolume)
+  setVolumeDisplay()
+}
+
+function stopVolumeDrag (e) {
+  window.removeEventListener("mouseup", stopVolumeDrag)
+  startVolumeDrag.dragging = false
+}
+
+function setVolumeDisplay() {
+  var volume = player.getVolume()
+  var icon = document.querySelector(sel.volumeI)
+  var innerSlide = document.querySelector(sel.volumeInnerSlider)
+  var height = volume * 100
+  if(height < 2) {
+    height = 2
+  }
+  icon.classList.toggle('fa-volume-off', volume == 0)
+  icon.classList.toggle('fa-volume-down', volume < 0.75 && volume > 0)
+  icon.classList.toggle('fa-volume-up', volume >= 0.75)
+  innerSlide.style.height = parseInt(height) + '%';
+}
+
 function playSongDblC (e, el) {
   var button = el.querySelector('[role="play-song"]')
   playSong(e, button)
@@ -121,8 +247,10 @@ function playSongs(e, el) {
 
 function onNewSong(e) {
   var el = document.querySelector(sel.title)
+  var controls = document.querySelector(sel.controls)
   el.textContent = e.detail.item.title
   el.classList.add('playing-track')
+  controls.classList.add('playing')
   if (typeof autoBrowseMore == 'function') autoBrowseMore()
 }
 
