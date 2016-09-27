@@ -1,3 +1,4 @@
+window.splittestlog = []
 function SplitTest (opts) {
   //console.log('opts', opts)
   this.alts = []
@@ -29,7 +30,6 @@ function SplitTest (opts) {
 
   this.checkStarter()
 }
-SplitTest.log = []
 
 //Fires every 50ms and starts the test if the
 //custom checkStart function for this specific test
@@ -38,7 +38,7 @@ SplitTest.prototype.checkStarter = function () {
   clearTimeout(this.checkStarterTimeout)
   if(this.checkStart()) {
     if(!this.started) {
-      SplitTest.log.push('STARTING TEST: ' + this.name)
+      window.splittestlog.push('STARTING TEST: ' + this.name)
       this.start()
     }
   }
@@ -56,7 +56,7 @@ SplitTest.prototype.start = function () {
     if (err) throw err;
     alt = res.alternative.name
     if(this.modifiers.hasOwnProperty(alt)) {
-      SplitTest.log.push('Running alt ' + alt + ' for ' + this.name)
+      window.splittestlog.push('Running alt ' + alt + ' for ' + this.name)
       this.modifiers[alt](this)
       this.onStarted(alt)
     }
@@ -67,9 +67,9 @@ SplitTest.prototype.start = function () {
 }
 
 SplitTest.prototype.convert = function () {
-  SplitTest.log.push('Convert for ' + this.name)
+  window.splittestlog.push('Convert for ' + this.name)
   sixPackSession.convert(this.name, function (err, res) {
     if (err) throw err
-    SplitTest.log.push('Convert res', res)
+    window.splittestlog.push('Convert res', res)
   })
-}
+};
