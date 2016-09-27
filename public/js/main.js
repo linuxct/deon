@@ -2,6 +2,7 @@ var endhost         = 'https://connect.monstercat.com'
 var endpoint        = endhost + '/api'
 var datapoint       = 'https://blobcache.monstercat.com'
 var session         = null
+var sixPackSession  = new sixpack.Session();
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
 var lstore          = window.localStorage
@@ -18,6 +19,11 @@ document.addEventListener("DOMContentLoaded", function (e) {
       console.warn(err.message)
     }
     session = obj
+    if(obj.user) {
+      sixPackSession = new sixpack.Session({
+        client_id: obj.user._id
+      });
+    }
     trackUser()
     renderHeader()
     renderHeaderMobile()
