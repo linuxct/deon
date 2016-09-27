@@ -124,6 +124,18 @@ var MusicPlayer = (function () {
     this.audio.volume = percent
   }
 
+  MusicPlayer.prototype.getVolume = function () {
+    return clamp(this.audio.volume, 0, 1)
+  }
+
+  MusicPlayer.prototype.setStoredVolume = function (v) {
+    this.storedVolume = v
+  }
+
+  MusicPlayer.prototype.getStoredVolume = function () {
+    return this.storedVolume
+  }
+
   MusicPlayer.prototype.next = function () {
     var old = this.currentItem
     this.advance(1)
