@@ -10,6 +10,12 @@ var MusicPlayer = (function () {
     return evt
   }
 
+  if (typeof Audio === 'undefined') {
+    function Audio() {
+      this.addEventListener = Function.prototype
+    }
+  }
+
   function MusicPlayer () {
     constructEmitter(this)
     MusicPlayer.define(this)

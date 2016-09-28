@@ -1,8 +1,8 @@
-var express 	= require('express')
-var path    	= require('path')
-var fs 			  = require('fs')
+var express   = require('express')
+var path      = require('path')
+var fs        = require('fs')
 
-var dir = process.env.PUBLIC_DIR || process.cwd() + '/public'
+var dir = process.cwd() + (process.env.NODE_ENV === 'production' ? '/bin' : '/public')
 if (!path.isAbsolute(dir)) dir = path.resolve(process.cwd(), dir)
 
 var order = [
@@ -30,8 +30,13 @@ function buildHTML () {
 
 var app = express()
 app.use(express.static(dir))
-app.use((req, res, next)=>{
-  res.status(200).send(buildHTML())
+app.use((req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    res.sendFile(path.join(dir, 'index.html'))
+  }
+  else {
+    res.status(200).send(buildHTML())
+  }
 })
 
 app.listen(process.env.PORT || 8080)

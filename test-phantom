@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -e
+
+echo
+echo "Running PhantomJS tests."
+echo
+
+phantomjs test/*-phantom.js
+
+echo
+echo -e "\033[0mDone."
