@@ -2,15 +2,16 @@ var endhost         = 'https://connect.monstercat.com'
 var endpoint        = endhost + '/api'
 var datapoint       = 'https://blobcache.monstercat.com'
 var session         = null
-var sixPackSession  = new sixpack.Session();
 var pageTitleSuffix = 'Monstercat'
 var pageTitleGlue   = ' - '
 var lstore          = window.localStorage
+var sixPackSession  = null
 
 preLoadImage('/img/artwork.jpg')
 preLoadImage('/img/artist.jpg')
 
 document.addEventListener("DOMContentLoaded", function (e) {
+  sixPackSession  = new sixpack.Session();
   initSocials()
   renderHeader()
   getSession(function (err, obj, xhr) {

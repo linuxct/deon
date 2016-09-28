@@ -72,4 +72,4 @@ SplitTest.prototype.convert = function () {
     if (err) throw err
     window.splittestlog.push('Convert res', res)
   })
-};
+}

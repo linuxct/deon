@@ -47,4 +47,4 @@ var homePageViewReleaseButton = new SplitTest({
       document.querySelector('.featured-details .button--cta').innerHTML = 'Check It Out <i class="fa fa-chevron-right"></i>'
     }
   }
-});
+})
