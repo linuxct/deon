@@ -10,16 +10,17 @@ var MusicPlayer = (function () {
     return evt
   }
 
-  if (typeof Audio === 'undefined') {
-    function Audio() {
-      this.addEventListener = Function.prototype
-    }
-  }
-
   function MusicPlayer () {
     constructEmitter(this)
     MusicPlayer.define(this)
-    this.audio = new Audio()
+    if(window._phantom) {
+      this.audio = new (function () {
+        this.addEventListener = Function.prototype
+      })()
+    }
+    else {
+      this.audio = new Audio()
+    }
     this.audio.addEventListener('error', onError.bind(this))
     this.audio.addEventListener('stalled', onStalled.bind(this))
     this.audio.addEventListener('ended', onEnded.bind(this))

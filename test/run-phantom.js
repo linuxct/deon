@@ -7,6 +7,10 @@ page.onError = function(msg, trace) {
   }
 }
 
+page.onConsoleMessage = function(msg, lineNum, sourceId) {
+  console.log('CONSOLE: ' + msg + ' (from line #' + lineNum + ' in "' + sourceId + '")');
+};
+
 page.open('http://localhost:8080', function(status){
   if (status !== 'success') {
     console.log('\033[31mPhantomJS page error:', status)
