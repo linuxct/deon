@@ -2,7 +2,7 @@ var express   = require('express')
 var path      = require('path')
 var fs        = require('fs')
 
-var dir = process.cwd() + (process.env.NODE_ENV === 'production' ? '/bin' : '/public')
+var dir = process.cwd() + (process.env.NODE_ENV === 'production' ? '/bin' : '/src')
 if (!path.isAbsolute(dir)) dir = path.resolve(process.cwd(), dir)
 
 var order = [

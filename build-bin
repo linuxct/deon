@@ -9,39 +9,25 @@ RESET="\033[0m"
 echo
 echo -e "Making \"bin\" directory"
 mkdir -p bin
-mkdir -p bin/fonts
-mkdir -p bin/img
 
 echo
-echo -e "${CYAN}JS${RESET}"
-echo -e "Combining all at ${CYAN}public/js/*.js${RESET}"
-cat public/js/*.js > bin/main.js
-echo -e "Minimizing"
-node_modules/.bin/uglifyjs bin/main.js > bin/main.min.js
-
-echo
-echo -e "${GREEN}CSS${RESET}"
-echo -e "Combining all at ${GREEN}public/css/*.css${RESET}"
-cat public/css/*.css > bin/style.css
-echo -e "Minimizing"
-node_modules/.bin/cleancss bin/style.css > bin/style.min.css
+echo -e "Linking assets"
+ln -s ../src/fonts bin/fonts
+ln -s ../src/img bin/img
+ln -s ../src/css bin/css
+ln -s ../src/js bin/js
+ln -s ../src/favicon.ico bin/favicon.ico
 
 echo
 echo -e "${YELLOW}HTML${RESET}"
 echo -e "Combining all HTML and Templates..."
-cat public/html/begin.html > bin/tmp.html
-cat public/html/head-production.html >> bin/tmp.html
-cat public/html/begin-body.html >> bin/tmp.html
-cat public/html/body.html >> bin/tmp.html
-cat public/templates/*.html >> bin/tmp.html
-cat public/html/end.html >> bin/tmp.html
+cat src/html/begin.html > bin/tmp.html
+cat src/html/head.html >> bin/tmp.html
+cat src/html/begin-body.html >> bin/tmp.html
+cat src/html/body.html >> bin/tmp.html
+cat src/templates/*.html >> bin/tmp.html
+cat src/html/end.html >> bin/tmp.html
 mv bin/tmp.html bin/index.html
-
-echo
-echo -e "Copying assets..."
-cp -fr public/fonts/* bin/fonts/
-cp -fr public/img/* bin/img/
-cp -fr public/favicon.ico bin/favicon.ico
 
 echo
 echo "Done."
