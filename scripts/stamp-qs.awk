@@ -1,6 +1,6 @@
 
 function add_qs(filename) {
-  path = root "public" filename
+  path = root filename
   cmd = "sha1sum " path " | cut -d ' ' -f1 | head -c 8"
   cmd | getline sum
   close(cmd)
