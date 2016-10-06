@@ -29,42 +29,21 @@
           <p>A Monstercat Whitelist License is a monthly subscription that allows content creators to utilize the Monstercat Catalog on one of YouTube, Twitch or Beam. Each channel will require its own license. This removes all existing and future Content ID matches allowing content creators to earn 100% of their channel advertising royalties.</p>
           <p>A portion of your Whitelist License subscription goes directly to the artists for each track you stream or download. We believe in generating new revenue streams for artists and this is a great way to fairly support content creators and musicians alike!</p>
         </div>
-        <div class="licensing-box col-xs-12 col-sm-12 col-md-offset-1 col-md-5">
-          {{>licensingOurContentCreators}}
-        </div>
     </div>
     <div class="flex">
-      <div class="licensing-box col-xs-12 faq">
+      <div class="licensing-box col-xs-12 faq col-lg-6">
         <h2 id="faq">Frequently Asked Questions</h2>
-        <h4 id="how-much-does-it-cost">How much does it cost?</h4>
-        <p>YouTube: $10 USD a month for 20 months or $200 one time
-        <br />Twitch or Beam: $5 USD a month for 20 months or $100 one time</p>
-
-        <h4 id="what-happens-after-20-months">What happens after 20 months?</h4>
-        <p>After 20 months your channel is considered fully <strong>paid off</strong> and you no longer need to keep paying for it.</p>
-
-        <h4 id="what-does-paid-off-mean">What does <strong>paid off</strong> mean?</h4>
-        <p>A channel that is fully <strong>paid off</strong> is permanently on the whitelist, and won't receive any copyright claims for new or old videos.</p>
-
-        <h4 id="can-i-pay-monthly">Can I pay monthly?</h4>
-        <p>Yes, you can pay either monthly or as a one time fee.</p>
-
-        <h4 id="can-i-use-monstercat-music-without-a-license">Can I use Monstercat music without a license?</h4>
-        <p>For YouTube videos, yes. You will receive a copyright claim and the ad revenue will go to Monstercat and the artists involved. This copyright claim isn't a strike, and it isn't bad for your channel.</p>
-
-        <h4 id="are-there-any-songs-i-cant-use">Are there any songs I can't use?</h4>
-        <p>Yes. The songs listed <a href="https://connect.monstercat.com/#handbook/licensing">on this page</a> cannot be licensed. Unlicensable tracks will be marked as such in the monstercat.com catalog. You can hide all of these tracks by toggling the "Skip Non-licensable Tracks" setting in your <a href="/account">settings page</a>.</p>
-
-        <h4 id="i-bought-a-license-but-still-got-a-copyright-claim">I bought a license but still got a copyright claim. What do I do?</h4>
-        <p>You can use <a href="/release-claim">this page to release the claim</a> or you can contact us at <a href="mailto:info@monstercat.com">info@monstercat.com</a> and we can get it sorted out for you.</p>
-
-        <h4 id="what-is-your-youtube-policy">What is your YouTube policy?</h4>
-        <p>You can <a href="/licensing/youtube-policy">read our YouTube policies here</a>.</p>
-
-        <h4 id="what-is-your-twitch-policy">What is your Twitch policy?</h4>
-        <p>You can <a href="/licensing/twitch-policy">read our Twitch policy here</a>.</p>
+        <div
+            template="markdown-bare"
+            source="https://raw.githubusercontent.com/monstercat/docs/master/site/Whitelisting.md">
+        </div>
       </div>
     </div>
+  </div>
+  <div class="panel">
+    <h3>Buy a License</h3>
+    <br />
+    {{>licensingContentCreatorCTAs}}
   </div>
 </div>
 </script>
@@ -73,7 +52,7 @@
         page-title="Licensing"
         transform="transformLicensing"
         completed="completedLicensing">
-  <div class="licensing">
+  <div class="licensing v-stretch">
     <div class="banner" id="licensing">
       <div class="banner-shade"></div>
     </div>
@@ -159,7 +138,7 @@
       <div class="flex">
         <div class="licensing-box col-xs-12 col-sm-12 col-md-6">
           <h2>About</h2>
-          <p>Music licensing doesn’t have to be hard. Our dedicated team of music licensing professionals can offer personalized support every step of the way. From finding the perfect song to executing the license, you’ll deal with a single representative to ensure that your project receives the unique attention it deserves. To further facilitate the licensing process, Monstercat Connect was developed for our clients to access our catalog and find that perfect song. Email us at <a href="mailto:licensing@monstercat.com">licensing@monstercat.com</a>.</p>
+          <p>Music licensing doesn't have to be hard. Our dedicated team of music licensing professionals can offer personalized support every step of the way. From finding the perfect song to executing the license, you'll deal with a single representative to ensure that your project receives the unique attention it deserves. To further facilitate the licensing process, Monstercat Connect was developed for our clients to access our catalog and find that perfect song. Email us at <a href="mailto:licensing@monstercat.com">licensing@monstercat.com</a>.</p>
         </div>
         <div class="licensing-box col-sm-12 col-md-5 col-md-offset-1">
           <h2>Our Clients</h2>
@@ -211,6 +190,19 @@
 
 <script type="text/template" template-name="markdown-simple" transform="transformMarkdown" completed="scrollToHighlightHash">
 {{>markdown-basic}}
+</script>
+
+
+<script type="text/template" template-name="markdown-bare" transform="transformMarkdown" completed="scrollToHighlightHash">
+{{#loading}}
+{{>loading-view}}
+{{/loading}}
+{{#error}}
+<p>{{message}}</p>
+{{/error}}
+{{#data}}
+{{{data}}}
+{{/data}}
 </script>
 
 <script type="text/template"

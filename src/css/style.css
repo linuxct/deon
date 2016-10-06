@@ -3096,6 +3096,11 @@ textarea.copycredits {
   padding: 3em 0 4em;
   font-size: 16px;
   position: relative;
+  min-height: 50vh
+}
+
+.licensing.v-stretch {
+  min-height: 85vh;
 }
 
 #licensing.first {
@@ -3122,6 +3127,10 @@ textarea.copycredits {
   color: #fff;
   display: inline-block;
   border-radius: 5px;
+}
+
+h2#faq {
+  margin-top: 1em;
 }
 
 .licensing .licensing-box {
