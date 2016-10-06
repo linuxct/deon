@@ -11,7 +11,6 @@ preLoadImage('/img/artwork.jpg')
 preLoadImage('/img/artist.jpg')
 
 document.addEventListener("DOMContentLoaded", function (e) {
-  sixPackSession  = new sixpack.Session();
   initSocials()
   renderHeader()
   getSession(function (err, obj, xhr) {
@@ -24,6 +23,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
       sixPackSession = new sixpack.Session({
         client_id: obj.user._id
       });
+    }
+    else {
+      sixPackSession  = new sixpack.Session();
     }
     trackUser()
     renderHeader()

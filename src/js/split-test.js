@@ -7,6 +7,7 @@ function SplitTest (opts) {
   this.onStart = function () {
 
   }
+  this.dontCheckStarter = false
 
   for(var i in opts) {
     this[i] = opts[i]
@@ -28,7 +29,11 @@ function SplitTest (opts) {
     throw new Error('Need a checkStart function to check when to start running the test')
   }
 
-  this.checkStarter()
+  //This is for test where a new SplitTest obj needs to be instantiated somewhere
+  //  to call the convert() function. Like in multiple page tests.
+  if(!this.dontCheckStarter) {
+    this.checkStarter()
+  }
 }
 
 //Fires every 50ms and starts the test if the
@@ -38,7 +43,7 @@ SplitTest.prototype.checkStarter = function () {
   clearTimeout(this.checkStarterTimeout)
   if(this.checkStart()) {
     if(!this.started) {
-      window.splittestlog.push('STARTING TEST: ' + this.name)
+      window.splittestlog.push('STARTING TEST: "' + this.name + '"')
       this.start()
     }
   }
@@ -56,19 +61,36 @@ SplitTest.prototype.start = function () {
     if (err) throw err;
     alt = res.alternative.name
     if(this.modifiers.hasOwnProperty(alt)) {
-      window.splittestlog.push('Running alt ' + alt + ' for ' + this.name)
+      window.splittestlog.push('Running alt "' + alt + '"" for "' + this.name + '"')
       this.modifiers[alt](this)
+      this.alt = alt
       this.onStarted(alt)
     }
     else {
-      throw new Error("No modifier found for alt '" + alt + "'")
+      throw new Error('No modifier found for alt "'  + alt + '"')
     }
   }.bind(this));
 }
 
 SplitTest.prototype.convert = function () {
-  window.splittestlog.push('Convert for ' + this.name)
-  sixPackSession.convert(this.name, function (err, res) {
+  splitTestConvert(this.name)
+}
+
+SplitTest.prototype.convertKpi = function (kpi) {
+  splitTestConvertKpi(this.name, kpi)
+}
+
+function splitTestConvert (name) {
+  window.splittestlog.push('Convert for "' + name + '"')
+  sixPackSession.convert(name, function (err, res) {
+    if (err) throw err
+    window.splittestlog.push('Convert res', res)
+  })
+}
+
+function splitTestConvertKpi (name, kpi) {
+  window.splittestlog.push('Convert for "' + name + '" with kpi "' + kpi + '"')
+  sixPackSession.convert(name, kpi, function (err, res) {
     if (err) throw err
     window.splittestlog.push('Convert res', res)
   })

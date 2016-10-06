@@ -62,22 +62,22 @@ function recordPlayerPlayLegacy (e) {
   recordEvent('Audio Player Play Server Side', e.detail.item)
 }
 
-function togglePlay(e, el) {
+function togglePlay (e, el) {
   player.toggle()
   updateControls()
 }
 
-function next(e, el) {
+function next (e, el) {
   player.next()
   updateControls()
 }
 
-function previous(e, el) {
+function previous (e, el) {
   player.previous()
   updateControls()
 }
 
-function toggleRepeat(e, el) {
+function toggleRepeat (e, el) {
   var options = ['none', 'one', 'all']
   var i = (options.indexOf(player.repeat) + 1) % options.length
   player.repeat = options[i]
@@ -86,12 +86,12 @@ function toggleRepeat(e, el) {
   el.classList.toggle('repeat-all', player.repeat == 'all')
 }
 
-function toggleShuffle(e, el) {
+function toggleShuffle (e, el) {
   player.shuffle = !player.shuffle
   el.classList.toggle('active', player.shuffle)
 }
 
-function playSong(e, el) {
+function playSong (e, el) {
   var index = el.hasAttribute('index') ? +el.getAttribute('index') : undefined
   if (index != undefined)
     loadAndPlayTracks(index)
@@ -113,7 +113,7 @@ function toggleVolume (e, el) {
   setVolumeDisplay()
 }
 
-function bindVolumeEvents(){
+function bindVolumeEvents (){
   var container = document.querySelector(sel.volumeSliderContainer)
   var outer = document.querySelector(sel.volumeOuterSlider)
 
@@ -195,7 +195,7 @@ function stopVolumeDrag (e) {
   startVolumeDrag.dragging = false
 }
 
-function setVolumeDisplay() {
+function setVolumeDisplay () {
   var volume = player.getVolume()
   var icon = document.querySelector(sel.volumeI)
   var innerSlide = document.querySelector(sel.volumeInnerSlider)
@@ -214,8 +214,14 @@ function playSongDblC (e, el) {
   playSong(e, button)
 }
 
-function loadAndPlayTracks(index) {
+function loadAndPlayTracks (index) {
   var tracks = buildTracks()
+
+  //A/B
+  if(musicReleasesVsBrowseTest.recordPlays) {
+    splitTestConvertKpi('music-releases-vs-browse', 'song-played')
+  }
+
   if (areTracksLoaded(tracks)) {
     player.toggle(index)
   }
@@ -230,22 +236,22 @@ function loadAndPlayTracks(index) {
   updateControls()
 }
 
-function buildTracks() {
+function buildTracks () {
   var els = Array.prototype.slice.call(document.querySelectorAll('[play-link]'))
   return els.map(mapTrackElToPlayer)
 }
 
-function areTracksLoaded(tracks) {
+function areTracksLoaded (tracks) {
   return tracks.every(function(track, index) {
     return player.items[index] && player.items[index].source == track.source
   })
 }
 
-function playSongs(e, el) {
+function playSongs (e, el) {
   loadAndPlayTracks()
 }
 
-function onNewSong(e) {
+function onNewSong (e) {
   var el = document.querySelector(sel.title)
   var controls = document.querySelector(sel.controls)
   el.textContent = e.detail.item.title
@@ -254,7 +260,7 @@ function onNewSong(e) {
   if (typeof autoBrowseMore == 'function') autoBrowseMore()
 }
 
-function updateControls() {
+function updateControls () {
   var playEl = document.querySelector(sel.play)
   if (playEl) {
     playEl.classList.toggle('fa-play', !player.playing && !player.loading)
@@ -289,11 +295,11 @@ function updateControls() {
   }
 }
 
-function isPlaylistLoaded(id) {
+function isPlaylistLoaded (id) {
   return player.items.length && player.items[0].playlistId == id
 }
 
-function isReleaseLoaded(id) {
+function isReleaseLoaded (id) {
   return player.items.length && player.items[0].releaseId == id
 }
 
@@ -308,7 +314,7 @@ function mapTrackElToPlayer (el) {
   }
 }
 
-function scrub(e, el) {
+function scrub (e, el) {
   if (e.clientY>100){
     var margin = 0
     if (document.body) margin = document.body.clientWidth - el.offsetWidth || 0
@@ -318,7 +324,7 @@ function scrub(e, el) {
   }
 }
 
-function updatePlayerProgress() {
+function updatePlayerProgress () {
   requestAnimationFrame(updatePlayerProgress)
   var scrubs = document.querySelectorAll(sel.scrub)
   if (scrubs) {
