@@ -269,6 +269,10 @@ function completedServices (source, obj) {
     }
   }
 
+  if(qp.hasOwnProperty('gold')) {
+    subscribeGold({}, document.querySelector('[action=subscribeGold]'))
+  }
+
   var vendorChanged = function () {
     var vendor = vendorSelect.value
     if(vendor == "" ) {
@@ -452,9 +456,15 @@ function subscribeGold (e, el) {
     ]
   }
   var fin = function (opts) {
-    addSub(opts)
-    toasty(strings.goldAdded)
-    scrollToCheckout()
+    if(isSignedIn()) {
+      addSub(opts)
+      toasty(strings.goldAdded)
+      scrollToCheckout()
+    }
+    else {
+      var url = '/account/services?gold'
+      return go('/sign-up?redirect=' + encodeURIComponent(url))
+    }
   }
   if (data.trialCode) {
     el.classList.add('working')
@@ -542,5 +552,7 @@ function selectServiceBuyout (e, el) {
 }
 
 function scrollToCheckout () {
-  scrollToAnimated(document.querySelector('#new-subscriptions'))
+  setTimeout(function () {
+    scrollToAnimated(document.querySelector('#new-subscriptions'))
+  }, 500)
 }

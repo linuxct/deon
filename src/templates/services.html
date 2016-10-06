@@ -37,7 +37,7 @@
                     <li>Direct support via e-mail and on site.</li>
                 </ul>
                 <div data-set="subscribe-gold" class="services-form">
-                    <input type="text" name="trialCode" placeholder="Special Code"/>
+                    <input type="text" name="trialCode" placeholder="Special Code (optional)"/>
                     <button class="button--gold"
                             action="subscribeGold"
                             data-set-target="subscribe-gold">
@@ -56,7 +56,7 @@
                    your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
                 <br/>
                 <p>To buy a license in full go <a href="/account/services/buyout">here</a>.</p>
-                {{#user}}
+                {{#user.isSignedIn}}
                 <br/>
                 <table>
                     <thead>
@@ -76,7 +76,7 @@
                         transform="transformWhitelists">
                     </tbody>
                 </table>
-                {{/user}}
+                {{/user.isSignedIn}}
                 <div data-set="new-license" class="services-form" trigger-target="subscribeNewLicense">
                     <select name="vendor">
                         <option value="">Select Platform</option>
@@ -104,10 +104,10 @@
                     <div class="help-text Beam hide">https://beam.pro/<strong>Channel_ID</strong></div>
                     <div class="help-text none hide">&nbsp;</div>
                 </div>
-                {{#user}}
+                {{#user.isSignedIn}}
                 <br/>
                 <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
-                {{/user}}
+                {{/user.isSignedIn}}
             </div>
         </div>
         <div id="new-subscriptions" class="hide panel">

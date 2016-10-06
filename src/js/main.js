@@ -507,16 +507,16 @@ function transformSocialSettings (obj) {
 function transformServices () {
   var user = isSignedIn() ? session.user : {}
   var opts = {
+    isSignedIn: isSignedIn(),
     hasGoldPermanent: !!user.goldService && !user.currentGoldSubscription,
-    goldSubscribe: !user.goldService && !user.currentGoldSubscription,
+    goldSubscribe: (!user.goldService && !user.currentGoldSubscription) || !isSignedIn(),
     goldUnsubscribe: (!!user.goldService && !!user.currentGoldSubscription)
   }
   if (isLegacyUser()) {
     opts = {hasLegacy: true}
   }
-
   return {
-    user: isSignedIn() ? opts : null,
+    user: opts,
     qs: encodeURIComponent(window.location.search)
   }
 }
