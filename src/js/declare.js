@@ -49,6 +49,16 @@ function request (opts, done) {
   return xhr
 }
 
+function requestWithFormData (opts, done) {
+  var fd = new FormData()
+  opts.data = opts.data || {}
+  for(var key in opts.data) {
+    fd.append(key, opts.data[key])
+  }
+  opts.data = fd
+  request(opts, done)
+}
+
 function requestDetect (opts, done, fallback) {
   var url    = opts.url
   var method = fallback || request
@@ -180,6 +190,7 @@ function interceptClick (e) {
     runAction(e, isAction)
   }
   if (!isAnchor || !t.hasAttribute('href')) return
+  if(e.ctrlKey) return
   var url = t.getAttribute("href")
   if (url.indexOf('http') == 0)
     return
@@ -336,6 +347,7 @@ function getElementSourceOptions (el) {
   var tel = getTemplateEl(el.getAttribute('template')) || el;
   return {
     source:    el.getAttribute('source'),
+    sourceType:    el.getAttribute('source-type'),
     container: el,
     template:  tel.textContent,
     transform: getMethod(tel, 'transform'),
@@ -346,7 +358,9 @@ function getElementSourceOptions (el) {
 function applyTransform (transform, data, done) {
   if (typeof transform == 'function') {
     data = transform(data, done)
-    if (!data) return
+    if (!data) {
+      return
+    }
   }
   done(null, data)
 }

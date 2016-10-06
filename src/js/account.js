@@ -65,8 +65,7 @@ function mapAccount (o) {
 }
 
 function completedAccount () {
-  window['optimizely'] = window['optimizely'] || [];
-  window.optimizely.push(["activate", 7219990760]);
+  scrollToHighlightHash()
 }
 
 function transformAccountSettings(obj) {

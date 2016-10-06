@@ -12,22 +12,25 @@ mkdir -p bin
 
 echo
 echo -e "Linking assets"
-ln -s ../src/fonts bin/fonts
-ln -s ../src/img bin/img
-ln -s ../src/css bin/css
-ln -s ../src/js bin/js
-ln -s ../src/favicon.ico bin/favicon.ico
+ln -fs ../src/fonts bin/fonts
+ln -fs ../src/img bin/img
+ln -fs ../src/css bin/css
+ln -fs ../src/js bin/js
+ln -fs ../src/favicon.ico bin/favicon.ico
 
 echo
 echo -e "${YELLOW}HTML${RESET}"
 echo -e "Combining all HTML and Templates..."
+
+
 cat src/html/begin.html > bin/tmp.html
-cat src/html/head.html >> bin/tmp.html
+gawk -v root=src -f scripts/stamp-qs.awk < src/html/head.html >> bin/tmp.html
 cat src/html/begin-body.html >> bin/tmp.html
 cat src/html/body.html >> bin/tmp.html
 cat src/templates/*.html >> bin/tmp.html
 cat src/html/end.html >> bin/tmp.html
 mv bin/tmp.html bin/index.html
+
 
 echo
 echo "Done."

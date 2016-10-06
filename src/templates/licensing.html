@@ -1,0 +1,343 @@
+<script type="text/template"
+        route="^licensing\/content-creators\/?\??(.*)?$"
+        page-title="Licensing"
+        transform="transformLicensing"
+        completed="completedContentCreatorLicensing">
+  <div class="licensing">
+    <div class="banner" id="licensing">
+      <div class="banner-shade"></div>
+    </div>
+    <div class="container">
+      <div class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-6">
+        <h1>Music for Content Creators</h1>
+        <div class="licensing-box licensing-box--margin">
+          {{>licensingContentCreatorSellingPoints}}
+          <div class="licensing-cta licensing-cta-content-creators button-group">
+            {{>licensingContentCreatorCTAs}}
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+  <div class="panel md-container licensing-content-creator-info">
+    <div class="flex">
+        <div class="licensing-box col-xs-12 col-sm-12 col-md-6">
+          <h2>How It Works</h2>
+          <p>A Monstercat Whitelist License is a monthly subscription that allows content creators to utilize the Monstercat Catalog on one of YouTube, Twitch or Beam. Each channel will require its own license. This removes all existing and future Content ID matches allowing content creators to earn 100% of their channel advertising royalties.</p>
+          <p>A portion of your Whitelist License subscription goes directly to the artists for each track you stream or download. We believe in generating new revenue streams for artists and this is a great way to fairly support content creators and musicians alike!</p>
+        </div>
+        <div class="licensing-box col-xs-12 col-sm-12 col-md-offset-1 col-md-5">
+          {{>licensingOurContentCreators}}
+        </div>
+    </div>
+    <div class="flex">
+      <div class="licensing-box col-xs-12 faq">
+        <h2 id="faq">Frequently Asked Questions</h2>
+        <h4 id="how-much-does-it-cost">How much does it cost?</h4>
+        <p>YouTube: $10 USD a month for 20 months or $200 one time
+        <br />Twitch or Beam: $5 USD a month for 20 months or $100 one time</p>
+
+        <h4 id="what-happens-after-20-months">What happens after 20 months?</h4>
+        <p>After 20 months your channel is considered fully <strong>paid off</strong> and you no longer need to keep paying for it.</p>
+
+        <h4 id="what-does-paid-off-mean">What does <strong>paid off</strong> mean?</h4>
+        <p>A channel that is fully <strong>paid off</strong> is permanently on the whitelist, and won't receive any copyright claims for new or old videos.</p>
+
+        <h4 id="can-i-pay-monthly">Can I pay monthly?</h4>
+        <p>Yes, you can pay either monthly or as a one time fee.</p>
+
+        <h4 id="can-i-use-monstercat-music-without-a-license">Can I use Monstercat music without a license?</h4>
+        <p>For YouTube videos, yes. You will receive a copyright claim and the ad revenue will go to Monstercat and the artists involved. This copyright claim isn't a strike, and it isn't bad for your channel.</p>
+
+        <h4 id="are-there-any-songs-i-cant-use">Are there any songs I can't use?</h4>
+        <p>Yes. The songs listed <a href="https://connect.monstercat.com/#handbook/licensing">on this page</a> cannot be licensed. Unlicensable tracks will be marked as such in the monstercat.com catalog. You can hide all of these tracks by toggling the "Skip Non-licensable Tracks" setting in your <a href="/account">settings page</a>.</p>
+
+        <h4 id="i-bought-a-license-but-still-got-a-copyright-claim">I bought a license but still got a copyright claim. What do I do?</h4>
+        <p>You can use <a href="/release-claim">this page to release the claim</a> or you can contact us at <a href="mailto:info@monstercat.com">info@monstercat.com</a> and we can get it sorted out for you.</p>
+
+        <h4 id="what-is-your-youtube-policy">What is your YouTube policy?</h4>
+        <p>You can <a href="/licensing/youtube-policy">read our YouTube policies here</a>.</p>
+
+        <h4 id="what-is-your-twitch-policy">What is your Twitch policy?</h4>
+        <p>You can <a href="/licensing/twitch-policy">read our Twitch policy here</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+<script type="text/template"
+        route="^licensing\/?$"
+        page-title="Licensing"
+        transform="transformLicensing"
+        completed="completedLicensing">
+  <div class="licensing">
+    <div class="banner" id="licensing">
+      <div class="banner-shade"></div>
+    </div>
+    <div class="container">
+      <div class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-offset-6 col-lg-offset-6">
+        <h1>Monstercat Music Licensing</h1>
+        <div class="licensing-box">
+          <ul class="selling-points">
+            <li>35 artists from 20 countries</li>
+            <li>Multiple #1 hits on iTunes Dance</li>
+            <li>Over 1.3m records sold in 2015</li>
+            <li>3 new releases weekly</li>
+          </ul>
+          <div class="licensing-ctas button-group">
+            <a href="/licensing/content-creators" class="button button--full cl-white">
+              <span class="title">Content Creators</span>
+              <span class="subtitle">YouTube, Twitch, and Beam</span>
+            </a>
+            <a href="/licensing/commercial" class="button button--full button--gold">
+              <span class="title">Commercial Use</span>
+              <span class="subtitle">Movies, TV shows, Advertisements</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template"
+        route="^license\/?$"
+        redirect="/licensing">
+</script>
+
+<script type="text/template"
+        route="^licensing\/commercial\/?$"
+        page-title="Commercial Licensing"
+        transform="transformCommercialLicensing"
+        completed="completedCommercialLicensing">
+  <div class="licensing">
+    <div class="banner" id="licensing">
+      <div class="banner-shade"></div>
+    </div>
+    <div class="container">
+      <div class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-6">
+        <h1>Commercial Music Licensing</h1>
+        <div class="licensing-box">
+          <ul class="selling-points">
+            <li>1000+ track catalogue</li>
+            <li>Personalized music supervision services</li>
+            <li>Streamlined licensing process</li>
+            <!--<li class="cta-email"><a href="mailto:licensing@monstercat.com">licensing@monstercat.com</a></li>-->
+          </ul>
+          <form id="licenseForm" data-set="commercial-license-form" trigger-target="commercial-license-form">
+            <div id="errorForm"></div>
+            <div class="flex">
+              <div class="col-xs-12 col-sm-6">
+                <input type="text" name="fullName" id="name" placeholder="Full Name" required="required" tabindex="1"/>
+                <input type="text" name="company" id="company" placeholder="Company" tabindex="3"/>
+                <input type="text" name="songs" id="songs" placeholder="Songs" required="required" tabindex="4"/>
+              </div>
+              <div class="col-xs-12 col-sm-6">
+                <input type="email" name="contactEmail" id="email" placeholder="E-mail" required="required" tabindex="2"/>
+                <textarea name="message" placeholder="Message" id="message" tabindex="5"></textarea>
+              </div>
+            </div>
+            <div class="flex submit-wrapper">
+              <input id="submitBtn" type="submit" data-set-target="commercial-license-form" trigger="commercial-license-form" action="submitCommercialLicensing" value="License our music" tabindex="6" class="button expand"/>
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+    </div>
+    </div>
+
+
+    <div class="container">
+    <div class="panel md-container licensing-content-creator-info">
+      <div class="flex">
+        <div class="licensing-box col-xs-12 col-sm-12 col-md-6">
+          <h2>About</h2>
+          <p>Music licensing doesn’t have to be hard. Our dedicated team of music licensing professionals can offer personalized support every step of the way. From finding the perfect song to executing the license, you’ll deal with a single representative to ensure that your project receives the unique attention it deserves. To further facilitate the licensing process, Monstercat Connect was developed for our clients to access our catalog and find that perfect song. Email us at <a href="mailto:licensing@monstercat.com">licensing@monstercat.com</a>.</p>
+        </div>
+        <div class="licensing-box col-sm-12 col-md-5 col-md-offset-1">
+          <h2>Our Clients</h2>
+          <ul class="vertical-line-list client-list clients">
+            <li>EA Sports</li>
+            <li>NBC</li>
+            <li>Ubisoft</li>
+            <li>Les Mills</li>
+            <li>MTV</li>
+            <li>Lyric House Publishing</li>
+            <li>Speed Motion Films</li>
+            <li>Knack Studios</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="col-sm-12 columns col-lg-8">
+          <h3>Need a YouTube, Twitch, or Beam license?</h3>
+          <p><a href="/licensing/content-creators">See our content creators licensing options</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<!-- POLICY PAGES -->
+
+<script type="text/template"
+        route="^licensing\/twitch-policy\/?\??(.*)?$"
+        page-title="Twich License Policy">
+  <div class="container">
+    <h1>Twitch Licensing Policy</h1>
+  </div>
+  <div
+      template="markdown-simple"
+      source="https://raw.githubusercontent.com/monstercat/docs/master/Twitch%20Policy.md">
+  </div>
+  <div class="container panel">
+    <h3>Buy a Twitch License</h3>
+    <br />
+    <a class="button button-cta button--twitch" href="/account/services?vendor=twitch">
+        <span class="title">Get a License</span>
+        <span class="subtitle">$5/mo or $100</span>
+    </a>
+    <span class="or">or</span>
+    <a href="/licensing/content-creators">read more</a>    
+  </div>
+</script>
+
+<script type="text/template" template-name="markdown-simple" transform="transformMarkdown" completed="scrollToHighlightHash">
+{{>markdown-basic}}
+</script>
+
+<script type="text/template"
+        route="^licensing\/youtube-policy\/?\??(.*)?$"
+        page-title="Monstercat YouTube Licensing Policy">
+  <div class="container">
+    <h1>YouTube Licensing Policy</h1>
+  </div>
+  <div
+      class="reading-md"
+      template="markdown-simple"
+      source="https://raw.githubusercontent.com/monstercat/docs/master/YouTube%20Policy.md">
+  </div>
+  <div class="container panel">
+    <h3>Buy a YouTube License</h3>
+    <br />
+    <a class="button button-cta button--youtube" href="/account/services?vendor=youtube">
+        <span class="title">Get a License</span>
+        <span class="subtitle">$10/mo or $200</span>
+    </a>
+    <span class="or">or</span>
+    <a href="/licensing/content-creators">read more</a>
+  </div>
+</script>
+
+<!-- MUSTACHES -->
+
+<script type="text/template"
+        mustache-name="licensingContentCreatorCTAs">
+<a class="button button--full button-cta button--youtube" href="/account/services?vendor=youtube">
+    <span class="title">YouTube</span>
+    <span class="subtitle">$10/mo or $200</span>
+</a>
+<a class="button button--full button-cta button--twitch" href="/account/services?vendor=twitch">
+  <span class="title">Twitch</span>
+  <span class="subtitle">$5/mo or $100</span>
+</a>
+<a class="button button--full button-cta button--beam" href="/account/services?vendor=beam">
+  <span class="title">Beam</span>
+  <span class="subtitle">$5/mo or $100</span>
+</a>
+</script>
+
+<script type="text/template"
+        mustache-name="licensingOurContentCreators">
+  <h2>Our Content Creators</h2>
+  <p>Some of the great streamers and YouTubers using Monstercat music to make their content great.</p><!-- what year is it? -->
+  <ul class="clients">
+    <li><a href="https://www.youtube.com/user/PewDiePie" target="_blank">PewDiePie</a></li>
+    <li><a href="https://www.youtube.com/user/freekickerz" target="_blank">Freekickerz</a></li>
+    <li><a href="https://youtube.com/user/elrubiusomg" target="_blank">elrunbiusOMG</a></li>
+    <li><a href="https://www.youtube.com/user/pixiwoo" target="_blank">Pixiwoo</a></li>
+    <li><a href="https://www.youtube.com/user/KSIOlajidebt" target="_blank">KSI</a></li>
+    <li><a href="https://www.facebook.com/peopleareawesome/" target="_blank">People Are Awesome</a></li>
+  </ul>        
+</script>
+
+<script type="text/template"
+        mustache-name="licensingContentCreatorSellingPoints">
+  <ul class="selling-points">
+    <li>Get whitelisted to use our music</li>
+    <li>Pay monthly or a one time fee</li>
+    <li>3 new songs released each week</li>
+  </ul>
+</script>
+
+<script type="text/template"
+        mustache-name="licensing-modal-main">
+  <div class="section content-creators">
+      <h3>Content Creators</h3>
+      {{>licensingContentCreatorCTAs}}
+      <span class="or">or</span>
+      <a href="/licensing/content-creators">read more</a>
+  </div>
+
+  <div class="section commercial">
+      <h3>Commercial Licensing</h3>
+      <a class="button button-cta" href="/licensing/commercial" action="closeModal">
+        <span class="title">Commercial Use</span>
+        <span class="subtitle">Movies, TV Shows, Commercials</span>
+      </a> 
+  </div>
+</script>
+
+<!-- MODALS -->
+
+<script type="text/template"
+        template-name="track-licensing-modal"
+        transform="loadReleaseAndTrack">
+    <div class="modal modal--licensing-track modal--licensing">
+        <div class="panel pointer-events">
+            <h1>License This Track</h1>
+            {{#loading}}
+            {{>loading-inner-view}}
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            {{>licensing-modal-main}}
+            <div class="section crediting">
+              <h3>Credit the Artists</h3>
+              <button action="showCrediting" credit-type="youtube" class="button">YouTube</button>
+              <button action="showCrediting" credit-type="other" class="button">Twitter/Facebook/Instagram</button>
+              <textarea class="copycredits hide" credit-type="youtube">{{track.copycredit}}</textarea>
+              <textarea class="copycredits hide" credit-type="other">{{track.copycreditOther}}</textarea>
+            </div>
+            {{/data}}
+            <button class="button--close faux" action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
+        template-name="release-licensing-modal"
+        transform="loadRelease"
+        >
+    <div class="modal modal--licensing-release modal--licensing">
+        <div class="panel pointer-events">
+            <h1>License This Track</h1>
+            {{>licensing-modal-main}}
+            <button class="button--close faux" action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+

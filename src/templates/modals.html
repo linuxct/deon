@@ -1,31 +1,5 @@
 
 <script type="text/template"
-        template-name="track-copycredits-modal"
-        transform="loadReleaseAndTrack">
-    <div class="modal modal--copy-credit">
-        <div class="panel pointer-events">
-            <h1>Video Crediting</h1>
-            {{#loading}}
-            {{>loading-inner-view}}
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            <p>As a content creator, you can use Monstercat music on YouTube easily! Just copy the crediting text and add it to your original content. No promoter or visualizer based uploads are allowed. For <a href="http://monstercat.com/licensing.html">commercial license click here</a>.</p>
-
-            <p><small>If you would like to monetize your videos please <a href="{{#signedIn}}http://monstercat.com/account/services{{/signedIn}}{{^signedIn}}https://www.monstercat.com/sign-up?redirect=%2faccount%2fservices{{/signedIn}}">purchase a YouTube license</a>. Otherwise you will receive a copyright claim and will not be able to monetize your video. </small></p>
-
-            <textarea class="copycredits">{{track.copycredit}}</textarea>
-            {{/data}}
-            <button class="button--close faux" action="closeModal">
-                <i class="fa fa-remove"></i>
-            </button>
-        </div>
-    </div>
-</script>
-
-<script type="text/template"
         template-name="release-shopping-modal">
     <div class="modal modal--release">
         <div class="panel pointer-events">

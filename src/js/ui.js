@@ -46,9 +46,13 @@ function openModal (name, data) {
 
 function closeModal () {
   var container = document.querySelector('[role="modals"]')
-  container.classList.remove('open')
-  var x = container.querySelector('[role="container"]').firstElementChild
-  x.parentElement.removeChild(x)
+  if(container != null) {
+    container.classList.remove('open')
+    var x = container.querySelector('[role="container"]').firstElementChild
+    if(x != null) {
+      x.parentElement.removeChild(x)
+    }
+  }
 }
 
 function togglePassword (e, el) {

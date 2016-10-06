@@ -110,6 +110,10 @@
                             <i class="fa fa-cloud-download"></i>
                         </a>
                         <button class="faux"
+                                action="openReleaseLicensing">
+                            <i class="fa fa-copyright"></i>
+                        </button>
+                        <button class="faux"
                                 action="playSongs"
                                 role="play-release"
                                 release-id="{{_id}}">
@@ -180,13 +184,13 @@
    href="{{downloadLink}}">
     <i class="fa fa-cloud-download"></i>
 </a>
-<button
-    class="faux col-xs-hidden col-md-visible inline"
-    action="openTrackCopyCredits"
+<a class="silent button--mobile"
+   target="_blank"
+    action="openTrackLicensing"
     release-id="{{releaseId}}"
     track-id="{{_id}}">
-    <i class="fa fa-copyright"></i>
-</button>
+    <i class="fa fa-copyright"></i> License
+</a>
 </script>
 
 <script type="text/template"

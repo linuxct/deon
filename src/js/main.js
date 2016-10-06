@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
 openRoute.completed.push(function () {
   recordPage()
   renderHeader()
+  closeModal()
   if (location.pathname == "/") getStats()
 })
 
@@ -159,6 +160,18 @@ function showIntercom (e, el) {
   window.Intercom('show')
 }
 
+//This is for shorting copy crediting for Facebook and Twitter and the like
+function createCopycreditOther (track) {
+  var credit = track.title + ' by '
+  var artists = []
+  console.log('artists', track.artists)
+  for(var i = 0; i < track.artists.length; i++) {
+    artists.push(track.artists[i].name)
+  }
+  artists.push('@Monstercat')
+  return credit + artists.join(', ')
+}
+
 function createCopycredit (title, urls) {
   var credit = 'Title: ' + title + "\n";
   var prefixes = {
@@ -216,6 +229,7 @@ function loadReleaseAndTrack (obj, done) {
       if (err) return done(err)
       var title = track.title + ' by ' + track.artistsTitle + ' from ' + release.title
       track.copycredit = createCopycredit(title, release.urls)
+      track.copycreditOther = createCopycreditOther(track)
       done(null, {
         track: track,
         release: release,
@@ -395,6 +409,7 @@ function mapRelease (o) {
     o.purchaseLinks = getReleasePurchaseLinks(o.urls)
     o.purchase = !!o.purchaseLinks.length
   }
+  o.copycreditOther = createCopycreditOther(o)
   o.downloadLink = getDownloadLink(o._id)
   // Since we use catalogId for links, if not present fallback to id
   // If causes problems just create new variable to use for the URI piece
@@ -558,21 +573,25 @@ function scrollToAnimated (el, opts) {
   var duration = opts.duration || 1000
   var padding = opts.padding || -20
   animatedScrollTo(document.body, el.offsetTop + padding, duration)
-  //var top = el.offsetTop; //Getting Y of target element
-  //window.scrollTo(0, top);
 }
 
-function completedMarkdown (obj) {
+function scrollToHighlightHash () {
   if(location.hash) {
     var el = document.querySelector(location.hash)
     if(el) {
-      el.classList.add('anchor-highlight')
-      scrollToAnimated(el)
       setTimeout(function () {
-        el.classList.add('anchor-highlight-off')
-      }, 2000)
+        scrollToAnimated(el)
+        el.classList.add('anchor-highlight')
+        setTimeout(function () {
+          el.classList.add('anchor-highlight-off')
+        }, 2000)
+      }, 500)
     }
   }
+}
+
+function completedMarkdown (obj) {
+  scrollToHighlightHash()
 }
 
 function transformWhitelists (obj) {
@@ -768,8 +787,8 @@ function openReleaseArt (e, el) {
   })
 }
 
-function openTrackCopyCredits (e, el) {
-  openModal('track-copycredits-modal', {
+function openTrackLicensing (e, el) {
+  openModal('track-licensing-modal', {
     trackId:   el.getAttribute('track-id'),
     releaseId: el.getAttribute('release-id'),
     signedIn: isSignedIn()
