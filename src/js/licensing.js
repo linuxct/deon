@@ -33,8 +33,9 @@ function completedCommercialLicensing () {
 function submitCommercialLicensing (e, el) {
   e.preventDefault();
   var data = getTargetDataSet(el)
+  data.date = new Date().toISOString()
   var fullname = data.fullName,
-      email = data.contactEmail,
+      email = data.email,
       songs = data.songs;
   var ef = document.querySelector('#errorForm')
   ef.classList.remove('shown')
