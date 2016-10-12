@@ -2776,6 +2776,30 @@ textarea.copycredits {
   color: #666;
 }
 
+.vendor-help .YouTube,
+.vendor-help .Beam,
+.vendor-help .none,
+.vendor-help .Twitch {
+  display: none;
+}
+
+.vendor-help.YouTube .YouTube {
+  display: inherit;
+}
+
+.vendor-help.Beam .Beam {
+  display: inherit;
+}
+
+.vendor-help.Twitch .Twitch {
+  display: inherit;
+}
+
+.vendor-help.none .none {
+  display: inherit;
+}
+
+
 /*-----------------------------*\
   LICENSING
 \*-----------------------------*/

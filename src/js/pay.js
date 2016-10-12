@@ -48,17 +48,26 @@ function transformBuyWhitelist (obj) {
 
 function buyWhitelistComplete (obj) {
   var qo = searchStringToObject()
+  var vendorSelect = document.querySelector('select[name=vendor]')
   if(qo.vendor) {
-    document.querySelector('select[name=vendor]').value = qo.vendor
+    vendorSelect.value = qo.vendor
   }
 
   if(qo.vendor && qo.method && qo.identity) {
     buyNewLicense({}, document.querySelector('[action=buyNewLicense]'))
   }
+
+  bindIdentityBlur()
+  vendorSelect.addEventListener('change', vendorChanged)
+  vendorChanged()
 }
 
-function buyLicense (e, el) {
+function buyLicenseAction (e, el) {
   var data = getTargetDataSet(el)
+  return buyLicense (data)
+}
+
+function buyLicense (data) {
   if (!data.vendor) return
   if (!data.identity) return
   if (!data.amount) return
@@ -74,9 +83,10 @@ function buyLicense (e, el) {
 
 function buyNewLicense (e, el) {
   var data = getTargetDataSet(el)
-  validateLicense(data.identity, data.vendor, function (err) {
+  convertIdentityAndValidateLicense(data.identity, data.vendor, function (err, identity) {
     if (err) return window.alert(err.message)
-    buyLicense(e, el)
+    data.identity = identity
+    buyLicense(data)
   })
 }
 
@@ -138,7 +148,19 @@ buyLicense.stripe = function buyLicenseStripe (data) {
   })
 }
 
-function validateLicense(identity, vendor, done) {
+function convertIdentityAndValidateLicense (identity, vendor, callback) {
+  if(vendor == 'YouTube') {
+    youTubeUserToChannelID(identity, function (channelid) {
+      document.querySelector('input[name=identity]').value = channelid
+      validateLicense(channelid, vendor, callback)
+    })
+  }
+  else {
+    validateLicense(channelid, vendor, callback)
+  }
+}
+
+function validateLicense (identity, vendor, done) {
   requestJSON({
     url: endpoint + '/whitelist/status/?vendor=' + vendor + '&identity=' + (vendor == 'YouTube' ? identity : identity.toLowerCase())
   }, function (err, obj, xhr) {
@@ -146,7 +168,7 @@ function validateLicense(identity, vendor, done) {
     if (!obj) return done(Error(strings.error))
     if (!obj.valid) return done(Error(strings.invalidIdentity))
     if (!obj.available) return done(Error(strings.unavailableIdentity))
-    done(null)
+    done(null, identity)
   })
 }
 
@@ -242,6 +264,17 @@ function resumeLicenseConfirm (e, el) {
   resumeLicenseConfirm[data.method](data)
 }
 
+function getSelectedVendor () {
+  return document.querySelector('select[name=vendor]').value
+}
+
+function bindIdentityBlur () {
+  document.querySelector('input[name=identity]').addEventListener('blur', function () {
+    var vendor = getSelectedVendor()
+    var val = serviceUrlToChannelId(this.value)
+    this.value = val
+  })
+}
 
 function completedServices (source, obj) {
   var vendorSelect = document.querySelector('select[name=vendor]')
@@ -273,20 +306,32 @@ function completedServices (source, obj) {
     subscribeGold({}, document.querySelector('[action=subscribeGold]'))
   }
 
-  var vendorChanged = function () {
-    var vendor = vendorSelect.value
-    if(!vendor) {
-      vendor = "none"
-    }
-    var els = document.querySelectorAll('.help-text')
-    for(var i = 0; i < els.length; i++) {
-      els[i].classList.toggle('hide', true)
-    }
-    document.querySelector('.help-text.' + vendor).classList.toggle('hide', false)
-  }
-
+  bindIdentityBlur()
   vendorSelect.addEventListener('change', vendorChanged)
   vendorChanged()
+}
+
+
+function vendorChanged () {
+  var vendor = getSelectedVendor()
+  if(!vendor) {
+    vendor = "none"
+  }
+  var vendorKeys = ['none', 'YouTube', 'Twitch', 'Beam']
+  var els = document.querySelectorAll('.vendor-help')
+  for(var i = 0; i < els.length; i++) {
+    for(var k = 0; k < vendorKeys.length; k++) {
+      var key = vendorKeys[k]
+      els[i].classList.toggle(key, key == vendor)
+    }
+  }
+
+  if (vendorPrices[vendor]) {
+    var buyoutPrice = document.querySelector('[role="buyout-price"]')
+    if(buyoutPrice) {
+      buyoutPrice.textContent = '$' + (vendorPrices[vendor].total / 100).toFixed(2)
+    }
+  }
 }
 
 resumeLicenseConfirm.paypal = function resumeLicenseConfirmPayPal (data) {
@@ -518,7 +563,8 @@ function subscribeNewLicense (e, el) {
   
   el.classList.add('working')
   el.disabled = true
-  validateLicense(data.identity, data.vendor, function (err) {
+  convertIdentityAndValidateLicense(data.identity, data.vendor, function (err, identity) {
+    data.identity = identity //Sometimes they put in the username (eg: monstercat) and we change it to ID (feh9832hgoh329g3h29)
     el.classList.remove('working')
     el.disabled = false
     if (err) return window.alert(err.message)
@@ -542,13 +588,6 @@ function subscribeNewLicense (e, el) {
     toasty(strings.whitelistAdded)
     scrollToCheckout()
   })
-}
-
-function selectServiceBuyout (e, el) {
-  var id = el.value
-  if (!vendorPrices[id]) return
-
-  document.querySelector('[role="buyout-price"]').textContent = '$' + (vendorPrices[id].total / 100).toFixed(2)
 }
 
 function scrollToCheckout () {

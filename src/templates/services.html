@@ -78,12 +78,7 @@
                 </table>
                 {{/user.isSignedIn}}
                 <div data-set="new-license" class="services-form" trigger-target="subscribeNewLicense">
-                    <select name="vendor">
-                        <option value="">Select Platform</option>
-                        <option value="YouTube">YouTube</option>
-                        <option value="Twitch">Twitch</option>
-                        <option value="Beam">Beam</option>
-                    </select>
+                    {{>vendor-selector}}
                     <input type="text" name="identity" placeholder="Channel_ID" size="30" />
                     <button
                         action="subscribeNewLicense"
@@ -99,10 +94,7 @@
                         Buy In Full
                         <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
                     </button>
-                    <div class="help-text YouTube hide">http:s//www.youtube.com/channel/<strong>Channel_ID</strong></div>
-                    <div class="help-text Twitch hide">https://www.twitch.tv/<strong>Channel_ID</strong></div>
-                    <div class="help-text Beam hide">https://beam.pro/<strong>Channel_ID</strong></div>
-                    <div class="help-text none hide">&nbsp;</div>
+                    {{>channel-id-help-text}}
                 </div>
                 {{#user.isSignedIn}}
                 <br/>
@@ -175,6 +167,15 @@
         <input type="radio" name="method" value="stripe" checked>
         <span><i class="fa fa-fw fa-cc-stripe"></i></span>
     </label>
+</script>
+
+<script type="text/template" mustache-name="channel-id-help-text">
+<div class="vendor-help none">
+    <div class="help-text YouTube">http:s//www.youtube.com/channel/<strong>Channel_ID</strong></div>
+    <div class="help-text Twitch">https://www.twitch.tv/<strong>Channel_ID</strong></div>
+    <div class="help-text Beam">https://beam.pro/<strong>Channel_ID</strong></div>
+    <div class="help-text none">&nbsp;</div>
+</div>
 </script>
 
 <script type="text/template" template-name="subscription-row">
@@ -366,12 +367,13 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Channel Id</th>
+                                <th valign="top">Channel ID</th>
                                 <td>
                                     <input type="text"
                                            name="identity"
                                            value="{{identity}}"
                                            placeholder="Put here."/>
+                                    {{>channel-id-help-text}}
                                 </td>
                             </tr>
                             <tr>
@@ -394,6 +396,7 @@
 <script type="text/template"
         route="^account\/services\/buyout\/(.+)$"
         transform="transformBuyOut"
+        completed="completedBuyOut"
         source="$endpoint/self/whitelist/$1"
         page-title="Whitelist Buy Out">
     <div class="container">
@@ -441,7 +444,7 @@
                 </table>
                 {{>payment-method}}
                 <div class="button-group">
-                    <button class="button--full" trigger="buyLicense" action="buyLicense" data-set-target="buy-out-license">Buy Out</button>
+                    <button class="button--full" trigger="buyLicense" action="buyLicenseAction" data-set-target="buy-out-license">Buy Out</button>
                 </div>
             </div>
             {{/data}}

@@ -218,14 +218,6 @@ function getCookie(cname) {
     return "";
 }
 
-function serviceUrlToChannelId (string) {
-  var no = ['https://', 'http://', 'www.', 'twitch.tv/', 'youtube.com/channel/', 'beam.pro/', '/profile']
-  no.forEach(function (val) {
-    string = string.replace(val, '')
-  })
-  return string
-}
-
 var requestAnimFrame = (function(){return window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||function(callback){window.setTimeout(callback,1000/60);};})();
 
 var easeInOutQuad = function (t, b, c, d) {
@@ -268,3 +260,24 @@ var animatedScrollTo = function (element, to, duration, callback) {
     };
     requestAnimFrame(animateScroll);
 };
+
+/* Vendor Helpers */
+
+function serviceUrlToChannelId (user) {
+  var m = user.match(/^\s*(?:(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube|twitch|beam)?\.(?:com\/|tv\/|pro\/)?)?\/?(?:user\/|channel\/|c\/)?([^\/\?]+)/i);
+  return m && m[1] || user;
+}
+
+function youTubeUserToChannelID (user, done) {
+  var opts = {
+    url: 'https://www.googleapis.com/youtube/v3/channels?key=AIzaSyAbhrDOydD1BML4ngEyLWn9gp0jlBKRr1U&forUsername=' + encodeURIComponent(user) + '&part=id',
+    method: 'GET',
+  }
+  requestJSON(opts, function (err, res) {
+    var channelId = user
+    if(res.items[0]) {
+      channelId = res.items[0].id
+    }
+    done(channelId)
+  })
+}

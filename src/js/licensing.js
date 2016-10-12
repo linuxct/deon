@@ -47,7 +47,7 @@ function submitCommercialLicensing (e, el) {
     }, function (err, resp) {
       if(err) {
         ef.innerText = "There's been an error. Please try again later."
-        ef.classList.add('shown')        
+        ef.classList.add('shown')
         return 
       }
       else {
