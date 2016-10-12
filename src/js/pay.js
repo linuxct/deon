@@ -275,7 +275,7 @@ function completedServices (source, obj) {
 
   var vendorChanged = function () {
     var vendor = vendorSelect.value
-    if(vendor == "" ) {
+    if(!vendor) {
       vendor = "none"
     }
     var els = document.querySelectorAll('.help-text')

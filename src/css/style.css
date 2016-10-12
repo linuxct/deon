@@ -287,6 +287,9 @@ button:hover,
 .button-group--margin{
   margin-bottom: 1rem;
 }
+.button-group--center .button{
+  text-align: center;
+}
 .button--cta{
   background: dodgerblue;
   color: white;
@@ -3234,6 +3237,10 @@ h2#faq {
 .panel .button--twitch:hover {
   background: #fff;
   color: #6441A5;
+}
+
+.panel .button--beam:hover {
+  color: #536dfe;
 }
 
 .button--beam {

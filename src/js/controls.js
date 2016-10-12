@@ -1,4 +1,3 @@
-
 var sel = {
   play: '[role="play"]',
   playPlaylist: '[role="play-playlist"]',
@@ -169,7 +168,7 @@ function calculateVolumeDrag (e) {
   if(!startVolumeDrag.dragging) {
     return
   }
-  if(e.path[0].matches('.volume-slider-handle')) {
+  if(e.path && e.path[0].matches('.volume-slider-handle')) {
     return
   }
   var outer = document.querySelector(sel.volumeOuterSlider)

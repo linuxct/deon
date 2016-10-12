@@ -166,7 +166,7 @@ function showIntercom (e, el) {
 function createCopycreditOther (track) {
   var credit = track.title + ' by '
   var artists = []
-  console.log('artists', track.artists)
+  track.artists = track.artists || []
   for(var i = 0; i < track.artists.length; i++) {
     artists.push(track.artists[i].name)
   }
@@ -181,6 +181,7 @@ function createCopycredit (title, urls) {
     'itunes' : 'iTunes Download Link: ',
     'spotify': 'Listen on Spotify: '
   };
+  urls = urls || []
   urls.forEach(function (url) {
     for(var site in prefixes) {
       if(url.indexOf(site) > 0) {
