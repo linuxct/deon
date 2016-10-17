@@ -1588,6 +1588,7 @@ span.note a {
 
 .modal-layer {
   display: none;
+  z-index: 9999;
 }
 .modal-layer.open {
   display: block;
