@@ -68,7 +68,7 @@ function requestDetect (opts, done, fallback) {
   }
   opts.withCredentials = false
   var list = requestDetect.credentialDomains
-  for (var i=0; i<list; i++) {
+  for (var i=0; i<list.length; i++) {
     if (url.indexOf(list[i]) == 0) {
       opts.withCredentials = true
       break;
