@@ -2,7 +2,7 @@ var page = require('webpage').create()
 
 page.onError = function(msg, trace) {
   if (trace && trace.length) {
-    console.log('\033[31mPhantomJS console error:', trace[0].file, trace[0].function, trace[0].line)
+    console.log('\033[31m', msg, trace[0].file, trace[0].function, trace[0].line)
     phantom.exit(1)
   }
 }
