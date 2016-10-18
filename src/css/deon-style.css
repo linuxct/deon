@@ -2359,6 +2359,23 @@ ul.social-grid {
   color: dodgerblue;
 }
 
+.merch .art-list li{
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.merch .art-list li .image-wrapper {
+  margin-bottom: 1rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  transition: box-shadow 0.4s ease;
+}
+.merch .art-list li:hover .image-wrapper,
+.merch .art-list li a:focus .image-wrapper {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); 
+}
+.merch .art-list li .image-wrapper img {
+  box-shadow: 0 0 0;
+}
 
 .one-line-ellipsis {
   display: inline-block;

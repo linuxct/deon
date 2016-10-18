@@ -8,6 +8,7 @@ var lstore          = window.localStorage
 var sixPackSession  = null
 
 preLoadImage('/img/artwork.jpg')
+preLoadImage('/img/artwork-merch.jpg')
 preLoadImage('/img/artist.jpg')
 
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -47,6 +48,8 @@ openRoute.completed.push(function () {
   closeModal()
   if (location.pathname == "/") getStats()
 })
+
+requestDetect.credentialDomains.push(endhost)
 
 var releaseTypes = {
   album: { value: 'Album', name: "Albums", key: 'album' },
@@ -456,6 +459,13 @@ function transformPodcast (obj) {
   obj.podcasts.forEach(function (i, index, arr) {
     i.episode = (i.title).replace('Monstercat Podcast ','').replace(/[()]/g, '')
   })
+  return obj
+}
+
+function transformMerch (obj) {
+  var products = obj
+  obj = {}
+  obj.products = products.slice(0,8)
   return obj
 }
 

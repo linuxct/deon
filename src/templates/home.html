@@ -1,8 +1,9 @@
 <script type="text/template"
         route="^(\?.*)?$"
         page-title="Monstercat">
-    <div source="$endpoint/catalog/release?limit=15" template="homeFeatured"></div>
-    <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="homePodcast"></div>
+    <div source="$endpoint/catalog/release?limit=15" template="home-featured"></div>
+    <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="home-podcast"></div>
+    <div source="https://shopcollections.monstercat.com/394974148" template="home-merch"></div>
     <div source="$endpoint/catalog/news" template="blog-stories"></div>
     <div class="flex social">
         <div class="col-xs-12 col-sm-12 col-md-6 text right cl-white spotify-wrapper">
@@ -152,7 +153,7 @@
 </script>
 
 <script type="text/template"
-        template-name="homeFeatured"
+        template-name="home-featured"
         transform="transformHome">
     {{#loading}}
     {{>loading-view-black}}
@@ -225,7 +226,7 @@
 </script>
 
 <script type="text/template"
-        template-name="homePodcast"
+        template-name="home-podcast"
         transform="transformPodcast">
     {{#loading}}
     {{>loading-view}}
@@ -261,6 +262,49 @@
                     </a>
                 </li>
                 {{/podcasts}}
+            </ul>
+        </div>
+    </section>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="home-merch"
+        transform="transformMerch">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+    <section class="v-padding merch">
+        <div class="container latest">
+            <header class="flex top-cta">
+                <div class="col-xs-6">
+                    <h2 class="line-top">Featured Merch</h2>
+                </div>
+                <div class="col-xs-6 text right">
+                    <a href="https://shop.monstercat.com" class="button button--black button--icon button--transparent">
+                        View all
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </header>
+            <ul class="art-list art-list--full-width">
+            {{#products}}
+                <li>
+                    <a class="silent" href="https://shop.monstercat.com/products/{{handle}}" target="_BLANK" title="{{title}}">
+                        <div class="image-wrapper">
+                            <img src="/img/artwork-merch.jpg" class="preload" />
+                            <img src="{{ images.0.src }}"/>
+                        </div>
+                        <label class="title one-line-ellipsis">{{title}}</label>
+                        <br/>
+                        <label class="artist one-line-ellipsis">${{variants.0.price}} USD</label>
+                    </a>
+                </li>
+            {{/products}}
             </ul>
         </div>
     </section>

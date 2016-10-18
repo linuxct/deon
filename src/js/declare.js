@@ -65,10 +65,18 @@ function requestDetect (opts, done, fallback) {
   var ext    = url.substring(url.lastIndexOf('.')+1, url.length)
   if (ext == 'md' || ext == 'markdown') {
     method = request
-    opts.withCredentials = false // TODO Remove hack
+  }
+  opts.withCredentials = false
+  var list = requestDetect.credentialDomains
+  for (var i=0; i<list; i++) {
+    if (url.indexOf(list[i]) == 0) {
+      opts.withCredentials = true
+      break;
+    }
   }
   method(opts, done)
 }
+requestDetect.credentialDomains = []
 
 function requestJSON (opts, done) {
   function resolve (err, body, xhr) {
