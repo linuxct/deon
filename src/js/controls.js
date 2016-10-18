@@ -97,7 +97,7 @@ function playSong (e, el) {
 }
 
 function toggleVolume (e, el) {
-  if(!e.target.matches('i,button')) {
+  if(!elMatches(e.target, 'i,button')) {
     return
   }
 
@@ -165,10 +165,10 @@ function startVolumeDrag (e) {
 startVolumeDrag.dragging = false
 
 function calculateVolumeDrag (e) {
-  if(!startVolumeDrag.dragging) {
-    return
+  if (!e.path) {
+    addEventPath(e)
   }
-  if(e.path && e.path[0].matches('.volume-slider-handle')) {
+  if(!startVolumeDrag.dragging || elMatches(e.path[0], '.volume-slider-handle')) {
     return
   }
   var outer = document.querySelector(sel.volumeOuterSlider)
@@ -305,7 +305,7 @@ function isReleaseLoaded (id) {
 function mapTrackElToPlayer (el) {
   return {
     source:     el.getAttribute('play-link'),
-    skip:       isSignedIn() && !el.hasAttribute('licensable') && session.settings.hideNonLicensableTracks,
+    skip:       isSignedIn() && !el.hasAttribute('licensable') && (session.settings || {}).hideNonLicensableTracks,
     title:      el.getAttribute('title'),
     trackId:    el.getAttribute('track-id'),
     playlistId: el.getAttribute('playlist-id'),

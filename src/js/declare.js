@@ -146,6 +146,9 @@ function elMatches (el, sel) {
   if(typeof(el.matches) == 'function') {
     return el.matches(sel)
   }
+  if(typeof(el.msMatchesSelector) == 'function') {
+    return el.msMatchesSelector(sel)
+  }
   return false;
 }
 

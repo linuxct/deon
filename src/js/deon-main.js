@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
       console.warn(err.message)
     }
     session = obj
-    if(obj.user) {
+    if(obj && obj.user) {
       sixPackSession = new sixpack.Session({
         client_id: obj.user._id
       });
