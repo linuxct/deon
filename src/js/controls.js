@@ -157,10 +157,28 @@ function volumeSliderHide () {
   controls.classList.toggle('show-slider', false)
 }
 
+function preventSelection(){
+  var selection = {};
+  if (window.getSelection) {
+      selection = window.getSelection();
+      if (selection.rangeCount) {
+        selection.removeAllRanges();
+        return;
+      }
+  } else if (document.selection) {
+      selection = document.selection.createRange();
+      if (selection.text > '') {
+        document.selection.empty();
+        return;
+      }
+  }  
+}
+
 function startVolumeDrag (e) {
   startVolumeDrag.dragging = true
   calculateVolumeDrag(e)
   window.addEventListener("mouseup", stopVolumeDrag)
+  window.addEventListener("mousemove", preventSelection, false)
 }
 startVolumeDrag.dragging = false
 
@@ -191,6 +209,7 @@ function calculateVolumeDrag (e) {
 
 function stopVolumeDrag (e) {
   window.removeEventListener("mouseup", stopVolumeDrag)
+  window.removeEventListener("mousemove", preventSelection, false)
   startVolumeDrag.dragging = false
 }
 

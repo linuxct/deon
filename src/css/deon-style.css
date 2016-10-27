@@ -881,6 +881,17 @@ section {
   box-shadow: 0 0 35px rgba(0,0,0,0.1);
 }
 
+.panel.md-container{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h1 + .panel.md-container,
+.panel.md-container.licensing-content-creator-info{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .flex .panel{
   margin-top: 0;
 }
