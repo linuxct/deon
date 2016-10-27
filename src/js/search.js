@@ -16,9 +16,18 @@ function search (e, el, url) {
   if(data.term) {
     for(var i in types) {
       if(types[i].searchPrefix) {
-        if(data.term.substr(0, types[i].searchPrefix.length) == types[i].searchPrefix) {
-          searchType = types[i]
-          searchTerm = data.term.substr(searchType.searchPrefix.length).trim()
+        var prefixes = [types[i].searchPrefix].concat(types[i].searchPrefixAliases)
+        var found  = false
+        for(var k = 0; k < prefixes.length; k++) {
+          var prefix = prefixes[k]
+          if(data.term.substr(0, prefix.length).toLowerCase() == prefix) {
+            searchType = types[i]
+            searchTerm = data.term.substr(prefix.length).trim()
+            found = true
+            break
+          }
+        }
+        if(found) {
           break
         }
       }
@@ -64,7 +73,8 @@ function getSearchTypes () {
         action: 'searchTracks'
       },
       url: '/search/songs',
-      searchPrefix: 'songs:'
+      searchPrefix: 'songs:',
+      searchPrefixAliases: ['song:', 'track:', 'tracks:']
     },
     artists: {
       fuzzyFields: ['name'],
@@ -77,7 +87,8 @@ function getSearchTypes () {
         action: 'searchArtists'
       },
       url: '/search/artists',
-      searchPrefix: 'artists:'
+      searchPrefix: 'artists:',
+      searchPrefixAliases: ['artist:']
     },
     releases: {
       fuzzyFields: ['title', 'renderedArtists'],
@@ -90,7 +101,8 @@ function getSearchTypes () {
         action: 'searchReleases'
       },
       url: '/search/releases',
-      searchPrefix: 'releases:'
+      searchPrefix: 'releases:',
+      searchPrefixAliases: ['release:', 'album:', 'albums:']
     }
   }
 }
