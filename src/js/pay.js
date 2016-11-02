@@ -515,7 +515,8 @@ function subscribeGold (e, el) {
     el.classList.add('working')
     el.disabled = true
     return requestJSON({
-      url: endpoint + "/services/gold/code/" + data.trialCode
+      url: endpoint + "/self/services/gold/code/" + data.trialCode,
+      withCredentials: true
     }, function (err, obj, xhr) {
       el.classList.remove('working')
       el.disabled = false
