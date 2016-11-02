@@ -119,7 +119,7 @@
             <div><span class="total-cost">$<span role="total-cost">0.00</span></span>/month</div>
             <br/>
             <div data-set="pay-method">
-               {{>payment-method}}
+               {{>payment-method-recurring}}
                <button class="button--cta"
                        action="checkoutSubscriptions" data-set-target="pay-method">
                     Purchase
@@ -167,6 +167,11 @@
         <input type="radio" name="method" value="stripe" checked>
         <span><i class="fa fa-fw fa-cc-stripe"></i></span>
     </label>
+</script>
+
+<script type="text/template" mustache-name="payment-method-recurring">
+<div class="recurring-warning-germany hide"><strong>Warning:</strong> PayPal cannot process recurring payments for German users. Please use Stripe.</div>
+{{>payment-method}}
 </script>
 
 <script type="text/template" mustache-name="channel-id-help-text">
@@ -337,7 +342,7 @@
                     <td>{{identity}}</td>
                 </tr>
             </table>
-            {{>payment-method}}
+            {{>payment-method-recurring}}
             <button action="resumeLicenseConfirm" data-set-target="resume-payment">Resume Payments</button>
             <button action="closeModal">Cancel</button>
         </div>

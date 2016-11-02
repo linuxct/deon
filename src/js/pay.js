@@ -252,6 +252,7 @@ function cancelLicenseSubscription (e, el) {
 function resumeLicenseSubscription (e, el) {
   var data = getTargetDataSet(el)
   openModal('resume-whitelist', data)
+  bindPayPalGermanyWarning()
 }
 
 function resumeLicenseConfirm (e, el) {
@@ -309,6 +310,7 @@ function completedServices (source, obj) {
   bindIdentityBlur()
   vendorSelect.addEventListener('change', vendorChanged)
   vendorChanged()
+  bindPayPalGermanyWarning()
 }
 
 
@@ -595,4 +597,22 @@ function scrollToCheckout () {
   setTimeout(function () {
     scrollToAnimated(document.querySelector('#new-subscriptions'))
   }, 500)
+}
+
+function bindPayPalGermanyWarning () {
+  var radios = document.querySelectorAll('input[name=method]')
+  for(var i = 0; i < radios.length; i++) {
+    radios[i].addEventListener('change', togglePayPalGermanyWarning)
+  }
+  togglePayPalGermanyWarning()
+}
+
+function togglePayPalGermanyWarning () {
+  if(session.user.location == 'Germany') {
+    var val = document.querySelector('input[name=method]:checked').value
+    var msg = document.querySelector('.recurring-warning-germany')
+    if(msg) {
+      msg.classList.toggle('hide', val != 'paypal')
+    }
+  }
 }
