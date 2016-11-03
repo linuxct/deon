@@ -282,7 +282,7 @@
         mustache-name="searchReleasesList">
     <ul class="art-list art-list--full-width">
         {{#results}}
-        <li>
+        <li class="{{#inEarlyAccess}}in-early-access{{/inEarlyAccess}}">
             <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
                 <div class="image-wrapper">
                     <img src="/img/artwork.jpg" class="preload" />

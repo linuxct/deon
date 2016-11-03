@@ -5,6 +5,7 @@ var strings = {
   "destroyPlaylist": "Are you sure you want to remove this playlist?",
   "accountUpdated": "Your account information has been saved.",
   "settingsUpdated": "Your preferred settings have been updated.",
+  "shopEmailUpdated": "Your shop email has been updated.",
   "addedToPlaylist": "Song succesfully added to playlist.",
   "reorderedPlaylist": "Playlist order saved.",
   "removedFromPlaylist": "Song succesfully removed from playlist.",

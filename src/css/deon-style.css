@@ -359,6 +359,16 @@ button:hover,
   color: black;
   background: gold;
 }
+.button--gold-light {
+  color: goldenrod;
+  background: none;
+  border-color: goldenrod;
+}
+.button--gold-light:hover {
+  color: black;
+  background: gold;
+  border-color: gold;
+}
 .button--black{
   color: #000;
   border-color: #ddd;
@@ -1724,6 +1734,18 @@ table.drag-sortable tr.drag-active-bottom {
   font-size: 1em;
 }
 
+.in-early-access-msg {
+  font-size: 0.8em;
+}
+
+.in-early-access-msg a {
+  font-size: 1em;
+}
+
+button.in-early-access {
+  color: goldenrod;
+}
+
 td.genres span:before {
   content: ", ";
 }
@@ -1876,6 +1898,10 @@ footer .footer-items li:first-child button::before{
   margin-top: 2rem;
 }
 
+.early-access-message {
+  margin-top: 0.5em;
+}
+
 .hero {
   text-align: right;
   padding: 5rem 0;
@@ -1898,6 +1924,28 @@ footer .footer-items li:first-child button::before{
   padding: 0;
   padding-bottom: 2%;
   padding-right: 1%;
+  position: relative;
+}
+
+.art-list li.in-early-access .image-wrapper:before {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  background: #1a1a1a;
+  color: gold;
+  height: 26px;
+  line-height: 26px;
+  font-size: 16px;
+  text-align: center;
+  margin-left: -75px;
+  margin-top: -13px;
+  border-radius: 3px;
+  opacity: 0.9;
+  content: "Gold Early Access";
+  z-index: 5;
+  border: 1px solid gold;
+  box-shadow: 0px 0px 10px 1px #000
 }
 
 .latest .art-list--full-width.art-list li:nth-child(7),
@@ -2670,6 +2718,11 @@ textarea.copycredits {
 .music-browse li{
   margin-bottom: 2rem;
 }
+.bgbox--browse .details-box .countdown {
+  width: 6em;
+  display: inline-block;
+  vertical-align: middle;
+}
 .bgbox--browse .details-box img.artwork {
   height: 159px;
 }
@@ -3401,6 +3454,113 @@ blockquote code {
 }
 
 /*-----------------------------*\
+  GOLD LANDING
+\*-----------------------------*/
+
+.top-banner-gold .button--gold {
+    background: gold;
+    color: black;
+}
+.top-banner-gold .button--gold:active,
+.top-banner-gold .button--gold:hover{
+    background: black;
+    border-color: black;
+    color: gold;
+}
+
+ul.gold-perks a {
+  text-decoration: none;
+}
+
+ul.gold-perks ~ p{
+  font-weight: bold;
+}
+
+.gold-banner > .flex{
+  padding: 5rem 0;
+}
+
+ul.gold-perks li {
+  list-style: none;
+  position: relative;
+  transition: all 0.3s ease;
+  line-height: 1.7;
+  left: 0;
+  color: #000;
+}
+
+ul.gold-perks li a{
+  display: block;
+}
+
+ul.gold-perks li::before {
+  content: "\f054";
+  font-family: "FontAwesome";
+  font-size: 0.65rem;
+  display: block;
+  padding-top: .3rem;
+  position: absolute;
+  left: -.85rem;
+}
+
+ul.gold-perks li:hover{
+  left: .25rem;
+  color: dodgerblue;
+}
+
+section.gold-feature-section {
+  padding-bottom: 0em;
+  padding-top: 0em;
+}
+
+section.gold-feature-section#reddit {
+  background-position: top left;
+}
+
+
+.gold-feature-section a.back-to-top {
+  color: #777;
+  font-size: 0.9em;
+}
+
+.gold-feature-section a + a.back-to-top {
+  margin-left: 0.5em;
+}
+
+.gold-feature-section h2{
+  margin-bottom: 1rem;
+}
+
+.gold-footer-cta {
+  text-align: center;
+  color: #fff;
+  padding: 7rem 0;
+  position: relative;
+}
+
+.gold-footer-cta h2 {
+  margin-bottom: 1rem;
+}
+
+.top-banner-gold .banner {
+  opacity: 0.15;
+}
+.top-banner-gold .flex {
+  padding: 3rem 1rem 3.5rem;
+}
+.top-banner-gold ul.gold-perks{
+  padding-left: 1.5rem;
+}
+@media screen and (min-width: 992px){
+  .top-banner-gold .flex > div{
+    padding: 0 1rem;
+  }
+  .top-banner-gold .banner {
+    opacity: 1;
+  }
+}
+
+/*-----------------------------*\
   BG IMAGE STYLES
 \*-----------------------------*/
 
@@ -3582,8 +3742,14 @@ body.bg {
 }
 .bg .top-banner .featured-details h1, 
 .bg .top-banner .featured-details h3, 
-.bg .top-banner .featured-details p {
+.bg .top-banner .featured-details p,
+.bg .top-banner .early-access-message,
+.bg .top-banner .early-access-message a,
+.bg .top-banner .cl-white .countdown > span {
   color: #000;
+}
+.bg .top-banner .early-access-message a:hover {
+  color: #666;
 }
 .bg .top-banner .gradient,
 .bg .spotify-wrapper .gradient {
@@ -3624,6 +3790,12 @@ body.bg {
   background: #000;
 }
 
+.bg .top-banner-gold p,
+.bg .top-banner-gold h1,
+.bg .top-banner-gold a {
+  color: #000;
+}
+
 .anchor-highlight {
   background: #ffffad;
   transition: background 0.5s linear;
@@ -3659,4 +3831,12 @@ body.bg {
 .or {
   padding: 0 0.5em;
   color: #666;
+}
+
+.countdown {
+  font-size: 1.3em;
+}
+
+.bg .gold-feature-section a.back-to-top {
+  color: #CCC;
 }

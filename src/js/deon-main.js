@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
     if (err) {
       // TODO handle this!
       console.warn(err.message)
+      if(err && endhost.indexOf('localhost') > 0) {
+        alert('Make sure you have ' + endhost + ' running!')
+      }
     }
     session = obj
     if(obj && obj.user) {
@@ -47,6 +50,9 @@ openRoute.completed.push(function () {
   renderHeader()
   closeModal()
   if (location.pathname == "/") getStats()
+})
+openRoute.started.push(function () {
+  stopCountdownTicks()
 })
 
 requestDetect.credentialDomains.push(endhost)
@@ -108,6 +114,19 @@ function getSession (done) {
     url: endpoint + '/self/session',
     withCredentials: true
   }, done)
+}
+
+function getSessionName () {
+  var names = []
+  if(session.user) {
+    names = names.concat([session.user.name, session.user.realName, session.user.email.substr(0, session.user.email.indexOf('@'))])
+  }
+  for(var i = 0; i < names.length; i++) {
+    if(names[i] && names[i].length > 0) {
+      return names[i]
+    }
+  }
+  return 'guest'
 }
 
 function recordPage () {
@@ -388,7 +407,7 @@ function removeYouTubeClaim (e, el) {
 function mapReleaseTrack (o, index) {
   o.trackNumber = index + 1
   o.index       = index
-  o.canPlaylist = isSignedIn() ? { _id: o._id } : null
+  o.canPlaylist = isSignedIn() && o.downloadable ? { _id: o._id } : null
   o.bpm         = Math.round(o.bpm)
   o.licensable  = o.licensable === false ? false : true
   return o
@@ -397,12 +416,17 @@ function mapReleaseTrack (o, index) {
 function mapRelease (o) {
   var pdate = typeof o.preReleaseDate != 'undefined' ? new Date(o.preReleaseDate) : undefined
   var rdate = new Date(o.releaseDate)
-  if (pdate && rdate > Date.now()) {
-    o.preReleaseDate = formatDate(pdate)
+  var now = new Date()
+  o.releaseDateObj = dateToMidnightWestCoast(rdate)
+  if(pdate && ((o.inEarlyAccess && now < pdate) || (!o.inEarlyAccess && now < rdate))) {
+    o.preReleaseDateObj = dateToMidnightWestCoast(pdate)
+    o.preReleaseDate = formatDate(o.preReleaseDateObj)
     o.releaseDate = null
+    o.releaseDateObj = null
   } else {
-    o.releaseDate = formatDate(o.releaseDate)
+    o.releaseDate = formatDate(o.releaseDateObj)
     o.preReleaseDate = null
+    o.preReleaseDateObj = null
   }
   o.artists = o.renderedArtists
   if(o.thumbHashes) {
@@ -448,8 +472,19 @@ function transformHome (obj) {
   })
   results.sort(sortRelease)
   obj.featured = results.shift()
+  //console.log('releaseDateObj', obj.featured.releaseDateObj.toISOString())
+  //console.log('releaseDateObj', obj.featured.releaseDateObj)
+  //console.log('now', new Date().toISOString())
   obj.releases = results
   obj.releases.length = 8
+  obj.hasGoldAccess = hasGoldAccess()
+  if(obj.hasGoldAccess) {
+    var thankyous = ['Thanks for being Gold, ' + getSessionName() + '.',
+    'Stay golden, ' + getSessionName() + '.',
+    "Here's an early taste for you, " + getSessionName() + '.',
+    'Enjoy the early music, ' + getSessionName() + ' ;)']
+    obj.goldThankYou = thankyous[randomChooser(thankyous.length)-1]
+  }
   return obj
 }
 
@@ -546,6 +581,56 @@ function transformGoldSubscription (obj) {
   return nobj
 }
 
+function transformGoldLanding (obj) {
+  obj = obj || {}
+  var featureBlocks = []
+  featureBlocks.push({
+    id: 'download-access',
+    title: 'Download Access',
+    description: 'Download tracks in MP3, FLAC, and WAV format.',
+    image: '1-DownloadAccess-v2.jpg',
+    download: true
+  }, {
+    id: 'early-streaming',
+    title: 'Early Streaming Access',
+    description: 'Listen to releases on Monstercat.com 24 hours before they are released to everyone else.',
+    image: '2-StreamingAccess.jpg',
+  }, {
+    id: 'support-the-artists',
+    title: 'Support the Artists',
+    description: 'Artists are paid out from Gold subscriptions based on how much people listen to their songs.',
+    image: '3-SupportArtists.jpg',
+  }, {
+    id: 'discord',
+    title: 'Gold-only Discord Chat',
+    description: 'Come chat with us and other superfans in our Discord server.',
+    image: '5-Discord.jpg',
+    discord: true
+  }, {
+    id: 'reddit',
+    title: 'Subreddit Flair on /r/Monstercat',
+    description: 'Show your bling off in the Monstercat subreddit.',
+    image: '6-Reddit.jpg',
+    reddit: true
+  })
+  featureBlocks = featureBlocks.map(function (i, index) {
+    i.isOdd = !(index % 2 == 0)
+    return i
+  })
+  obj.featureBlocks = featureBlocks
+  obj.hasGoldAccess = hasGoldAccess()
+  obj.sessionName = getSessionName()
+
+  if(obj.hasGoldAccess) {
+    obj.redditUsername = session.user.redditUsername
+  }
+  else {
+    obj.redditUsername = false
+  }
+
+  return obj
+}
+
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
   q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(',')
@@ -585,21 +670,38 @@ function scrollToAnimated (el, opts) {
   opts = opts || {}
   var duration = opts.duration || 1000
   var padding = opts.padding || -20
-  animatedScrollTo(document.body, el.offsetTop + padding, duration)
+  var top = el.getBoundingClientRect().top
+  animatedScrollTo(document.body, top + padding, duration)
+}
+
+function anchorScrollTo (e, el) {
+  e.preventDefault()
+  scrollToAnimated(document.querySelector(el.getAttribute('href')))
+  return false
 }
 
 function scrollToHighlightHash () {
   if(location.hash) {
-    var el = document.querySelector(location.hash)
-    if(el) {
-      setTimeout(function () {
-        scrollToAnimated(el)
-        el.classList.add('anchor-highlight')
+    var attempts = 0
+    var attempt = function () {
+      var el = document.querySelector(location.hash)
+      if(el) {
         setTimeout(function () {
-          el.classList.add('anchor-highlight-off')
-        }, 2000)
-      }, 500)
+          scrollToAnimated(el)
+          el.classList.add('anchor-highlight')
+          setTimeout(function () {
+            el.classList.add('anchor-highlight-off')
+          }, 2000)
+        }, 1000)
+      }
+      else {
+        attempts++
+        if(attempts < 10) {
+          setTimeout(attempt, 100)
+        }
+      }
     }
+    attempt()
   }
 }
 
@@ -641,6 +743,7 @@ function transformReleaseTracks (obj, done) {
       track.downloadLink = getDownloadLink(releaseId, track._id)
       track.time = formatDuration(track.duration)
     })
+    obj.hasGoldAccess = hasGoldAccess()
     done(null, obj)
   })
 }
@@ -677,6 +780,18 @@ function appendSongMetaData (tracks) {
 
 /* Completed Methods */
 
+function completedHome (source, obj) {
+  startCountdownTicks()
+}
+
+function featuredReleaseCountdownEnd () {
+  loadSubSources(document.querySelector('[role="home-featured"]'), true)
+}
+
+function releasePageCountdownEnd () {
+  reloadPage()
+}
+
 function completedRelease (source, obj) {
   if (obj.error) return
   var r = obj.data
@@ -699,6 +814,7 @@ function completedRelease (source, obj) {
   }
   setMetaData(meta)
   setPageTitle(r.title + ' by ' + r.artists)
+  startCountdownTicks()
 }
 
 function completedReleaseTracks (source, obj) {

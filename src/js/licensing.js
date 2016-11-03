@@ -6,9 +6,6 @@ function transformLicensing (obj) {
 }
 
 function pickBackground(){
-  function randomChooser(n){
-    return Math.floor(Math.random() * n+1);
-  }
   var quantity = 5;
   var randomNumber = randomChooser(quantity);
   var word = "";

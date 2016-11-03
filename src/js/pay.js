@@ -266,15 +266,19 @@ function resumeLicenseConfirm (e, el) {
 }
 
 function getSelectedVendor () {
-  return document.querySelector('select[name=vendor]').value
+  var sel = document.querySelector('select[name=vendor]')
+  return sel ? sel.value : "none"
 }
 
 function bindIdentityBlur () {
-  document.querySelector('input[name=identity]').addEventListener('blur', function () {
-    var vendor = getSelectedVendor()
-    var val = serviceUrlToChannelId(this.value)
-    this.value = val
-  })
+  var id = document.querySelector('input[name=identity]')
+  if(id) {
+    id.addEventListener('blur', function () {
+      var vendor = getSelectedVendor()
+      var val = serviceUrlToChannelId(this.value)
+      this.value = val
+    })
+  }
 }
 
 function completedServices (source, obj) {

@@ -257,6 +257,15 @@ function runDblCAction (e, el) {
   if (fn) fn(e, el)
 }
 
+function applyFunctions (t, fns, args) {
+  if (fns instanceof Array) {
+    for(var i = 0; i < fns.length; i++) {
+      if (typeof fns[i] == 'function')
+        fns[i].apply(t, arguments)
+    }
+  }
+}
+
 function stateChange (url, state) {
   cache()
   var str = url.substr(1)
@@ -294,14 +303,11 @@ function openRoute (target, container, matches) {
     } else if (typeof pageIsReady == 'function') {
       pageIsReady()
     }
-    var fns = openRoute.completed
-    if (fns instanceof Array) {
-      for(var i = 0; i < fns.length; i++) {
-        if (typeof fns[i] == 'function')
-          fns[i].apply(fn, arguments)
-      }
-    }
+    applyFunctions(fn, openRoute.completed, arguments)
   }
+
+  applyFunctions(null, openRoute.started, arguments)
+
   if (target.hasAttribute('page-title'))
     document.title = target.getAttribute('page-title')
   setMetaData({}) //This is declared in main.js but should probably be moved to this file
@@ -315,6 +321,7 @@ function openRoute (target, container, matches) {
   renderTemplateOptions(opts)
 }
 openRoute.completed = []
+openRoute.started = []
 
 function loadSource (opts) {
   var source    = opts.source

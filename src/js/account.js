@@ -20,6 +20,33 @@ function saveAccountSettings (e, el) {
   })
 }
 
+function saveShopEmail (e, el) {
+  var data = getTargetDataSet(el, true, true)
+  if (!data) return
+  update('self', null, data, function (err, obj) {
+    if (err) return window.alert(err.message)
+    toasty(strings.shopEmailUpdated)
+    session.user.shopEmail = data.shopEmail
+  })
+}
+function saveRedditUsername (e, el) {
+  var data = getTargetDataSet(el, false, true)
+  console.log('data', data)
+  if (!data) {
+    data = {redditUsername: null}
+  }
+  requestJSON({
+    url: endpoint + '/self/update-reddit',
+    method: 'PUT',
+    data: data,
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    toasty('Flair set')
+    session.user.redditUsername = data.redditUsername
+  })
+}
+
 function updateBackground (e, el) {
   if (!lstore) return
   lstore.setItem('bgon', el.checked)
@@ -61,6 +88,9 @@ function mapAccount (o) {
       countries: CountryCallingCodes
     }
   }
+  o.hasGoldAccess = hasGoldAccess()
+  o.endhost = endhost
+  o.shopEmail = session.user.shopEmail ? session.user.shopEmail : session.user.email
   return o
 }
 

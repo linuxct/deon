@@ -41,11 +41,11 @@
             <h1>Get Gold!</h1>
             <div class="modal-content">
               <h2 class="pricing">$5/month</h2>
-              <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
-              <br/>
               <ul>
-                  <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
-                  <li>Direct support via e-mail and on site.</li>
+                  <li>Download Monstercat songs in your preferred format</li>
+                  <li>Early streaming access to new releases</li>
+                  <li>Directly support the artists</li>
+                  <li>and more!</li>
               </ul>
             </div>
             {{^hasGold}}
@@ -54,11 +54,13 @@
                 {{/signedIn}}
             {{/hasGold}}
             {{^signedIn}}
-            <a class="button button--cta" href="/sign-up" redirect-to="/account/services" action="closeModal">Sign up for an account!</a>
+                <a class="button button--cta" href="/sign-up?redirect=%2Faccount%2Fservices%3Fgold" action="closeModal">Sign up for an account!</a>
             {{/signedIn}}
             <button class="button--close faux" action="closeModal">
               <i class="fa fa-remove"></i>
             </button>
+            <span class="or">or</span>
+            <a href="/gold">learn more</a>
         </div>
     </div>
 </script>

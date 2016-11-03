@@ -36,17 +36,7 @@
         </header>
         <ul class="panel art-list">
             {{#results}}
-            <li>
-                <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
-                    <div class="image-wrapper">
-                        <img src="/img/artwork.jpg" class="preload" />
-                        <img src="{{cover}}"/>
-                    </div>
-                    <label class="title one-line-ellipsis">{{title}}</label>
-                    <br/>
-                    <label class="artist one-line-ellipsis">{{artists}}</label>
-                </a>
-            </li>
+            {{>release-list-item}}
             {{/results}}
         </ul>
     </div>
@@ -89,37 +79,55 @@
                     <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
                     <h2>{{artists}}</h2>
                     <label>
-                        {{#preReleaseDate}}Pre-Released {{preReleaseDate}}{{/preReleaseDate}}
-                        {{#releaseDate}}Released {{releaseDate}}{{/releaseDate}}
+                        {{>albumReleaseDates}}
                     </label>
                     <div class="options push-right">
-                        {{#purchase}}
-                        <button class="faux" action="openPurchaseRelease">
-                            <i class="fa fa-shopping-bag"></i>
-                        </button>
-                        {{/purchase}}
-                        {{#share}}
-                        <a class="silent" href="{{share}}" target="_blank">
-                            <i class="fa fa-social-sp"></i>
-                        </a>
-                        {{/share}}
-                        <a class="silent"
-                        href="{{downloadLink}}"
-                        target="_blank"
-                        action="canAccessGold">
-                            <i class="fa fa-cloud-download"></i>
-                        </a>
-                        <button class="faux"
-                                action="openReleaseLicensing">
-                            <i class="fa fa-copyright"></i>
-                        </button>
-                        <button class="faux"
-                                action="playSongs"
-                                role="play-release"
-                                release-id="{{_id}}">
-                            <i class="fa fa-play inactive"></i>
-                            <i class="fa fa-pause active"></i>
-                        </button>
+                        {{^inEarlyAccess}}
+                            {{#purchase}}
+                            <button class="faux" action="openPurchaseRelease">
+                                <i class="fa fa-shopping-bag"></i>
+                            </button>
+                            {{/purchase}}
+                        {{/inEarlyAccess}}
+                        {{^inEarlyAccess}}
+                            {{#share}}
+                            <a class="silent" href="{{share}}" target="_blank">
+                                <i class="fa fa-social-sp"></i>
+                            </a>                            
+                            {{/share}}
+                            <a class="silent"
+                            href="{{downloadLink}}"
+                            target="_blank"
+                            action="canAccessGold">
+                                <i class="fa fa-cloud-download"></i>
+                            </a>
+                            <button class="faux"
+                                    action="openReleaseLicensing">
+                                <i class="fa fa-copyright"></i>
+                            </button>
+                            {{#streamable}}
+                                {{>playRelease}}
+                            {{/streamable}}
+                        {{/inEarlyAccess}}
+
+                        {{#inEarlyAccess}}
+                            {{#streamable}}
+                                <button class="button button--cta button--icon"
+                                        action="playSongs"
+                                        role="play-release"
+                                        release-id="{{_id}}">
+                                        Listen Early 
+                                    <i class="fa fa-play inactive"></i>
+                                    <i class="fa fa-pause active"></i>
+                                </button>
+                            {{/streamable}}
+                            {{^streamable}}
+                                <a href="/gold" class="button button--cta button--icon">
+                                    GET GOLD to LISTEN EARLY
+                                    <i class="fa fa-play"></i>
+                                </a>
+                            {{/streamable}}
+                        {{/inEarlyAccess}}
                     </div>
                 </div>
             </div>
@@ -140,8 +148,33 @@
 </script>
 
 <script type="text/template"
+        mustache-name="early-access-msg">
+{{#inEarlyAccess}}
+<div class="in-early-access-msg">
+    {{^hasGoldAccess}}
+        Early streaming for <a href="/gold">Gold</a> members only.
+    {{/hasGoldAccess}}
+    {{#hasGoldAccess}}
+        Early streaming because you have Gold.
+    {{/hasGoldAccess}}
+</div>
+{{/inEarlyAccess}}
+</script>
+
+<script type="text/template"
+        mustache-name="playRelease">
+<button class="faux"
+        action="playSongs"
+        role="play-release"
+        release-id="{{_id}}">
+    <i class="fa fa-play inactive"></i>
+    <i class="fa fa-pause active"></i>
+</button>
+</script>
+
+<script type="text/template"
         mustache-name="trackCells">
-<td>{{title}}{{>unlicensable}}</td>
+<td>{{title}}{{>early-access-msg}}{{>unlicensable}}</td>
 {{#playlistId}}
 <td><a href="/release/{{releaseId}}">{{release}}</a></td>
 {{/playlistId}}
@@ -160,7 +193,8 @@
 
 <script type="text/template"
         mustache-name="playSong">
-<button class="faux button--mobile"
+{{#streamable}}
+<button class="faux button--mobile{{#inEarlyAccess}} in-early-access{{/inEarlyAccess}}"
         action="playSong"
         role="play-song"
         play-link="{{playUrl}}"
@@ -173,10 +207,21 @@
     <i class="fa fa-play-circle inactive"></i>
     <i class="fa fa-pause-circle active"></i>
 </button>
+{{/streamable}}
+{{^streamable}}
+    {{#inEarlyAccess}}
+        <button class="faux button--mobile{{#inEarlyAccess}} in-early-access{{/inEarlyAccess}}"
+                action="canAccessGold"
+                title="{{title}}">
+            <i class="fa fa-play-circle inactive"></i>
+        </button>
+    {{/inEarlyAccess}}
+{{/streamable}}
 </script>
 
 <script type="text/template"
         mustache-name="trackButtons">
+{{#downloadable}}
 <a class="silent button--mobile"
    target="_blank"
    title="Download Track"
@@ -184,6 +229,8 @@
    href="{{downloadLink}}">
     <i class="fa fa-cloud-download"></i>
 </a>
+{{/downloadable}}
+{{#streamable}}
 <a class="silent button--mobile"
    target="_blank"
     action="openTrackLicensing"
@@ -191,6 +238,7 @@
     track-id="{{_id}}">
     <i class="fa fa-copyright"></i> License
 </a>
+{{/streamable}}
 </script>
 
 <script type="text/template"
@@ -243,6 +291,12 @@
             {{/data}}
         </tbody>
     </table>
+    {{#data}}
+    {{#hiddenTracks}}
+    <br />
+    <p>This release contains <strong>{{hiddenTracks}} more songs</strong> that will be available when it is fully released. <a href="/gold">Monstercat Gold</a> subscribers will be able to stream them 24hrs early.</p>
+    {{/hiddenTracks}}
+    {{/data}}
 </script>
 
 <script type="text/template"
@@ -305,6 +359,18 @@
 </script>
 
 <script type="text/template"
+        mustache-name="albumReleaseDates">
+    {{^inEarlyAccess}}
+        {{#preReleaseDate}}Pre-Released on {{preReleaseDate}}{{/preReleaseDate}}
+        {{#releaseDate}}Released on {{releaseDate}}{{/releaseDate}}
+    {{/inEarlyAccess}}
+    {{#inEarlyAccess}}
+        {{#preReleaseDateObj}}Pre-Releases in <span role="countdown" class="countdown" to="{{preReleaseDateObj}}" completed="featuredReleaseCountdownEnd"></span>{{/preReleaseDateObj}}
+        {{#releaseDateObj}}Releases in <span role="countdown" class="countdown" to="{{releaseDateObj}}" completed="featuredReleaseCountdownEnd"></span>{{/releaseDateObj}}
+    {{/inEarlyAccess}}
+</script>
+
+<script type="text/template"
         template-name="user-releases"
         transform="transformReleases">
     {{#loading}}
@@ -325,7 +391,7 @@
 
 <script type="text/template"
         mustache-name="release-list-item">
-    <li>
+    <li class="{{#inEarlyAccess}}in-early-access{{/inEarlyAccess}}">
         <a class="silent" href="/release/{{catalogId}}" title="{{title}} / {{artists}}">
             <div class="image-wrapper">
                 <img src="/img/artwork.jpg" class="preload" />

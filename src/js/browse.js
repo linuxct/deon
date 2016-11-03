@@ -66,6 +66,7 @@ function transformMusicBrowseResults (obj, done) {
     var rmap = {}
     tracks.forEach(function (track, index, arr) {
       var release = track.release
+      release.inEarlyAccess = track.inEarlyAccess
       if (!rmap[release._id]) rmap[release._id] = track.release
       delete track.release
       release = rmap[release._id]
@@ -77,7 +78,6 @@ function transformMusicBrowseResults (obj, done) {
       mapRelease(release)
       release.tracks.forEach(function (track, index, arr) {
         mapReleaseTrack(track)
-        track.index        = playIndexOffset
         track.releaseId    = release._id
         track.trackNumber  = getTrackNumber(track, release._id)
         track.playUrl      = getPlayUrl(track.albums, release._id)
@@ -87,12 +87,16 @@ function transformMusicBrowseResults (obj, done) {
         track.genreBonus   = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
         track.genreLink    = encodeURIComponent(track.genre)
         track.time         = formatDuration(track.duration)
-        playIndexOffset++
+        if(track.streamable) {
+          track.index        = playIndexOffset
+          playIndexOffset++
+        }
       })
       release.tracks.sort(sortTracks)
     })
     obj.results = releases
     obj.total = obj.total
+    obj.hasGoldAccess = hasGoldAccess()
     done(null, obj)
   })
 }
@@ -110,6 +114,7 @@ function completedMusicBrowseResults (source, obj) {
   el.disabled = false
   el.classList[method]('hide')
   mergeBrowseResults()
+  startCountdownTicks()
 }
 
 function mergeBrowseResults () {

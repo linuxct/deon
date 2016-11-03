@@ -1,7 +1,9 @@
 <script type="text/template"
         route="^(\?.*)?$"
         page-title="Monstercat">
-    <div source="$endpoint/catalog/release?limit=15" template="home-featured"></div>
+    <div role="home-featured">
+        <div source="$endpoint/catalog/release?limit=15" template="home-featured"></div>
+    </div>
     <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="home-podcast"></div>
     <div source="https://shopcollections.monstercat.com/394974148" template="home-merch"></div>
     <div source="$endpoint/catalog/news" template="blog-stories"></div>
@@ -43,6 +45,7 @@
                 </ul>
             </div>
         </div>
+
         <div class="col-xs-12 col-sm-12 col-md-6 text left followers">
             <div class="container-right">
                 <header>
@@ -153,6 +156,7 @@
 </script>
 
 <script type="text/template"
+        completed="completedHome"
         template-name="home-featured"
         transform="transformHome">
     {{#loading}}
@@ -177,19 +181,45 @@
                 </a>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8 cl-white featured-details">
+                {{#inEarlyAccess}}
+                <span class="tag">Early Access</span>
+                {{/inEarlyAccess}}
+                {{^inEarlyAccess}}
                 <span class="tag">Featured</span>
+                {{/inEarlyAccess}}
                 <a class="silent no-hover" href="/release/{{catalogId}}">
                     <h1 class="title uppercase">{{title}}</h1>
                 </a>
                 <h3>By {{artists}}</h3>
                 <p class="date">
-                    {{#preReleaseDate}}Pre-Released on {{preReleaseDate}}{{/preReleaseDate}}
-                    {{#releaseDate}}Released on {{releaseDate}}{{/releaseDate}}
+                    {{>albumReleaseDates}}
                 </p>
-                <a href="/release/{{catalogId}}" class="button button--cta button--icon">
-                    View
-                    <i class="fa fa-chevron-right"></i>
-                </a>
+                {{#inEarlyAccess}}
+                    {{#hasGoldAccess}}
+                        <a href="/release/{{catalogId}}" class="button button--cta button--icon">
+                            Listen Early
+                            <i class="fa fa-chevron-right"></i>
+                        </a>
+                        <div class="early-access-message">
+                            {{goldThankYou}}
+                        </div>
+                    {{/hasGoldAccess}}
+                    {{^hasGoldAccess}}
+                    <a href="/account/services?gold" class="button button--cta button--icon">
+                        Get Gold to Listen Early
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                    <div class="early-access-message">
+                        <a href="/gold">Monstercat Gold</a> members can stream releases 24hrs early.
+                    </div>
+                    {{/hasGoldAccess}}
+                {{/inEarlyAccess}}
+                {{^inEarlyAccess}}
+                    <a href="/release/{{catalogId}}" class="button button--cta button--icon">
+                        View
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                {{/inEarlyAccess}}
             </div>
         </div>
         {{/featured}}

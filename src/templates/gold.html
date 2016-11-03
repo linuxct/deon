@@ -1,0 +1,85 @@
+<script type="text/template"
+        route="^gold$"
+        transform="transformGoldLanding"
+        page-title="Monstercat Gold">
+  {{#data}}
+    <div class="top-banner top-banner-gold">
+      <div class="banner" style="background-image:url('img/gold.jpg')"></div>
+      <div class="container flex">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-6">
+          <h1 id="top">Monstercat Gold</h1>
+          <ul class="gold-perks">
+            <li><a href="#download-access" action="anchorScrollTo">Download Monstercat songs in your preferred format</a></li>
+            <li><a href="#early-streaming" action="anchorScrollTo">Early streaming access to new releases</a></li>
+            <li><a href="#support-the-artists" action="anchorScrollTo">Directly support the artists</a></li>
+            <li><a href="#discord" action="anchorScrollTo">and more!</a></li>
+          </ul>
+          <br />
+          {{#hasGoldAccess}}
+          <p>You already have Gold, {{sessionName}}. You're cool.</p>
+          {{/hasGoldAccess}}
+          {{^hasGoldAccess}}
+          <a class="button button--gold" href="/account/services?gold">
+            Get Gold - $5/mo
+          </a>
+          {{/hasGoldAccess}}
+        </div>
+      </div>
+    </div>
+    {{#featureBlocks}}
+      <section class="flex gold-feature-section" id="{{id}}">
+          <div class="col-xs-12 col-sm-12 col-md-6 {{^isOdd}}col-md-last {{/isOdd}} article-banner">
+              <div class="side-banner" style="background-image: url(/img/gold-landing/{{image}});"></div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+              <div class="article-wrapper">
+                <h2>{{title}}</h2>
+                <p class="description">{{description}}</p>
+                {{#discord}}
+                  {{#hasGoldAccess}}
+                    {{>joinGoldDiscord}}
+                  {{/hasGoldAccess}}
+                {{/discord}}
+                {{#download}}
+                <p class="description">You can change your preferred download format in <a href="/account#preferred-download">your settings</a>.</p>
+                {{/download}}
+                {{#reddit}}
+                  {{#hasGoldAccess}}
+                    {{#redditUsername}}
+                    <p class="description">Your reddit account: <strong>{{redditUsername}}</strong>. <a href="/account#reddit">Change it</a>.</p>
+                    {{/redditUsername}}
+                    {{^redditUsername}}
+                    <p class="description">You haven't set up your reddit username yet, <a href="/account#reddit">set it here</a>.</p>
+                    {{/redditUsername}}
+                  {{/hasGoldAccess}}
+                {{/reddit}}
+                {{^hasGoldAccess}}
+                  <a class="button button--gold-light" href="/account/services?gold" target="_BLANK">
+                    Get Gold - $5/mo
+                  </a>
+                {{/hasGoldAccess}}
+                <a class="back-to-top" href="#top" action="anchorScrollTo">back to top</a>
+              </div>
+          </div>
+      </section>
+    {{/featureBlocks}}
+    <div class="gold-footer-cta">
+      <div class="banner" style="background-image:url(/img/banner.jpg)">
+          <div class="banner-shade"></div>
+          <div class="gradient gradient--inverted"></div>
+      </div>
+      <div class="container">
+        <div class="button-group-center">
+          {{#hasGoldAccess}}
+          <h2>You already have Gold, {{sessionName}}.</h2>
+          <p>You're cool.</p>
+          {{/hasGoldAccess}}
+          {{^hasGoldAccess}}
+          <h2>Be Gold.</h2>
+          <a class="button button--gold" href="/account/services?gold">Get Gold - $5/mo</a>
+          {{/hasGoldAccess}}
+        </div>
+      </div>
+    </div>
+  {{/data}}
+</script>

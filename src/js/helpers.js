@@ -261,6 +261,10 @@ var animatedScrollTo = function (element, to, duration, callback) {
     requestAnimFrame(animateScroll);
 };
 
+function randomChooser(n){
+  return Math.floor(Math.random() * n+1);
+}
+
 /* Vendor Helpers */
 
 function serviceUrlToChannelId (user) {
