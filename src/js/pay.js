@@ -608,7 +608,7 @@ function bindPayPalGermanyWarning () {
 }
 
 function togglePayPalGermanyWarning () {
-  if(session.user.location == 'Germany') {
+  if(session.user && session.user.location == 'Germany') {
     var val = document.querySelector('input[name=method]:checked').value
     var msg = document.querySelector('.recurring-warning-germany')
     if(msg) {
