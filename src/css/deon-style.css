@@ -2488,7 +2488,8 @@ ul.social-grid {
 }
 
 .details-box label,
-.cl-white .details-box label{
+.cl-white .details-box label,
+.bg .cl-white .details-box label {
   color: #aaa;
   font-size: 18px;
 }
