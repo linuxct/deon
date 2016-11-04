@@ -296,6 +296,11 @@ function getDownloadLink (releaseId, trackId) {
   return endpoint + '/release/' + releaseId + '/download?' + objectToQueryString(opts)
 }
 
+function getGetGoldLink () {
+  var goldUrl = '/account/services?gold'
+  return isSignedIn() ? goldUrl : '/sign-up?redirect=' + encodeURIComponent(goldUrl)
+}
+
 function updatePlayerPlaylist (playlistId, ptracks) {
   var url = endpoint + "/playlist/" + playlistId + "/tracks"
   loadCache(url, function(err, obj) {
@@ -620,6 +625,7 @@ function transformGoldLanding (obj) {
   obj.featureBlocks = featureBlocks
   obj.hasGoldAccess = hasGoldAccess()
   obj.sessionName = getSessionName()
+  obj.getGoldUrl = getGetGoldLink()
 
   if(obj.hasGoldAccess) {
     obj.redditUsername = session.user.redditUsername

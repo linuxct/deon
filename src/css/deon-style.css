@@ -51,8 +51,10 @@ small a {
 input,
 textarea{
   box-shadow: 0 0 0;
-  border: 0;
+  border: 1px solid #ccc;
   background: transparent;
+  padding: 0.20em 0.30em;
+  border-radius: 3px;
 }
 
 select {
@@ -238,8 +240,6 @@ table.form tr:nth-child(odd) > td {
 }
 
 table.form input {
-  padding: 0;
-  border: none;
   font-size: 18px;
   transition: border-color .3s ease;
 }
