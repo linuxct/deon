@@ -598,7 +598,7 @@ function transformGoldLanding (obj) {
   }, {
     id: 'early-streaming',
     title: 'Early Streaming Access',
-    description: 'Listen to releases on Monstercat.com 24 hours before they are released to everyone else.',
+    description: 'Listen to releases on Monstercat.com 20 hours before they are released to everyone else.',
     image: '2-StreamingAccess.jpg',
   }, {
     id: 'support-the-artists',
