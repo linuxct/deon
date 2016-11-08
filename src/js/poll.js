@@ -26,7 +26,7 @@ function createVote (e, el) {
     return toasty(Error('You need to <a href="/signin">sign in</a> to vote (it\'s free).'), 3000)
 
   var data = getTargetDataSet(el)
-  if (!data || !data.pollId)
+  if (!data || !data.pollId)
     return toasty(Error('There was an error. Please try again later.'))
   if (!data["choices[]"])
     return toasty(Error('You need to select at least an option.'))
