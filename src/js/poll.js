@@ -5,7 +5,7 @@ function transformMixContest(obj){
 }
 
 function transformMixContestPoll(obj){
-  obj.audioLink = 'https://s3.amazonaws.com/data.monstercat.com/blobs/5de6ba60600e3f20feefd4bd1e60893bdb742a36'
+  obj.audioLink = 'https://connect.monstercat.com/api/release/5822296505c273e131e967c4/download?format=mp3&bitRate=128&method=download&track=5822220805c273e131e964f0'
   obj.tournamentImage = '/img/tournament-1.jpg'
   obj.endDate = new Date('2016-11-12T00:00:00') // UTC = PST + 8
   obj.cover = "/img/mixcontest.jpg" 
