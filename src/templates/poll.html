@@ -1,0 +1,177 @@
+<script type="text/template"
+        route="^MixContest2016\/?$"
+        page-title="Mix Contest 2016"
+        transform="transformMixContest">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <div class="container panel">
+      <p>{{message}}</p>
+  </div>
+  {{/error}}
+  {{#data}}
+  {{#pollId}}
+  <div source="$endpoint/poll/{{pollId}}" template="mix-contest"></div>
+  {{/pollId}}
+  {{^pollId}}
+  <div class="container">
+      <h1>Monstercat Mix Contest 2016</h1>
+    <div class="panel">
+      <div class="voting-closed">
+        <p><strong>This week's Voting has closed. </strong>Come back next week.</p>
+      </div>
+    </div>
+  </div>
+  {{/pollId}}
+  {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="mix-contest"
+        transform="transformMixContestPoll"
+        completed="completedHome">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <div class="container panel">
+      <p>{{message}}</p>
+  </div>
+  {{/error}}
+  {{#data}}
+  <div class="top-banner top-banner--mix">
+    <div class="banner">
+        <div class="banner" style="background-image:url({{cover}}">
+          <div class="banner-shade banner-shade--blue"></div>
+        </div>
+    </div>
+    <div class="container flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 cl-white featured-details">
+        <span class="tag tag--mix">Voting is Open!</span>
+        <h1 class="title uppercase">Monstercat Mix Contest 2016</h1>
+        <h3>
+          {{#endDate}}
+            <span role="countdown" class="countdown" to="{{endDate}}" completed="featuredReleaseCountdownEnd"></span>
+          {{/endDate}}
+          <span class="excerpt">Left to vote</span>
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel panel--mix text center">
+      <h2>{{question}}</h2>
+      {{#audioLink}}
+      <h3>You be the judge. Pick your 2 favourite Djs to advance to the next challenge!</h3>
+        <div class="audio-wrapper">
+          <audio src="{{audioLink}}" controls></audio>
+        </div>
+      {{/audioLink}}
+      <div data-set="choices" class="choice-list">
+        <input type="hidden" name="pollId" value={{_id}} />
+        {{#choices}}
+        <div>
+        <input type="checkbox" name="choices[]" value="choice-{{index}}" id="choice-{{index}}"/>
+        <label for="choice-{{index}}">{{choice}}</label>
+        </div>
+        {{/choices}}
+      </div>
+
+      <div class="button-group">
+          <button class="button--full button--cta" action="createVote" data-set-target="choices">
+            Vote
+          </button>
+      </div>     
+
+      <div class="tournament-image">
+        <img src="{{tournamentImage}}" alt="Tournament Image" />
+      </div>
+    </div>
+  </div>
+  {{/data}}
+</script>
+
+<script type="text/template"
+        route="^poll\/?$"
+        page-title="Poll"
+        transform="transformPoll">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <div class="container panel">
+      <p>{{message}}</p>
+  </div>
+  {{/error}}
+  {{#data}}
+  {{#hasPollAccess}}
+  <div class="container">
+      <h1>Poll</h1>
+      <div class="panel">
+        <table class="form mobile">
+          <tbody data-set="create-poll" role="create-poll-table">
+            <tr>
+              <th>Question</th>
+              <td>
+                <input type="text" name="question" placeholder="Question"/>
+              </td>
+            </tr>
+            <tr>
+              <th><label for="multiChoice">Users can choose more than 1 choice.</label></th>
+              <td><input type="checkbox" name="multiChoice" id="multiChoice"/></td>
+            </tr>
+            <tr>
+              <th><label for="multiVote">Users can vote more than 1 time.</label></th>
+              <td><input type="checkbox" name="multiVote" id="multiVote"/></td>
+            </tr>
+            <tr class="choice">
+              <th>Choice 1</th>
+              <td><input type="text" name="choices[]" placeholder="Choice 1" /></td>
+            </tr>
+            <tr class="choice">
+              <th>Choice 2</th>
+              <td><input type="text" name="choices[]" placeholder="Choice 2" /></td>
+            </tr>
+            <tr class="choice">
+              <th>Choice 3</th>
+              <td><input type="text" name="choices[]" placeholder="Choice 3" /></td>
+            </tr>
+            <tr class="choice">
+              <th>Choice 4</th>
+              <td><input type="text" name="choices[]" placeholder="Choice 4" /></td>
+            </tr>
+
+          </tbody>
+        </table>
+        <div class="button-group">
+            <button class="button--full" action="addChoice">Add choice</button>
+            <button class="button--full button--cta" action="createPoll" data-set-target="create-poll">
+              Create Poll
+            </button>
+        </div>
+      </div>
+  </div>
+  {{/hasPollAccess}}
+  {{^hasPollAccess}}
+  <div class="container">
+      <h1>Page Not Found</h1>
+      <div class="panel">
+          <p>The page you are looking for is not here.</p>
+      </div>
+  </div>
+  {{/hasPollAccess}}
+  {{/data}}
+</script>
+
+<script type="text/template" template-name="poll-choice">
+    <table>
+      <tbody>
+        <tr class="choice">
+          <th>Choice {{number}}</th>
+          <td><input type="text" name="choices[]" placeholder="Choice {{number}}" /></td>
+        </tr>
+      </tbody>
+    </table>
+</script>

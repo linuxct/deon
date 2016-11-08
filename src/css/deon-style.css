@@ -1584,6 +1584,12 @@ header:hover .scrub > .progress,
   width: 100%;
 }
 
+.toasts a {
+  pointer-events: auto;
+  color: white;
+  font-weight: bold;
+}
+
 .toast {
   box-shadow: 0 0 35px rgba(0,0,0,0.1);
   padding: 1.5rem;
@@ -3452,6 +3458,98 @@ blockquote code {
     margin-left: 1.5%;
   }
 
+}
+
+/*-----------------------------*\
+  POLLS
+\*-----------------------------*/
+
+.audio-wrapper > audio{
+  width: 100%;
+  margin: .5rem auto 1rem; 
+}
+
+.tag--mix{
+  background: dodgerblue;
+  display: inline-block;
+  margin-bottom: .25rem;
+}
+
+.featured-details span.excerpt {
+  display: block;
+  font-size: 16px;
+  color: #aaa;
+}
+
+.banner-shade--blue{
+  background: rgba(17,7,42,0.5);
+}
+
+.voting-closed{
+  width: 100%;
+  padding: 1rem;
+  background: #ef6958;
+  color: #fff;
+}
+
+.panel--mix{
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.panel--mix h2{
+  margin-top: 1rem;
+}
+
+.choice-list {
+  text-align: left;
+  max-width: 150px;
+  margin: 0 auto;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.choice-list label,
+.choice-list input {
+  font-size: 1.25rem;
+  margin-top: 5px;
+}
+.choice-list input{
+  position: relative;
+  top: -2px;
+  margin-right: .15rem
+}
+
+.choice-list + .button-group > button{
+  width: 150px;
+}
+
+button.already-voted{
+  background: #daedff;
+  border-color: #daedff;
+  color: dodgerblue;
+  cursor: not-allowed;
+  pointer-events: none;
+  text-shadow: 0 0 0;
+}
+
+.choice-list.already-voted{
+  opacity: 0.5;
+}
+
+.top-banner--mix .featured-details{
+  align-self: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tournament-image{
+  width: 100%;
+  margin: 1rem auto 0;
+}
+.tournament-image > img{
+  max-width: 100%;
 }
 
 /*-----------------------------*\
