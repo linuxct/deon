@@ -71,6 +71,8 @@
       {{/audioLink}}
       <div data-set="choices" class="choice-list">
         <input type="hidden" name="pollId" value={{_id}} />
+        <input type="hidden" name="maxChoices" value={{maxChoices}} />
+        <input type="hidden" name="minChoices" value={{minChoices}} />
         {{#choices}}
         <div>
         <input type="checkbox" name="choices[]" value="choice-{{index}}" id="choice-{{index}}"/>
@@ -125,6 +127,14 @@
             <tr>
               <th><label for="multiVote">Users can vote more than 1 time.</label></th>
               <td><input type="checkbox" name="multiVote" id="multiVote"/></td>
+            </tr>
+            <tr>
+              <th><label for="minChoices">Mininum choices</label></th>
+              <td><input type="number" name="minChoices" id="minChoices" size="2" /></td>
+            </tr>
+            <tr>
+              <th><label for="maxChoices">Maximum choices</label></th>
+              <td><input type="number" name="maxChoices" id="maxChoices" size="2" /></td>
             </tr>
             <tr class="choice">
               <th>Choice 1</th>

@@ -28,8 +28,6 @@ function createVote (e, el) {
   var data = getTargetDataSet(el)
   if (!data || !data.pollId)
     return toasty(Error('There was an error. Please try again later.'))
-  if (!data["choices[]"])
-    return toasty(Error('You need to select at least an option.'))
   choices = []
   for (var i = 0; i<data["choices[]"].length; i++){
     var value = data["choices[]"][i]
@@ -38,9 +36,13 @@ function createVote (e, el) {
       choices.push(index)
     }
   }
-  var maxVotes = 2;
-  if (choices.length > maxVotes) 
-    return toasty(Error('You may only select up to ' + maxVotes + ' choices.'))
+  var maxChoices = parseInt(data.maxChoices);
+  var minChoices = parseInt(data.minChoices);
+  if (choices.length > maxChoices)
+    return toasty(Error('You may only select up to ' + maxChoices + ' choices.'))
+
+  if(choices.length < minChoices)
+    return toasty(Error('You need to select at least ' + minChoices + ' choices.'))
 
   requestJSON({
     url: endpoint + '/vote',
