@@ -134,7 +134,7 @@
         </div>
     </div>
     <div class="release container" >
-        <div class="panel"
+        <div class="panel panel--mobile"
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
@@ -236,7 +236,8 @@
     action="openTrackLicensing"
     release-id="{{releaseId}}"
     track-id="{{_id}}">
-    <i class="fa fa-copyright"></i> License
+    <i class="fa fa-copyright"></i> 
+    <span class="col-xs-hidden">License</span>
 </a>
 {{/streamable}}
 </script>

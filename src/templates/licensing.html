@@ -234,15 +234,15 @@
 
 <script type="text/template"
         mustache-name="licensingContentCreatorCTAs">
-<a class="button button--full button-cta button--youtube" href="/account/services?vendor=youtube">
+<a class="button button--full button-cta button--youtube button-cta--mobile" href="/account/services?vendor=youtube">
     <span class="title">YouTube</span>
     <span class="subtitle">$10/mo or $200</span>
 </a>
-<a class="button button--full button-cta button--twitch" href="/account/services?vendor=twitch">
+<a class="button button--full button-cta button--twitch button-cta--mobile" href="/account/services?vendor=twitch">
   <span class="title">Twitch</span>
   <span class="subtitle">$5/mo or $100</span>
 </a>
-<a class="button button--full button-cta button--beam" href="/account/services?vendor=beam">
+<a class="button button--full button-cta button--beam button-cta--mobile" href="/account/services?vendor=beam">
   <span class="title">Beam</span>
   <span class="subtitle">$5/mo or $100</span>
 </a>
@@ -282,7 +282,7 @@
 
   <div class="section commercial">
       <h3>Commercial Licensing</h3>
-      <a class="button button-cta" href="/licensing/commercial" action="closeModal">
+      <a class="button button-cta button-cta--mobile" href="/licensing/commercial" action="closeModal">
         <span class="title">Commercial Use</span>
         <span class="subtitle">Movies, TV Shows, Commercials</span>
       </a> 
@@ -307,8 +307,8 @@
             {{>licensing-modal-main}}
             <div class="section crediting">
               <h3>Credit the Artists</h3>
-              <button action="showCrediting" credit-type="youtube" class="button">YouTube</button>
-              <button action="showCrediting" credit-type="other" class="button">Twitter/Facebook/Instagram</button>
+              <button action="showCrediting" credit-type="youtube" class="button button-cta--mobile">YouTube</button>
+              <button action="showCrediting" credit-type="other" class="button button-cta--mobile">Twitter/Facebook/Instagram</button>
               <textarea class="copycredits hide" credit-type="youtube">{{track.copycredit}}</textarea>
               <textarea class="copycredits hide" credit-type="other">{{track.copycreditOther}}</textarea>
             </div>

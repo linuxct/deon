@@ -553,6 +553,34 @@ label[for] {
     padding: .5rem;
     font-size: 1.65rem;
   }
+  .panel.panel--mobile {
+    box-shadow: none;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px;
+  }
+  .release.container {
+    width: 100%;
+  }
+  .button-cta--mobile {
+    padding: 8px 10px 8px 10px;
+  }
+  button.button-cta--mobile .title,
+  button.button-cta--mobile .subtitle,
+  a.button-cta--mobile .subtitle,
+  a.button-cta--mobile .title {
+    font-size: 1em;
+    font-weight: normal;
+  }
+  .modal--licensing > .panel {
+    padding: 1em;
+  }
+
+  div.modal--licensing {
+    max-height: 90%;
+    margin: 5% auto;
+    overflow: auto;
+  }
 }
 
 /*-----------------------------*\
@@ -1641,6 +1669,10 @@ span.note a {
   max-width: 1000px;
   position: relative;
   margin: 50px auto;
+}
+
+.modal > .panel:first-of-type {
+  margin-top: 0px;
 }
 
 @media screen and (min-width: 768px){

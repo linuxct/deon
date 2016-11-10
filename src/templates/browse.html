@@ -16,7 +16,7 @@
                 </a>
             </div>
         </header>
-        <div class="flex panel">
+        <div class="flex panel panel--mobile">
             <div class="col-xs-12 col-sm-12 col-md-2 browse-filters" source="$endpoint/catalog/browse/filters"
                  template="browse-filters">
             </div>
@@ -131,6 +131,7 @@
                         {{#canPlaylist}}
                         <select
                             onchange="addToPlaylist(null, this)"
+                            class="col-xs-hidden col-md-visible inline"
                             source="$endpoint/playlist"
                             template="select-playlist"
                             release-id="{{releaseId}}"

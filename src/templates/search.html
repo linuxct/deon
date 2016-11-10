@@ -51,7 +51,7 @@
     <div class="container">
         <h1>Songs</h1>
         {{#loading}}
-        <div class="panel">
+        <div class="panel panel--mobile">
             <i class="fa fa-fw fa-spin fa-refresh"></i>
         </div>
         {{/loading}}
@@ -71,7 +71,7 @@
 <script type="text/template"
         template-name="search-tracks"
         transform="transformSearchTrackResults">
-    <div class="panel">
+    <div class="panel panel--mobile">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
         {{/loading}}
@@ -147,7 +147,7 @@
         <h1>Search</h1>
         {{#data}}
         {{#searches}}
-        <div class="panel">
+        <div class="panel panel--mobile">
             <h2>Songs</h2>
             <div source="$endpoint/catalog/track?{{tracks.query}}"
                  template="search-snippet-tracks">
@@ -264,6 +264,7 @@
                     {{#canPlaylist}}
                     <select
                         onchange="addToPlaylist(null, this)"
+                        class="col-xs-hidden col-md-visible inline"
                         source="$endpoint/playlist"
                         template="select-playlist"
                         release-id="{{releaseId}}"
