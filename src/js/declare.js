@@ -352,6 +352,9 @@ function loadSource (opts) {
 }
 
 function loadSubSources (container, reset, disableLoadingRender) {
+  if(!container) {
+    return
+  }
   var sources = container.querySelectorAll('[source]')
   for (var i = 0; i < sources.length; i++) {
     var opts = getElementSourceOptions(sources[i])
@@ -406,6 +409,9 @@ function renderTemplateOptions (opts) {
 }
 
 function render (container, template, scope) {
+  if(!container) {
+    return
+  }
   container.innerHTML = Mustache.render(template, scope, mustacheTemplates)
   loadSubSources(container)
 }
@@ -491,6 +497,9 @@ function getTargetDataSet (el, checkInitial, ignoreEmpty) {
 }
 
 function getDataSetTargetElement (el) {
+  if(!el) {
+    return null
+  }
   var target = el.getAttribute('data-set-target')
   return document.querySelector('[data-set="' + target + '"]')
 }

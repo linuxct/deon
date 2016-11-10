@@ -56,6 +56,9 @@ function toAtlas (arr, key) {
 }
 
 function getAccountCountries (current) {
+  if(!Countries) {
+    return []
+  }
   return Countries.map(function (item) {
     return {
       name: item.name,

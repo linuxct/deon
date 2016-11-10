@@ -52,7 +52,9 @@ openRoute.completed.push(function () {
   if (location.pathname == "/") getStats()
 })
 openRoute.started.push(function () {
-  stopCountdownTicks()
+  if(typeof(stopCountdownTicks) == 'function') {
+    stopCountdownTicks()
+  }
 })
 
 requestDetect.credentialDomains.push(endhost)
@@ -410,6 +412,9 @@ function removeYouTubeClaim (e, el) {
  */
 
 function mapReleaseTrack (o, index) {
+  if(!o) {
+    return {}
+  }
   o.trackNumber = index + 1
   o.index       = index
   o.canPlaylist = isSignedIn() && !o.inEarlyAccess ? { _id: o._id } : null
@@ -824,6 +829,9 @@ function completedRelease (source, obj) {
 }
 
 function completedReleaseTracks (source, obj) {
+  if(!obj) {
+    return
+  }
   appendSongMetaData(obj.data.results)
   var artists = [];
   getArtistsAtlas(obj.data.results, function (err, atlas) {

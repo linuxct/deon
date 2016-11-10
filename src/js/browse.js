@@ -66,12 +66,16 @@ function transformMusicBrowseResults (obj, done) {
     var rmap = {}
     tracks.forEach(function (track, index, arr) {
       var release = track.release
-      release.inEarlyAccess = track.inEarlyAccess
-      if (!rmap[release._id]) rmap[release._id] = track.release
-      delete track.release
-      release = rmap[release._id]
-      if (!release.tracks) release.tracks = []
-      release.tracks.push(track)
+      if(release) {
+        release.inEarlyAccess = track.inEarlyAccess
+        if (!rmap[release._id]) {
+          rmap[release._id] = track.release
+        }
+        delete track.release
+        release = rmap[release._id]
+        if (!release.tracks) release.tracks = []
+        release.tracks.push(track)
+      }
     })
     var releases = Object.keys(rmap).map(function (key) { return rmap[key] }).sort(sortRelease)
     releases.forEach(function(release) {
