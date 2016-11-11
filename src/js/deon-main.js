@@ -620,7 +620,7 @@ function transformGoldLanding (obj) {
     id: 'reddit',
     title: 'Subreddit Flair on /r/Monstercat',
     description: 'Show your bling off in the Monstercat subreddit.',
-    image: '6-Reddit.jpg',
+    image: '6-Reddit.png',
     reddit: true
   })
   featureBlocks = featureBlocks.map(function (i, index) {
