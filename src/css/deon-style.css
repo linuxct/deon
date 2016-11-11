@@ -3507,6 +3507,10 @@ blockquote code {
   margin-bottom: .25rem;
 }
 
+.tag--mix.tag--mix-closed{
+  background: crimson;
+}
+
 .featured-details span.excerpt {
   display: block;
   font-size: 16px;

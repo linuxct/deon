@@ -1,4 +1,58 @@
 <script type="text/template"
+        route="^[Mm]ix[Cc]ontest2016\/votes"
+        page-title="Mix Contest 2016 Votes"
+        transform="transformMixContest">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <div class="container panel">
+      <p>{{message}}</p>
+  </div>
+  {{/error}}
+  {{#data}}
+  {{#pollId}}
+  <div source="$endpoint/poll/{{pollId}}/votes/breakdown" template="vote-breakdown"></div>
+  {{/pollId}}
+  {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="vote-breakdown"
+        transform="transformVotesBreakdown"
+        completed="completedHome">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <div class="container panel">
+      <p>{{message}}</p>
+  </div>
+  {{/error}}
+  {{#data}}
+  <div class="container">
+    <div class="panel">
+        <table>
+          <thead>
+          <tr>
+            <th>Votes</th>
+          </tr>
+          </thead>
+          <tbody>
+            {{#votes}}
+            <tr>
+              <td>{{.}}</td>
+            </tr>
+            {{/votes}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {{/data}}
+</script>
+
+<script type="text/template"
         route="^[Mm]ix[Cc]ontest2016\/?$"
         page-title="Mix Contest 2016"
         transform="transformMixContest">
@@ -48,44 +102,51 @@
     </div>
     <div class="container flex">
       <div class="col-xs-12 col-sm-12 col-md-6 cl-white featured-details">
-        <span class="tag tag--mix">Voting is Open!</span>
+        {{#votingOpen}}<span class="tag tag--mix">Voting is Open!</span>{{/votingOpen}}
+        {{^votingOpen}}<span class="tag tag--mix tag--mix-closed">Voting is closed</span>{{/votingOpen}}
         <h1 class="title uppercase">Monstercat Mix Contest 2016</h1>
+        {{#votingOpen}}
         <h3>
           {{#endDate}}
-            <span role="countdown" class="countdown" to="{{endDate}}" completed="featuredReleaseCountdownEnd"></span>
+            <span role="countdown" class="countdown" to="{{endDate}}" completed="pollCountdownEnd"></span>
           {{/endDate}}
           <span class="excerpt">Left to vote</span>
         </h3>
+        {{/votingOpen}}
       </div>
     </div>
   </div>
 
   <div class="container">
     <div class="panel panel--mix text center">
-      <h2>{{question}}</h2>
+      {{#votingOpen}}
+        <h2>{{question}}</h2>
+        <h3>You be the judge. Pick your 2 favourite Djs to advance to the next challenge!</h3>
+      {{/votingOpen}}
       {{#audioLink}}
-      <h3>You be the judge. Pick your 2 favourite Djs to advance to the next challenge!</h3>
         <div class="audio-wrapper">
           <audio src="{{audioLink}}" controls></audio>
         </div>
       {{/audioLink}}
-      <div data-set="choices" class="choice-list">
-        <input type="hidden" name="pollId" value={{_id}} />
-        <input type="hidden" name="maxChoices" value={{maxChoices}} />
-        <input type="hidden" name="minChoices" value={{minChoices}} />
-        {{#choices}}
-        <div>
-        <input type="checkbox" name="choices[]" value="choice-{{index}}" id="choice-{{index}}"/>
-        <label for="choice-{{index}}">{{choice}}</label>
+      {{#votingOpen}}
+        <div data-set="choices" class="choice-list">
+          <input type="hidden" name="pollId" value={{_id}} />
+          <input type="hidden" name="maxChoices" value={{maxChoices}} />
+          <input type="hidden" name="minChoices" value={{minChoices}} />
+          {{#choices}}
+          <div>
+          <input type="checkbox" name="choices[]" value="choice-{{index}}" id="choice-{{index}}"/>
+          <label for="choice-{{index}}">{{choice}}</label>
+          </div>
+          {{/choices}}
         </div>
-        {{/choices}}
-      </div>
 
-      <div class="button-group">
-          <button class="button--full button--cta" action="createVote" data-set-target="choices">
-            Vote
-          </button>
-      </div>     
+        <div class="button-group">
+            <button class="button--full button--cta" action="createVote" data-set-target="choices">
+              Vote
+            </button>
+        </div>     
+      {{/votingOpen}}
 
       <div class="tournament-image">
         <img src="{{tournamentImage}}" alt="Tournament Image" />
