@@ -10,7 +10,7 @@ function transformVotesBreakdown(obj){
   return obj
 }
 function transformMixContestPoll(obj){
-  obj.audioLink = ''
+  obj.audioLink = 'https://s3.amazonaws.com/data.monstercat.com/blobs/03340e4c2363321ba93214c9e7d3326ac33b1683'
   obj.tournamentImage = '/img/tournament-1.jpg'
   obj.endDate = new Date('2016-11-18T00:00:00') // UTC = PST + 8
   obj.votingOpen = obj.endDate > new Date()
