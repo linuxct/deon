@@ -1,6 +1,6 @@
 function transformMixContest(obj){
   obj = obj || {}
-  obj.pollId = '5820db412b27002175be50ff'
+  obj.pollId = '582b5f866e4505c85c31cd81'
   return obj
 }
 function transformVotesBreakdown(obj){
@@ -10,9 +10,9 @@ function transformVotesBreakdown(obj){
   return obj
 }
 function transformMixContestPoll(obj){
-  obj.audioLink = 'https://connect.monstercat.com/api/release/5822296505c273e131e967c4/download?format=mp3&bitRate=128&method=download&track=5822220805c273e131e964f0'
+  obj.audioLink = ''
   obj.tournamentImage = '/img/tournament-1.jpg'
-  obj.endDate = new Date('2016-11-12T00:00:00') // UTC = PST + 8
+  obj.endDate = new Date('2016-11-18T00:00:00') // UTC = PST + 8
   obj.votingOpen = obj.endDate > new Date()
   obj.cover = "/img/mixcontest.jpg" 
 
@@ -98,6 +98,8 @@ function createPoll (e, el) {
     data: {
       question: data.question,
       choices: choices,
+      maxChoices: data.maxChoices,
+      minChoices: data.minChoices,
       multiChoice: data.multiChoice || false,
       multiVote: data.multiVote || false
     },
