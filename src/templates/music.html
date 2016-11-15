@@ -98,7 +98,9 @@
                             <a class="silent"
                             href="{{downloadLink}}"
                             target="_blank"
-                            action="canAccessGold">
+                            release-title="{{title}}"
+                            free-download-for-users="{{freeDownloadForUsers}}"
+                            action="accessDownloadOrModal">
                                 <i class="fa fa-cloud-download"></i>
                             </a>
                             <button class="faux"
@@ -211,7 +213,7 @@
 {{^streamable}}
     {{#inEarlyAccess}}
         <button class="faux button--mobile{{#inEarlyAccess}} in-early-access{{/inEarlyAccess}}"
-                action="canAccessGold"
+                action="accessGoldOrModal"
                 title="{{title}}">
             <i class="fa fa-play-circle inactive"></i>
         </button>
@@ -221,15 +223,17 @@
 
 <script type="text/template"
         mustache-name="trackButtons">
-{{#downloadable}}
+{{#showDownloadLink}}
 <a class="silent button--mobile"
    target="_blank"
    title="Download Track"
-   action="canAccessGold"
+   free-download-for-users="{{freeDownloadForUsers}}"
+   track-title="{{title}}"
+   action="accessDownloadOrModal"
    href="{{downloadLink}}">
     <i class="fa fa-cloud-download"></i>
 </a>
-{{/downloadable}}
+{{/showDownloadLink}}
 {{#streamable}}
 <a class="silent button--mobile"
    target="_blank"

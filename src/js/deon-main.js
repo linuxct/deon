@@ -420,6 +420,8 @@ function mapReleaseTrack (o, index) {
   o.canPlaylist = isSignedIn() && !o.inEarlyAccess ? { _id: o._id } : null
   o.bpm         = Math.round(o.bpm)
   o.licensable  = o.licensable === false ? false : true
+  o.showDownloadLink = o.downloadable || o.freeDownloadForUsers
+
   return o
 }
 
@@ -915,7 +917,27 @@ function completedMusic (source, obj) {
 
 /* UI Stuff */
 
-function canAccessGold (e, el) {
+function accessDownloadOrModal (e, el) {
+  if(el.getAttribute('free-download-for-users') == 'true') {
+    if(isSignedIn()) {
+      return true
+    }
+    else {
+      e.preventDefault()
+      var opts = {
+        releaseTitle: el.getAttribute('release-title'),
+        redirect: encodeURIComponent(window.location),
+        trackTitle: el.getAttribute('track-title'),
+      }
+      openModal('freedownload-for-users-modal', opts)
+    }
+  }
+  else {
+    return accessGoldOrModal(e, el)
+  }
+}
+
+function accessGoldOrModal (e, el) {
   var hasit = hasGoldAccess()
   if (hasit) return
   e.preventDefault()
