@@ -300,6 +300,9 @@ button:hover,
   border-color: black;
   color: white;
 }
+.button--release-cta {
+  padding: 8px 10px 8px 13px;
+}
 .cl-white .button--cta:active,
 .cl-white .button--cta:hover{
   background: white;

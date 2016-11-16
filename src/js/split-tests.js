@@ -1,22 +1,22 @@
 var supportThisReleaseButtonsTest = new SplitTest({
   getButtons: function () {
-    var buttons = document.querySelectorAll('.modal--release ul li a')
+    var buttons = document.querySelectorAll('.details-box .options a, .details-box .options button')
     return buttons
   },
-  name: 'support-this-release-buttons',
+  name: 'release-buttons-cta',
   modifiers: {
-    'button': function () {
-      //control
+    'control': function () {
     },
     'button--cta': function (_this) {
       var buttons = _this.getButtons()
       for(var i = 0; i < buttons.length; i++) {
-        buttons[i].classList.add('button--cta')
+        buttons[i].classList.add('button', 'button--release-cta', 'button--cta')
+        buttons[i].classList.remove('faux')
       }
     }
   },
   checkStart: function (test) {
-    return document.querySelector('.modal--release') != null
+    return sixPackSession && this.getButtons().length > 0
   },
   onStarted: function () {
     var buttons = this.getButtons()

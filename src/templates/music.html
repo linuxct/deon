@@ -83,15 +83,11 @@
                     </label>
                     <div class="options push-right">
                         {{^inEarlyAccess}}
-                            {{#purchase}}
-                            <button class="faux" action="openPurchaseRelease">
-                                <i class="fa fa-shopping-bag"></i>
-                            </button>
-                            {{/purchase}}
-                        {{/inEarlyAccess}}
-                        {{^inEarlyAccess}}
+                            {{#streamable}}
+                                {{>playRelease}}
+                            {{/streamable}}
                             {{#share}}
-                            <a class="silent" href="{{share}}" target="_blank">
+                            <a class="silent" href="{{share}}" target="_blank" title="Spotify">
                                 <i class="fa fa-social-sp"></i>
                             </a>                            
                             {{/share}}
@@ -99,19 +95,23 @@
                             href="{{downloadLink}}"
                             target="_blank"
                             release-title="{{title}}"
+                            title="Download {{title}}"
                             free-download-for-users="{{freeDownloadForUsers}}"
                             action="accessDownloadOrModal">
                                 <i class="fa fa-cloud-download"></i>
                             </a>
                             <button class="faux"
+                                    title="License this release"
                                     action="openReleaseLicensing">
                                 <i class="fa fa-copyright"></i>
                             </button>
-                            {{#streamable}}
-                                {{>playRelease}}
-                            {{/streamable}}
-                        {{/inEarlyAccess}}
 
+                            {{#purchase}}
+                            <button class="faux" action="openPurchaseRelease" title="Buy this release">
+                                <i class="fa fa-shopping-bag"></i>
+                            </button>
+                            {{/purchase}}
+                        {{/inEarlyAccess}}
                         {{#inEarlyAccess}}
                             {{#streamable}}
                                 <button class="button button--cta button--icon"
