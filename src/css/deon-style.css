@@ -3978,3 +3978,15 @@ body.bg {
 .bg .gold-feature-section a.back-to-top {
   color: #CCC;
 }
+
+/** Tickets */
+.tickets-footer {
+  text-align: center;
+  color: #fff;
+  padding: 3rem 0;
+  position: relative;
+}
+
+.tickets-footer h3 {
+  margin-bottom: 0.25em;
+}
