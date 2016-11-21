@@ -672,6 +672,13 @@ td.push-right > * {
   margin-right: 0;
 }
 
+.hidden{
+  display: none;
+}
+.visible{
+  display: block;
+}
+
 /* Loading */
 .loading {
   display: flex;
@@ -2735,7 +2742,6 @@ textarea.copycredits {
   display: none;
 }
 
-
 .filter-list li {
   display: inline-block;
   width: auto;
@@ -3548,6 +3554,16 @@ blockquote code {
   transition: opacity 0.5s ease;
 }
 
+.choice-list--long{
+  max-width: initial;
+  margin: 1rem 0;
+}
+
+.choice-list--limited{
+  height: 350px;
+  overflow-y: auto;
+}
+
 .choice-list label,
 .choice-list input {
   font-size: 1.25rem;
@@ -3696,6 +3712,46 @@ section.gold-feature-section#reddit {
   .top-banner-gold .banner {
     opacity: 1;
   }
+}
+
+/*-----------------------------*\
+  BEST OF
+\*-----------------------------*/
+
+.tabs-content > div{
+  animation: scalingModal .45s ease 1 forwards;
+  -webkit-backface-visibility: hidden;
+}
+.tab-button:focus,
+.tab-button:hover,
+.tab-button {
+  border-color: transparent;
+  background-color: transparent;
+  color: #777;
+  cursor: default;
+}
+.tab-button.active {
+  border-bottom-color: dodgerblue;
+  font-weight: bold;
+  color: dodgerblue;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.tabs-content > .tabs-section:first-child .button-group button:first-child {
+  display: none;
+}
+.tabs-nav .tab-button {
+  margin: 2px 0;
+}
+.tabs table.form th {
+  width: initial;
+}
+input.filter-search {
+  padding: .65rem 2rem;
+  width: 90%;
+  max-width: 300px;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: .5rem;
 }
 
 /*-----------------------------*\

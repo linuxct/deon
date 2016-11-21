@@ -1,0 +1,132 @@
+<script type="text/template"
+        route="^[Bb]est[Oo]f2016"
+        page-title="Best Of 2016"
+        transform="transformBestOf">
+  <div class="top-banner top-banner--mix">
+    <div class="banner">
+        <div class="banner" style="background-image:url('img/mixcontest.jpg')">
+          <div class="banner-shade banner-shade--blue"></div>
+        </div>
+    </div>
+    <div class="container flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 cl-white featured-details">
+        <span class="tag tag--mix">Voting is Open!</span>}}
+        <h1 class="title uppercase">Monstercat Best Of 2016</h1>
+      </div>
+    </div>
+  </div>
+  <div class="container panel panel--mix text center">
+    <div class="tabs">
+      <nav class="tabs-nav" role="tabs-nav">
+        <button class="tab-button active">Album 026</button>
+        <button class="tab-button incomplete">Album 027</button>
+        <button class="tab-button incomplete">Album 028</button>
+        <button class="tab-button incomplete">Album 029</button>
+        <button class="tab-button incomplete">Questions</button>
+      </nav>
+      <div class="tabs-content" role="tabs-content">
+        <div class="tabs-section visible">
+          <div source="$endpoint/poll/583057354031b36f516d711d/" template="best-poll"></div>
+        </div>
+        <div class="tabs-section hidden">
+          <div source="$endpoint/poll/583058a44031b36f516d715d/" template="best-poll"></div>
+        </div>
+        <div class="tabs-section hidden">
+          <div source="$endpoint/poll/58305a0c4031b36f516d7172/" template="best-poll"></div>
+        </div>
+        <div class="tabs-section hidden">
+          <div source="$endpoint/poll/58305b184031b36f516d723f/" template="best-poll"></div>
+        </div>
+        <div class="tabs-section hidden">
+          {{>best-form}}
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" mustache-name="best-form">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <p>{{message}}</p>
+  {{/error}}
+  {{#data}}
+  <h2>Questions</h2>
+  <h3>Your opinion matters.</h3>
+  <div data-set="questions" class="choice-list choice-list--long">
+    <input type="hidden" name="user-id" value="{{user}}"/>
+    <table class="form mobile">
+      <tbody>
+        <tr>
+          <th>What is your favourite Monstercat Release Artwork from 2016?</th>
+          <td>
+            <input type="text" name="favourite-release-artwork" placeholder="Gorilla Glue"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Have you interacted with Monstercat staff and how was it?</th>
+          <td>
+            <input type="text" name="monstercat-staff" placeholder="It was awesome!"/>
+          </td>
+        </tr>
+        <tr>
+          <th>What is your favourite piece of Monstercat Merchandise?</th>
+          <td>
+            <input type="text" name="favourite-merch" placeholder="Monstercat Logo Tee"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Who is your favourite New Monstercat artist?</th>
+          <td>
+            <input type="text" name="favourite-new-artist" placeholder="Marshmello"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Where do you want to see Monstercat Live Events in 2017?</th>
+          <td>
+            <input type="text" name="live-events" placeholder="South America"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="button-group">
+    <button action="previousTab" class="button--half">Previous</button>
+    <button action="submitBestOf" class="button--half button--cta" data-set-target="questions">Submit</button>
+  </div>    
+  {{/data}} 
+</script>
+
+<script type="text/template"
+        template-name="best-poll"
+        transform="transformPollChoices"
+        completed="initializeSearchFilter">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <p>{{message}}</p>
+  {{/error}}
+  {{#data}}
+  <h2>{{question}}</h2>
+  <h3>Choose up to 3 artists</h3>
+  <input type="text" role="filter-search" class="filter-search" placeholder="Search to filter the options..." />
+  <div data-set="choices-{{_id}}" class="choice-list choice-list--long choice-list--limited" role="multistep-poll">
+    <input type="hidden" name="pollId" value={{_id}} />
+    <input type="hidden" name="maxChoices" value={{maxChoices}} />
+    <input type="hidden" name="minChoices" value={{minChoices}} />
+    {{#choices}}
+    <div>
+    <input type="checkbox" name="choices[]" value="choice-{{index}}" id="choice-{{index}}-{{_id}}"/>
+    <label for="choice-{{index}}-{{_id}}">{{choice}}</label>
+    </div>
+    {{/choices}}
+  </div>
+  <div class="button-group">
+    <button action="previousTab" class="button--half">Previous</button>
+    <button action="nextTab" class="button--half button--cta" data-set-target="choices-{{_id}}">Next</button>
+  </div>     
+  {{/data}}
+</script>
