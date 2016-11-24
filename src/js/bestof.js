@@ -158,7 +158,9 @@ function submitBestOf(e, el){
     delete data.lat
   }
 
-  if (localStorage.getItem("bestOf2016")) return toasty("You've already voted.")
+  var storageId = "bestOf2016_" + session.user._id
+
+  if (localStorage.getItem(storageId)) return toasty("You've already voted.")
   requestWithFormData({
     url: 'https://submit.monstercat.com', 
     method: 'POST', 
@@ -167,7 +169,7 @@ function submitBestOf(e, el){
     if (err) return toasty(Error(err.message))
     else {
       submitVotesBestOf()
-      localStorage.setItem("bestOf2016", "true")
+      localStorage.setItem(storageId, "true")
       toasty("Thanks for your submission!")
     }
   })
