@@ -806,6 +806,9 @@ td.push-right > * {
 .banner--scaled .bgbox .details-box {
   transform: perspective(1px) scale(0.909);
 }
+.banner--bottom-crop{
+  background-position: center bottom;
+}
 @media screen and (min-width: 992px){
   .banner--height{
     min-height: auto;

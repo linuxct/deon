@@ -812,7 +812,7 @@ function completedRelease (source, obj) {
   var description = r.title + ' is ' + (r.type == 'EP' ? 'an' : 'a') + ' ' + r.type + ' by ' + r.artists
 
   var releaseDate = new Date(r.releaseDate)
-  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Desc']
+  var months = getMonths()
   if(r.releaseDate) {
     description += ' released on ' + months[releaseDate.getMonth()] + ' ' + releaseDate.getDay() + ' ' + releaseDate.getYear()
   }

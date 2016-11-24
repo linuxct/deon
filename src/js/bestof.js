@@ -1,6 +1,15 @@
 function transformBestOf(obj){
   obj = obj || {}
   obj.user = isSignedIn() ? session.user._id : 0
+  obj.days = ['Day']
+  for(var i = 1; i <= 31; i++) {
+    obj.days.push(i)
+  }
+  obj.months = ['Month'].concat(getMonths())
+  obj.years = ['Year']
+  for(var i = new Date().getFullYear() - 100; i <= new Date().getFullYear() - 1; i++) {
+    obj.years.push(i)
+  }
   return obj
 }
 
@@ -121,25 +130,45 @@ function validateStep(e, el){
 
 function submitBestOf(e, el){
   var data = getTargetDataSet(el)
-  /* TODO: add validation if required */
+  data.type = "bestof2016"
+  data.date = new Date()
 
-  /* post questions to SUBMIT API */
-  var formData = new FormData()
-  formData.append("type", "bestof2016-testing")
-  formData.append("date", new Date());
-  for (var key in data){
-    formData.append(key, data[key])
+  if(data.birthyear != 'Year') {
+    var bday = new Date(data.birthyear, 0, 1)
+    if (data.birthmonth != 'Month') {
+      bday.setMonth(getMonths().indexOf(data.birthmonth))
+    }
+    if(data.birthday != 'Day') {
+      bday.setDate(data.birthday)
+    }
+    data.birthdate = bday.toISOString().substr(0,10)
   }
+
+  delete data.birthday
+  delete data.birthyear
+  delete data.birthmonth
+
+  //If no google maps just delete the hidden fields
+  if(!data.googleMapsPlaceId) {
+    delete data.googleMapsPlaceId
+    delete data.placeName
+    delete data.placeNameFull
+    delete data.country
+    delete data.lng
+    delete data.lat
+  }
+
   if (localStorage.getItem("bestOf2016")) return toasty("You've already voted.")
-  requestJSON({
+  requestWithFormData({
     url: 'https://submit.monstercat.com', 
     method: 'POST', 
-    data: formData
+    data: data
   }, function (err, obj, xhr) {
     if (err) return toasty(Error(err.message))
     else {
       submitVotesBestOf()
       localStorage.setItem("bestOf2016", "true")
+      toasty("Thanks for your submission!")
     }
   })
 }
@@ -181,4 +210,12 @@ function transformChoices(data){
     'pollId': data.pollId,
     'choices': choices
   }
+}
+
+function completedBestOf () {
+  var input = document.getElementById('locationAutoComplete');
+  google.maps.event.addDomListener(window, 'load', function () {
+    initLocationAutoComplete(input)
+  })
+  initLocationAutoComplete(input)
 }

@@ -268,6 +268,10 @@ function randomChooser(n){
   return Math.floor(Math.random() * n+1);
 }
 
+function getMonths () {
+  return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']  
+}
+
 /* Vendor Helpers */
 
 function serviceUrlToChannelId (user) {
