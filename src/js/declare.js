@@ -466,7 +466,11 @@ function getDataSet (el, checkInitial, ignoreEmpty) {
     var ival    = getElementInitialValue(kel)
     var val     = getElementValue(kel)
     var isRadio = kel.getAttribute('type') == 'radio'
-    var isCheckboxList = el.querySelector('[name="' + key + '"]').length > 0
+    var isList = el.querySelectorAll('[name="' + key + '"]').length > 0 && key.indexOf('[]') > -1
+
+    if (isList && !(obj[key] instanceof Array)) {
+      obj[key] = []
+    }
 
     if (ignoreEmpty && val === '') {
       continue
@@ -474,9 +478,9 @@ function getDataSet (el, checkInitial, ignoreEmpty) {
       if (!(obj[key] instanceof Array)) {
         obj[key] = [obj[key]]
       }
-      if(!isCheckboxList)
+      if(!isList) {
         obj[key].push(val)
-      else {
+      } else {
         if (val !== false) {
           obj[key].push(val)
         }
