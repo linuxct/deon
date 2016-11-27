@@ -10,6 +10,8 @@ function transformBestOf(obj){
   for(var i = new Date().getFullYear() - 100; i <= new Date().getFullYear() - 1; i++) {
     obj.years.push(i)
   }
+  obj.endDate = new Date('2016-11-28T07:59:00') // UTC = PST + 8
+  obj.votingOpen = obj.endDate > new Date()
   return obj
 }
 

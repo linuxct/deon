@@ -3,18 +3,27 @@
         page-title="Best of 2016"
         transform="transformBestOf"
         completed="completedBestOf">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <p>{{message}}</p>
+  {{/error}}
+  {{#data}}
   <div class="top-banner top-banner--mix">
     <div class="banner">
         <div class="banner banner--bottom-crop" style="background-image:url('img/bestof.jpg')"></div>
     </div>
     <div class="container flex">
       <div class="col-xs-12 col-sm-12 col-md-6 cl-white featured-details">
-        <span class="tag tag--mix">Voting is Open!</span>}}
+        {{#votingOpen}}<span class="tag tag--mix">Voting is Open!</span>{{/votingOpen}}
+        {{^votingOpen}}<span class="tag tag--mix tag--mix-closed">Voting is closed</span>{{/votingOpen}}
         <h1 class="title uppercase">Monstercat Best Of 2016</h1>
       </div>
     </div>
   </div>
   <div class="container panel panel--mix text center">
+    {{#votingOpen}}
     <div class="tabs">
       <nav class="tabs-nav" role="tabs-nav">
         <button class="tab-button active">Album 026</button>
@@ -41,7 +50,18 @@
         </div>
       </div>
     </div>
+    {{/votingOpen}}
+    {{^votingOpen}}
+    <div>
+      <p>
+        Your ballots are now being calculated by predictbot.
+        <br>
+        Thank you for voting for Monstercat's Best of 2016!
+      </p>
+    </div>
+    {{/votingOpen}}
   </div>
+  {{/data}}
 </script>
 
 <script type="text/template" mustache-name="best-form">
@@ -125,6 +145,11 @@
     <button action="previousTab" class="button--half">Previous</button>
     <button action="submitBestOf" class="button--half button--cta" data-set-target="questions">Submit</button>
   </div>    
+  <div class="bottom-cta">
+    <a href="https://shop.monstercat.com" target="_BLANK">
+      <img src="/img/blackfriday.jpg" alt="Monstercat Shop Black Friday!" />
+    </a>
+  </div>
   {{/data}} 
 </script>
 

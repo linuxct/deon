@@ -3756,6 +3756,11 @@ input.filter-search {
   font-size: 1rem;
   margin-top: .5rem;
 }
+.bottom-cta img{
+  max-width: 100%;
+  width: auto;
+  margin: 35px auto 0;
+}
 
 /*-----------------------------*\
   BG IMAGE STYLES
