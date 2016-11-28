@@ -106,6 +106,7 @@ function signUpGoogle (e, el) {
   auth.signIn()
   .then(function (user) {
     var obj = {
+      name: user.getBasicProfile().getName(),
       email: user.getBasicProfile().getEmail(),
       token: user.getAuthResponse().id_token,
       submitWhere: '/google/signup'
@@ -121,6 +122,7 @@ function signUpFacebook (e, el) {
 
     FB.api('/me?fields=name,email', function (ares) {
       var obj = {
+        name: ares.name,
         email: ares.email,
         token: res.authResponse.accessToken,
         submitWhere: '/facebook/signup'
