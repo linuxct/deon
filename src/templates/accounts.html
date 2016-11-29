@@ -408,11 +408,13 @@
             </div>
             {{/hasGoldAccess}}
         </div>
-        <div class="panel">
+        <div class="panel" id="two-factor">
             <h2>Two-Factor Auth</h2>
-            {{^enableTwoFactor}}
+            {{#twoFactor}}
+            <p>Two-factor auth is currently <strong>enabled</strong>.</p>
+            <br />
             <button action="disableTwoFactor">Disable</button>
-            {{/enableTwoFactor}}
+            {{/twoFactor}}
             {{#enableTwoFactor}}
             <table class="form mobile" data-set="2-factor">
                 <tbody>
@@ -439,6 +441,22 @@
                 <button class="button--full" action="enableTwoFactor" data-set-target="2-factor">Enable</button>
             </div>
             {{/enableTwoFactor}}
+            {{#confirmingTwoFactor}}
+            <p>Enter the token to confirm your phone number and complete your two factor setup.</p>
+            <table class="form mobile" data-set="confirm-auth-token">
+                <tr>
+                    <th>Token</th>
+                    <td>
+                        <input type="text" name="token" placeholder="Enter Here"/>
+                    </td>
+                </tr>
+            </table>
+            <div class="button-group">
+                <button class="button--cta button--full" action="confirmTwoFactor" data-set-target="confirm-auth-token">Confirm Two Factor</button>
+                <button class="button--full" action="resendTwoFactorToken">Resend Token</button>
+                <button class="button--full" action="disableTwoFactor">Cancel</button>
+            </div>
+            {{/confirmingTwoFactor}}
         </div>
         <div class="panel" id="settings">
             <h2>Settings</h2>

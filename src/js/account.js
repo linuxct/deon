@@ -64,8 +64,26 @@ function enableTwoFactor (e, el) {
     withCredentials: true
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
+    window.location.hash = '#two-factor'
     reloadPage()
-    toasty(strings.twoFactorEnabled)
+    toasty(strings.twoFactorPending)
+  })
+}
+
+function confirmTwoFactor (e, el) {
+  var data = getTargetDataSet(el, false, true)
+  if (!data) return
+  data.number = String(data.number)
+  requestJSON({
+    url: endpoint + '/self/two-factor/confirm',
+    method: 'PUT',
+    data: data,
+    withCredentials: true
+  }, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    reloadPage()
+    window.location.hash = '#two-factor'
+    toasty(strings.twoFactorConfirmed)
   })
 }
 
@@ -83,10 +101,18 @@ function disableTwoFactor (e, el) {
 
 function mapAccount (o) {
   o.countries = getAccountCountries(o.location)
-  if (!o.twoFactorId) {
+  if (!o.twoFactorId && !o.pendingTwoFactorId) {
     o.enableTwoFactor = {
       countries: CountryCallingCodes
     }
+    o.twoFactor = false
+  }
+  else if(o.pendingTwoFactorId) {
+    o.confirmingTwoFactor = true
+    o.twoFacotr = false
+  }
+  else if(o.twoFactorId) {
+    o.twoFactor = true
   }
   o.hasGoldAccess = hasGoldAccess()
   o.endhost = endhost
