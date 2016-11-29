@@ -14,9 +14,9 @@
         </div>
         {{/buying}}        
         <div class="flex sign-split">
-            <div class="col-xs-12 col-md-6 panel">
+            <form onsubmit="false" data-set="credentials" data-submit-action="signIn" class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>
-                <table class="form mobile" data-set="credentials" trigger-target="signIn">
+                <table class="form mobile">
                     <tbody>
                         <tr>
                             <th>Email</th>
@@ -37,7 +37,8 @@
                                 <button
                                     class="faux password"
                                     action="togglePassword"
-                                    toggle-target="password">
+                                    toggle-target="password"
+                                    type="button">
                                     <i class="fa fa-eye-slash"></i>
                                 </button>
                             </td>
@@ -45,12 +46,12 @@
                     </tbody>
                 </table>
                 <div class="button-group button-group--margin">
-                    <button class="button--cta button--full" action="signIn" trigger="signIn" data-set-target="credentials">Sign In</button>
+                    <button class="button--cta button--full">Sign In</button>
                 </div>
                 <a href="/forgot-password">Forgot your password?</a>
                 <br/>
                 <a href="/sign-up?redirect={{redirectTo}}">Don't have an account? Sign up!</a>
-            </div>
+            </form>
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Social</h2>
                 <div class="button-group button-group--margin">
@@ -233,49 +234,51 @@
         <div class="flex sign-split">
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>
-                <table class="form mobile" data-set="credentials" trigger-target="signUp">
-                    <tbody>
-                        <tr>
-                            <th>Email</th>
-                            <td>
-                                <input type="text"
-                                       name="email"
-                                       placeholder="kitty@monstercat.com"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Password</th>
-                            <td>
-                                <input type="password"
-                                       name="password"
-                                       placeholder="a secret"/>
-                                <button
-                                    class="faux password"
-                                    action="togglePassword"
-                                    toggle-target="password">
-                                    <i class="fa fa-eye-slash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Country</th>
-                            <td>
-                                <select name="location">
-                                    <option disabled selected>Select One</option>
-                                    {{#countries}}
-                                    <option value="{{name}}">
-                                        {{name}}
-                                    </option>
-                                    {{/countries}}
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="button-group">
-                    <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
-                    or <a href="/signin?redirect={{redirectTo}}">sign in</a>
-                </div>
+                <form  data-set="credentials" data-submit-action="signUp">
+                    <table class="form mobile">
+                        <tbody>
+                            <tr>
+                                <th>Email</th>
+                                <td>
+                                    <input type="text"
+                                           name="email"
+                                           placeholder="kitty@monstercat.com"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Password</th>
+                                <td>
+                                    <input type="password"
+                                           name="password"
+                                           placeholder="a secret"/>
+                                    <button
+                                        class="faux password"
+                                        action="togglePassword"
+                                        toggle-target="password">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Country</th>
+                                <td>
+                                    <select name="location">
+                                        <option disabled selected>Select One</option>
+                                        {{#countries}}
+                                        <option value="{{name}}">
+                                            {{name}}
+                                        </option>
+                                        {{/countries}}
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="button-group">
+                        <button class="button--cta button--full">Sign Up</button>
+                        or <a href="/signin?redirect={{redirectTo}}">sign in</a>
+                    </div>
+                </form>
             </div>
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Social</h2>
@@ -306,74 +309,72 @@
             <p><a href="/signin?redirect=account">Sign in</a> to view this page.</a></p>
             {{/error}}
             {{#data}}
-            <table class="form mobile" trigger-target="saveAccount">
-                <tbody data-set="account">
-                    <tr>
-                        <th>Email</th>
-                        <td>{{email}}</td>
-                    </tr>
-                    <tr>
-                        <th>Display Name</th>
-                        <td><input type="text"
-                                   name="name"
-                                   value="{{name}}"
-                                   placeholder="Nickname"
-                                   data-set-target="account"
-                                   initial-value="{{name}}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Full Name</th>
-                        <td><input type="text"
-                                   name="realName"
-                                   value="{{realName}}"
-                                   placeholder="Jon GQ Winter"
-                                   data-set-target="account"
-                                   initial-value="{{realName}}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Country</th>
-                        <td>
-                            <select name="location"
-                                    initial-value="{{location}}">
-                                <option disabled>Select One</option>
-                                {{#countries}}
-                                <option
-                                    value="{{name}}"
-                                    {{#selected}}selected{{/selected}}>
-                                    {{name}}
-                                </option>
-                                {{/countries}}
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Change Password</th>
-                        <td>
-                            <input type="password"
-                                   name="password"
-                                   placeholder="New Password">
-                            <button
-                                class="faux password"
-                                action="togglePassword"
-                                toggle-target="password">
-                                <i class="fa fa-eye-slash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="button-group button-group--margin">
-                <button class="button--cta button--full" 
-                        action="saveAccount"
-                        trigger="saveAccount"
-                        data-set-target="account">
-                    Save
-                </button>
-                <button class="button--danger button--full" action="signOut">Sign Out</button>
-            </div>
-            <a href="/account/services" class="button--manage-services button button-cta">Manage Licenses & Subscriptions</a>
+            <form data-submit-action="saveAccount" data-set="account">
+                <table class="form mobile">
+                    <tbody data-set="account">
+                        <tr>
+                            <th>Email</th>
+                            <td>{{email}}</td>
+                        </tr>
+                        <tr>
+                            <th>Display Name</th>
+                            <td><input type="text"
+                                       name="name"
+                                       value="{{name}}"
+                                       placeholder="Nickname"
+                                       data-set-target="account"
+                                       initial-value="{{name}}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Full Name</th>
+                            <td><input type="text"
+                                       name="realName"
+                                       value="{{realName}}"
+                                       placeholder="Jon GQ Winter"
+                                       data-set-target="account"
+                                       initial-value="{{realName}}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td>
+                                <select name="location"
+                                        initial-value="{{location}}">
+                                    <option disabled>Select One</option>
+                                    {{#countries}}
+                                    <option
+                                        value="{{name}}"
+                                        {{#selected}}selected{{/selected}}>
+                                        {{name}}
+                                    </option>
+                                    {{/countries}}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Change Password</th>
+                            <td>
+                                <input type="password"
+                                       name="password"
+                                       placeholder="New Password">
+                                <button
+                                    class="faux password"
+                                    action="togglePassword"
+                                    toggle-target="password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="button-group button-group--margin">
+                    <button class="button--cta button--full">
+                        Save
+                    </button>
+                    <button class="button--danger button--full" action="signOut">Sign Out</button>
+                </div>
+            </form>
         </div>
         <div class="panel">
             <h2>Gold-only Discord Chat</h2>

@@ -178,6 +178,16 @@ function interceptKeyPress (e) {
   }
 }
 
+function interceptSubmit (e) {
+  if (!e.path) {
+    addEventPath(e)
+  }
+  if (e.path[0].dataset.submitAction) {
+    e.preventDefault()
+    return runSubmitAction(e, e.path[0])
+  }
+}
+
 function interceptClick (e) {
   var isAnchor = false
   var isAction = null
@@ -249,6 +259,11 @@ function getMethod(el, attr) {
 
 function runAction (e, el) {
   var fn = getMethod(el, 'action')
+  if (fn) fn(e, el)
+}
+
+function runSubmitAction (e, el) {
+  var fn = getMethod(el, 'data-submit-action')
   if (fn) fn(e, el)
 }
 
@@ -505,6 +520,9 @@ function getDataSetTargetElement (el) {
     return null
   }
   var target = el.getAttribute('data-set-target')
+  if(!target && el.getAttribute('data-set')) {
+    return el
+  }
   return document.querySelector('[data-set="' + target + '"]')
 }
 

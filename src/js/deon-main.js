@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     document.addEventListener("click", interceptClick)
     document.addEventListener("dblclick", interceptDoubleClick)
     document.addEventListener("keypress", interceptKeyPress)
+    document.addEventListener("submit", interceptSubmit);
     stateChange(location.pathname + location.search)
     stickyPlayer()
   })
