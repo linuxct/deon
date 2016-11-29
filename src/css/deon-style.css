@@ -294,6 +294,19 @@ button:hover,
   background: dodgerblue;
   color: white;
 }
+.button--white,
+.cl-white .button--white {
+  background: white;
+  color: #383838;
+  border-color: white;
+}
+.button--white:active,
+.button--white:hover,
+.cl-white .button--white:active,
+.cl-white .button--white:hover {
+  background: #383838;
+  color: white;
+}
 .button--cta:active,
 .button--cta:hover{
   background: black;

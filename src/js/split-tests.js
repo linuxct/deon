@@ -1,9 +1,9 @@
-var supportThisReleaseButtonsTest = new SplitTest({
+var releaseButtonsABCTest = new SplitTest({
   getButtons: function () {
     var buttons = document.querySelectorAll('.details-box .options a, .details-box .options button')
     return buttons
   },
-  name: 'release-buttons-cta',
+  name: 'release-buttons-abc',
   modifiers: {
     'control': function () {
     },
@@ -13,16 +13,41 @@ var supportThisReleaseButtonsTest = new SplitTest({
         buttons[i].classList.add('button', 'button--release-cta', 'button--cta')
         buttons[i].classList.remove('faux')
       }
+    },
+    'button--white': function (_this) {
+      var buttons = _this.getButtons()
+      for(var i = 0; i < buttons.length; i++) {
+        if(i == 0) {
+          buttons[i].classList.add('button', 'button--release-cta', 'button--cta')
+        }
+        else {
+          buttons[i].classList.add('button', 'button--release-cta', 'button--white')
+        }
+        buttons[i].classList.remove('faux')
+      }
     }
   },
   checkStart: function (test) {
-    return sixPackSession && this.getButtons().length > 0
+    if(sixPackSession && this.getButtons().length > 0) {
+      var early = document.querySelector('[name=inEarlyAccess]').value
+      return early == "false"
+    }
+    return false
   },
   onStarted: function () {
     var buttons = this.getButtons()
     for(var i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener('click', function () {
-        this.convert()
+      buttons[i].addEventListener('click', function (e, el) {
+        var kpi = false
+        for(var i = 0; i < e.path.length; i++) {
+          if(e.path[i].getAttribute('kpi')) {
+            kpi = e.path[i].getAttribute('kpi')
+            break;
+          }
+        }
+        if(kpi) {
+          splitTestConvertKpi(this.name, kpi)
+        }
       }.bind(this))
     }    
   }

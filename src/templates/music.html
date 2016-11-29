@@ -71,6 +71,7 @@
     </div>
     {{/error}}
     {{#data}}
+    <input type="hidden" name="inEarlyAccess" value="{{inEarlyAccess}}" />
     <div class="bgbox banner--scaled">
         <div class="bgbox" style="background-image: url('{{coverBig}}')">
             <div class="bgbox-blanket cl-white">
@@ -87,7 +88,7 @@
                                 {{>playRelease}}
                             {{/streamable}}
                             {{#share}}
-                            <a class="silent" href="{{share}}" target="_blank" title="Spotify">
+                            <a class="silent" href="{{share}}" target="_blank" title="Spotify" kpi="spotify">
                                 <i class="fa fa-social-sp"></i>
                             </a>                            
                             {{/share}}
@@ -97,17 +98,19 @@
                             release-title="{{title}}"
                             title="Download {{title}}"
                             free-download-for-users="{{freeDownloadForUsers}}"
+                            kpi="download"
                             action="accessDownloadOrModal">
                                 <i class="fa fa-cloud-download"></i>
                             </a>
                             <button class="faux"
                                     title="License this release"
+                                    kpi="license"
                                     action="openReleaseLicensing">
                                 <i class="fa fa-copyright"></i>
                             </button>
 
                             {{#purchase}}
-                            <button class="faux" action="openPurchaseRelease" title="Buy this release">
+                            <button class="faux" action="openPurchaseRelease" title="Buy this release" kpi="purchase">
                                 <i class="fa fa-shopping-bag"></i>
                             </button>
                             {{/purchase}}
@@ -168,6 +171,7 @@
 <button class="faux"
         action="playSongs"
         role="play-release"
+        kpi="play"
         release-id="{{_id}}">
     <i class="fa fa-play inactive"></i>
     <i class="fa fa-pause active"></i>
