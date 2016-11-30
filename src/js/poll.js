@@ -10,7 +10,7 @@ function transformVotesBreakdown(obj){
   return obj
 }
 function transformMixContestPoll(obj){
-  obj.audioLink = 'https://s3.amazonaws.com/data.monstercat.com/blobs/03340e4c2363321ba93214c9e7d3326ac33b1683'
+  obj.audioLink = 'https://s3.amazonaws.com/data.monstercat.com/blobs/f98a03f5638deeb6b599bfc64d6cb3879be2b7c7'
   obj.tournamentImage = '/img/tournament-3.jpg'
   obj.startDate = new Date('2016-11-29T22:00:00') // UTC = PST + 8
   obj.endDate = new Date('2016-12-03T02:00:00') // UTC = PST + 8
