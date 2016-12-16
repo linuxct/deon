@@ -74,7 +74,7 @@
 
 <script type="text/template"
         route="^playlist\/(.*)"
-        source="$endpoint/playlist/$1?fields=name,public,tracks,userId"
+        source="$endpoint/playlist/$1?fields=name,public,userId"
         completed="completedPlaylist"
         transform="transformPlaylist">
     <div class="container">

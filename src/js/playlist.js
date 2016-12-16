@@ -100,10 +100,10 @@ function transformPlaylist (obj) {
 
 function transformPlaylistTracks (obj, done) {
   var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
-  var url = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
+  var url = endpoint + '/playlist/' + id + '?fields=name,public,userId'
   var playlist = cache(url)
-  var ids = uniqueArray(playlist.tracks.map(function (item) {
-    return item.releaseId
+  var ids = uniqueArray(obj.results.map(function (item) {
+    return item.release._id
   }))
   var url = endpoint + '/catalog/release?fields=title&ids=' + ids.join(',')
   loadCache(url, function(err, aobj) {
@@ -112,9 +112,9 @@ function transformPlaylistTracks (obj, done) {
     var trackAtlas = toAtlas(obj.results, '_id')
     getArtistsAtlas(obj.results, function (err, artistAtlas) {
       if (!artistAtlas) artistAtlas = {}
-      obj.results = playlist.tracks.map(function (item, index, arr) {
-        var track = mapReleaseTrack(trackAtlas[item.trackId] || {}, index, arr)
-        var release = releaseAtlas[item.releaseId] || {}
+      obj.results = obj.results.map(function (item, index, arr) {
+        var track = mapReleaseTrack(trackAtlas[item._id] || {}, index, arr)
+        var release = releaseAtlas[item.release._id] || {}
         track.release = release.title
         track.releaseId = release._id
         track.artists = mapTrackArtists(track, artistAtlas)
@@ -136,6 +136,7 @@ function transformPlaylistTracks (obj, done) {
             trackNumber: track.trackNumber
           }
         }
+
         return track
       })
       done(null, obj)
