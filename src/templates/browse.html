@@ -102,20 +102,22 @@
     {{#data}}
     {{#results}}
     <li catalog-id="{{catalogId}}">
-        <div class="bgbox banner--scaled">
-            <div class="bgbox bgbox--browse" style="background-image: url('{{coverBig}}')">
-                <div class="bgbox-blanket cl-white">
-                    <div class="details-box clearfix">
-                        <a href="/release/{{catalogId}}">
-                            <img class="artwork" src="{{cover}}"/>
-                            <h2 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h2>
-                        </a>
-                        <h3>{{artists}}</h3>
-                        <label>
-                            {{>albumReleaseDates}}
-                        </label>
-                        <label>{{type}}</label>
-                    </div>
+        <div class="bgbox bgbox--browse">
+            <div class="banner banner--scaled">
+                <div class="banner" style="background-image: url('{{coverBig}}')"></div>
+                <div class="banner-shade banner-shade--darker"></div>
+            </div>
+            <div class="cl-white">
+                <div class="details-box clearfix">
+                    <a href="/release/{{catalogId}}">
+                        <img class="artwork" src="{{cover}}"/>
+                        <h2 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h2>
+                    </a>
+                    <h3>{{artists}}</h3>
+                    <label>
+                        {{>albumReleaseDates}}
+                    </label>
+                    <label>{{type}}</label>
                 </div>
             </div>
         </div>

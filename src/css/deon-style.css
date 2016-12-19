@@ -305,6 +305,7 @@ button:hover,
 .cl-white .button--white:active,
 .cl-white .button--white:hover {
   background: #383838;
+  border-color: #383838;
   color: white;
 }
 .button--cta:active,
@@ -785,14 +786,7 @@ td.push-right > * {
 }
 
 .bgbox {
-  background-size: cover;
-  background-position: center 60%;
-  background-color: black;
-}
-
-.bgbox-blanket {
-  background-color: rgba(0, 0, 0, 0.65);
-  overflow: hidden;
+  position: relative;
 }
 
 .banner {
@@ -810,14 +804,17 @@ td.push-right > * {
 }
 .banner--scaled{
   overflow: hidden;
+  backface-visibility: hidden;
 }
 .banner--scaled .banner,
 .banner--scaled .side-banner,
 .banner--scaled .bgbox{
-  transform: perspective(1px) scale(1.1);
+  transform: perspective(1px) translateZ(0) scale(1.1);
+  backface-visibility: hidden;
 }
 .banner--scaled .bgbox .details-box {
-  transform: perspective(1px) scale(0.909);
+  transform: perspective(1px) translateZ(0) scale(0.909);
+  backface-visibility: hidden;
 }
 .banner--bottom-crop{
   background-position: center bottom;
@@ -834,6 +831,9 @@ td.push-right > * {
   height: 100%;
   position: absolute;
   background: rgba(0,0,0,0.5);
+}
+.banner-shade--darker{
+  background: rgba(0,0,0,0.65);
 }
 .gradient{
   background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
@@ -1145,7 +1145,7 @@ h1 + .panel.md-container,
   position: fixed;
   padding: 5rem 0;
   color: #fff;
-  z-index: 99;
+  z-index: 999;
   list-style: none;
   width: 100%;
   height: 100%;
@@ -1170,7 +1170,7 @@ h1 + .panel.md-container,
 }
 .mcat-mast .mcat-mobile-nav .hamburger-icon.active {
   position: fixed;
-  z-index: 999;
+  z-index: 1000;
   right: 2%;
   margin-right: 4px;
 }
@@ -1530,11 +1530,12 @@ header:hover .scrub > .progress,
 .scrub-container--mobile,
 .scrub-container--mobile .scrub{
   position: relative;
-  height: 13px;
+  height: 20px;
   margin-right: 0;
+  cursor: pointer;
 }
 .scrub-container--mobile:hover .scrub {
-  height: 13px;
+  height: 20px;
 }
 
 .scrub-container--mobile .progress {
@@ -1544,8 +1545,8 @@ header:hover .scrub > .progress,
 .scrub-container--mobile .progress::after {
   content: "";
   background: #fff;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   display: inline-block;
   position: absolute;
   border-radius: 50%;
@@ -1685,9 +1686,14 @@ span.note a {
   left: 0;
 }
 
+.modal-escape-layer{
+  cursor: pointer; /* workaround for iOS to detect click ev */
+}
+
 .modal-content-layer {
   background: rgba(0, 0, 0, 0.3);
   pointer-events: none;
+  cursor: pointer;
 }
 
 .modal {
@@ -2508,6 +2514,10 @@ ul.social-grid {
   text-overflow: ellipsis;
 }
 
+.bgbox .details-box{
+  text-align: center;
+}
+
 .details-box {
   padding: 2em 0;
 }
@@ -2542,8 +2552,8 @@ ul.social-grid {
 }
 
 .details-box h2 {
-  margin-top: 0;
-  margin-bottom: .5rem;
+  margin-top: .5rem;
+  margin-bottom: 1rem;
 }
 
 
@@ -2572,6 +2582,9 @@ ul.social-grid {
     height: 256px;
     padding: 0;
     cursor: pointer;
+  }
+  .bgbox .details-box{
+    text-align: left;
   }
 }
 
@@ -2781,6 +2794,8 @@ textarea.copycredits {
 }
 .music-browse li{
   margin-bottom: 2rem;
+  z-index: 0;
+  position: relative;
 }
 .bgbox--browse .details-box .countdown {
   width: 6em;
@@ -3780,7 +3795,7 @@ input.filter-search {
 \*-----------------------------*/
 
 body.bg {
-  background: #000 url("../img/bgon.jpg") 50% 50%;
+  background: #000 url("../img/bg.jpg") 50% 50%;
   background-size: cover;
   background-attachment: fixed;
 }
@@ -3880,6 +3895,13 @@ body.bg {
 }
 .bg .panel button:active:not(.button--social),
 .bg .panel button:hover:not(.button--social){
+  color: white;
+}
+.bg .panel .button:not(.button--social){
+  color: dodgerblue;
+}
+.bg .panel .button:active:not(.button--social),
+.bg .panel .button:hover:not(.button--social){
   color: white;
 }
 .bg .panel button.faux {
@@ -4001,16 +4023,35 @@ body.bg {
 .bg .hero h1.line-bottom::after{
   background: #000;
 }
+.bg .controls,
 .bg .controls.fixed {
   background: #000;
 }
-
+.bg .scrub-container--mobile .scrub > .progress,
+.bg header:hover .scrub-container--mobile .scrub > .progress {
+  background: dodgerblue;
+}
 .bg .top-banner-gold p,
 .bg .top-banner-gold h1,
 .bg .top-banner-gold a {
   color: #000;
 }
+.bg a.button.button--white, 
+.bg .button.button--white {
+    color: #383838;
+}
+.bg a.button.button--white:hover,
+.bg a.button.button--white:active,
+.bg .button.button--white:hover,
+.bg .button.button--white:active{
+    color: #fff;
+}
 
+@media screen and (min-width: 992px){
+  .bg .controls{
+    background: transparent;
+  }
+}
 .anchor-highlight {
   background: #ffffad;
   transition: background 0.5s linear;

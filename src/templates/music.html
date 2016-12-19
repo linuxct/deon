@@ -72,10 +72,14 @@
     {{/error}}
     {{#data}}
     <input type="hidden" name="inEarlyAccess" value="{{inEarlyAccess}}" />
-    <div class="bgbox banner--scaled">
-        <div class="bgbox" style="background-image: url('{{coverBig}}')">
-            <div class="bgbox-blanket cl-white">
-                <div class="details-box container clearfix">
+    <div class="bgbox">
+        <div class="banner banner--scaled">
+            <div class="banner" style="background-image: url('{{coverBig}}')"></div>
+            <div class="banner-shade banner-shade--darker"></div>
+        </div>
+        <div class="container">
+            <div class="cl-white">
+                <div class="details-box clearfix">
                     <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
                     <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
                     <h2>{{artists}}</h2>
@@ -323,11 +327,15 @@
     </div>
     {{/error}}
     {{#data}}
-    <div class="bgbox banner--scaled">
-        <div class="bgbox" style="background-image: url('{{image}}');
-          background-position: center {{imagePositionY}}%;">
-            <div class="bgbox-blanket cl-white">
-                <div class="details-box container clearfix">
+    <div class="bgbox">
+        <div class="banner banner--scaled">
+            <div class="banner" style="background-image: url('{{image}}');
+          background-position: center {{imagePositionY}}%;"></div>
+            <div class="banner-shade banner-shade--darker"></div>
+        </div>
+        <div class="container">
+            <div class="cl-white">
+                <div class="details-box clearfix">
                     {{#image}}
                     <img class="artwork" src="{{image}}" big-src="{{image}}" action="openReleaseArt"/>
                     {{/image}}
