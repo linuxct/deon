@@ -1984,6 +1984,7 @@ footer .footer-items li:first-child button::before{
   margin-right: 0;
   margin-left: auto;
   font-size: 38px;
+  line-height: 1.1;
 }
 
 .hero .playfair {
@@ -2326,6 +2327,16 @@ ul.social-grid {
   }
   .social-grid .stats .stats-wrapper h3{
     font-size: 1.3rem;
+  }
+  .latest .art-list--full-width.art-list li:nth-child(7),
+  .latest .art-list--full-width.art-list li:nth-child(8){
+    display: inline-block;
+  }
+}
+@media screen and (min-width: 1200px){
+  .latest .art-list--full-width.art-list li:nth-child(7),
+  .latest .art-list--full-width.art-list li:nth-child(8){
+    display: none;
   }
 }
 @media screen and (min-width: 1300px){
@@ -2685,7 +2696,7 @@ textarea.copycredits {
 @media screen and (min-width: 992px){
   .panel .button-list > li,
   .panel .button-list > li:first-child{
-    width: 16.66%;    
+    width: 14.28%;    
   }
   .panel .button-list > li:nth-child(even) > a{
     border-right-width: 0px;
