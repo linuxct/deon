@@ -29,8 +29,8 @@ var releaseButtonsABCTest = new SplitTest({
   },
   checkStart: function (test) {
     if(sixPackSession && this.getButtons().length > 0) {
-      var early = document.querySelector('[name=inEarlyAccess]').value
-      return early == "false"
+      var node = document.querySelector('[name=inEarlyAccess]')
+      if (node && node.value == "false") return true
     }
     return false
   },

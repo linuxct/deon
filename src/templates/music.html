@@ -329,16 +329,14 @@
     {{#data}}
     <div class="bgbox">
         <div class="banner banner--scaled">
-            <div class="banner" style="background-image: url('{{image}}');
-          background-position: center {{imagePositionY}}%;"></div>
+            <div class="banner" 
+              style="background-image: url('{{image}}');
+              background-position: center {{imagePositionY}}%;"></div>
             <div class="banner-shade banner-shade--darker"></div>
         </div>
         <div class="container">
             <div class="cl-white">
-                <div class="details-box clearfix">
-                    {{#image}}
-                    <img class="artwork" src="{{image}}" big-src="{{image}}" action="openReleaseArt"/>
-                    {{/image}}
+                <div class="details-box artist clearfix">
                     <h1>{{name}}</h1>
                     <div class="options push-right">
                         {{#socials}}
@@ -365,11 +363,8 @@
             <p>{{management}}</p>
         </div>
         {{/contact}}
-        <div class="panel">
-            <h2>Discography</h2>
-            <div source="$endpoint/catalog/artist/{{_id}}/releases"
-                template="user-releases">
-            </div>
+        <div source="$endpoint/catalog/artist/{{_id}}/releases"
+            template="user-releases">
         </div>
     </div>
     {{/data}}
@@ -388,23 +383,42 @@
 </script>
 
 <script type="text/template"
-        template-name="user-releases"
-        transform="transformReleases">
+  template-name="user-releases"
+  transform="transformUserReleases">
     {{#loading}}
-    {{>loading-inner-view}}
+    <div class="panel">
+      <h2>Releases</h2>
+      {{>loading-inner-view}}
+    </div>
+    <div class="panel">
+      <h2>Appears On</h2>
+      {{>loading-inner-view}}
+    </div>
     {{/loading}}
     {{#error}}
-    <p>{{message}}</p>
+    <div class="panel">
+      <p>{{message}}</p>
+    </div>
     {{/error}}
     {{#data}}
-    <ul class="art-list art-list--full-width discography">
-        {{#results}}
-            {{>release-list-item}}
-        {{/results}}
-    </ul>
+    <div class="panel">
+      <h2>Releases</h2>
+      <ul class="art-list art-list--full-width discography">
+      {{#releases}}
+      {{>release-list-item}}
+      {{/releases}}
+      </ul>
+    </div>
+    <div class="panel">
+      <h2>Appears On</h2>
+      <ul class="art-list art-list--full-width discography">
+      {{#appearsOn}}
+      {{>release-list-item}}
+      {{/appearsOn}}
+      </ul>
+    </div>
     {{/data}}
 </script>
-
 
 <script type="text/template"
         mustache-name="release-list-item">

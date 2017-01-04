@@ -824,6 +824,10 @@ td.push-right > * {
     min-height: auto;
     height: 400px;
   }
+
+  .details-box.artist {
+    min-height: 400px;
+  }
 }
 .banner-shade,
 .gradient{

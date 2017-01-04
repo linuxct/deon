@@ -676,6 +676,22 @@ function transformReleases (obj) {
   return obj
 }
 
+function isVariousArtistsRelease(obj) {
+  var artists = obj.artists || ""
+  return artists.toLowerCase().indexOf("various artists") > -1
+}
+
+function transformUserReleases (obj) {
+  obj = transformReleases(obj)
+  obj.releases = obj.results.filter(function(i) {
+    return !isVariousArtistsRelease(i)
+  })
+  obj.appearsOn = obj.results.filter(function(i) {
+    return isVariousArtistsRelease(i)
+  })
+  return obj
+}
+
 function transformMarkdown (obj) {
   return marked(obj)
 }
