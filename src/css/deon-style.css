@@ -2671,15 +2671,12 @@ textarea.copycredits {
   display: inline-block;
   width: 50%;    
 }
-.panel .button-list > li:first-child{
-  width: 100%;    
-}
 .panel .button-list > li > a{
   text-align: center;
   width: 100%;
   border-right-width: 0px;
 }
-.panel .button-list > li:nth-child(odd) > a{
+.panel .button-list > li:nth-child(even) > a{
   border-right-width: 3px;
 }
 
@@ -2697,11 +2694,14 @@ textarea.copycredits {
 }
 
 @media screen and (min-width: 992px){
-  .panel .button-list > li,
-  .panel .button-list > li:first-child{
-    width: 14.28%;    
+  .panel .button-list{
+    display: flex;
   }
-  .panel .button-list > li:nth-child(odd) > a{
+  .panel .button-list > li{
+    width: initial;
+    flex: 1;    
+  }
+  .panel .button-list > li:nth-child(even) > a{
     border-right-width: 0px;
   }
   .panel .button-list > li:last-child > a{
