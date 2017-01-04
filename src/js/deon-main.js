@@ -539,7 +539,7 @@ function transformRoster () {
   }
   return {
     years: arr,
-    year: q.year || thisYear
+    year: q.year || 0 // featured year is 0
   }
 }
 
