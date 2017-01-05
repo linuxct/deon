@@ -141,15 +141,16 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <label>Gold Subscription Active</label>
     {{^canceled}}
+    <label>Gold Subscription Active</label>
     <p>You are subscribed for $5.00 USD a month</p>
     <p>Your next invoice will be charged on {{nextBillingDate}}</p>
     <br>
     <button class="button--gold" action="unsubscribeGold">Cancel Subscription</button>
     {{/canceled}}
     {{#canceled}}
-    <p>Your gold subscription will expire on {{endDate}}</p>
+    <label>You have Gold Membership.</label>
+    <p>Your Gold Membership will expire on {{endDate}}</p>
     <div data-set="subscribe-gold" class="services-form">
         <input type="text" name="trialCode" placeholder="Special Code"/>
         <button class="button--gold" action="subscribeGold" data-set-target="subscribe-gold">Re-Subscribe</button>
