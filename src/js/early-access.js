@@ -1,6 +1,15 @@
 function zeroPad (num, size) {
   var str = num.toString()
-  return '0'.repeat(size).substr(0,size - str.length)+str
+  return repeatString('0', size).substr(0,size - str.length)+str
+}
+
+function repeatString(str, times) {
+  if (typeof str.repeat == 'function') {
+    return str.repeat(times)
+  }
+  return Array.apply(null, Array(times)).reduce(function (s) {
+    return s + str
+  }, "")
 }
 
 function dateToCountdownString (date) {
