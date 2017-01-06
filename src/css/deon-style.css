@@ -820,6 +820,9 @@ td.push-right > * {
   background-position: center bottom;
 }
 @media screen and (min-width: 992px){
+  table td.push-right{
+    text-align: right;
+  }
   .banner--height{
     min-height: auto;
     height: 400px;
@@ -1432,6 +1435,7 @@ h1 + .panel.md-container,
   }
 
   .global-search input[type="text"] {
+    max-width: 85px;
     margin-left: .75em;
     background: transparent;
   }
@@ -1454,6 +1458,11 @@ h1 + .panel.md-container,
   }
   .controls > button{
     margin-right: 1rem;
+  }
+}
+@media screen and (min-width: 1080px){
+  .global-search input[type="text"] {
+    max-width: 145px;
   }
 }
 
@@ -2591,6 +2600,10 @@ ul.social-grid {
   padding: 0 1rem;
 }
 
+.details-box .options i {
+  font-size: 20px;
+}
+
 @media screen and (min-width: 992px){
   .details-box img.artwork {
     float: right;
@@ -2601,11 +2614,9 @@ ul.social-grid {
   .bgbox .details-box{
     text-align: left;
   }
-}
-
-.details-box .options i {
-  font-size: 20px;
-
+  .details-box .options .button--release-cta i {
+    font-size: 16px;
+  }
 }
 
 .panel > .options{
@@ -2641,6 +2652,83 @@ button > i.active,
   display: none;
 }
 
+.button--release-cta > span{
+  display: none;
+}
+.button--mobile[role=play-song]{
+  font-size: 2rem;
+}
+.track-container{
+  max-width: 90%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+.track-title{
+  text-indent: 0px;
+  transition: text-indent 0.7s ease;
+  white-space: nowrap;
+  display: inline-block;
+}
+@media screen and (min-width: 992px){
+  .track-container{
+    max-width: 200px;
+  }
+  .button--mobile[role=play-song]{
+    font-size: 1.5rem;
+  }
+}
+@media screen and (min-width: 1080px){
+  .track-container{
+    max-width: 220px;
+  }
+  .button--release-cta > span{
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    top: 1px;
+    margin-left: .25rem;
+    color: #383838;
+    transition: color .3s ease;
+    font-size: .75rem;
+  }
+  .button--release-cta > .active + span,
+  .button--release-cta.active > .inactive + span{
+    display: none;
+  }
+  .button--release-cta.active > .active + span{
+    display: inherit;
+  }
+  a.button--release-cta > span{
+    top: 3px;
+  }
+  .button--release-cta.button--cta > span{
+    color: white;
+  }
+  .button--release-cta:hover > span,
+  .button--release-cta:active > span{
+    color: white;
+  }
+  .button--release-cta.button--cta:hover > span,
+  .button--release-cta.button--cta:active > span{
+    color: black;
+  }
+  button[role=play-release]{
+    width: 110px;
+    text-align: center;
+  }
+}
+@media screen and (min-width: 1200px){
+  .track-container{
+    max-width: 325px;
+  }
+}
+@media screen and (min-width: 1500px){
+  .track-container{
+    max-width: 400px;
+  }
+}
 textarea.copycredits {
   width: 100%;
   font-size: 1rem;

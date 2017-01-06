@@ -92,30 +92,32 @@
                                 {{>playRelease}}
                             {{/streamable}}
                             {{#share}}
-                            <a class="silent" href="{{share}}" target="_blank" title="Spotify" kpi="spotify">
+                            <a class="silent button button--release-cta button--white" href="{{share}}" target="_blank" title="Spotify">
                                 <i class="fa fa-social-sp"></i>
+                                <span>Spotify</span>
                             </a>                            
                             {{/share}}
-                            <a class="silent"
+                            <a class="silent button button--release-cta button--white"
                             href="{{downloadLink}}"
                             target="_blank"
                             release-title="{{title}}"
                             title="Download {{title}}"
                             free-download-for-users="{{freeDownloadForUsers}}"
-                            kpi="download"
                             action="accessDownloadOrModal">
                                 <i class="fa fa-download"></i>
+                                <span>Download</span>
                             </a>
-                            <button class="faux"
+                            <button class="button--release-cta button--white"
                                     title="License this release"
-                                    kpi="license"
                                     action="openReleaseLicensing">
                                 <i class="fa fa-copyright"></i>
+                                <span>License</span>
                             </button>
 
                             {{#purchase}}
-                            <button class="faux" action="openPurchaseRelease" title="Buy this release" kpi="purchase">
+                            <button class="button--release-cta button--white" action="openPurchaseRelease" title="Buy this release">
                                 <i class="fa fa-shopping-bag"></i>
+                                <span>Purchase</span>
                             </button>
                             {{/purchase}}
                         {{/inEarlyAccess}}
@@ -172,13 +174,12 @@
 
 <script type="text/template"
         mustache-name="playRelease">
-<button class="faux"
+<button class="button--release-cta button--cta"
         action="playSongs"
         role="play-release"
-        kpi="play"
         release-id="{{_id}}">
-    <i class="fa fa-play inactive"></i>
-    <i class="fa fa-pause active"></i>
+    <i class="fa fa-play inactive"></i> <span>Play</span>
+    <i class="fa fa-pause active"></i> <span>Pause</span>
 </button>
 </script>
 
@@ -209,6 +210,7 @@
         role="play-song"
         play-link="{{playUrl}}"
         title="{{title}}"
+        {{#artists.length}}artist="{{#artists}}{{name}}, {{/artists}}"{{/artists.length}}
         index="{{index}}"
         track-id="{{_id}}"
         {{#licensable}}licensable{{/licensable}}

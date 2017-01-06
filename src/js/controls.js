@@ -3,6 +3,7 @@ var sel = {
   playPlaylist: '[role="play-playlist"]',
   playRelease: '[role="play-release"]',
   scrub: '[role="scrub-progress"]',
+  link: '[role="track-link"]',
   title: '[role="track-title"]',
   volume: '[role="volumeControl"]',
   volumeI: '[role="volumeControl"] > i',
@@ -250,7 +251,7 @@ function loadAndPlayTracks (index) {
     player.set(tracks)
     player.play(index)
 
-    var el = document.querySelector(sel.title)
+    var el = document.querySelector(sel.link)
     if (el) el.setAttribute('href', window.location.pathname + window.location.search)
   }
 
@@ -274,11 +275,42 @@ function playSongs (e, el) {
 
 function onNewSong (e) {
   var el = document.querySelector(sel.title)
+  var elContainer = document.querySelector(sel.link)
   var controls = document.querySelector(sel.controls)
-  el.textContent = e.detail.item.title
-  el.classList.add('playing-track')
+  el.textContent = prepareTrackTitle(e.detail.item)
+  elContainer.classList.add('playing-track')
   controls.classList.add('playing')
   if (typeof autoBrowseMore == 'function') autoBrowseMore()
+}
+
+function prepareTrackTitle(item){
+  var artistNames = item.artist
+  if (!artistNames) return item.title
+
+  var trackTitle = "";
+  artistNames = artistNames.split(", ").filter(function(n){ return n != "" })
+
+  if (artistNames.length>2){
+    trackTitle = "Various Artists";
+  } else{
+    trackTitle = artistNames.join(" & ")
+  }
+  trackTitle += " - " + item.title
+  return trackTitle
+}
+
+function scrollTrackTitle(){
+  var el = document.querySelector(sel.title)
+  var elContainer = document.querySelector(sel.link)
+  if (!el || !elContainer) return
+  if (el.offsetWidth>elContainer.offsetWidth){
+    var scrollDistance = el.offsetWidth - elContainer.offsetWidth
+    el.style.textIndent = -scrollDistance + 'px';
+  }
+}
+function removeScrollTrackTitle(){
+  var el = document.querySelector(sel.title)
+  if (el) el.style.textIndent = '0px';
 }
 
 function updateControls () {
@@ -329,6 +361,7 @@ function mapTrackElToPlayer (el) {
     source:     el.getAttribute('play-link'),
     skip:       isSignedIn() && !el.hasAttribute('licensable') && (session.settings || {}).hideNonLicensableTracks,
     title:      el.getAttribute('title'),
+    artist:      el.getAttribute('artist'),
     trackId:    el.getAttribute('track-id'),
     playlistId: el.getAttribute('playlist-id'),
     releaseId:  el.getAttribute('release-id')
