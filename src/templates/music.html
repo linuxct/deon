@@ -123,13 +123,12 @@
                         {{/inEarlyAccess}}
                         {{#inEarlyAccess}}
                             {{#streamable}}
-                                <button class="button button--cta button--icon"
+                                <button class="button button--cta button--release-cta"
                                         action="playSongs"
                                         role="play-release"
                                         release-id="{{_id}}">
-                                        Listen Early 
-                                    <i class="fa fa-play inactive"></i>
-                                    <i class="fa fa-pause active"></i>
+                                    <i class="fa fa-play inactive"></i> <span>Listen Early</span>
+                                    <i class="fa fa-pause active"></i> <span>Listen Early</span>
                                 </button>
                             {{/streamable}}
                             {{^streamable}}
