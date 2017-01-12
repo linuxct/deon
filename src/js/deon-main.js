@@ -461,8 +461,9 @@ function mapRelease (o) {
 }
 
 function mapWebsiteDetails (o) {
-  if (o.profileImageBlobId)
-    o.image = datapoint + '/blobs/' + o.profileImageBlobId
+  //if (o.profileImageBlobId)
+  //  o.image = datapoint + '/blobs/' + o.profileImageBlobId
+  o.image = o.profileImageUrl 
   if (isNaN(o.imagePositionY))
     o.imagePositionY = 60
   if (o.bookings || o.managementDetail) {
@@ -545,9 +546,9 @@ function transformRoster () {
 
 function transformRosterYear (obj) {
   obj.results.forEach(function (doc) {
-    if (doc.profileImageBlobId)
+    if (doc.profileImageUrl)
       doc.uri = doc.vanityUri || doc.websiteDetailsId || doc._id
-      doc.image = datapoint + '/blobs/' + doc.profileImageBlobId
+      doc.image = doc.profileImageUrl //datapoint + '/blobs/' + doc.profileImageBlobId
   })
   obj.results.sort(function (a, b) {
     a = a.name.toLowerCase()

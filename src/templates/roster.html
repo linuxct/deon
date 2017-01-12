@@ -12,7 +12,8 @@
             <li><a class="button" href="/artists/?year={{.}}">{{.}}</a></li>
             {{/years}}
             </ul>
-            <div source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId&filters=years,{{year}}"
+            <div
+            source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId,profileImageUrl&filters=years,{{year}}"
                  template="roster-year">
             </div>
             {{/data}}
@@ -37,7 +38,7 @@
                 {{#image}}
                 <div class="image-wrapper">
                     <img src="/img/artist.jpg" class="preload" />
-                    <img src="{{image}}"/>
+                    <img src="{{.}}?image_width=512"/>
                 </div>
                 {{/image}}
                 {{^image}}

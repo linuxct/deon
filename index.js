@@ -18,7 +18,9 @@ function buildHTML () {
   var arr = order.map(function (i) {
     return path.join(hdir, i + '.html')
   })
-  arr = arr.concat(fs.readdirSync(tdir).map(function (i) {
+  arr = arr.concat(fs.readdirSync(tdir).filter(function (i) {
+    return i[0] != "."
+  }).map(function (i) {
     return path.join(tdir, i)
   }))
   arr.push(path.join(hdir, 'end.html'))

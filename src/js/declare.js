@@ -192,7 +192,7 @@ function interceptClick (e) {
   var isAnchor = false
   var isAction = null
   var t = null
-  if (e.metaKey) {
+  if ((e.button != undefined && e.button != 0) || e.metaKey) {
     return true
   }
   if (!e.path) {
