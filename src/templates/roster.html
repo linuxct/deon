@@ -1,19 +1,37 @@
 <script type="text/template"
         route="^artists\/?"
         transform="transformRoster"
+        completed="completedRoster"
         page-title="Artists">
     <div class="container">
         <h1>Artists</h1>
         <div class="panel">
             {{#data}}
-            <ul class="button-list">
-            <li><a class="button" href="/artists">Featured</a></li>
-            {{#years}}
-            <li><a class="button" href="/artists/?year={{.}}">{{.}}</a></li>
-            {{/years}}
+            <!-- desktop year selector -->
+            <ul class="col-xs-hidden col-sm-visible button-list">
+                <li>
+                    <a class="button {{^selectedYear}}selected-year{{/selectedYear}}" 
+                        href="/artists">Featured</a>
+                </li>
+                {{#years}}
+                    <li>
+                        <a class="button {{#selected}}selected-year{{/selected}}"
+                            href="/artists/?year={{year}}">{{year}}</a>
+                    </li>
+                {{/years}}
             </ul>
+            <!-- mobile year selector -->
+            <div class="col-xs-visible col-sm-hidden">
+                <select class="select-year" role="roster-select">
+                    <option value="0">Featured</option>
+                    {{#years}}
+                        <option {{#selected}}selected="selected"{{/selected}} 
+                                value="{{year}}">{{year}}</option>
+                    {{/years}}
+                </select>
+            </div>
             <div
-            source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId,profileImageUrl&filters=years,{{year}}"
+            source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId,profileImageUrl&filters=years,{{selectedYear}}"
                  template="roster-year">
             </div>
             {{/data}}

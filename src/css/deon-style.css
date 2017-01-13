@@ -2771,7 +2771,15 @@ textarea.copycredits {
 .panel .button-list > li:nth-child(even) > a{
   border-right-width: 3px;
 }
-
+.panel .button-list .selected-year{
+  background: dodgerblue;
+  color: white;
+}
+.panel select.select-year{
+  padding: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
 .artist-list li label.title {
   margin-top: 0;
 }

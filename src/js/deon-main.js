@@ -394,6 +394,13 @@ function openPurchaseRelease (e, el) {
 function removeYouTubeClaim (e, el) {
   var data = getTargetDataSet(el)
   if (!data || !data.videoId) return
+
+  var videoId = data.videoId
+  if (videoId.indexOf('youtu')>-1){
+    videoId = youTubeIdParser(videoId)
+    if (!videoId) return toasty(Error('Please make sure to enter a YouTube ID or a valid YouTube URL.'))
+  }
+
   requestJSON({
     url: endpoint + '/self/remove-claims',
     method: 'POST',
@@ -406,6 +413,13 @@ function removeYouTubeClaim (e, el) {
     toasty(strings.claimReleased)
     document.querySelector('input[name="videoId"]').value = ""
   })
+}
+
+function youTubeIdParser(url){
+  var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+  var match = url.match(regExp)
+  // ids have 11 characters but that's not something they guarantee
+  return (match && match[2].length >= 11) ? match[2] : false
 }
 
 /* Map Methods
@@ -535,12 +549,15 @@ function transformRoster () {
   var arr = []
   var i = thisYear
   while (i >= 2011) {
-    arr.push(i)
+    arr.push({
+      year: i,
+      selected: i == q.year
+    })
     i--
   }
   return {
     years: arr,
-    year: q.year || 0 // featured year is 0
+    selectedYear: q.year || 0 // featured year is 0
   }
 }
 
@@ -931,6 +948,15 @@ function completedMusic (source, obj) {
   }
   setPageTitle(parts.join(pageTitleGlue))
   pageIsReady()
+}
+
+function completedRoster (){
+  var rosterSelect = document.querySelector('[role=roster-select]')
+  rosterSelect.addEventListener('change', function(){
+    var year = this.options[this.selectedIndex].value
+    if (year !== "0") window.location.href = '/artists/?year='+year
+    else window.location.href = '/artists/'
+  })
 }
 
 /* UI Stuff */
