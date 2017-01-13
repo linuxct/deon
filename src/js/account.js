@@ -10,7 +10,7 @@ function saveAccount (e, el) {
 }
 
 function saveAccountSettings (e, el) {
-  var data = getTargetDataSet(el, true, true)
+  var data = getTargetDataSet(el, false, true)
   if (!data) return
   update('self/settings', null, data, function (err, obj) {
     if (err) return window.alert(err.message)
