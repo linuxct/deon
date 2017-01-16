@@ -208,6 +208,7 @@ function createCopycredit (title, urls) {
   };
   urls = urls || []
   urls.forEach(function (url) {
+    if (!url) return
     for(var site in prefixes) {
       if(url.indexOf(site) > 0) {
         credit += prefixes[site] + url + "\n";
