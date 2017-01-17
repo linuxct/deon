@@ -52,6 +52,10 @@ function transformEvent (i) {
   else {
     i.artistDetails = []
   }
+  if(i.coverImageUri) {
+    i.coverImageLarge = i.coverImageUri + '?image_width=2048'
+    i.coverImageSmall = i.coverImageUri + '?image_width=512'
+  }
   return i  
 }
 
