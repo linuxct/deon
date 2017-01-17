@@ -1738,14 +1738,13 @@ header:hover .scrub > .progress,
     background: #fff;
     animation: slideDown .45s ease;
   }
-
-  @keyframes slideDown{
-    from{
-      transform: translateY(-50px);
-    }
-    to{
-      transform: translateY(0px);
-    }
+}
+@keyframes slideDown{
+  from{
+    transform: translateY(-50px);
+  }
+  to{
+    transform: translateY(0px);
   }
 }
 
@@ -4361,6 +4360,7 @@ ul.picture-gallery > li > div{
   to {
     left: 0;
   }
+}
 /*-----------------------------*\
   POLLS
 \*-----------------------------*/
@@ -4558,6 +4558,7 @@ section.gold-feature-section#reddit {
 
 .top-banner-gold .banner {
   opacity: 0.15;
+  background-color: #f2f7f0;
 }
 .top-banner-gold .flex {
   padding: 3rem 1rem 3.5rem;
@@ -4926,7 +4927,7 @@ body.bg {
   color: #CCC;
 }
 
-/** Tickets */
+/* Tickets */
 .tickets-footer {
   text-align: center;
   color: #fff;
