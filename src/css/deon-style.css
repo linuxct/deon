@@ -2105,6 +2105,9 @@ footer .footer-items li:first-child button::before{
   text-align: center;
   margin-top: 2rem;
 }
+.top-banner--no-margin .featured-details{
+  margin-top: 0;
+}
 
 .early-access-message {
   margin-top: 0.5em;
