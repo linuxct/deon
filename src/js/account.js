@@ -1,11 +1,17 @@
 function saveAccount (e, el) {
   var data = getTargetDataSet(el, true, true)
   if (!data) return
+  var wasLegacy = isLegacyLocation()
   update('self', null, data, function (err, obj) {
     if (err) return window.alert(err.message)
     toasty(strings.accountUpdated)
     document.querySelector('[name="password"]').value = ""
     resetTargetInitialValues(el, obj)
+    loadSession(function (err, obj) {
+      if(wasLegacy && !isLegacyLocation()) {
+        reloadPage()
+      }
+    })
   })
 }
 
@@ -31,7 +37,6 @@ function saveShopEmail (e, el) {
 }
 function saveRedditUsername (e, el) {
   var data = getTargetDataSet(el, false, true)
-  console.log('data', data)
   if (!data) {
     data = {redditUsername: null}
   }
@@ -117,14 +122,25 @@ function mapAccount (o) {
   o.hasGoldAccess = hasGoldAccess()
   o.endhost = endhost
   o.shopEmail = session.user.shopEmail ? session.user.shopEmail : session.user.email
+  o.locationLegacy = isLegacyLocation()
+  o.emailOptIns = transformEmailOptins(o.emailOptIns)
   return o
+}
+
+function transformEmailOptins (optinsArray) {
+  if(!optinsArray) return {}
+  return optinsArray.reduce(function (atlas, value) {
+    atlas[value.type] = value.in
+    return atlas
+  }, {})
 }
 
 function completedAccount () {
   scrollToHighlightHash()
+  initLocationAutoComplete()
 }
 
-function transformAccountSettings(obj) {
+function transformAccountSettings (obj) {
   obj.bgon = false
   if (lstore)
     obj.bgon = lstore.getItem('bgon') == 'true' ? true : false
@@ -135,6 +151,7 @@ function transformAccountSettings(obj) {
   })
   return obj
 }
+
 transformAccountSettings.options = [
   {
     name: "MP3 320kbps",

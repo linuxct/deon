@@ -26,27 +26,28 @@ function getAutoCompleteInputMap (place) {
   return inputs
 }
 
-function initLocationAutoComplete (input, options) {
-  options = options || {}
-  var defaults = {
+function initLocationAutoComplete () {
+  var options = {
     types: ['(cities)'],
   };
-  for(var key in defaults) {
-    options[key] = options.hasOwnProperty(key) ? options[key] : defaults[key]
+  var input = document.getElementById('locationAutoComplete');
+  if(input == null) {
+    return false
   }
-  var autocomplete = new google.maps.places.Autocomplete(input, options)
-
+  var autocomplete = new google.maps.places.Autocomplete(input, options);
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
     var place = autocomplete.getPlace()
-    var inputs = getAutoCompleteInputMap(place)
-    for(var name in inputs) {
-      document.querySelector('input[name=' + name + ']').value = inputs[name]
+    var lat = place.geometry.location.lat()
+    var lng = place.geometry.location.lng()
+    var c = getGooglePlaceCountryName(place)
+    document.querySelector('input[name=googleMapsPlaceId]').value = place.place_id
+    var placeNameInput = document.querySelector('input[name=placeNameFull]')
+    if(placeNameInput) {
+      placeNameInput.value = place.formatted_address
     }
-    var locationNames = document.querySelectorAll('[role="my-location"]')
-    if(locationNames && locationNames.length > 0) {
-      for(var i = 0; i < locationNames.length; i++) {
-        locationNames[i].innerHTML = '<strong>' + place.formatted_address + '</strong>'
-      }
+    var locationName = document.querySelector('[role="my-location"]')
+    if(locationName) {
+      locationName.innerHTML = '<strong>' + place.formatted_address + '</strong>'
     }
   });
   //Prevent hitting enter to select autocomplete option from submitting the form
@@ -54,6 +55,5 @@ function initLocationAutoComplete (input, options) {
     if (e.keyCode == 13) { 
       e.preventDefault(); 
     }
-  });
-  return autocomplete
+  })
 }

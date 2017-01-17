@@ -172,6 +172,19 @@ function formatDate (date) {
     date.getFullYear()
 }
 
+function formatDateJSON (date){
+  if (!(date instanceof Date)) date = new Date(date)
+  d = date.toDateString().split(" ")
+  return {
+    'weekday': d[0],
+    'month': d[1],
+    'day': d[2],
+    'year': d[3],
+    'hours': date.getHours() < 10 ? '0'+ date.getHours() : date.getHours(),
+    'minutes': date.getMinutes() < 10 ? '0'+ date.getMinutes() : date.getMinutes()
+  }
+}
+
 function sortRelease (a, b) {
   var a = new Date(a.preReleaseDate || a.releaseDate)
   var b = new Date(b.preReleaseDate || b.releaseDate)

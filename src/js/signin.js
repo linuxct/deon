@@ -121,6 +121,11 @@ function signUpAt (e, el, where) {
 }
 
 function signUp (e, el) {
+  var data = getTargetDataSet(el)
+  console.log('data', data)
+  if(!data.googleMapsPlaceId) {
+    return alert('Please enter your location')
+  }
   signUpAt(e, el, '/signup')
 }
 
@@ -141,20 +146,44 @@ function getSignInBuying () {
   return buying
 }
 
-function mapSignup () {
+function transformSignUp () {
   var redirectTo = getRedirectTo()
   var buying = getSignInBuying()
 
-  return {
+  obj = {
     countries: getAccountCountries(),
     buying: buying,
     redirectTo: encodeURIComponent(redirectTo)
   }
+
+  var qo = queryStringToObject(window.location.search)
+
+  if(qo.email) {
+    obj.email = qo.email
+  }
+
+  if(qo.location) {
+    obj.placeNameFull = qo.location
+
+    obj.emailOptIns = {
+      eventsNearMe: true
+    }
+  }
+
+  return obj
 }
 
 function mapConfirmSignup () {
   var obj = queryStringToObject(window.location.search)
   if (!Object.keys(obj).length) return
   obj.countries = getAccountCountries()
+  if(obj.email == 'undefined') {
+    obj.email = ''
+  }
   return obj
+}
+
+function completedSignUp () {
+  google.maps.event.addDomListener(window, 'load', initLocationAutoComplete);
+  initLocationAutoComplete()
 }

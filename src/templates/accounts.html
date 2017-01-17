@@ -5,7 +5,7 @@
     {{#data}}
     <div class="container">
         {{^buying}}
-        <h1>Sign Up</h1>
+        <h1>Sign In</h1>
         {{/buying}}
         {{#buying}}
         <div class="panel">
@@ -152,57 +152,17 @@
 <script type="text/template"
         route="^confirm-sign-up"
         page-title="Confirm Sign Up"
+        completed="completedSignUp"
         transform="mapConfirmSignup">
     <div class="container">
         <h1>Confirm Sign Up</h1>
         <div class="panel">
         {{#data}}
         <table class="form mobile" data-set="credentials" trigger-target="signUpSocial">
-            <tbody>
-                <tr>
-                    <th>Email</th>
-                    <td>
-                        <input type="text"
-                               name="email"
-                               placeholder="kitty@monstercat.com"
-                               value="{{email}}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Password (Optional)</th>
-                    <td>
-                        <input type="text"
-                               name="password"
-                               placeholder="a secret"/>
-                        <button
-                            class="faux password"
-                            action="togglePassword"
-                            toggle-target="password">
-                            <i class="fa fa-eye-slash"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Country</th>
-                    <td>
-                        <select name="location">
-                            <option disabled selected>Select One</option>
-                            {{#countries}}
-                            <option value="{{name}}">
-                                {{name}}
-                            </option>
-                            {{/countries}}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <input type="hidden" name="token" value="{{token}}"/>
-                        <input type="hidden" name="submitWhere" value="{{submitWhere}}"/>
-                        <input type="hidden" name="name" value="{{name}}"/>
-                    </th>
-                </tr>
-            </tbody>
+            {{>signup-fields}}
+            <input type="hidden" name="token" value="{{token}}"/>
+            <input type="hidden" name="submitWhere" value="{{submitWhere}}"/>
+            <input type="hidden" name="name" value="{{name}}"/>
         </table>
         <div class="button-group">
             <button class="button--cta button--full" action="signUpSocial" trigger="signUpSocial" data-set-target="credentials">Sign Up</button>
@@ -218,7 +178,8 @@
 <script type="text/template"
         route="^sign-up"
         page-title="Sign Up"
-        transform="mapSignup">
+        completed="completedSignUp"
+        transform="transformSignUp">
     <div class="container">
         {{#data}}
             {{^buying}}
@@ -234,51 +195,13 @@
         <div class="flex sign-split">
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>
-                <form  data-set="credentials" data-submit-action="signUp">
-                    <table class="form mobile">
-                        <tbody>
-                            <tr>
-                                <th>Email</th>
-                                <td>
-                                    <input type="text"
-                                           name="email"
-                                           placeholder="kitty@monstercat.com"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Password</th>
-                                <td>
-                                    <input type="password"
-                                           name="password"
-                                           placeholder="a secret"/>
-                                    <button
-                                        class="faux password"
-                                        action="togglePassword"
-                                        toggle-target="password">
-                                        <i class="fa fa-eye-slash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Country</th>
-                                <td>
-                                    <select name="location">
-                                        <option disabled selected>Select One</option>
-                                        {{#countries}}
-                                        <option value="{{name}}">
-                                            {{name}}
-                                        </option>
-                                        {{/countries}}
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="button-group">
-                        <button class="button--cta button--full">Sign Up</button>
-                        or <a href="/signin?redirect={{redirectTo}}">sign in</a>
-                    </div>
-                </form>
+                <table class="form mobile" data-set="credentials" trigger-target="signUp">
+                    {{>signup-fields}}
+                </table>
+                <div class="button-group">
+                    <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+                    or <a href="/signin?redirect={{redirectTo}}">sign in</a>
+                </div>
             </div>
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Social</h2>
@@ -309,72 +232,74 @@
             <p><a href="/signin?redirect=account">Sign in</a> to view this page.</a></p>
             {{/error}}
             {{#data}}
-            <form data-submit-action="saveAccount" data-set="account">
-                <table class="form mobile">
-                    <tbody data-set="account">
-                        <tr>
-                            <th>Email</th>
-                            <td>{{email}}</td>
-                        </tr>
-                        <tr>
-                            <th>Display Name</th>
-                            <td><input type="text"
-                                       name="name"
-                                       value="{{name}}"
-                                       placeholder="Nickname"
-                                       data-set-target="account"
-                                       initial-value="{{name}}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Full Name</th>
-                            <td><input type="text"
-                                       name="realName"
-                                       value="{{realName}}"
-                                       placeholder="Jon GQ Winter"
-                                       data-set-target="account"
-                                       initial-value="{{realName}}" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Country</th>
-                            <td>
-                                <select name="location"
-                                        initial-value="{{location}}">
-                                    <option disabled>Select One</option>
-                                    {{#countries}}
-                                    <option
-                                        value="{{name}}"
-                                        {{#selected}}selected{{/selected}}>
-                                        {{name}}
-                                    </option>
-                                    {{/countries}}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Change Password</th>
-                            <td>
-                                <input type="password"
-                                       name="password"
-                                       placeholder="New Password">
-                                <button
-                                    class="faux password"
-                                    action="togglePassword"
-                                    toggle-target="password">
-                                    <i class="fa fa-eye-slash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="button-group button-group--margin">
-                    <button class="button--cta button--full">
-                        Save
-                    </button>
-                    <button class="button--danger button--full" action="signOut">Sign Out</button>
-                </div>
-            </form>
+            <table class="form mobile" trigger-target="saveAccount">
+                <tbody data-set="account">
+                    <tr>
+                        <th>Email</th>
+                        <td>{{email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Display Name</th>
+                        <td><input type="text"
+                                   name="name"
+                                   value="{{name}}"
+                                   placeholder="Nickname"
+                                   data-set-target="account"
+                                   initial-value="{{name}}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Full Name</th>
+                        <td><input type="text"
+                                   name="realName"
+                                   value="{{realName}}"
+                                   placeholder="Jon GQ Winter"
+                                   data-set-target="account"
+                                   initial-value="{{realName}}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Location</th>
+                        <td>
+                            {{>location-autocomplete}}
+                            {{#locationLegacy}}
+                                <p>Your country is currently <strong>{{location}}</strong>. Add your city above.</p>
+                            {{/locationLegacy}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Email settings</th>
+                        <td>
+                            {{>account-email-optin-promotions}}
+                            <br />
+                            {{>account-email-optin-eventsnearme}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Change Password</th>
+                        <td>
+                            <input type="password"
+                                   name="password"
+                                   placeholder="New Password">
+                            <button
+                                class="faux password"
+                                action="togglePassword"
+                                toggle-target="password">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="button-group button-group--margin">
+                <button class="button--cta button--full" 
+                        action="saveAccount"
+                        trigger="saveAccount"
+                        data-set-target="account">
+                    Save
+                </button>
+                <button class="button--danger button--full" action="signOut">Sign Out</button>
+            </div>
         </div>
         <div class="panel">
             <h2>Gold-only Discord Chat</h2>
@@ -548,6 +473,79 @@
 </script>
 
 <script type="text/template"
+        mustache-name="signup-fields">
+    <tbody>
+        <tr>
+            <th>Email</th>
+            <td>
+                <input type="text"
+                       name="email"
+                       placeholder="kitty@monstercat.com"
+                       value="{{email}}" />
+            </td>
+        </tr>
+        <tr>
+            <th>Password</th>
+            <td>
+                <input type="password"
+                       name="password"
+                       placeholder="a secret"/>
+                <button
+                    class="faux password"
+                    action="togglePassword"
+                    tabindex="999"
+                    toggle-target="password">
+                    <i class="fa fa-eye-slash"></i>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td>
+                {{>location-autocomplete}}
+            </td>
+        </tr>
+        {{>account-email-optins}}
+    </tbody>
+</script>
+
+<script type="text/template"
+        mustache-name="account-email-optins">
+<tr>
+    <td colspan="2">
+        {{>account-email-optin-promotions}}
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        {{>account-email-optin-eventsnearme}}
+    </td>
+</tr>
+</script>
+
+<script type="text/template"
+        mustache-name="account-email-optin-promotions">
+<label>
+    <input type="checkbox" name="emailOptIns[promotions]"{{#emailOptIns.promotions}} checked="checked"{{/emailOptIns.promotions}} value="1" />
+    Email me about Monstercat news and promotions
+</label>
+</script>
+
+<script type="text/template"
+        mustache-name="account-email-optin-eventsnearme">
+<label>
+    <input type="checkbox" name="emailOptIns[eventsNearMe]"{{#emailOptIns.eventsNearMe}} checked="checked"{{/emailOptIns.eventsNearMe}} value="1" />
+    Email me about Monstercat events near <span role="my-location">{{#placeNameFull}}<strong>{{placeNameFull}}</strong>{{/placeNameFull}}{{^placeNameFull}}my city{{/placeNameFull}}</span>
+</label>
+</script>
+
+<script type="text/template"
+        mustache-name="location-autocomplete">
+    <input id="cityTextField" type="text" size="50" placeholder="City, Country" autocomplete="on" value="{{placeNameFull}}" />
+    <input type="hidden" name="googleMapsPlaceId" value="{{googleMapsPlaceId}}" />
+</script>
+
+<script type="text/template"
         template-name="social-settings"
         transform="transformSocialSettings">
     {{#data}}
@@ -583,6 +581,9 @@
 <a href="{{endhost}}/api/self/discord/gold" target="_blank" class="button">Join Discord</a>
 {{/hasGoldAccess}}
 </script>
+
+<script type="text/template"
+        mustache-name="required"><span class="required">*</span></script>
 
 <script type="text/template"
         mustache-name="buying">{{#vendor}}a <strong>{{vendor}}</strong> license for <strong>{{identity}}</strong>{{/vendor}}{{#gold}}a <strong><a href="/gold">Gold subscription</a></strong>{{/gold}}</script>

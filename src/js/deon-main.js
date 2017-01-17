@@ -14,15 +14,7 @@ preLoadImage('/img/artist.jpg')
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
   renderHeader()
-  getSession(function (err, obj, xhr) {
-    if (err) {
-      // TODO handle this!
-      console.warn(err.message)
-      if(err && endhost.indexOf('localhost') > 0) {
-        alert('Make sure you have ' + endhost + ' running!')
-      }
-    }
-    session = obj
+  loadSession(function (err, obj) {
     if(obj && obj.user) {
       sixPackSession = new sixpack.Session({
         client_id: obj.user._id
@@ -99,6 +91,10 @@ function isLegacyUser () {
     user.type.indexOf('admin_readonly') > -1
 }
 
+function isLegacyLocation () {
+  return session.user.location && !session.user.hasOwnProperty('googleMapsPlaceId')
+}
+
 function hasGoldAccess () {
   if (!isSignedIn()) return false
   // TODO remove temporary support for old checks
@@ -117,6 +113,20 @@ function getSession (done) {
     url: endpoint + '/self/session',
     withCredentials: true
   }, done)
+}
+
+function loadSession (done) {
+  getSession(function (err, obj, xhr) {
+    if (err) {
+      // TODO handle this!
+      console.warn(err.message)
+      if(err && endhost.indexOf('localhost') > 0) {
+        alert('Make sure you have ' + endhost + ' running!')
+      }
+    }
+    session = obj
+    done(err, obj)
+  })
 }
 
 function getSessionName () {

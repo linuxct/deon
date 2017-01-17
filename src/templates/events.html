@@ -1,0 +1,337 @@
+<script type="text/template"
+        route="^event\/(.*)"
+        page-title="Event"
+        transform="transformEventPage"
+        completed="completedEventPage"
+        source="$endpoint/event/$1">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+
+    <div class="event-page-header">
+      <div class="top-banner top-banner-events">
+        {{>event-header}}
+
+        
+        <div class="container latest cl-white">
+          {{#artistDetails.length}}
+          <header class="flex top-cta ">
+              <div class="col-xs-12">
+                  <h2 class="line-top">Artists</h2>
+              </div>
+          </header>
+          <ul class="art-list artist-list art-list--full-width">
+            {{#artistDetails}}
+            <li>
+                <a class="silent" href="/artist/{{vanityUri}}" title="{{name}}">
+                    {{#image}}
+                    <div class="image-wrapper">
+                        <img src="/img/artist.jpg" class="preload" />
+                        <img src="{{image}}"/>
+                    </div>
+                    {{/image}}
+                    {{^image}}
+                    <div class="no-art">
+                        <label>No image.</label>
+                    </div>
+                    {{/image}}
+                    <div class="hover-wrapper">
+                        <label class="title one-line-ellipsis">{{name}}</label>
+                    </div>
+                </a>
+            </li>
+            {{/artistDetails}}
+          </ul>
+          {{/artistDetails.length}}
+
+          <div class="back-to-events">
+            <a class="button button--white button--icon button--icon-left" href="/events" target="_BLANK">
+                <i class="fa fa-chevron-left"></i>
+                Back to Events
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{>events-email-optin}}
+
+    {{>event-sponsor}}
+
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="event-sponsor">
+  <div class="container text left cl-white">
+    <div class="footer-cta footer-cta--sponsor">
+      <div class="button-group-center">
+        <h2>Sponsorship.</h2>
+        <p>
+          Want to partner with one of our event properties? Contact us at <a href="mailto:ben@monstercat.com">ben@monstercat.com</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template"
+        route="^events\/?(\?.+)?$"
+        transform="transformEventsPage"
+        completed="completedEventsPage">
+    {{#data}}
+      <div source="$endpoint/events/header?limit=1" template="event-header"></div>
+      <div role="upcoming-events">
+        <section>
+          <div class="container latest">
+            <header class="flex top-cta">
+              <div class="col-xs-12 col-sm-6">
+                  <h2 class="line-top">Upcoming Events</h2>
+              </div>
+              <div class="col-xs-12 col-sm-6 toggle-wrapper">
+                  <span class="toggle-label">All Events</span>
+                  <div class="toggle">
+                    <input type="checkbox" role="upcoming-toggle" action="toggleUpcoming" class="check">
+                    <span class="switch"></span>
+                    <span class="track"></span>
+                  </div>
+                  <span class="toggle-label">Monstercat</span>
+              </div>
+            </header>
+            <div role="events-tables" class="events-tables">
+              <div class="events-no-featured-message shadow hide">
+                <a href="https://www.monstercat.com/tickets" target="_BLANK" class="blue">Sign-up</a>
+                for information on upcoming Monstercat events.</div>
+            </div>
+            <button action="loadMoreUpcomingEvents" current-page="{{page}}" class="button button--load-events button--cta hide">Load More</button>
+          </div>
+          
+        </section>
+      </div>
+      {{>events-email-optin}}
+      <div source="$endpoint/events/past?featured=1" template="events-past"></div>
+    {{/data}}
+    {{>event-sponsor}}    
+</script>
+
+<script type="text/template"
+        template-name="event-header"
+        transform="transformHeaderEvent">
+    {{#loading}}
+    {{>loading-view-black}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+      <p>{{message}}</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div class="top-banner top-banner-events">
+      {{>event-header}}
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="events-table-container">
+<div source="$endpoint/events/upcoming?{{upcomingQueryString}}" template="events-table"></div>
+</script>
+
+<script type="text/template"
+        template-name="events-table"
+        transform="transformUpcomingEvents"
+        completed="completedUpcomingEvents">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <div class="container panel">
+    <p>{{message}}</p>
+  </div>
+  {{/error}}
+  {{#data}}
+      <table class="events" role="upcoming-table">
+      {{#results}}
+      <tr {{#featured}}class="featured"{{/featured}}>
+        <td class="date">
+          <div>
+            <span class="month">{{localMonth}}</span>
+            <span class="day">{{localDay}}</span>
+          </div>
+        </td>
+        <td class="title">
+          <div>
+            <span class="name">
+              <a class="silent{{#externalUrl}} external{{/externalUrl}}" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>{{name}}{{#externalUrl}} <small class="fa fa-external-link"></small>{{/externalUrl}}</a>
+            </span>
+            <span class="time">{{localWeekday}} {{localTime}} {{localTimeZone}}</span>
+          </div>
+        </td>
+        <td class="location">
+          <div>
+            <span class="place">{{venue}}.</span>
+            <span class="city">{{location}}</span>
+          </div>
+        </td>
+        <td class="push-right">
+          <div>
+              <a class="faux silent button--mobile buy-tickets" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
+                  <i class="fa fa-shopping-cart"></i> <span>Buy Tickets</span>
+              </a>
+              <a class="faux button--mobile" action="addToCalendar" title="Download iCal" target="_blank" href="{{icalDownloadLink}}">
+                  <i class="fa fa-calendar-plus-o"></i>
+              </a>
+          </div>
+        </td>
+      </tr>
+      {{/results}}
+      </table>
+  {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="events-past"
+        transform="transformPastEvents">
+  {{#loading}}
+  {{>loading-view}}
+  {{/loading}}
+  {{#error}}
+  <div class="container panel">
+    <p>{{message}}</p>
+  </div>
+  {{/error}}
+  {{#data}}
+  <section class="v-padding past-events">
+    <div class="container latest">
+      <header class="flex top-cta">
+        <div class="col-xs-12">
+            <h2 class="line-top">Past Events</h2>
+        </div>
+      </header>
+      <ul class="art-list art-list--full-width artist-list event-list">
+      {{#results}}
+      <li>
+        <a class="silent" href="{{url}}" {{#externalUrl}}target="_blank" {{/externalUrl}} title="{{name}}">
+            {{#coverImageUri}}
+            <div class="image-wrapper">
+                <img src="/img/event.jpg" class="preload" />
+                <img src="{{coverImageUri}}"/>
+            </div>
+            {{/coverImageUri}}
+            {{^coverImageUri}}
+            <div class="image-wrapper">
+                <img src="/img/event.jpg" class="preload"/>
+                <img src="/img/event.jpg"/>
+            </div>
+            {{/coverImageUri}}
+            <div class="hover-wrapper">
+                <label class="title one-line-ellipsis">{{name}}</label>
+                <label class="city one-line-ellipsis">{{location}}</label>
+            </div>
+        </a>
+        </li>
+      {{/results}}
+      </ul>
+    </div>
+  </section>
+  {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="event-header">
+  <div class="banner">
+      <div class="banner" style="background-image:url({{coverImageUri}}">
+          <div class="banner-shade"></div>
+          <div class="gradient"></div>
+      </div>
+  </div>
+  <div class="container flex">
+    {{#posterImageUri}}
+    <div class="col-xs-12 col-sm-12 col-md-3 featured-artwork">
+        {{#single}}
+        <img class="shadow responsive" src="{{posterImageUri}}"/>
+        {{/single}}
+        {{^single}}
+        <a class="silent" href="{{url}}">
+            <img class="shadow responsive" src="{{posterImageUri}}"/>
+        </a>
+        {{/single}}
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-9 cl-white featured-details featured-details--event">
+    {{/posterImageUri}}
+    {{^posterImageUri}}
+    <div class="col-xs-12 col-sm-12 cl-white featured-details featured-details--event">
+    {{/posterImageUri}}
+      {{#upcoming}}<span class="tag">Upcoming Event</span>{{/upcoming}}
+      {{^upcoming}}<span class="tag">Past Event</span>{{/upcoming}}
+      <a class="silent no-hover" href="{{url}}">
+          <h1 class="title uppercase">{{name}}</h1>
+      </a>
+      <h3>
+        {{venue}} @ {{location}}.
+      </h3>
+      <p class="date">
+        {{dateString}} {{#upcoming}}{{localTime}} {{localTimeZone}}{{/upcoming}}
+      </p>
+      <p class="description">{{ description }}</p>
+      <a class="button button--cta" role="view-event" href="{{url}}">View</a>
+      {{#showCtaButton}}
+        <a class="button button--cta button--icon" target="_blank" href="{{ctaUri}}">{{ctaLabel}} <i class="fa fa-external-link"></i></a>
+      {{/showCtaButton}}
+    </div>
+  </div>
+</script>
+
+<script type="text/template"
+        mustache-name="events-email-optin">
+<div role="events-email-optin">
+{{#isSignedIn}}<div source="$endpoint/self" template="events-email-optin"></div>{{/isSignedIn}}
+{{^isSignedIn}}
+  <div class="container panel events-email events-email-signin">
+    <form onsubmit="false" data-set="credentials" data-submit-action="signUpForEventEmail" trigger-target="signUpForEventEmail">
+      <div class="form form-inline mobile">
+        <label class="email-me">Email me about Monstercat events near me.</label>
+        <input type="text" name="email" id="eventOptInEmail" placeholder="Email" />
+        {{>location-autocomplete}}
+        <input type="hidden" name="placeNameFull" value="" />
+        <button class="button--cta button--full subscribe" trigger="signUpForEventEmail" action="signUpForEventEmail">Subscribe</button>
+      </div>
+    </form>
+{{/isSignedIn}}
+</div>
+</script>
+
+<script type="text/template"
+        template-name="events-email-optin"
+        transform="transformEventsEmailOptin"
+        completed="completedEventsEmailOptin">
+{{#loading}}
+{{/loading}}
+{{#error}}
+<div class="container panel">
+  <p>{{message}}</p>
+</div>
+{{/error}}
+{{#data}}
+  {{^fullyOptedIn}}
+  <div class="container panel events-email">
+    <form onsubmit="false" data-set="credentials" data-submit-action="subscribeEventsEmailOptIn">
+      <div class="form form-inline mobile">
+        <label class="email-me">Email me about Monstercat events near me.</label>
+        <div class="form-block my-location">
+          <label>My location: </label>
+          {{>location-autocomplete}}
+        </div>
+        <button class="button--cta button--full subscribe">Subscribe</button>
+      </div>
+    </form>
+  </div>
+  {{/fullyOptedIn}}
+{{/data}}
+</script>
