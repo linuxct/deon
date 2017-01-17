@@ -56,6 +56,16 @@ function transformEvent (i) {
     i.coverImageLarge = i.coverImageUri + '?image_width=2048'
     i.coverImageSmall = i.coverImageUri + '?image_width=512'
   }
+  var weekdays = {
+    'Sat': 'urday',
+    'Sun': 'day',
+    'Mon': 'day',
+    'Tue': 'sday',
+    'Wed': 'nesday',
+    'Thu': 'rsday',
+    'Fri': 'day'
+  }
+  i.localWeekdayLong = i.localWeekday + weekdays[i.localWeekday]
   return i  
 }
 
