@@ -54,6 +54,7 @@ function onSignIn() {
     session = sess
     trackUser()
     renderHeader()
+    renderHeaderMobile()
     go(getRedirectTo())
   })
 }
@@ -68,6 +69,7 @@ function signOut (e, el) {
     session.user = null
     untrackUser()
     renderHeader()
+    renderHeaderMobile()
     go("/")
   })
 }
@@ -115,6 +117,7 @@ function signUpAt (e, el, where) {
       if (err) return window.alert(err.message)
       session = sess
       renderHeader()
+      renderHeaderMobile()
       go(getRedirectTo())
     })
   })

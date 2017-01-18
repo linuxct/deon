@@ -51,14 +51,31 @@ small a {
 input,
 textarea{
   box-shadow: 0 0 0;
-  border: 1px solid #ccc;
-  background: transparent;
-  padding: 0.20em 0.30em;
-  border-radius: 3px;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 2px solid #ccc;
+  background: #eee;
+  padding: 1rem;
+  transition: border-color .4s ease;
 }
-
-select {
-  font-size: 16px;
+input:focus,
+textarea:focus{
+  border-bottom: 2px solid dodgerblue;
+}
+select{
+  font-family: "Proxima Nova", Open Sans, sans-serif;
+  font-size: 1rem;
+  box-shadow: 0 0 0px rgba(30, 144, 255, 0.0);
+  border: 0;
+  background: #eee;
+  border-radius: 0px;
+  padding: 0.30em 0.40em;
+  height: 55px;
+  transition: all 0.4s ease;
+}
+select:focus{
+  box-shadow: 0 0 5px rgba(30, 144, 255, 0.9);
+  outline: 0;
 }
 
 p{
@@ -244,8 +261,8 @@ table.form input {
   transition: border-color .3s ease;
 }
 
-table.form select:focus{
-  outline: 2px solid dodgerblue;
+table.form select{
+  width: 220px;
 }
 
 table.form th {
@@ -660,6 +677,7 @@ label[for] {
   table.form.mobile select{
     width: 100%;
     padding: 1rem;
+    height: 55px;
   }
   .button-group{
     font-size: 0;
@@ -916,20 +934,28 @@ td.push-right > * {
 }
 .banner--scaled{
   overflow: hidden;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 .banner--scaled .banner,
 .banner--scaled .side-banner,
 .banner--scaled .bgbox{
   transform: perspective(1px) translateZ(0) scale(1.1);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 .banner--scaled .bgbox .details-box {
   transform: perspective(1px) translateZ(0) scale(0.909);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 .banner--bottom-crop{
   background-position: center bottom;
+}
+.details-box .options .button,
+.details-box .options button{
+  min-height: 45px;
+  vertical-align: top;
 }
 @media screen and (min-width: 992px){
   table td.push-right{
@@ -942,6 +968,10 @@ td.push-right > * {
 
   .details-box.artist {
     min-height: 400px;
+  }
+  .details-box .options .button,
+  .details-box .options button{
+    min-height: 40px;
   }
 }
 .banner-shade,
@@ -1065,6 +1095,10 @@ section {
   padding: 2rem 2rem 2.5rem;
   background: white;
   box-shadow: 0 0 35px rgba(0,0,0,0.1);
+}
+
+.panel--no-margin-top{
+  margin-top: 0;
 }
 
 .panel.md-container{
@@ -1863,6 +1897,7 @@ span.note a {
 .toast {
   animation: scalingModal .45s ease 1 forwards;
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 @keyframes scalingModal{
@@ -2517,6 +2552,7 @@ ul.social-grid {
 @media screen and (min-width: 992px){
   .flex.sign-split > .panel {
     max-width: 48.75%;
+    flex-basis: 48.75%;
   }
   .flex.sign-split > .panel:first-child {
     margin-right: 2.5%;
@@ -3115,16 +3151,12 @@ textarea.copycredits {
 }
 .services .services-form select{
   font-family: "Proxima Nova", Open Sans, sans-serif;
-  box-shadow: 0 0 0px rgba(30, 144, 255, 0.21);
   border: 0;
   background: transparent;
   vertical-align: bottom;
   -webkit-border-radius: 0px;
   border-radius: 0px;
   transition: all 0.4s ease;
-}
-.services .services-form select:focus{
-  box-shadow: 0 0 15px rgba(30, 144, 255, 0.21);
 }
 .services .services-form select,
 .services .services-form input[type="text"]{
@@ -3378,7 +3410,7 @@ textarea.copycredits {
 }
 .license.first::after{
   opacity: 1;
-  background: #000 url("/img/licensing1.jpg") 50% 50% no-repeat;
+  background: #000 url("/img/licensing.jpg") 50% 50% no-repeat;
 }
 .license.second::after{
   opacity: 1;
@@ -3558,7 +3590,7 @@ textarea.copycredits {
 }
 
 #licensing.first {
-  background-image: url('/img/licensing1.jpg');
+  background-image: url('/img/licensing.jpg');
 }
 
 #licensing.second {
@@ -3913,6 +3945,7 @@ tr.featured a.external .fa-external-link{
   transition: opacity 0.25s ease;
   animation: scalingCenteredModal .45s ease 1 forwards;
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   font-size: 1.25rem;
   z-index: 1;
 }
@@ -4582,6 +4615,7 @@ section.gold-feature-section#reddit {
 .tabs-content > div{
   animation: scalingModal .45s ease 1 forwards;
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .tab-button:focus,
 .tab-button:hover,

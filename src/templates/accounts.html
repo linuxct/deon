@@ -301,40 +301,43 @@
                 <button class="button--danger button--full" action="signOut">Sign Out</button>
             </div>
         </div>
-        <div class="panel">
-            <h2>Gold-only Discord Chat</h2>
-            <p>Join us on our Discord server in the excluse Gold members only chat.</p>
-            {{>joinGoldDiscord}}
-            {{^hasGoldAccess}}
-            <div class="button-group">
-                <a href="/account/services?gold" class="button">Get Monstercat Gold</a>
+        <div class="flex sign-split">
+            <div class="col-xs-12 col-md-6 panel" id="reddit">
+                <h2>/r/Monstercat Flair</h2>
+                {{#hasGoldAccess}}
+                <p>Put in your reddit username to get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
+                <table class="form mobile" data-set="reddit-flair" trigger-target="saveRedditUsername">
+                    <tbody>
+                        <tr>
+                            <th>reddit username</th>
+                            <td><input type="text" name="redditUsername" placeholder="Username" value="{{redditUsername}}" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="button-group">
+                    <button class="button--full" action="saveRedditUsername" trigger="saveRedditUsername" data-set-target="reddit-flair">Save</button>
+                </div>
+                {{/hasGoldAccess}}
+                {{^hasGoldAccess}}
+                <p>Get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
+                <div class="button-group">
+                    <a href="/account/services?gold" class="button">Get Monstercat Gold</a>
+                </div>
+                {{/hasGoldAccess}}
             </div>
-            {{/hasGoldAccess}}
+            <div class="col-xs-12 col-md-6 panel">
+                <h2>Gold-only Discord Chat</h2>
+                <p>Join us on our Discord server in the excluse Gold members only chat.</p>
+                <br>
+                {{>joinGoldDiscord}}
+                {{^hasGoldAccess}}
+                <div class="button-group">
+                    <a href="/account/services?gold" class="button">Get Monstercat Gold</a>
+                </div>
+                {{/hasGoldAccess}}
+            </div>
         </div>
-        <div class="panel" id="reddit">
-            <h2>/r/Monstercat Flair</h2>
-            {{#hasGoldAccess}}
-            <p>Put in your reddit username to get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
-            <table class="form mobile" data-set="reddit-flair" trigger-target="saveRedditUsername">
-                <tbody>
-                    <tr>
-                        <th>reddit username</th>
-                        <td><input type="text" name="redditUsername" value="{{redditUsername}}" /></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="button-group">
-                <button class="button--full" action="saveRedditUsername" trigger="saveRedditUsername" data-set-target="reddit-flair">Save</button>
-            </div>
-            {{/hasGoldAccess}}
-            {{^hasGoldAccess}}
-            <p>Get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
-            <div class="button-group">
-                <a href="/account/services?gold" class="button">Get Monstercat Gold</a>
-            </div>
-            {{/hasGoldAccess}}
-        </div>
-        <div class="panel" id="two-factor">
+        <div class="panel panel--no-margin-top" id="two-factor">
             <h2>Two-Factor Auth</h2>
             {{#twoFactor}}
             <p>Two-factor auth is currently <strong>enabled</strong>.</p>
