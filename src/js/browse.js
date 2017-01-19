@@ -98,6 +98,7 @@ function transformMusicBrowseResults (obj, done) {
       })
       release.tracks.sort(sortTracks)
     })
+
     obj.results = releases
     obj.total = obj.total
     obj.hasGoldAccess = hasGoldAccess()
@@ -119,6 +120,11 @@ function completedMusicBrowseResults (source, obj) {
   el.classList[method]('hide')
   mergeBrowseResults()
   startCountdownTicks()
+  //Rebuild the indexes so that the index attribute matches their actual position on the page
+  document.querySelectorAll('[play-link]').forEach(function (el, index) {
+    el.setAttribute('index', index)
+  })
+
 }
 
 function mergeBrowseResults () {
