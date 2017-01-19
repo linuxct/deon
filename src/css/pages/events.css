@@ -1,0 +1,426 @@
+.events-tables {
+  position: relative;
+}
+.container.events-email {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding: 2rem 2rem 2.2rem;
+}
+.events-email .my-location {
+  margin-left: 0.1em;
+}
+.sign-up-notice{
+  margin-bottom: .75rem;
+}
+.toggle-wrapper,
+.sign-up-notice {
+  text-align: center;
+}
+.top-banner-events > .flex{
+  padding: 2rem 0;
+}
+.top-banner-events .latest{
+  padding-bottom: 2rem;
+}
+.top-banner-events .back-to-events{
+  margin-top: 1.5rem;
+}
+.top-banner-events 
+.featured-details--event p.date{
+  color: #fff;
+  margin-top: 1rem;
+}
+
+table.events td.date {
+  width: 10%;
+}
+
+table.events td.title {
+  width: 25%;
+}
+
+table.events td.location {
+  width: 30%;
+}
+table.events tr,
+table.events tr div{
+  overflow: hidden;
+}
+table.events tr td{
+  transition: padding 0.4s ease;
+}
+table.events tr div{
+  transition: opacity 0.3s ease, max-height 0.4s ease;
+}
+.events--filtered tr td{
+  padding: 0 1em;
+}
+.events--filtered tr.featured td{
+  padding: 0.5em 1em;
+}
+.events--filtered tr div{
+  opacity: 0;
+  max-height: 0px;
+}
+.events--filtered tr.featured div{
+  opacity: 1;
+  max-height: 500px;
+}
+table.events tr.featured a {
+  color: white;
+}
+table.events tr.featured a:hover,
+table.events tr.featured a:active {
+  color: #ddd;
+}
+td.date .month {
+  text-transform: uppercase;
+  display: block;
+}
+
+td.date .day {
+  font-size: 1.65rem;
+  font-weight: bold;
+}
+table.events a.external{
+  color: dodgerblue;
+}
+table.events a.external .fa-external-link {
+  opacity: 0;
+  font-size: 0.7em;
+  transition: opacity 0.25s ease;
+  position: relative;
+  top: -1px;
+  margin-left: 0.25em;
+}
+table.events a.external:hover .fa-external-link {
+  opacity: 1;
+}
+tr.featured {
+  background: dodgerblue;
+  color: white;
+}
+tr.featured td.title .time, 
+tr.featured td.location .city,
+tr.featured td.title .name a,
+tr.featured td.title .name a:hover,
+tr.featured td.title .name a:active{
+  color: white;
+}
+tr.featured td.title .name a:hover,
+tr.featured td.title .name a:active{
+  text-decoration: underline;
+}
+tr.featured a.external .fa-external-link{
+  color: white;
+}
+.events-no-featured-message {
+  padding: 40px 20px;
+  margin: auto;
+  background: #fff;
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 90%;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+  animation: scalingCenteredModal .45s ease 1 forwards;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  font-size: 1.25rem;
+  z-index: 1;
+}
+
+.events-no-featured-message a {
+  font-size: inherit;
+}
+
+.events-no-featured-message.hide {
+  display: none;
+}
+.events--filtered-empty{
+  height: 200px;
+  position: relative;
+}
+.featured > td.title .name > a{
+  color: dodgerblue;
+}
+
+.past-events{
+  margin-bottom: 2rem;
+}
+
+.top-banner-events .hover-wrapper {
+  background: #111;
+}
+.top-banner-events .art-list--full-width.art-list li{
+  padding-bottom: 1%;
+}
+
+.footer-cta{
+  padding: 4rem 0;
+  position: relative;
+}
+
+.footer-cta--sponsor {
+  background: #222 url('../img/sponsor.jpg');
+  background-size: cover;
+  padding: 4rem 2rem;
+  margin-top: 2rem;
+}
+
+.footer-cta h2{
+  margin-bottom: 1rem;
+}
+
+td.title .name {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+td.title .time,
+td.location .city {
+  display: block;
+  color: #888;
+}
+
+span.place {
+  display: block;
+  font-weight: bold;
+}
+
+.event-list label.city {
+  color: #ccc;
+  font-size: .85rem;
+}
+.art-list--full-width.event-list li{
+  padding-bottom: 1%;
+}
+.event-page-header a[role='view-event'] {
+  display: none;
+}
+.button--load-events.hide { 
+  display: none;
+}
+.button--load-events {
+  margin: .5rem auto;
+  display: block;
+  background: #eee;
+  border-color: #eee;
+  color: #111;
+  padding: 7px;
+  width: 100%;
+}
+.event-video{
+  padding: 5rem 0;
+  position: relative;
+}
+.event-video > .container{
+  max-width: 720px;
+}
+.embed-container { 
+  position: relative; 
+  padding-bottom: 56.25%; 
+  height: 0; 
+  overflow: hidden; 
+  width: 100%;
+  max-width: 1080px;
+  margin: 5rem auto 0;
+} 
+.embed-container iframe, 
+.embed-container object, 
+.embed-container embed { 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+}
+.event-body{
+  margin-top: 2rem;
+}
+.event-body .article-details {
+  align-self: flex-start;
+}
+.event-poster{
+  width: 100%;
+}
+
+ul.picture-gallery > li {
+  height: 150px;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+ul.picture-gallery > li:hover{
+  opacity: 0.9;  
+}
+ul.picture-gallery > li > div{
+  background-size: cover;
+  background-position: 50% 50%;
+  cursor: zoom-in;
+  height: 100%;
+}
+.modal--gallery {
+  max-width: initial;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+.modal--gallery img{
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+}
+.artist-list li a .image-wrapper {
+  -webkit-filter: none;
+  filter: none;
+}
+.buy-tickets > span{
+  display: none;
+}
+.my-location {
+  display: block;
+  margin-top: 0.5rem;
+  margin-left: 0;
+  padding-left: 0;
+}
+.events-email .my-location input {
+  font-size: 18px;
+  padding: .9rem 1rem;
+  margin-bottom: .5rem;
+}
+.my-location label{
+  display: none;
+  margin-left: 0;
+  font-size: 1rem;
+  padding-left: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+.events-email .email-me{
+  font-family: 'Gotham Bold', sans-serif;
+  font-size: 26px;
+  display: block;
+}
+.events-email-signin form{
+  margin-top: 1rem;
+}
+.events-email input,
+.events-email button {
+  width: 100%;
+  margin-top: .5rem;
+}
+.events-email-signin input {
+  font-size: 1rem;
+  padding: .9rem 1rem;
+}
+@media screen and (min-width: 768px){
+  ul.picture-gallery > li {
+    height: 200px;
+  }
+  .toggle-wrapper{
+    text-align: right;
+  }
+  .sign-up-notice {
+    text-align: left;
+  }
+  .my-location,
+  .my-location label,
+  .my-location + button{
+    display: inline-block;
+    width: auto;
+  }
+  .my-location input{
+    width: auto;
+  }
+  .my-location + button{
+    position: relative;
+    top: -1px;
+  }
+  .events-email-signin input,
+  .events-email-signin button {
+    width: auto;
+  }
+}
+@media screen and (min-width: 992px){
+  .events-email .my-location > label {
+    font-family: 'Gotham Bold', sans-serif;
+    font-size: 26px;
+  }
+  .events-email input#locationAutoComplete,
+  .events-email input#eventOptInEmail {
+    font-size: 1rem;
+    padding: .9rem 1rem;
+  }
+  .events--filtered-empty{
+    height: 150px;
+  }
+  .art-list.event-list > li{
+    width: 33.3%;
+  }
+  .event-list li a .hover-wrapper {
+    background: rgba(0,0,0,0.5);
+  }
+  .event-list li a .image-wrapper{
+    transform: perspective(1px) scale(1.1);
+  }
+  .event-list li a:hover .image-wrapper{
+    transform: perspective(1px) scale(1.25);
+  }
+  table.events a.buy-tickets {
+    color: #000;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-right: 1rem;
+    font-weight: bold;
+  }
+
+  table.events a.buy-tickets:hover,
+  table.events a.buy-tickets:active{
+    color: dodgerblue;
+  }
+  table.events a.buy-tickets > i{
+    margin-right: .25rem;
+  }
+  table.events a.buy-tickets > span{
+    display: inline-block;
+    font-size: .85rem;
+    letter-spacing: 1px;
+  }
+}
+@media screen and (min-width: 1200px){
+  .art-list.event-list > li{
+    width: 25%;
+  }
+}
+@media screen and (min-width: 1250px){
+  .my-location,
+  .events-email .email-me{
+    display: inline-block;
+  }
+  .my-location {
+    margin-left: .5rem;
+  }
+}
+@media screen and (min-width: 1600px){
+  .art-list.event-list > li{
+    width: 16.6666%;
+  }
+}
+
+/* Tickets */
+.tickets-footer {
+  text-align: center;
+  color: #fff;
+  padding: 3rem 0;
+  position: relative;
+}
+
+.tickets-footer h3 {
+  margin-bottom: 0.25em;
+}
+

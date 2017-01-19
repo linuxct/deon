@@ -67,8 +67,7 @@ function preLoadImage (src) {
 
 function bgmebro() {
   if (!lstore) return
-  var m = lstore.getItem('bgon') == 'true' ? 'add' : 'remove'
-  document.body.classList[m]('bg')
+  lstore.removeItem('bgon')
 }
 
 function pageIsReady () {

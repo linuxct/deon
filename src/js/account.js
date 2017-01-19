@@ -52,12 +52,6 @@ function saveRedditUsername (e, el) {
   })
 }
 
-function updateBackground (e, el) {
-  if (!lstore) return
-  lstore.setItem('bgon', el.checked)
-  bgmebro()
-}
-
 function enableTwoFactor (e, el) {
   var data = getTargetDataSet(el, false, true)
   if (!data) return
@@ -141,9 +135,6 @@ function completedAccount () {
 }
 
 function transformAccountSettings (obj) {
-  obj.bgon = false
-  if (lstore)
-    obj.bgon = lstore.getItem('bgon') == 'true' ? true : false
   obj.downloadOptions = transformAccountSettings.options.map(function (opt) {
     opt = cloneObject(opt)
     opt.selected = opt.value == obj.preferredDownloadFormat

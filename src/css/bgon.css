@@ -1,0 +1,260 @@
+body.bg {
+  background: #000 url("../img/bg.jpg") 50% 50%;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.bg .mcat-logo .logo-black{
+  display: none;
+}
+.bg .mcat-logo .logo-white{
+  display: block;
+}
+.bg a.no-hover.monstercat-logo:focus {
+    color: white;
+}
+.bg .mcat-mast .mcat-mobile-nav .hamburger-icon .line{
+  background: #fff;
+}
+.bg .scrub{
+  background: rgba(255, 255, 255, 0.5);
+}
+.bg .scrub > .progress,
+.bg header:hover .scrub > .progress{
+  background: white;
+}
+.bg,
+.bg p,
+.bg a,
+.bg button:not(.button--social){
+  color: white;
+}
+.bg a:active,
+.bg a:hover,
+.bg button:active:not(.button--social),
+.bg button:hover:not(.button--social){
+  color: dodgerblue;
+}
+.bg input{
+  color: white;
+}
+.bg .loader{
+  border: 0.25em solid rgba(255,255,255, 0.1);
+  border-top-color: #fff;
+}
+.bg .nav-item::before{
+  background: #aaa;
+}
+.bg tr:nth-child(odd) > td {
+  background: rgba(255,255,255,0.1);
+}
+.bg .line-bottom::after,
+.bg .line-top::before{
+  background: white;
+}
+.bg .button--black:hover {
+  color: dodgerblue;
+  border-color: dodgerblue;
+}
+.bg .button--transparent:hover {
+  border-color: transparent;
+}
+.bg a.no-hover:hover {
+  color: white;
+}
+.bg .social-grid .grey-square {
+  background: rgba(255,255,255,0.08);
+}
+.bg .social-grid .social-grid-wrapper {
+  border-color: rgba(255,255,255,0.08);
+  color: white;
+}
+.bg .scrub-container--mobile .scrub{
+  background: rgba(255,255,255,0.25);
+}
+.bg .mcat-mast .mcat-nav ul li a {
+  color: #fff;
+}
+.bg .mcat-mast .mcat-nav ul li a::after {
+  background: #fff;
+}
+.bg footer .logo-black{
+  display: none;
+}
+.bg footer .logo-white{
+  display: inline;
+  opacity: 0.5;
+}
+.bg .panel,
+.bg .panel p,
+.bg .panel label,
+.bg .panel a{
+  color: black;
+}
+.bg .panel a:active,
+.bg .panel a:hover{
+  color: dodgerblue;
+}
+.bg .panel button:not(.button--social){
+  color: dodgerblue;
+}
+.bg .panel button:active:not(.button--social),
+.bg .panel button:hover:not(.button--social){
+  color: white;
+}
+.bg .panel .button:not(.button--social){
+  color: dodgerblue;
+}
+.bg .panel .button:active:not(.button--social),
+.bg .panel .button:hover:not(.button--social){
+  color: white;
+}
+.bg .panel button.faux {
+  color: #383838;
+}
+.bg .panel button.faux:active,
+.bg .panel button.faux:hover {
+  color: dodgerblue;
+}
+.bg .panel.panel--dark,
+.bg .panel.panel--dark p,
+.bg .panel button.button--cta{
+  color: white;
+}
+.bg .panel button.button--cta:active,
+.bg .panel button.button--cta:hover{
+  background: black;
+  border-color: black;
+  color: white;
+}
+.bg .panel button.button--danger{
+  color: #ef6958;
+  border-color: #ef6958;
+}
+.bg .panel button.button--danger:active,
+.bg .panel button.button--danger:hover{
+  background: #ef6958;
+  border-color: #ef6958;
+  color: white;
+}
+.bg .panel button.button--gold,
+.bg .panel--dark button.button--gold{
+  color: white;
+  border-color: gold;
+}
+.bg .panel button.button--gold:active,
+.bg .panel button.button--gold:hover,
+.bg .panel--dark button.button--gold:active,
+.bg .panel--dark button.button--gold:hover{
+  background: gold;
+  border-color: gold;
+  color: black;
+}
+.bg .panel .button-list > li > a.button{
+  color: dodgerblue;
+  border-color: dodgerblue;
+}
+.bg .panel .button-list > li > a.button:active,
+.bg .panel .button-list > li > a.button:hover{
+  color: white;
+  background: dodgerblue;
+  border-color: dodgerblue;
+}
+.bg .panel .hover-wrapper label{
+  color: white;
+} 
+.bg .panel .loader{
+  border: 0.25em solid rgba(0,0,0, 0.1);
+  border-top-color: #000;
+}
+.bg .panel input{
+  color: black;
+}
+.bg .panel tr:nth-child(odd) > td {
+  background: #f5f5f5;
+}
+.bg .panel table.form tr:nth-child(odd) > td{
+  background: transparent;
+}
+.bg .top-banner .banner-shade {
+  background: rgba(255,255,255,0.75);
+}
+.bg .spotify-wrapper .banner-shade {
+  background: rgba(255,255,255,0.85);
+}
+.bg .top-banner .featured-details h1, 
+.bg .top-banner .featured-details h3, 
+.bg .top-banner .featured-details p,
+.bg .top-banner .early-access-message,
+.bg .top-banner .early-access-message a,
+.bg .top-banner .cl-white .countdown > span {
+  color: #000;
+}
+.bg .top-banner .early-access-message a:hover {
+  color: #666;
+}
+.bg .top-banner .gradient,
+.bg .spotify-wrapper .gradient {
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+.bg .top-banner .latest.cl-white *:not(i):not(:hover) {
+  color: #000;
+}
+.bg .top-banner .line-top,
+.bg .spotify-wrapper .line-top{
+  color: #000;
+}
+.bg .top-banner .line-top::before,
+.bg .spotify-wrapper .line-top::before{
+  background: #000;
+}
+.bg .top-banner .button--cta:active,
+.bg .top-banner .button--cta:hover{
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+.bg .hero .banner .banner-shade {
+  background: rgba(255,255,255,0.65);
+}
+.bg .hero .banner .gradient--inverted {
+  background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 60%, rgba(255,255,255,1) 100%);
+}
+.bg .hero h3.playfair,
+.bg .hero h3.playfair em,
+.bg .hero h1.line-bottom{
+  color: #000;
+}
+.bg .hero h1.line-bottom::after{
+  background: #000;
+}
+.bg .controls,
+.bg .controls.fixed {
+  background: #000;
+}
+.bg .scrub-container--mobile .scrub > .progress,
+.bg header:hover .scrub-container--mobile .scrub > .progress {
+  background: dodgerblue;
+}
+.bg .top-banner-gold p,
+.bg .top-banner-gold h1,
+.bg .top-banner-gold a {
+  color: #000;
+}
+.bg a.button.button--white, 
+.bg .button.button--white {
+    color: #383838;
+}
+.bg a.button.button--white:hover,
+.bg a.button.button--white:active,
+.bg .button.button--white:hover,
+.bg .button.button--white:active{
+    color: #fff;
+}
+.bg .gold-feature-section a.back-to-top {
+  color: #CCC;
+}
+@media screen and (min-width: 992px){
+  .bg .controls{
+    background: transparent;
+  }
+}

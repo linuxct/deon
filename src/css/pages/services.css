@@ -1,0 +1,117 @@
+.services table{
+  margin-bottom: 2rem;
+}
+.services .panel--dark{
+  padding: 2rem 2rem 2.5rem;
+}
+.services .services-form {
+  margin-top: 1rem;
+}
+.services .services-form select{
+  font-family: "Proxima Nova", Open Sans, sans-serif;
+  border: 0;
+  background: transparent;
+  vertical-align: bottom;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  transition: all 0.4s ease;
+}
+.services .services-form select,
+.services .services-form input[type="text"]{
+  height: 51px;
+  background: #eee;
+  padding: 1rem;
+  font-size: 1rem;
+  width: 100%;
+}
+.services .services-form select,
+.services .services-form input[type="text"],
+.services .services-form button{
+  margin: .5rem 0;
+}
+.services button{
+  width: 100%;
+  margin-top: 1rem;
+}
+.services > p {
+  margin-bottom: 1.5rem;
+}
+.services .total-cost{
+  font-size: 2rem;
+  font-weight: bold;
+}
+.services .recurring-warning-germany {
+  padding: 0.5em 0.75em;
+  border: 1px solid #FF0000;
+  background: #FFE0E0;
+  border-radius: 2px;
+  margin-bottom: 0.5em;
+  height: 2.5em;
+  vertical-align: middle;
+  transition: all 0.25s ease, opacity 0.5s ease 0.25s;
+}
+.services .recurring-warning-germany.hide {
+  height: 0px;
+  opacity: 0;
+  margin: 0px;
+  padding: 0px 0.75em;
+  display: block;
+  transition: all 0.25s ease 0.5s, opacity 0.5s ease 0s;
+}
+@media screen and (min-width: 1650px){
+  .services .panel--dark{
+    padding: 2rem 3rem 2.2rem;
+  }
+}
+@media screen and (min-width: 992px){
+  .services .services-form select,
+  .services .services-form input[type="text"],
+  .services button,
+  .services .services-form button{
+    width: auto;
+    margin: 0;
+  }
+}
+.services .panel--dark .services-form input[type="text"]{
+  background: #333;
+  color: white;
+}
+.pricing{
+  font-weight: bold;
+}
+.pricing.pricing--gold{
+  color: gold;
+}
+
+.help-text {
+  font-size: 0.9em;
+  padding: 5px 0 0 2px;
+  color: #333;
+}
+
+.help-text strong {
+  color: #666;
+}
+
+.vendor-help .YouTube,
+.vendor-help .Beam,
+.vendor-help .none,
+.vendor-help .Twitch {
+  display: none;
+}
+
+.vendor-help.YouTube .YouTube {
+  display: inherit;
+}
+
+.vendor-help.Beam .Beam {
+  display: inherit;
+}
+
+.vendor-help.Twitch .Twitch {
+  display: inherit;
+}
+
+.vendor-help.none .none {
+  display: inherit;
+}

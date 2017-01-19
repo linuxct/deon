@@ -1,0 +1,555 @@
+@keyframes slideUpLong {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(150px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+  }
+}
+@keyframes moveDown{
+  from,
+  to{
+    -webkit-transform: translateY(0px);
+  }
+  50%{
+    -webkit-transform: translateY(-20px);
+  }
+}
+
+.slide-up-long {
+  -webkit-animation: slideUpLong 1s ease;
+  animation: slideUpLong 1s ese;
+}
+.slide-down {
+  -webkit-animation: slideDown 1s ease;
+  animation: slideDown 1s ese;
+}
+
+#licensing #licenseForm .row {
+  margin-bottom: 0px;
+}
+
+#licenseForm textarea,
+#licenseForm input{
+  background-color: rgba(0,0,0,0.15);
+  border: 2px solid #fff;
+  border-radius: 3px;
+  box-shadow: 0 0 0;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  margin: 6px 0px;
+  padding: 0px 0 0 12px;
+  width: 99%;
+  outline: none;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+}
+#licenseForm textarea::-webkit-input-placeholder,
+#licenseForm input::-webkit-input-placeholder{
+  color: #ddd;
+}
+
+#licenseForm input[type="text"]:focus, 
+#licenseForm input[type="email"]:focus,
+#licenseForm textarea:focus{
+  background: rgba(0,0,0,0.35);
+  border-color: #000;
+  outline: 0;
+  box-shadow: 0 0 0;
+}
+#licenseForm textarea {
+  display: block;
+  height: 112px;
+  padding-top: 12px;
+}
+#licenseForm input[type=text], 
+#licenseForm input[type=email] {
+  height: 50px;
+}
+#licenseForm input[type=submit] {
+  padding:15px 25px;
+  border-color:transparent;
+  background: rgba(250,250,250,1);
+  color: #555;
+  text-transform: uppercase;
+  font-size:12px;
+  max-width: 200px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+#licenseForm input[type=submit]:hover {
+  background:rgba(0,0,0,.6);
+  border-color:transparent;
+  color:#fff;
+  outline: none;
+}
+.licensebox {
+  background:transparent;
+  padding: 0 0 3rem 0;
+}
+.hero-scroll-icon{
+  position: absolute;
+  bottom: 40px;
+  text-align: center;
+  width: 100%;
+  opacity: 0;
+}
+.hero-scroll-icon > i{
+  color: #fff;
+  font-size: 1.75rem;
+  animation: moveDown 2s infinite ease;
+}
+.license{
+  color: #fff;
+  background: -webkit-linear-gradient(transparent 25%, rgba(0,0,0,.35) 75%) !important;
+  background: linear-gradient(transparent 25%, rgba(0,0,0,.35) 75%) !important;
+}
+.license::before,
+.license::after{
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.license::before{
+  background: #000;
+  z-index: -2;
+}
+.license::after{
+  background: #000 0% 0% no-repeat;
+  background-size: cover;
+  background-position: 50% 75%;
+  transition: opacity 0.4s 1s ease;
+  opacity: 0;
+  z-index: -1;
+}
+.license.first::after{
+  opacity: 1;
+  background: #000 url("/img/licensing.jpg") 50% 50% no-repeat;
+}
+.license.second::after{
+  opacity: 1;
+  background: #000 url("/img/licensing2.jpg") 50% 50% no-repeat;
+}
+.license.third::after{
+  opacity: 1;
+  background: #000 url("/img/licensing3.jpg") 50% 50% no-repeat;
+}
+.license.four::after{
+  opacity: 1;
+  background: #000 url("/img/licensing4.jpg") 50% 50% no-repeat;
+}
+.license.fifth::after{
+  opacity: 1;
+  background: #000 url("/img/licensing5.jpg") 50% 50% no-repeat;
+}
+.license.first::after,
+.license.second::after,
+.license.third::after,
+.license.four::after,
+.license.fifth::after{
+  background-size: cover;
+}
+.license form .left-wrapper {
+  padding-left: 0;
+  padding-right: 0.3rem;
+}
+.license form .right-wrapper {
+  padding-left: 0.3rem;
+  padding-right: 0;
+}
+.licensebox > h3{
+  color: #fff;
+  padding-bottom: 2rem;
+}
+.licensing-what{
+  padding: 3em 15px;
+}
+.connect-header{
+  min-height: initial;
+  background: -webkit-linear-gradient(#1f1f23, #37363d);
+  background: linear-gradient(#1f1f23, #37363d);
+  text-align: center;
+}
+.connect-header > img{
+  max-width: 1400px;
+  width: 95%;
+}
+.licensing-body{
+  padding: 2em 0;
+}
+.licensing-body .vertical-line-list{
+  list-style: none;
+  margin-left: 0;
+}
+.licensing-body .vertical-line-list > li{
+  border-left: 3px solid #000;
+  margin: 5px 0;
+  padding-left: 8px;
+  vertical-align: text-top;
+}
+.client-list li{
+  display: inline-block;
+  width: 100%;
+}
+
+#errorForm{
+  width: 100%;
+  background: #FA4040;
+  color: #fff;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: .5rem;
+  line-height: 1em;
+  overflow: hidden;
+  height: 0px;
+  transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+}
+#errorForm.shown {
+  padding: 8px 12px;
+  height: 30px;
+}
+
+#licenseForm input[type=submit].submitted{
+  background-color: #DFF6DF !important;
+  border-color: #DFF6DF !important;
+  color: #6CA36C !important;
+  cursor: auto;
+}
+
+@media screen and (min-width: 768px){
+  .license{
+    overflow: hidden;
+  }
+  .sticked-bottom{
+    position: relative;
+    bottom: 0;
+  }
+  .license > .hero-wrapper > .row{
+    top: initial;
+    bottom: 90px;
+    margin: auto;
+    position: absolute;
+  }
+  .licensebox{
+    padding: 1em 0 0 0;
+  }
+  .header.hero {
+    text-align: left;
+    padding-bottom:0em;
+  }
+  .bottom-keys > h2{
+    font-size: 2.4rem;
+  }
+  .hero-wrapper {
+    height: auto;
+    padding: 0;
+  }
+  #licenseForm input[type=submit]{
+    padding: 15px 35px;
+    max-width: initial;
+    float: none;
+  }
+  .client-list li{
+    width: 48.5%;  
+  }
+  .team{
+    text-align: left;
+  }
+  .hero-scroll-icon{
+    opacity: 1;
+    bottom: 10px;
+  }
+}
+@media screen and (min-width: 960px){
+  .bottom-keys > ul > li{
+    float: left;
+  }
+  .bottom-keys > ul > li:nth-child(even)::before{
+    content: "/";
+    display: inline-block;
+    margin: 0 .2em;    
+  }
+}
+@media screen and (min-width: 992px){
+  #licenseForm input[type=submit]{
+    float: right;
+  }
+  .bottom-keys > h2{
+    font-size: 2.75rem;
+  }
+}
+@media screen and (min-height: 900px){
+  .license > .hero-wrapper > .row{
+    margin: 3rem auto;
+  } 
+}
+
+#licenseForm .row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.licensing {
+  background: center center no-repeat;
+  background-size: cover;
+  padding: 3em 0 4em;
+  font-size: 16px;
+  position: relative;
+  min-height: 50vh
+}
+
+.licensing.v-stretch {
+  min-height: 85vh;
+}
+
+#licensing.first {
+  background-image: url('/img/licensing.jpg');
+}
+
+#licensing.second {
+  background-image: url('/img/licensing2.jpg');
+}
+
+#licensing.third {
+  background-image: url('/img/licensing3.jpg');
+}
+
+#licensing.fourth {
+  background-image: url('/img/licensing4.jpg');
+}
+
+#licensing.fifth {
+  background-image: url('/img/licensing5.jpg');
+}
+
+.licensing h1 {
+  color: #fff;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+h2#faq {
+  margin-top: 1em;
+}
+
+.licensing .licensing-box {
+  color: #fff;
+}
+
+.md-container .licensing-box{
+  margin-bottom: 2rem;
+}
+
+.md-container .licensing-box:last-child{
+  margin-bottom: 0;
+}
+
+.licensing ul.selling-points {
+  list-style-position: inside;
+  font-size: 1.1em;
+  margin: 0.8em 0 1em 0.5em;
+}
+
+.licensing .row {
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 2em;
+}
+
+.licensing h3 {
+  font-size: 2rem;
+}
+
+.licensing .button {
+  text-align: center;
+}
+
+.licensing .cta-email {
+  margin-top: 0.2em;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+
+.licensing .licensing-ctas .button--cta:first-of-type {
+  margin-right: 3%;
+}
+
+.button .at {
+  font-size: 1.1em;
+  font-family: arial;
+}
+
+.button .title {
+  display: block;
+  font-size: 1.5em;
+  margin-bottom: 0.25em;
+}
+
+.button .subtitle { 
+  display: block;
+  font-size: 1em;
+  text-transform: none;
+}
+
+.licensing .licensing-cta-content-creators {
+  float: left;
+  width: 100%;
+}
+
+.button--youtube,
+.cta-content-creators {
+  background: #bb0000;
+  border-color: #bb0000;
+  color: #ffffff;
+}
+
+.button--youtube:hover,
+.cta-content-creators:hover {
+  background: transparent;
+  color: white;
+  border-color: #bb0000;
+}
+
+.panel .button--youtube:hover {
+  background: #ffffff;
+  color: #bb0000;
+}
+
+.cta-commercial:hover{
+  background: transparent;
+  color: white;
+}
+
+.button--twitch {
+  background: #6441A5;
+  border-color: #6441A5;
+  color: #ffffff;
+}
+.button--twitch:hover {
+  background: transparent;
+}
+
+.panel .button--twitch:hover {
+  background: #fff;
+  color: #6441A5;
+}
+
+.panel .button--beam:hover {
+  color: #536dfe;
+}
+
+.button--beam {
+  background: #536dfe;
+  border-color: #536dfe;
+  color: #ffffff;
+}
+
+.button--beam:hover {
+  background: transparent;
+}
+
+.licensing .more-info {
+  text-align: center;
+  clear: both;
+  padding: 1em 0 0 0;
+}
+
+.licensing-box ul.clients {
+  list-style: inside none;
+  padding: 0.5em 0 0 0;
+}
+
+.licensing-box ul.clients li {
+  border-left: 3px solid #000;
+  margin: 5px 0;
+  padding-left: 8px;
+  vertical-align: text-top;
+  width: 48.5%;
+  display: inline-block;
+}
+
+.licensing-box--margin .selling-points{
+  padding-bottom: 4px;
+}
+
+.licensing-content-creator-info {
+  padding-top: 2em;
+}
+
+blockquote {
+  border-left: 0.25em solid #b7b7b7;
+  padding: 0.25em 0 0.25em 1em;
+  margin: 0.25em 0 1em 0;
+  color: #5a5a5a;
+}
+
+blockquote code {
+  color: #5a5a5a;
+  background: #e2e2e2;
+}
+
+/** MODAL **/
+
+.modal--licensing .section {
+  margin-bottom: 2em;
+}
+
+.modal--licensing .section.youtube {
+  margin-bottom: 0em;
+}
+
+.modal--licensing .content-creators .button--cta {
+  min-width: 200px;
+}
+
+.modal--licensing .button--cta {
+  text-align: center;
+}
+.faq h4 {
+  margin-top: 2em;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+.faq h4:first-of-type {
+  margin-top: 0em;
+}
+@media screen and (min-width: 768px){
+  #licenseForm .col-sm-6 {
+    padding-right: 4px;
+  }
+
+  .licensing .licensing-cta-content-creators .button {
+    width: 32%;
+    display: block;
+    float: left;
+  }
+
+  .licensing .licensing-cta-content-creators .button:nth-of-type(2n) {
+    margin-right: 1.5%;
+    margin-left: 1.5%;
+  }
+
+}

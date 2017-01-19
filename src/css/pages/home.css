@@ -1,0 +1,384 @@
+.early-access-message {
+  margin-top: 0.5em;
+}
+
+.hero {
+  text-align: right;
+  padding: 5rem 0;
+  position: relative;
+}
+
+.hero h1 {
+  width: 90%;
+  max-width: 990px;
+  margin-right: 0;
+  margin-left: auto;
+  font-size: 38px;
+  line-height: 1.1;
+}
+
+.hero .playfair {
+  margin-bottom: 1rem;
+}
+
+.art-list--full-width.art-list li{
+  padding: 0;
+  padding-bottom: 2%;
+  padding-right: 1%;
+  position: relative;
+}
+
+.art-list li.in-early-access .image-wrapper:before {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  background: #1a1a1a;
+  color: gold;
+  height: 26px;
+  line-height: 26px;
+  font-size: 16px;
+  text-align: center;
+  margin-left: -75px;
+  margin-top: -13px;
+  border-radius: 3px;
+  opacity: 0.9;
+  content: "Gold Early Access";
+  z-index: 5;
+  border: 1px solid gold;
+  box-shadow: 0px 0px 10px 1px #000
+}
+
+.latest .art-list--full-width.art-list li:nth-child(7),
+.latest .art-list--full-width.art-list li:nth-child(8){
+  display: none;
+}
+
+p.date{
+  margin: 1rem 0;
+  font-size: 1.15rem;
+  color: #999;
+}
+.cl-white p.date{
+  color: #aaa;
+}
+
+h1.title {
+  margin: 1rem 0 .35rem;
+}
+
+p.date{
+  margin: .5rem 0 1rem;
+}
+
+p.description{
+  margin: 0 0 1rem;
+}
+.article-details{
+  align-self: center;
+  padding: 2rem;
+}
+.article-banner {
+  height: 350px;
+}
+
+.social .spotify-wrapper, 
+.social .followers {
+  padding: 4rem 0;
+}
+.spotify-wrapper{
+  position: relative;
+}
+
+.spotify-playlists{
+  margin-top: 2rem;
+}
+.spotify-playlists{
+  list-style: none;
+  font-size: 0;
+  text-align: right; 
+}
+.spotify-playlists > li {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+}
+
+.spotify-playlists > li > a{
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.spotify-playlists > li .spotify-title{
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 0;
+  height: 3rem;
+  text-align: center;
+}
+
+.spotify-playlists > li .spotify-artwork{
+  height: 150px;
+  background-color: #222;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.spotify-playlists > li .spotify-title h2{
+  text-transform: uppercase;
+  font-size: 1.75rem;
+  display: inline-block;
+  padding: .5rem 1rem;
+  border: 4px solid rgba(255,255,255,0);
+  mix-blend-mode: overlay;
+  transform: perspective(1px) scale(1);
+  transition: transform 0.4s ease, border-color 0.6s ease;
+}
+.spotify-playlists > li a:hover .spotify-artwork{
+  transform: perspective(1px) scale(1.25);
+}
+.spotify-playlists > li a:hover .spotify-title h2{
+  transform: perspective(1px) scale(0.85);
+  mix-blend-mode: normal;
+  border-color: white;
+}
+ul.social-grid {
+  width: 100%;
+  padding: 0;
+  margin-top: 2.65rem;
+  font-size: .85em;
+}
+.social-grid .social-grid-wrapper {
+  text-align: center;
+  border: 2px solid rgba(0,0,0,.08);
+  color: #000;
+}
+.social-grid .social-grid-wrapper::before {
+  content: "";
+  display: block;
+  float: left;
+}
+.social-grid-wrapper > div {
+  display: inline-block;
+  width: 50%;
+  vertical-align: middle;
+  position: relative;
+}
+
+.social-grid > li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  height: auto;
+  clear: both;
+  font-size: 0;
+  position: relative;
+}
+.social-grid .icon > i {
+  font-size: 2rem;
+}
+.social-grid .stats{
+  height: 100%;
+}
+.social-grid .stats .stats-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+.social-grid .stats .stats-wrapper h3, 
+.social-grid .stats .stats-wrapper p{
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+}
+.social-grid .stats .stats-wrapper h3{
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.social-grid .grey-square {
+  background: rgba(0,0,0,.08);
+}
+
+.social-grid .social-grid-wrapper{
+  -webkit-transition: background 0.7s ease, color .6s ease, border-color .4s ease;
+  transition: background 0.7s ease, color .6s ease, border-color .4s ease;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  width: 50%;
+  height: 88px;
+  font-size: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.social-grid .social-grid-wrapper:focus::before,
+.social-grid .social-grid-wrapper:hover::before{
+  transform: perspective(500px) rotateY(0deg);
+}
+.social-grid .social-grid-wrapper::before{
+  content:"";
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+  transform: perspective(500px) rotateY(90deg);
+  transform-origin: 50% 50%;
+  background: #222;
+  position: absolute;
+  left: 0;
+  padding: 0;
+  z-index: 0;
+}
+.social-grid .social-grid-wrapper:focus,
+.social-grid .social-grid-wrapper:hover{
+  background: #222;
+  border-color: #222;
+  color: #fff;
+}
+.social-grid .social-grid-wrapper.youtube:focus,
+.social-grid .social-grid-wrapper.youtube:hover{
+  border-color: #cd201f;
+}
+.social-grid .social-grid-wrapper.twitter:focus,
+.social-grid .social-grid-wrapper.twitter:hover{
+  border-color: #55acee;
+}
+.social-grid .social-grid-wrapper.facebook:focus,
+.social-grid .social-grid-wrapper.facebook:hover{
+  border-color: #3b5998;
+}
+.social-grid .social-grid-wrapper.instagram:focus,
+.social-grid .social-grid-wrapper.instagram:hover{
+  border-color: #3f729b;
+}
+.social-grid .social-grid-wrapper.spotify:focus,
+.social-grid .social-grid-wrapper.spotify:hover{
+  border-color: #2ebd59;
+}
+.social-grid .social-grid-wrapper.twitch:focus,
+.social-grid .social-grid-wrapper.twitch:hover{
+  border-color: #6441a5;
+}
+.social-grid .social-grid-wrapper.soundcloud:focus,
+.social-grid .social-grid-wrapper.soundcloud:hover{
+  border-color: #ff8800;
+}
+.social-grid .social-grid-wrapper.apple:focus,
+.social-grid .social-grid-wrapper.apple:hover{
+  border-color: #0F79CE;
+}
+.social-grid .social-grid-wrapper.youtube:before{
+  background: #cd201f;
+}
+.social-grid .social-grid-wrapper.twitter:before{
+  background: #55acee;
+}
+.social-grid .social-grid-wrapper.facebook:before{
+  background: #3b5998;
+}
+.social-grid .social-grid-wrapper.instagram:before{
+  background: #3f729b;
+}
+.social-grid .social-grid-wrapper.spotify:before{
+  background: #2ebd59;
+}
+.social-grid .social-grid-wrapper.twitch:before{
+  background: #6441a5;
+}
+.social-grid .social-grid-wrapper.soundcloud:before{
+  background: #ff8800;
+}
+.social-grid .social-grid-wrapper.apple:before{
+  background: #0F79CE;
+}
+
+@media screen and (min-width:768px){
+  .spotify-playlists > li .spotify-artwork{
+    height: 173px;
+  }
+  .social-grid .social-grid-wrapper{
+    height: 145px;
+  }
+}
+@media screen and (min-width: 992px){
+  .hero h1{
+    font-size: 54px;
+  }
+  .article-wrapper {
+    max-width: 80%;
+  }
+  .article-banner{
+    height: 500px;
+  }
+  .col-md-last + .article-details > .article-wrapper {
+    margin-left: auto;
+    margin-right: 0;
+  }
+  .article-details{
+    padding: 0;
+    padding-left: 2rem;
+  }
+  .col-md-last + .article-details {
+    padding-left: 0;
+  }
+  .col-md-last + .article-details h2,
+  .col-md-last + .article-details p.description {
+    padding-right: 2rem;
+  }
+  .spotify-playlists > li {
+    width: 50%; 
+    padding: .5rem 0 0 .8rem;
+  }
+  .spotify-playlists > li .spotify-artwork{
+    height: 223px;
+  }
+  .social-grid .social-grid-wrapper{
+    height: 113px;
+  }
+  .social-grid .stats .stats-wrapper p{
+    font-size: 1rem;
+  }
+  .social-grid .stats .stats-wrapper h3{
+    font-size: 1.3rem;
+  }
+  .latest .art-list--full-width.art-list li:nth-child(7),
+  .latest .art-list--full-width.art-list li:nth-child(8){
+    display: inline-block;
+  }
+}
+@media screen and (min-width: 1200px){
+  .latest .art-list--full-width.art-list li:nth-child(7),
+  .latest .art-list--full-width.art-list li:nth-child(8){
+    display: none;
+  }
+}
+@media screen and (min-width: 1300px){
+  .spotify-playlists > li .spotify-artwork{
+    height: 301px;
+  }
+  .social-grid .social-grid-wrapper{
+    width: 50%;
+    height: 152px;
+  }
+  .article-banner{
+    height: 450px;
+  }
+  .social-grid .icon > i {
+    font-size: 3rem;
+  }
+}
+@media screen and (min-width: 1800px){
+  .latest .art-list--full-width.art-list li:nth-child(7),
+  .latest .art-list--full-width.art-list li:nth-child(8){
+    display: inline-block;
+  }
+}

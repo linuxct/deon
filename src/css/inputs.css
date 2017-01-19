@@ -1,0 +1,554 @@
+th.shrink, td.shrink {
+  white-space: nowrap;
+  width: 1px;
+}
+
+th.nohpad, td.nohpad {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+tr:nth-child(odd) > td {
+  background: #f5f5f5;
+}
+
+table.form td, table.form th {
+  font-size: 18px;
+  padding: 0.5em 0;
+}
+
+table.form tr:nth-child(odd) > td {
+  background: transparent;
+}
+
+table.form input {
+  font-size: 18px;
+  transition: border-color .3s ease;
+}
+
+table.form select{
+  width: 220px;
+}
+
+table.form th {
+  width: 270px;
+}
+
+table.form th label{
+  font-weight: normal;
+}
+
+a.blue{
+  color: dodgerblue;
+  text-decoration: none;
+}
+
+.button{
+  display: inline-block;
+  margin-bottom: .2rem;
+}
+button,
+.button {
+  background: transparent;
+  color: dodgerblue;
+  border: solid 3px dodgerblue;
+  text-decoration: none;
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 15px 17px 15px 20px;
+  -webkit-transition: background 0.5s ease, color 0.4s ease, border-color 0.5s ease, all 0.4s ease;
+  transition: background 0.5s ease, color 0.4s ease, border-color 0.5s ease, all 0.4s ease;
+}
+button:active,
+button:hover,
+.button:active,
+.button:hover{
+  background: dodgerblue;
+  color: white;
+}
+.button-group{
+  margin: 1.5rem 0 0rem;
+}
+.button-group--margin{
+  margin-bottom: 1rem;
+}
+.button-group--center .button{
+  text-align: center;
+}
+.button--cta{
+  background: dodgerblue;
+  color: white;
+}
+.button--white,
+.cl-white .button--white {
+  background: white;
+  color: #383838;
+  border-color: white;
+}
+.button--white:active,
+.button--white:hover,
+.cl-white .button--white:active,
+.cl-white .button--white:hover {
+  background: #383838;
+  border-color: #383838;
+  color: white;
+}
+.button--cta:active,
+.button--cta:hover{
+  background: black;
+  border-color: black;
+  color: white;
+}
+.button--release-cta {
+  padding: 8px 10px 8px 13px;
+}
+.cl-white .button--cta:active,
+.cl-white .button--cta:hover{
+  background: white;
+  border-color: white;
+  color: black;
+}
+.button--danger{
+  color: #ef6958;
+  border-color: #ef6958;
+}
+.button--danger:active,
+.button--danger:hover{
+  background: #ef6958;
+  border-color: #ef6958;
+  color: white;
+}
+.button--fb{
+  border-color: #3b5998;
+  color: #3b5998;
+}
+.button--fb:active,
+.button--fb:hover{
+  color: white;
+  background: #3b5998;
+}
+.button--fb > i{
+  transition: color 0.4s ease;
+  color: #3b5998;
+}
+.button--fb:active > i,
+.button--fb:hover > i{
+  color: white;
+}
+.button--g{
+  border-color: #34a853;
+  color: #34a853;
+}
+.button--g:active,
+.button--g:hover{
+  color: white;
+  background: #34a853;
+}
+.button--g > i{
+  transition: color 0.4s ease;
+  color: #34a853;
+}
+.button--g:active > i,
+.button--g:hover > i{
+  color: white;
+}
+.button--gold{
+  color: white;
+  border-color: gold;
+}
+.button--gold:active,
+.button--gold:hover{
+  color: black;
+  background: gold;
+}
+.button--gold-light {
+  color: goldenrod;
+  background: none;
+  border-color: goldenrod;
+}
+.button--gold-light:hover {
+  color: black;
+  background: gold;
+  border-color: gold;
+}
+.button--black{
+  color: #000;
+  border-color: #ddd;
+  background: transparent;
+}
+.button--black:active,
+.button--black:hover{
+  color: #000;
+  border-color: #000;
+  background: transparent;
+}
+.button--icon > i {
+  font-weight: normal;
+  font-size: 0.5rem;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  left: 0;
+  position: relative;
+  margin-left: 5px;
+  transition: left 0.5s;
+  transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+}
+.button--icon:focus > i, 
+.button--icon:hover > i {
+  left: 5px;
+}
+.button--icon-left > i{
+  margin-left: 0;
+  margin-right: 5px;
+}
+.button--icon-left:focus > i, 
+.button--icon-left:hover > i {
+  left: -5px;
+}
+.button--transparent,
+.button--transparent:active,
+.button--transparent:hover{
+  border-color: transparent;
+  background-color: transparent;
+}
+
+button.faux {
+  border: none;
+  background: transparent;
+  font-size: 100%;
+  padding: 0;
+  color: #383838;
+}
+
+button.faux:active,
+button.faux:hover{
+  color: dodgerblue;
+  background: transparent;
+}
+
+button.select {
+  padding: 7px 10px 8px 4px;
+}
+
+button.select select {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  color: dodgerblue;
+  transition: color 0.4s ease;
+  cursor: pointer;
+}
+
+button.select:focus,
+button.select:hover{
+  background: transparent;
+  color: dodgerblue;
+}
+
+input.round {
+  border: solid 3px #d4d4d4;
+  font-size: 16px;
+  border-radius: 22px;
+  padding: 8px 18px;
+  transition: border-color 0.5s ease;
+}
+input.round:focus{
+  border-color: dodgerblue;
+}
+
+label {
+  display: inline-block;
+  font-size: 1rem;
+}
+
+label[for] {
+  cursor: pointer;
+}
+
+[type="radio"] {
+  border: 0; 
+  clip: rect(0 0 0 0); 
+  height: 1px; margin: -1px; 
+  overflow: hidden; 
+  padding: 0; 
+  position: absolute; 
+  width: 1px;
+}
+
+[type="radio"] + span {
+  display: block;
+}
+
+[type="radio"] + span:before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.25em;
+  border-radius: 1em;
+  border: 0.125em solid #fff;
+  box-shadow: 0 0 0 0.15em #000;
+  margin-right: 0.75em;
+  transition: 0.5s ease all;
+}
+
+[type="radio"]:checked + span:before {
+  background: dodgerblue;
+  box-shadow: 0 0 0 0.25em dodgerblue;
+}
+
+[type="radio"]:focus + span{
+  transition: text-shadow 0.4s ease;
+}
+[type="radio"]:focus + span{
+  text-shadow: 0 0 20px rgba(30, 144, 255, 0.41)
+}
+[type="radio"] + span > i {
+  font-size: 2rem;
+  vertical-align: middle;
+  margin-right: 1.5rem;
+}
+[type="radio"]:checked + span > i {
+  color: dodgerblue;
+}
+
+.toggle-label {
+  display: inline-block;
+  margin: 0 .5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.toggle-wrapper {
+  margin-top: 1rem;
+}
+.toggle {
+  width: 50px;
+  height: 20px;
+  position: relative;
+  border-radius: 100px;
+  background-color: #ddd;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+.toggle > .check {
+  position: absolute;
+  display: block;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 6;
+}
+.toggle > .check:checked ~ .track {
+  box-shadow: inset 0 0 0 20px dodgerblue;
+}
+.toggle > .check:checked ~ .switch {
+  right: 2px;
+  left: 22px;
+  transition: .35s cubic-bezier(0.785, 0.135, 0.150, 0.860);
+  transition-property: left, right;
+  transition-delay: .05s, 0s;
+  }
+.toggle > .switch {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  right: 22px;
+  background-color: #fff;
+  border-radius: 36px;
+  z-index: 1;
+  transition: .35s cubic-bezier(0.785, 0.135, 0.150, 0.860);
+  transition-property: left, right;
+  transition-delay: 0s, .05s;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.toggle > .track {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transition: .35s cubic-bezier(0.785, 0.135, 0.150, 0.860);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.05);
+  border-radius: 40px;
+}
+
+.form-block > label {
+  font-weight: bold;
+  font-size: 18px;
+  padding: .5em 0;
+  margin-right: 1rem;
+}
+.form-block > label.regular{
+  font-weight: normal;
+}
+
+.form-row {
+  font-size: 1rem;
+}
+@media screen and (min-width: 992px){
+  .form-inline .form-block{
+    display: inline-block;
+    width: auto;
+    margin-left: 1rem;
+  }
+  .form-inline .form-block:first-child{
+    margin-left: 0;
+  }
+  .form-inline .form-block.button-group{
+    margin-left: 1.5rem;
+    margin-top: 0;
+  }
+  .form-inline .form-block > label{
+    margin-right: .25rem;
+  }
+}
+@media screen and (max-width: 992px){
+  table.form.mobile th,
+  table.form.mobile td{
+    display: block;
+    clear: both;
+    width: 100%;
+    max-width: initial;
+    position: relative;
+  }
+
+  table.form.mobile td > input{
+    width: 100%;
+    max-width: initial;
+    background: #eee;
+    padding: 1rem;
+  }
+  table.form.mobile td > input,
+  table.form.mobile td > button{
+    display: inline-block;
+  }
+  table.form.mobile td > button.password{
+    position: absolute;
+    right: 1rem;
+    top: 1.5rem;
+  }
+  table.form.mobile select{
+    width: 100%;
+    padding: 1rem;
+    height: 55px;
+  }
+  .button-group{
+    font-size: 0;
+  }
+  .button-group .button--full {
+    width: 100%;
+  }
+  .button-group .button--half{
+    width: 50%;
+    margin: 0;
+  }
+  .button-group ~ a{
+    margin: .25rem auto;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+  a.button--mobile,
+  button.button--mobile {
+    padding: .5rem;
+    font-size: 1.65rem;
+  }
+  .panel.panel--mobile {
+    box-shadow: none;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px;
+  }
+  .release.container {
+    width: 100%;
+  }
+  .button-cta--mobile {
+    padding: 8px 10px 8px 10px;
+  }
+  button.button-cta--mobile .title,
+  button.button-cta--mobile .subtitle,
+  a.button-cta--mobile .subtitle,
+  a.button-cta--mobile .title {
+    font-size: 1em;
+    font-weight: normal;
+  }
+  .modal--licensing > .panel {
+    padding: 1em;
+  }
+
+  div.modal--licensing {
+    max-height: 90%;
+    margin: 5% auto;
+    overflow: auto;
+  }
+}
+
+/* best of specifics */
+.tabs-content > div{
+  animation: scalingModal .45s ease 1 forwards;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.tab-button:focus,
+.tab-button:hover,
+.tab-button {
+  border-color: transparent;
+  background-color: transparent;
+  color: #777;
+  cursor: default;
+}
+.tab-button.active {
+  border-bottom-color: dodgerblue;
+  font-weight: bold;
+  color: dodgerblue;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.tabs-content > .tabs-section:first-child .button-group button:first-child {
+  display: none;
+}
+.tabs-nav .tab-button {
+  margin: 2px 0;
+}
+.tabs table.form th {
+  width: initial;
+}
+input.filter-search {
+  padding: .65rem 2rem;
+  width: 90%;
+  max-width: 300px;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: .5rem;
+}
+.bottom-cta img{
+  max-width: 100%;
+  width: auto;
+  margin: 35px auto 0;
+}
+.anchor-highlight {
+  background: #ffffad;
+  transition: background 0.5s linear;
+  -webkit-transition: background 0.5s linear;
+}
+.anchor-highlight.anchor-highlight-off {
+  background: transparent;
+}
+.or {
+  padding: 0 0.5em;
+  color: #666;
+}
+.countdown {
+  font-size: 1.3em;
+}

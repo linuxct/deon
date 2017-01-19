@@ -1,0 +1,103 @@
+.top-banner-gold .button--gold {
+    background: gold;
+    color: black;
+}
+.top-banner-gold .button--gold:active,
+.top-banner-gold .button--gold:hover{
+    background: black;
+    border-color: black;
+    color: gold;
+}
+
+ul.gold-perks a {
+  text-decoration: none;
+}
+
+ul.gold-perks ~ p{
+  font-weight: bold;
+}
+
+.gold-banner > .flex{
+  padding: 5rem 0;
+}
+
+ul.gold-perks li {
+  list-style: none;
+  position: relative;
+  transition: all 0.3s ease;
+  line-height: 1.7;
+  left: 0;
+  color: #000;
+}
+
+ul.gold-perks li a{
+  display: block;
+}
+
+ul.gold-perks li::before {
+  content: "\f054";
+  font-family: "FontAwesome";
+  font-size: 0.65rem;
+  display: block;
+  padding-top: .3rem;
+  position: absolute;
+  left: -.85rem;
+}
+
+ul.gold-perks li:hover{
+  left: .25rem;
+  color: dodgerblue;
+}
+
+section.gold-feature-section {
+  padding-bottom: 0em;
+  padding-top: 0em;
+}
+
+section.gold-feature-section#reddit {
+  background-position: top left;
+}
+
+
+.gold-feature-section a.back-to-top {
+  color: #777;
+  font-size: 0.9em;
+}
+
+.gold-feature-section a + a.back-to-top {
+  margin-left: 0.5em;
+}
+
+.gold-feature-section h2{
+  margin-bottom: 1rem;
+}
+
+.gold-footer-cta {
+  text-align: center;
+  color: #fff;
+  padding: 7rem 0;
+  position: relative;
+}
+
+.gold-footer-cta h2 {
+  margin-bottom: 1rem;
+}
+
+.top-banner-gold .banner {
+  opacity: 0.15;
+  background-color: #f2f7f0;
+}
+.top-banner-gold .flex {
+  padding: 3rem 1rem 3.5rem;
+}
+.top-banner-gold ul.gold-perks{
+  padding-left: 1.5rem;
+}
+@media screen and (min-width: 992px){
+  .top-banner-gold .flex > div{
+    padding: 0 1rem;
+  }
+  .top-banner-gold .banner {
+    opacity: 1;
+  }
+}

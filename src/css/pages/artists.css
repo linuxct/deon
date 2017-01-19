@@ -1,0 +1,98 @@
+.discography.art-list--full-width li {
+  padding: 0;
+  padding-right: 1%;
+  padding-top: 2%;
+}
+
+.panel .button-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 0;
+  margin-bottom: 2rem;
+}
+.panel .button-list > li{
+  display: inline-block;
+  width: 50%;    
+}
+.panel .button-list > li > a{
+  text-align: center;
+  width: 100%;
+  border-right-width: 0px;
+}
+.panel .button-list > li:nth-child(even) > a{
+  border-right-width: 3px;
+}
+.panel .button-list .selected-year{
+  background: dodgerblue;
+  color: white;
+}
+.panel select.select-year{
+  padding: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.artist-list li label.title {
+  margin-top: 0;
+}
+.hover-wrapper{
+  position: relative;
+  bottom: 0px;
+  width: 100%;
+  padding: .5rem;
+  color: #fff;
+  background: #000;
+  text-align: center;
+}
+
+@media screen and (min-width: 992px){
+  .panel .button-list{
+    display: flex;
+  }
+  .panel .button-list > li{
+    width: initial;
+    flex: 1;    
+  }
+  .panel .button-list > li:nth-child(even) > a{
+    border-right-width: 0px;
+  }
+  .panel .button-list > li:last-child > a{
+    border-right: 3px solid dodgerblue;
+  }
+  .artist-list li a {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: hidden;
+  }
+  .artist-list li a .image-wrapper{
+    transition: transform 0.6s ease, filter 0.5s ease, -webkit-filter 0.5s ease;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+  }
+  .artist-list li a:hover .image-wrapper{
+    transform: translateY(-25px);
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+  }
+  .hover-wrapper {
+    transition: bottom 0.4s ease;
+    position: absolute;
+    bottom: 0px;
+    padding: 1rem;
+  }
+  .artist-list li a:hover .hover-wrapper{
+    bottom: 0px;
+  }
+
+  .art-list.artist-list > li{
+    width: 25%;
+  }
+}
+
+@media screen and (min-width: 2000px){
+  .art-list.artist-list > li{
+    width: 16.66%;
+  }
+}
