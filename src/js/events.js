@@ -28,7 +28,7 @@ function transformEvent (i) {
   i.dateString = formatDate(i.startDate)
   i.date = formatDateJSON(i.startDate)
   i.icalDownloadLink = endpoint + '/events/addtocalendar/' + i._id
-  if(i.featured) {
+  if(i.vanityUri) {
     i.url = '/event/' + i.vanityUri
     i.externalUrl = false
   }
