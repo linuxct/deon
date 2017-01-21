@@ -100,6 +100,9 @@ tr.featured {
   background: dodgerblue;
   color: white;
 }
+tr:nth-child(odd).featured > td{
+  background: dodgerblue;
+}
 tr.featured td.title .time, 
 tr.featured td.location .city,
 tr.featured td.title .name a,

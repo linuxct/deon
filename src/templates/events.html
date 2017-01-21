@@ -158,41 +158,46 @@
   {{#data}}
       <table class="events" role="upcoming-table">
       {{#results}}
-      <tr {{#featured}}class="featured"{{/featured}}>
-        <td class="date">
-          <div>
-            <span class="month">{{localMonth}}</span>
-            <span class="day">{{localDay}}</span>
-          </div>
-        </td>
-        <td class="title">
-          <div>
-            <span class="name">
-              <a class="silent{{#externalUrl}} external{{/externalUrl}}" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>{{name}}{{#externalUrl}} <small class="fa fa-external-link"></small>{{/externalUrl}}</a>
-            </span>
-            <span class="time">{{localWeekdayLong}}</span>
-          </div>
-        </td>
-        <td class="location">
-          <div>
-            <span class="place">{{venue}}.</span>
-            <span class="city">{{location}}</span>
-          </div>
-        </td>
-        <td class="push-right">
-          <div>
-              <a class="faux silent button--mobile buy-tickets" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
-                  <i class="fa fa-shopping-cart"></i> <span>Buy Tickets</span>
-              </a>
-              <a class="faux button--mobile" action="addToCalendar" title="Download iCal" target="_blank" href="{{icalDownloadLink}}">
-                  <i class="fa fa-calendar-plus-o"></i>
-              </a>
-          </div>
-        </td>
-      </tr>
+        {{>upcoming-event-tr}}
       {{/results}}
       </table>
   {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="upcoming-event-tr">
+<tr {{#featured}}class="featured"{{/featured}} data-date="{{startDate}}" event-id="{{_id}}">
+    <td class="date">
+      <div>
+        <span class="month">{{localMonth}}</span>
+        <span class="day">{{localDay}}</span>
+      </div>
+    </td>
+    <td class="title">
+      <div>
+        <span class="name">
+          <a class="silent{{#externalUrl}} external{{/externalUrl}}" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>{{name}}{{#externalUrl}} <small class="fa fa-external-link"></small>{{/externalUrl}}</a>
+        </span>
+        <span class="time">{{localWeekdayLong}}</span>
+      </div>
+    </td>
+    <td class="location">
+      <div>
+        <span class="place">{{venue}}.</span>
+        <span class="city">{{location}}</span>
+      </div>
+    </td>
+    <td class="push-right">
+      <div>
+          <a class="faux silent button--mobile buy-tickets" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
+              <i class="fa fa-shopping-cart"></i> <span>Buy Tickets</span>
+          </a>
+          <a class="faux button--mobile" action="addToCalendar" title="Download iCal" target="_blank" href="{{icalDownloadLink}}">
+              <i class="fa fa-calendar-plus-o"></i>
+          </a>
+      </div>
+    </td>
+  </tr>
 </script>
 
 <script type="text/template"

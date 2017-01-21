@@ -2,6 +2,10 @@ function getFeaturedToggleEl () {
   return document.querySelector('[role="upcoming-toggle"]')
 }
 
+function getLoadMoreEventsEl () {
+  return document.querySelector('[action=loadMoreUpcomingEvents]')
+}
+
 function transformEventPage (obj){
   obj = transformEvent(obj)
   obj.view = false
@@ -169,8 +173,8 @@ function getUpcomingEventsQueryObject (options) {
     skip: (page - 1) * limit,
     page: page
   }
-  if(search.featured) {
-    qo.featured = 1
+  if(options.hasOwnProperty('featured')) {
+    qo.featured = options.featured
   }
   return qo
 }
@@ -193,28 +197,80 @@ function loadUpcomingEvents (options) {
 }
 
 function loadMoreUpcomingEvents (e, el) {
-  var button = document.querySelector('[action=loadMoreUpcomingEvents]')
+  var button = getLoadMoreEventsEl()
   var att = button.getAttribute('current-page')
   var page = parseInt(att) + 1
   loadUpcomingEvents({page: page})
   button.setAttribute('current-page', page)
 }
 
+function loadAndAppendFeaturedEvents () {
+  var url = endpoint + '/events/upcoming?featured=1&skip=0&limit=20'
+  loadCache(url, function (err, result) {
+    if(err) {
+      checkNoFeaturedMessage()
+      return console.error(err)
+    }
+
+    //Delete all the existing featured events
+    document.querySelectorAll('tr.featured').forEach(function (el) {
+      el.parentNode.removeChild(el)
+    })
+
+    var trsToAdd = result.results.map(function (event) {
+      event = transformEvent(event)
+      var html = Mustache.render("{{>upcoming-event-tr}}", event, mustacheTemplates)
+      var table = document.createElement('table')
+      table.innerHTML = html
+      var featuredTr = table.querySelector('tr')
+      return featuredTr
+    })
+
+    trsToAdd.forEach(function (newTr) {
+      var allTrs = document.querySelectorAll('tr[event-id]')
+      var newDate = new Date(newTr.getAttribute('data-date'))
+      var checkDate
+      var trAfterThis
+      i = 0
+      do {
+        trAfterThis = allTrs[i]
+        checkDate = new Date(trAfterThis.getAttribute('data-date'))
+        i++
+      } while (checkDate < newDate && i < allTrs.length)
+
+      trAfterThis.parentNode.insertBefore(newTr, trAfterThis.nextSibling)
+    })
+
+    checkNoFeaturedMessage()
+  })
+}
+
 function toggleUpcoming (){
   var el = getFeaturedToggleEl()
+  var button = getLoadMoreEventsEl()
+
   document.querySelector('[role=events-tables]').classList.toggle('events--filtered', el.checked)
-  checkNoFeaturedMessage()
+  if(el.checked) {
+    loadAndAppendFeaturedEvents()
+    button.classList.toggle('hide', true)
+  }
+  else {
+    button.classList.toggle('hide', toggleUpcoming.hideLoadMore)
+    checkNoFeaturedMessage()
+  }
 }
+toggleUpcoming.hideLoadMore = true
 
 function completedEventsEmailOptin () {
   initLocationAutoComplete()
 }
 
 function completedUpcomingEvents (source, obj) {
-  var button = document.querySelector('[action=loadMoreUpcomingEvents]')
+  var button = getLoadMoreEventsEl()
   var shown = (obj.data.skip) + (obj.data.results.length)
-  button.classList.toggle('hide', shown >= obj.data.total)
-  checkNoFeaturedMessage()
+  toggleUpcoming.hideLoadMore = shown >= obj.data.total
+  button.classList.toggle('hide', toggleUpcoming.hideLoadMore)
+  loadAndAppendFeaturedEvents()
 }
 
 function completedEventPage (source, obj) {
