@@ -1,5 +1,5 @@
 <script type="text/template"
-        route="^news\/article\/(.*)"
+        route="^news\/(?:article|post)\/(.*)"
         page-title="Article"
         transform="transformPost"
         source="$newshost/json/posts/$1.json">
