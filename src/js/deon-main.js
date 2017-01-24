@@ -486,9 +486,10 @@ function mapRelease (o) {
 }
 
 function mapWebsiteDetails (o) {
-  //if (o.profileImageBlobId)
-  //  o.image = datapoint + '/blobs/' + o.profileImageBlobId
-  o.image = o.profileImageUrl 
+  if (o.profileImageUrl) {
+    o.image = o.profileImageUrl
+    o.imageSmall = o.profileImageUrl + "?image_width=256"
+  }
   if (isNaN(o.imagePositionY))
     o.imagePositionY = 60
   if (o.bookings || o.managementDetail) {

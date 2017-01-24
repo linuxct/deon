@@ -78,7 +78,7 @@ function getSearchTypes () {
     },
     artists: {
       fuzzyFields: ['name'],
-      fields: ['name', 'websiteDetailsId', 'profileImageBlobId', 'vanityUri'],
+      fields: ['name', 'websiteDetailsId', 'profileImageBlobId', 'profileImageUrl', 'vanityUri'],
       q: {},
       title: 'Search Artists',
       perPage: 10,
@@ -176,7 +176,7 @@ function transformSearchSnippetReleases (obj) {
 }
 
 function transformSearchSnippetArtists (obj) {
-  return transformSearchSnippet(obj, 'Artist')
+  return transformSearchSnippet(transformSearchArtistsResults(obj), 'Artist')
 }
 
 function transformSearchSnippetTracks (obj, done) {
@@ -218,6 +218,7 @@ function transformSearchTrackResults (obj, done) {
 function transformSearchArtistsResults (obj, done) {
   var type = getSearchType('artists')
   setPagination(obj, type.perPage)
+  obj.results = obj.results.map(mapWebsiteDetails)
   return obj
 }
 

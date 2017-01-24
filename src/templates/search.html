@@ -24,7 +24,7 @@
 
 <script type="text/template"
         template-name="search-artists"
-        transform="transformRosterYear">
+        transform="transformSearchArtistsResults">
     <div class="panel">
         {{#loading}}
         <i class="fa fa-fw fa-spin fa-refresh"></i>
@@ -197,7 +197,7 @@
 
 <script type="text/template"
         template-name="search-snippet-artists"
-        transform="transformRosterYear">
+        transform="transformSearchSnippetArtists">
     {{#loading}}
     {{>loading-view}}
     {{/loading}}
@@ -304,18 +304,18 @@
     <ul class="art-list art-list--full-width">
         {{#results}}
         <li>
-            <a class="silent" href="/artist/{{uri}}" title="{{name}}">
-                {{#image}}
+            <a class="silent" href="/artist/{{vanityUri}}" title="{{name}}">
+                {{#imageSmall}}
                 <div class="image-wrapper">
                     <img src="/img/artist.jpg" class="preload" />
-                    <img src="{{image}}"/>
+                    <img src="{{imageSmall}}"/>
                 </div>
-                {{/image}}
-                {{^image}}
+                {{/imageSmall}}
+                {{^imageSmall}}
                 <div class="no-art">
                     <label>No image.</label>
                 </div>
-                {{/image}}
+                {{/imageSmall}}
                 <label class="title one-line-ellipsis">{{name}}</label>
             </a>
         </li>
