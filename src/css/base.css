@@ -31,6 +31,12 @@ input[type="password"]{
 p, label, a {
   font-size: 16px;
 }
+h1 > a,
+h2 > a,
+h3 > a,
+h4 > a{
+  font-size: inherit;
+}
 
 a:hover {
   cursor: pointer;

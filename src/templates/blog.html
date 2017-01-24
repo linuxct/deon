@@ -1,0 +1,176 @@
+<script type="text/template"
+        route="^news\/article\/(.*)"
+        page-title="Article"
+        transform="transformPost"
+        source="$newshost/json/posts/$1.json">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>Article not found.</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div class="top-banner top-banner--blog">
+        <div class="banner">
+            <div class="banner" style="background-image:url({{image}})"></div>
+        </div>
+    </div>
+    
+    <div class="panel panel--article">
+        <header>
+            <h1 class="title uppercase">{{title}}</h1>
+            <h3 class="subline">{{subline}}</h3>
+            <p class="date">{{date}}</p>
+            <ul class="blog-tags">
+                {{#tags}}
+                    <li>
+                        <a class="button button--black" href="/news/tags/{{.}}">{{.}}</a>
+                    </li>
+                {{/tags}}
+            </ul>
+        </header>
+        <div class="md-container">
+            <div
+                template="markdown-post"
+                source="$newshost/{{path}}">
+            </div>
+        </div>
+    </div>
+    
+    {{/data}}
+</script>
+
+<script type="text/template" template-name="markdown-post" transform="transformMarkdown">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <p>{{message}}</p>
+    {{/error}}
+    {{#data}}
+        {{{data}}}
+    {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="blog-featured">
+
+        <div class="top-banner top-banner--blog-featured">
+            <div class="banner">
+                <div class="banner" style="background-image:url({{image}})">
+                    <div class="banner-shade"></div>
+                    <div class="gradient"></div>
+                </div>
+            </div>
+            <div class="container cl-white text center">
+                <h1 class="title uppercase">{{title}}</h1>
+                <h3 class="subline">{{subline}}</h3>
+                <p class="date">{{date}}</p>
+                <ul class="blog-tags">
+                    {{#tags}}
+                        <li>
+                            <a class="button button--black" href="/news/tags/{{.}}">{{.}}</a>
+                        </li>
+                    {{/tags}}
+                </ul>
+                <a class="button button--white button--icon" href="/news/article/{{url}}" target="_BLANK">
+                    Read more
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+
+</script>
+
+<script type="text/template"
+        mustache-name="blog-article">
+        <article class="flex">
+            <div class="col-xs-12 col-sm-12 col-md-6 article-banner{{#isOdd}} col-md-last{{/isOdd}} banner--scaled">
+                <a href="/news/article/{{url}}" class="side-banner" style="background-image: url({{image}});"></a>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+                <div class="article-wrapper">
+                    <a class="silent no-hover" href="/news/article/{{url}}" target="_BLANK">
+                        <h2>{{title}}</h2>
+                    </a>
+                    <p class="date">{{date}}</p>
+                    <ul class="blog-tags">
+                        {{#tags}}
+                            <li>
+                                <a class="button button--black" href="/news/tags/{{.}}">{{.}}</a>
+                            </li>
+                        {{/tags}}
+                    </ul>
+                    <p class="description">{{{excerpt}}}</p>
+                    <a class="button button--black button--icon" href="/news/article/{{url}}" target="_BLANK">
+                        Read more
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+</script>
+
+<script type="text/template"
+        route="^(?:news|blog)\/?(?:\?.*)?$"
+        page-title="News"
+        transform="transformBlogPagination"
+        source="$newshost/json/archive/pages/1.json">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}.</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div
+        template="blog-page"
+        source="$newshost/json/archive/pages/{{page}}.json">
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        route="^news\/tags\/(.*)"
+        page-title="News"
+        transform="transformBlogPagination"
+        source="$newshost/json/tags/$1/pages/1.json">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>An error has occured.</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    <div
+        template="blog-page"
+        source="$newshost/json/tags/{{tag}}/pages/{{page}}.json">
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        transform="transformBlog"
+        template-name="blog-page">
+    {{#loading}}
+    {{>loading-view}}
+    {{/loading}}
+    {{#error}}
+    <div class="container panel">
+        <p>{{message}}.</p>
+    </div>
+    {{/error}}
+    {{#data}}
+    {{#results}}
+    {{#featured}} {{>blog-featured}} {{/featured}}
+    {{^featured}} {{>blog-article}} {{/featured}}
+    {{/results}}
+    {{#showPagination}} {{>searchPagination}} {{/showPagination}}
+    {{/data}}
+</script>

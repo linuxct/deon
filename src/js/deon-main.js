@@ -1,5 +1,6 @@
 var endhost         = 'https://connect.monstercat.com'
 var endpoint        = endhost + '/api'
+var newshost        = 'https://www.monstercat.com/news-api'
 var datapoint       = 'https://blobcache.monstercat.com'
 var session         = null
 var pageTitleSuffix = 'Monstercat'
@@ -51,6 +52,7 @@ openRoute.started.push(function () {
 })
 
 requestDetect.credentialDomains.push(endhost)
+requestDetect.credentialDomains.push(newshost)
 
 var releaseTypes = {
   album: { value: 'Album', name: "Albums", key: 'album' },
@@ -539,17 +541,6 @@ function transformMerch (obj) {
   var products = obj
   obj = {}
   obj.products = products.slice(0,8)
-  return obj
-}
-
-function transformBlogPosts (obj) {
-  var maxLength = 400
-  obj.posts.length = 2
-  obj.posts.forEach(function (i, index, arr) {
-    i.date = formatDate(i.date)
-    i.isOdd = !(index % 2 == 0)
-    i.excerpt = i.excerpt.length>maxLength ? i.excerpt.substr(0,maxLength-1)+'...' : i.excerpt;
-  })
   return obj
 }
 

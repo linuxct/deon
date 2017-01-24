@@ -6,7 +6,7 @@
     </div>
     <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="home-podcast"></div>
     <div source="https://shopcollections.monstercat.com/394974148" template="home-merch"></div>
-    <div source="$endpoint/catalog/news" template="blog-stories"></div>
+    <div source="$newshost/json/home.json" template="blog-stories"></div>
     <div class="flex social">
         <div class="col-xs-12 col-sm-12 col-md-6 text right cl-white spotify-wrapper">
             <div class="banner" style="background-image:url(/img/banner.jpg)">
@@ -342,7 +342,7 @@
 
 <script type="text/template"
         template-name="blog-stories"
-        transform="transformBlogPosts">
+        transform="transformBlog">
     {{#loading}}
     {{>loading-view}}
     {{/loading}}
@@ -357,33 +357,16 @@
                     <h2 class="line-top">New Posts</h2>
                 </div>
                 <div class="col-xs-6 text right">
-                    <a href="https://www.monstercat.com/news" class="button button--black button--icon button--transparent">
+                    <a href="/news" class="button button--black button--icon button--transparent">
                         View all
                         <i class="fa fa-chevron-right"></i>
                     </a>
                 </div>
             </header>
         </div>
-        {{#posts}}
-        <article class="flex">
-            <div class="col-xs-12 col-sm-12 col-md-6 article-banner{{#isOdd}} col-md-last{{/isOdd}} banner--scaled">
-                <a href="https://www.monstercat.com/news/{{path}}" class="side-banner" style="background-image: url(https://www.monstercat.com{{image}});"></a>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 article-details">
-                <div class="article-wrapper">
-                    <a class="silent no-hover" href="https://www.monstercat.com/news/{{path}}" target="_BLANK">
-                        <h2>{{title}}</h2>
-                        <p class="date">{{date}}</p>
-                        <p class="description">{{excerpt}}</p>
-                    </a>
-                    <a class="button button--black button--icon" href="https://www.monstercat.com/news/{{path}}" target="_BLANK">
-                        Read more
-                        <i class="fa fa-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-        </article>
-        {{/posts}}
+        {{#results}}
+            {{>blog-article}}
+        {{/results}}
     </section>
     {{/data}}
 </script>
