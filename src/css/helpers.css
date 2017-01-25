@@ -314,3 +314,12 @@ td.push-right > * {
     padding: 15px 17px 15px 20px;
   }
 }
+
+.action-toggle.on .off,
+.action-toggle .on {
+  display: none;
+}
+
+.action-toggle.on .on {
+  display: inherit;
+}

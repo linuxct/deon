@@ -249,3 +249,15 @@ table select {
 .fa-social-g:before{
   content: "\f1a0";
 }
+
+p.success-box {
+  padding: 1em;
+  border: solid dodgerblue;
+  background: dodgerblue;
+  color: white;
+}
+
+p.success-box a,
+p.success-box a:hover {
+  color: white;
+}

@@ -1115,3 +1115,32 @@ getStats.translate = function (value) {
   }
   return value
 }
+
+function joinDiscord (e, el) {
+  var data = getTargetDataSet(el)
+  var parent = getDataSetTargetElement(el)
+  if (!data.discordId) return window.alert("Please provide a Discord User Id.")
+  var container = parent.querySelector('[role="response"]')
+  var template = getTemplateEl("joinDiscordResponse")
+  var div = document.createElement("div")
+  render(container, template.textContent, {loading: true})
+	el.disabled = true
+	el.classList.add("on")
+  requestJSON({
+    method:"POST", 
+    url: endpoint + "/self/discord/join", 
+    withCredentials: true, 
+    data: data
+  }, function (err, body, xhr) { 
+		el.disabled = false
+		el.classList.remove("on")
+    if (!err && body.gold.success)
+      body.gold.joinUrl = "https://discord.gg/" + body.gold.invite.code
+    if (!err && body.licensee.success)
+      body.licensee.joinUrl = "https://discord.gg/" + body.licensee.invite.code
+    render(container, template.textContent, {
+      error: err,
+      data: body 
+    })
+  });
+}

@@ -327,8 +327,7 @@
             </div>
             <div class="col-xs-12 col-md-6 panel">
                 <h2>Gold-only Discord Chat</h2>
-                <p>Join us on our Discord server in the excluse Gold members only chat.</p>
-                <br>
+                <p>Join us on our <a href="https://discord.gg/j8N75GN">Discord server</a> in the exclusive Gold members only chat. Please join the server before using the form below.</p>
                 {{>joinGoldDiscord}}
                 {{^hasGoldAccess}}
                 <div class="button-group">
@@ -571,8 +570,54 @@
 <script type="text/template"
         mustache-name="joinGoldDiscord">
 {{#hasGoldAccess}}
-<a href="{{endhost}}/api/self/discord/gold" target="_blank" class="button">Join Discord</a>
+<div data-set="discord-join-info" trigger-target="joinDiscord">
+	<table class="form mobile">
+		<tbody>
+			<tr>
+					<th>Discord User Id</th>
+					<td><input type="text" placeholder="96291747751002112" name="discordId"/></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="button-group">
+		<button type="button"
+			class="action-toggle"
+			action="joinDiscord" 
+			data-set-target="discord-join-info">
+			Join Discord 
+			<i class="fa fa-spin fa-refresh fa-fw on"></i>
+		</button>
+	</div>
+  <div role="response"></div>
+</div>
 {{/hasGoldAccess}}
+</script>
+
+<script type="text/template" template-name="joinDiscordResponse">
+{{#loading}}
+{{/loading}}
+
+{{#error}}
+  <p class="error">{{message}}</p>
+{{/error}}
+
+{{#data}}
+{{#gold.joinUrl}}
+	<br/>
+  <p class="success-box">Please join the gold channel here, <a href="{{.}}">{{.}}</a>. Link expires in 10 minutes.</p>
+{{/gold.joinUrl}}
+{{#gold.error}}
+  <p>{{message}}</p>
+{{/gold.error}}
+
+{{#licensee.joinUrl}}
+	<br/>
+  <p class="success-box">Please join the <strong>Licensee</strong> channel here, <a href="{{.}}">{{.}}</a>. Link expires in 10 minutes.</p>
+{{/licensee.joinUrl}}
+{{#licensee.error}}
+<p>{{message}}</p>
+{{/licensee.error}}
+{{/data}}
 </script>
 
 <script type="text/template"
