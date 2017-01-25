@@ -167,7 +167,7 @@ tr.featured a.external .fa-external-link{
 }
 
 .footer-cta--sponsor {
-  background: #222 url('../img/sponsor.jpg');
+  background: #222 url('/../img/sponsor.jpg');
   background-size: cover;
   padding: 4rem 2rem;
   margin-top: 2rem;

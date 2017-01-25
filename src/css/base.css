@@ -64,7 +64,8 @@ input:focus,
 textarea:focus{
   border-bottom: 2px solid dodgerblue;
 }
-select{
+select,
+table.form select{
   font-family: "Proxima Nova", Open Sans, sans-serif;
   font-size: 1rem;
   box-shadow: 0 0 0px rgba(30, 144, 255, 0.0);
@@ -109,6 +110,22 @@ h2 {
 h3 {
   font-size: 22px;
   font-weight: normal;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+h5,
+h6 {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+h6{
+  font-size: 14px;
 }
 
 @media screen and (min-width: 768px){
@@ -184,6 +201,8 @@ th, td {
 
 table select {
   max-width: 100%; /* make sure selects don't make table collapse beyond parent width */ 
+  height: auto;
+  padding: 0;
 }
 
 ::selection {
