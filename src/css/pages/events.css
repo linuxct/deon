@@ -2,9 +2,11 @@
   position: relative;
 }
 .container.events-email {
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
+  margin: 0 auto;
   padding: 2rem 2rem 2.2rem;
+}
+.event-page-header + div > .events-email {
+  margin-top: 2rem;
 }
 .events-email .my-location {
   margin-left: 0.1em;
@@ -150,8 +152,8 @@ tr.featured a.external .fa-external-link{
   color: dodgerblue;
 }
 
-.past-events{
-  margin-bottom: 2rem;
+.events-past{
+  padding-bottom: 0;
 }
 
 .top-banner-events .hover-wrapper {
@@ -207,7 +209,7 @@ span.place {
   display: none;
 }
 .button--load-events {
-  margin: .5rem auto;
+  margin: 0 auto;
   display: block;
   background: #eee;
   border-color: #eee;
@@ -250,12 +252,17 @@ span.place {
   width: 100%;
 }
 
+.event-gallery{
+  margin-top: 2rem;
+}
+
 ul.picture-gallery > li {
   height: 150px;
   cursor: pointer;
   overflow: hidden;
   opacity: 1;
   transition: opacity 0.5s ease;
+  padding: 0 .5rem .5rem 0;
 }
 ul.picture-gallery > li:hover{
   opacity: 0.9;  
@@ -308,9 +315,6 @@ ul.picture-gallery > li > div{
   font-family: 'Gotham Bold', sans-serif;
   font-size: 26px;
   display: block;
-}
-.events-email-signin form{
-  margin-top: 1rem;
 }
 .events-email input,
 .events-email button {
@@ -396,7 +400,8 @@ ul.picture-gallery > li > div{
   }
 }
 @media screen and (min-width: 1200px){
-  .art-list.event-list > li{
+  .art-list.event-list > li,
+  .picture-gallery > li{
     width: 25%;
   }
 }
@@ -411,7 +416,10 @@ ul.picture-gallery > li > div{
 }
 @media screen and (min-width: 1600px){
   .art-list.event-list > li{
-    width: 16.6666%;
+    width: 16.666%;
+  }
+  .picture-gallery > li{
+    width: 20%;
   }
 }
 

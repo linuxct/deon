@@ -56,6 +56,8 @@ function transformEvent (i) {
   else {
     i.artistDetails = []
   }
+  i.gallery = transformEventGallery(i)
+  i.hasGallery = i.gallery.length > 0
   if(i.coverImageUri) {
     i.coverImageLarge = i.coverImageUri + '?image_width=2048'
     i.coverImageSmall = i.coverImageUri + '?image_width=512'
@@ -71,6 +73,18 @@ function transformEvent (i) {
   }
   i.localWeekdayLong = i.localWeekday + weekdays[i.localWeekday]
   return i  
+}
+
+function transformEventGallery (event) {
+  if(!event.galleryImages) {
+    return []
+  }
+  return event.galleryImages.map(function (url) {
+    return {
+      thumbSrc: url + '?image_width=256',
+      bigSrc: url
+    }
+  })
 }
 
 function transformHeaderEvent (obj) {

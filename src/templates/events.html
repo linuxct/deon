@@ -17,8 +17,6 @@
     <div class="event-page-header">
       <div class="top-banner top-banner-events">
         {{>event-header}}
-
-        
         <div class="container latest cl-white">
           {{#artistDetails.length}}
           <header class="flex top-cta ">
@@ -62,6 +60,18 @@
 
     {{>events-email-optin}}
 
+    {{#hasGallery}}
+    <div class="container event-gallery">
+      <ul class="art-list picture-gallery clearfix">
+        {{#gallery}}
+          <li>
+            <div style="background-image: url({{thumbSrc}});" action="openGalleryModal" big-src="{{bigSrc}}"></div>
+          </li>
+        {{/gallery}}
+      </ul>
+    </div>
+    {{/hasGallery}}
+
     {{>event-sponsor}}
 
     {{/data}}
@@ -74,7 +84,7 @@
       <div class="button-group-center">
         <h2>Sponsorship.</h2>
         <p>
-          Want to partner with one of our event properties? Contact us at <a href="mailto:ben@monstercat.com">ben@monstercat.com</a>.
+          Want to partner with one of our event properties? Contact <a href="mailto:ben@monstercat.com">ben@monstercat.com</a>.
         </p>
       </div>
     </div>
@@ -87,35 +97,32 @@
         completed="completedEventsPage">
     {{#data}}
       <div source="$endpoint/events/header?limit=1" template="event-header"></div>
-      <div role="upcoming-events">
-        <section>
-          <div class="container latest">
-            <header class="flex top-cta">
-              <div class="col-xs-12 col-sm-6">
-                  <h2 class="line-top">Upcoming Events</h2>
-              </div>
-              <div class="col-xs-12 col-sm-6 toggle-wrapper">
-                  <span class="toggle-label">All Events</span>
-                  <div class="toggle">
-                    <input type="checkbox" role="upcoming-toggle" action="toggleUpcoming" class="check">
-                    <span class="switch"></span>
-                    <span class="track"></span>
-                  </div>
-                  <span class="toggle-label">Monstercat</span>
-              </div>
-            </header>
-            <div role="events-tables" class="events-tables">
-              <div class="events-no-featured-message shadow hide">
-                <a href="https://www.monstercat.com/tickets" target="_BLANK" class="blue">Sign-up</a>
-                for information on upcoming Monstercat events.</div>
+      <section role="upcoming-events">
+        <div class="container latest">
+          <header class="flex top-cta">
+            <div class="col-xs-12 col-sm-6">
+                <h2 class="line-top">Upcoming Events</h2>
             </div>
-            <button action="loadMoreUpcomingEvents" current-page="{{page}}" class="button button--load-events button--cta hide">Load More</button>
+            <div class="col-xs-12 col-sm-6 toggle-wrapper">
+                <span class="toggle-label">All Events</span>
+                <div class="toggle">
+                  <input type="checkbox" role="upcoming-toggle" action="toggleUpcoming" class="check">
+                  <span class="switch"></span>
+                  <span class="track"></span>
+                </div>
+                <span class="toggle-label">Monstercat</span>
+            </div>
+          </header>
+          <div role="events-tables" class="events-tables">
+            <div class="events-no-featured-message shadow hide">
+              <a href="https://www.monstercat.com/tickets" target="_BLANK" class="blue">Sign-up</a>
+              for information on upcoming Monstercat events.</div>
           </div>
-          
-        </section>
-      </div>
+          <button action="loadMoreUpcomingEvents" current-page="{{page}}" class="button button--load-events button--cta hide">Load More</button>
+        </div>          
+      </section>
       {{>events-email-optin}}
-      <div source="$endpoint/events/past?featured=1" template="events-past"></div>
+      <section source="$endpoint/events/past?featured=1" class="events-past" template="events-past"></section>
     {{/data}}
     {{>event-sponsor}}    
 </script>
@@ -212,7 +219,7 @@
   </div>
   {{/error}}
   {{#data}}
-  <section class="v-padding past-events">
+  <div class="past-events">
     <div class="container latest">
       <header class="flex top-cta">
         <div class="col-xs-12">
@@ -244,7 +251,7 @@
       {{/results}}
       </ul>
     </div>
-  </section>
+  </div>
   {{/data}}
 </script>
 
@@ -308,6 +315,7 @@
         <button class="button--cta button--full subscribe" trigger="signUpForEventEmail" action="signUpForEventEmail">Subscribe</button>
       </div>
     </form>
+  </div>
 {{/isSignedIn}}
 </div>
 </script>
