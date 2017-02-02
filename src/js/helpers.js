@@ -281,6 +281,17 @@ function randomChooser(n){
   return Math.floor(Math.random() * n+1);
 }
 
+function iframeHeight(){
+  var iframe = document.querySelectorAll('iframe.fullpage-iframe')
+  for (var i = 0; i<iframe.length; i++){
+    iframe[i].addEventListener('load', resetHeightIframes, true)
+  }
+}
+function resetHeightIframes(){
+  this.nextElementSibling.style.display = 'none'
+  this.style.height = this.contentWindow.document.body.scrollHeight + 'px'
+}
+
 function getMonths () {
   return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']  
 }

@@ -309,6 +309,25 @@ td.push-right > * {
 .top-title .button--transparent {
   padding: .5rem 0;
 }
+.fullpage-iframe{
+  width: 100%;
+  border: 0;
+  box-shadow: 0 0 0;
+  outline: 0;
+  height: 100%;
+  min-height: 800px;
+  margin: 0;
+  padding: 0;
+}
+.fullpage-wrapper{
+  position: relative
+}
+.fullpage-iframe + .loading {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
 @media screen and (min-width: 768px){
   .top-title .button--transparent{
     padding: 15px 17px 15px 20px;
