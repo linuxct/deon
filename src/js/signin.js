@@ -167,9 +167,11 @@ function transformSignUp () {
 
   if(qo.location) {
     obj.placeNameFull = qo.location
+  }
 
+  if(qo.promotions || qo.location) {
     obj.emailOptIns = {
-      eventsNearMe: true
+      promotions:true
     }
   }
 

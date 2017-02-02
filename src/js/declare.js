@@ -473,7 +473,7 @@ function parseElementValue (el, value) {
 }
 
 function getDataSet (el, checkInitial, ignoreEmpty) {
-  var obj
+  var obj = {}
   var els = el.querySelectorAll('[name]')
   for (var i = 0; i < els.length; i++) {
     var kel     = els[i]

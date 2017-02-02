@@ -271,8 +271,6 @@
                         <th>Email settings</th>
                         <td>
                             {{>account-email-optin-promotions}}
-                            <br />
-                            {{>account-email-optin-eventsnearme}}
                         </td>
                     </tr>
                     <tr>
@@ -508,18 +506,13 @@
         {{>account-email-optin-promotions}}
     </td>
 </tr>
-<tr>
-    <td colspan="2">
-        {{>account-email-optin-eventsnearme}}
-    </td>
-</tr>
 </script>
 
 <script type="text/template"
         mustache-name="account-email-optin-promotions">
 <label>
     <input type="checkbox" name="emailOptIns[promotions]"{{#emailOptIns.promotions}} checked="checked"{{/emailOptIns.promotions}} value="1" />
-    Email me about Monstercat news and promotions
+    Email me about Monstercat news and events
 </label>
 </script>
 

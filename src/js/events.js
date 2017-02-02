@@ -125,7 +125,7 @@ function transformEventsEmailOptin (obj) {
   obj.isSignedIn = isSignedIn()
   if (obj.isSignedIn) {
     obj.emailOptIns = transformEmailOptins(obj.emailOptIns)
-    obj.fullyOptedIn = obj.emailOptIns.eventsNearMe && !isLegacyLocation()
+    obj.fullyOptedIn = obj.emailOptIns.promotions && !isLegacyLocation()
 
     //Legacy Location
     //delete obj.googleMapsPlaceId
@@ -167,15 +167,30 @@ function subscribeEventsEmailOptIn (e, el) {
   })
 }
 
+function subscribeEventsPromotionsOptIn (e, el) {
+  var data = getTargetDataSet(el, true, true)
+  data['emailOptIns[promotions]'] = true
+  update('self', null, data, function (err, obj) {
+    if (err) return window.alert(err.message)
+    toasty('You are now subscribed to hear about Monstercat news and events')
+
+    resetTargetInitialValues(el, obj)
+    loadSession(function (err, obj) {
+      loadSubSources(document.querySelector('[role=events-email-optin]'), true, true)
+    })
+  })
+}
+
 function signUpForEventEmail (e, el) {
   var data = getTargetDataSet(el, true, true)
   var qs = {}
-  if(data.placeNameFull && data.placeNameFull.length > 0) {
+  if(data && data.placeNameFull && data.placeNameFull.length > 0) {
     qs.location = data.placeNameFull
   }
   if(data.email && data.email.length > 0) {
     qs.email = data.email
   }
+  qs.promotions = 1
   return go('/sign-up?' + objectToQueryString(qs))
 }
 

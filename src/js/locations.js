@@ -50,8 +50,14 @@ function initLocationAutoComplete () {
       locationName.innerHTML = '<strong>' + place.formatted_address + '</strong>'
     }
   });
-  //Prevent hitting enter to select autocomplete option from submitting the form
-  google.maps.event.addDomListener(input, 'keydown', function(e) { 
+
+  google.maps.event.addDomListener(input, 'keydown', function(e) {
+    //If they aren't selecting one of the options then enter means submit
+    if(document.querySelector('.pac-item.pac-item-selected') == null) {
+      return true
+    }
+
+    //Otherwise prevent default, cause they're just selecting a location, not submitting the form
     if (e.keyCode == 13) { 
       e.preventDefault(); 
     }
