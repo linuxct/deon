@@ -25,7 +25,7 @@ function SplitTest (opts) {
     throw new Error('Need a test name')
   }
 
-  if(!this.hasOwnProperty('checkStart')) {
+  if(!this.hasOwnProperty('checkStart') && !this.dontCheckStarter) {
     throw new Error('Need a checkStart function to check when to start running the test')
   }
 

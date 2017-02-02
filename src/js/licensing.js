@@ -1,8 +1,33 @@
+var licensingABTest
+
 function transformLicensing (obj) {
   obj = obj || {}
   obj.scriptopen = "<script"
   obj.scriptclose = "</script>"
   return obj  
+}
+
+function transformLicensingContentCreators (obj, done) {
+  obj = transformLicensing(obj)
+  //Create the split test
+  licensingABTest = new SplitTest({
+    name: 'licensing-ab',
+    dontCheckStarter: true,
+    modifiers: {
+      'a': function (_this) {
+        obj.splitTestA = true
+        obj.splitTestB = false
+      },
+      'b' : function (_this) {
+        obj.splitTestA = false
+        obj.splitTestB = true
+      }
+    },
+    onStarted: function () {
+      done(null, obj)
+    }
+  })
+  licensingABTest.start()
 }
 
 function pickBackground(){
@@ -21,6 +46,13 @@ function completedLicensing () {
 function completedContentCreatorLicensing () {
   pickBackground()
   scrollToHighlightHash()
+  var buyButtons = document.querySelectorAll('[role=licensing-cta]')
+  buyButtons.forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      licensingABTest.convert()
+      return true
+    })
+  })
 }
 
 function completedCommercialLicensing () {   
