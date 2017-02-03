@@ -34,6 +34,7 @@ echo -e "Combining all HTML and Templates..."
 
 
 cat src/html/begin.html > bin/tmp.html
+cat src/html/endhost.prod.html > bin/tmp.html
 gawk -v root=src -f scripts/stamp-qs.awk < src/html/head.html >> bin/tmp.html
 cat src/html/begin-body.html >> bin/tmp.html
 cat src/html/body.html >> bin/tmp.html

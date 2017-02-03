@@ -1,4 +1,3 @@
-var endhost         = 'https://connect.monstercat.com'
 var endpoint        = endhost + '/api'
 var newshost        = '/news-api'
 var datapoint       = 'https://blobcache.monstercat.com'

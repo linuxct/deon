@@ -6,11 +6,17 @@ var dir = process.cwd() + (process.env.NODE_ENV === 'production' ? '/bin' : '/sr
 if (!path.isAbsolute(dir)) dir = path.resolve(process.cwd(), dir)
 
 var order = [
-  'begin',
-  'head',
-  'begin-body',
-  'body'
+  'begin'
 ]
+
+if(parseInt(process.env.ENDHOST_LOCAL) == 1) {
+  order.push('endhost.local')
+}
+else {
+  order.push('endhost.prod')
+}
+
+order = order.concat(['head', 'begin-body', 'body'])
 function buildHTML () {
   var str = ""
   var tdir = path.join(dir, 'templates')
