@@ -436,7 +436,6 @@ function getTemplateEl(name) {
 }
 
 function getElementValue (el) {
-  var type = el.getAttribute('type')
   return parseElementValue(el, el.value)
 }
 
@@ -467,7 +466,8 @@ function parseElementValue (el, value) {
     }
   }
   if (typeof value == 'string' && isNumberString(value)) {
-    return Number(value)
+    var n = Number(value)
+    if (n.toString() == value) return n
   }
   return value
 }
