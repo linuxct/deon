@@ -250,14 +250,19 @@ table select {
   content: "\f1a0";
 }
 
-p.success-box {
+p.success-box,
+p.error-box {
   padding: 1em;
-  border: solid dodgerblue;
   background: dodgerblue;
   color: white;
 }
+p.error-box {
+  background: red;
+}
 
 p.success-box a,
-p.success-box a:hover {
+p.error-box a,
+p.success-box a:hover,
+p.error-box a:hover {
   color: white;
 }

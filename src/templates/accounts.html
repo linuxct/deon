@@ -591,25 +591,29 @@
 {{/loading}}
 
 {{#error}}
-  <p class="error">{{message}}</p>
+  <p class="error-box">{{message}}</p>
 {{/error}}
 
 {{#data}}
-{{#gold.joinUrl}}
-	<br/>
+{{#gold}}
+<br/>
+{{#joinUrl}}
   <p class="success-box">Please join the gold channel here, <a href="{{.}}">{{.}}</a>. Link expires in 10 minutes.</p>
-{{/gold.joinUrl}}
-{{#gold.error}}
-  <p>{{message}}</p>
-{{/gold.error}}
+{{/joinUrl}}
+{{#error}}
+  <p class="error-box">{{.}}</p>
+{{/error}}
+{{/gold}}
 
-{{#licensee.joinUrl}}
-	<br/>
+{{#licensee}}
+<br/>
+{{#joinUrl}}
   <p class="success-box">Please join the <strong>Licensee</strong> channel here, <a href="{{.}}">{{.}}</a>. Link expires in 10 minutes.</p>
-{{/licensee.joinUrl}}
-{{#licensee.error}}
-<p>{{message}}</p>
-{{/licensee.error}}
+{{/joinUrl}}
+{{#error}}
+<p class="error-box">{{.}}</p>
+{{/error}}
+{{/licensee}}
 {{/data}}
 </script>
 
