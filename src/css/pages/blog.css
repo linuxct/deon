@@ -87,8 +87,38 @@ ul.blog-tags {
 	margin-left: 5px;margin-right: 5px;
 }
 .panel--article .button-group {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
+.pagination--blog{
+	margin: 2rem 0 0;
+}
+.pagination--blog label {
+  font-size: 1.25rem;
+  vertical-align: middle;
+  margin: 0 .75rem;
+}
+.button--share{
+	color: #fff;
+}
+.button--share-facebook { 
+	background-color: #4A66B7; 
+	border-color: #4A66B7; 
+}
+.button--share-facebook:hover,
+.button--share-facebook:active { 
+	background-color: #556fbb; 
+	border-color: #556fbb; 
+}
+.button--share-twitter { 
+	background-color: #1B95E0; 
+	border-color: #1B95E0; 
+}
+.button--share-twitter:hover,
+.button--share-twitter:active { 
+	background-color: #269ce5; 
+	border-color: #269ce5; 
+}
+
 @media screen and (min-width: 768px){
 	.panel--article{
 		padding: 2rem 4rem;

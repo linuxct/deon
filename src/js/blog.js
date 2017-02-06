@@ -2,7 +2,19 @@ function transformPost(obj){
 	if (obj.title) setPageTitle(obj.title)
 	obj.date = formatDate(obj.date)
 	obj.image = transformLegacyImages(obj.image)
+  obj.url = window.location.href
 	return obj
+}
+function openShare(e, el){
+  var options = 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,';
+  var networks = {
+    facebook : { width : 600, height : 300 },
+    twitter  : { width : 600, height : 254 }
+  }
+  var network = el.dataset.share;
+  if (network) window.open(el.dataset.href, '', options+'height='+networks[network].height+',width='+networks[network].width);
+  e.preventDefault
+  return false
 }
 function completedMarkdownPost(){
   var redditEmbeds = document.querySelector('.reddit-embed');
@@ -25,7 +37,7 @@ function transformBlog(obj){
   var maxExcerpt = 200
 
   obj.results.forEach(function (i, index, arr) {
-  	i.featured = (index == 0) ? true : false
+  	i.featured = (index == 0 && !obj.tag) ? true : false
     i.date = formatDate(i.date)
     i.isOdd = !(index % 2 == 0)
     i.excerpt = transformExcerptToText(i.excerpt)

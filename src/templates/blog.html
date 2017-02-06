@@ -30,6 +30,24 @@
                     </li>
                 {{/tags}}
             </ul>
+            <div class="button-group">
+                <a data-href="https://www.facebook.com/sharer/sharer.php?u={{url}}"
+                   action = "openShare"
+                   data-share="facebook"
+                   class="button button--full button--share button--share-facebook"
+                   target="_blank">
+                    <i class="fa fa-facebook"></i>
+                    Share on Facebook
+                </a>
+                <a data-href="https://twitter.com/intent/tweet?url={{url}}&via=Monstercat"
+                   action = "openShare"
+                   data-share="twitter"
+                   class="button button--full button--share button--share-twitter"
+                   target="_blank">
+                    <i class="fa fa-twitter"></i>
+                    Tweet this
+                </a>
+            </div>
         </header>
         <div class="md-container">
             <div
@@ -169,10 +187,33 @@
     </div>
     {{/error}}
     {{#data}}
+
+    {{#tag}}
+        <div class="container tag-header">
+            <h1>Posts tagged with "{{.}}"</h1>
+        </div>
+    {{/tag}}
+
     {{#results}}
     {{#featured}} {{>blog-featured}} {{/featured}}
     {{^featured}} {{>blog-article}} {{/featured}}
     {{/results}}
-    {{#showPagination}} {{>searchPagination}} {{/showPagination}}
+    {{#showPagination}} {{>blogPagination}} {{/showPagination}}
     {{/data}}
 </script>
+
+<script type="text/template"
+        mustache-name="blogPagination">
+    {{#total}}
+    <div class="container pagination pad-vertical pagination--blog text center">
+        {{#previous}}
+        <a href="?{{previous}}" class="button button--cta">Previous</a>
+        {{/previous}}
+        <label>{{showingFrom}} - {{showingTo}} of {{total}}</label>
+        {{#next}}
+        <a href="?{{next}}" class="button button--cta">Next</a>
+        {{/next}}
+    </div>
+    {{/total}}
+</script>
+
