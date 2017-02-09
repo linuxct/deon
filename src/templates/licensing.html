@@ -15,6 +15,7 @@
           {{>licensingContentCreatorSellingPoints}}
           <div class="licensing-cta licensing-cta-content-creators button-group">
             {{>licensingContentCreatorCTAs}}
+            <div class="licensing-other-platforms"><a href="/licensing/other-platforms">Using another platform?</a></div>
           </div>
         </div>
       </div>
@@ -267,6 +268,53 @@
     <span class="or">or</span>
     <a href="/licensing/content-creators">read more</a>
   </div>
+</script>
+
+<script type="text/template"
+        route="^licensing\/other-platforms\/?\??(.*)?$"
+        page-title="Licensing Music for Facebook, Instagram, and more"
+        transform="transformLicensingOtherPlatformsPage">
+{{#data}}
+<div class="container">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="panel paragraphs">
+      <h1>Music Licensing for Other Platforms</h1>
+      <p>Monstercat whitelist licenses for content creators are currently available for <a href="/licensing/content-creators">YouTube, Twitch, and Beam</a>.</p>
+
+      <p><a href="/licensing/commercial">Commercial music licensing</a> is also available.</p>
+
+      <p>If you would like a whitelist license for another platform, let us know below and we can contact you when they become available.</p>
+
+      <form onsubmit="submitLicensingOtherPlatforms(event)" id="other-platforms-form">
+        <div class="form-group">
+          <label>Platforms</label>
+          <ul class="checkboxes">
+            {{#platforms}}
+              <li>
+                <label>
+                  <input type="checkbox" name="{{.}}" value ="1" />
+                  {{.}}
+                </label>
+              </li>
+            {{/platforms}}
+            <li>
+              <label>Other:</label>
+              <input type="text" name="other" class="small" size="20" />
+            </li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label>Your Email</label>
+          <input type="text" name="email" placeholder="Your email" value="{{email}}" size="30" />
+        </div>
+        <div class="form-group">
+          <button class="button button-cta" id="submit-licensing-other-platforms">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{{/data}}
 </script>
 
 <!-- MUSTACHES -->

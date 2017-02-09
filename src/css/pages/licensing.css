@@ -499,6 +499,16 @@ h2#faq {
   padding-top: 2em;
 }
 
+.licensing-other-platforms {
+  padding: 1em 0 0 0;
+  width: 100%;
+  float: left;
+}
+
+.licensing-other-platforms a {
+  color: #fff;
+}
+
 blockquote {
   border-left: 0.25em solid #b7b7b7;
   padding: 0.25em 0 0.25em 1em;

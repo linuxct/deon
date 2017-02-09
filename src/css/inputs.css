@@ -21,7 +21,8 @@ table.form tr:nth-child(odd) > td {
   background: transparent;
 }
 
-table.form input {
+table.form input,
+form input[type=text] {
   font-size: 18px;
   transition: border-color .3s ease;
 }
@@ -551,4 +552,35 @@ input.filter-search {
 }
 .countdown {
   font-size: 1.3em;
+}
+
+.form-group {
+  margin-bottom: 1em;
+}
+
+.form-group input[type=text].small {
+  width: auto;
+  font-size: 16px;
+  padding: 0.25rem 0.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.form-group .checkboxes label {
+  display: inline;
+  font-weight: normal;
+}
+
+.form-group ul.checkboxes {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.form-group ul.checkboxes li {
+  margin-bottom: 0.25em;
 }
