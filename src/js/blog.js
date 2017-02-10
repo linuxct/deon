@@ -17,12 +17,18 @@ function openShare(e, el){
   return false
 }
 function completedMarkdownPost(){
+  var twitterEmbeds = document.querySelector('.twitter-tweet');
   var redditEmbeds = document.querySelector('.reddit-embed');
-  if (!redditEmbeds) return
-
-  var redditJs = document.createElement('script');
-  redditJs.src = 'https://www.redditstatic.com/comment-embed.js';
-  document.getElementsByTagName('head')[0].appendChild(redditJs);
+  if (twitterEmbeds){
+    var twitterJs = document.createElement('script');
+    twitterJs.src = 'https://platform.twitter.com/widgets.js';
+    document.getElementsByTagName('head')[0].appendChild(twitterJs);
+  }
+  if (redditEmbeds){
+    var redditJs = document.createElement('script');
+    redditJs.src = 'https://www.redditstatic.com/comment-embed.js';
+    document.getElementsByTagName('head')[0].appendChild(redditJs);
+  }
 }
 function transformBlogPagination(obj){
   var q = queryStringToObject(window.location.search)
