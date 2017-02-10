@@ -50,7 +50,7 @@ function transformBlog(obj){
 function transformExcerptToText(htmlExcerpt){
   var aux = document.createElement('div')
   aux.innerHTML = htmlExcerpt
-  return aux.textContent || aux.innerText || "";
+  return aux.textContent || aux.innerText || "";
 }
 function transformLegacyImages(img){
 	return (img.indexOf('http') == -1) ? img = 'https://www.monstercat.com' + img : img
