@@ -131,14 +131,15 @@ h1 + .panel.md-container,
   width: 32px;
   height: 14px;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 7px;
   position: relative;
 }
 
 .mcat-logo .text{
   display: inline-block;
-  width: 141px;
-  margin-top: .25rem;
+  width: 185px;
+  position: relative;
+  top: -.5rem;
 }
 
 .mcat-logo .logo-white{

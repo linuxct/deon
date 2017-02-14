@@ -219,8 +219,6 @@ body.bg {
 .bg .hero .banner .gradient--inverted {
   background: linear-gradient(to top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 60%, rgba(255,255,255,1) 100%);
 }
-.bg .hero h3.playfair,
-.bg .hero h3.playfair em,
 .bg .hero h1.line-bottom{
   color: #000;
 }

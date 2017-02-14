@@ -309,10 +309,10 @@ ul.picture-gallery > li > div{
   margin-left: 0;
   font-size: 1rem;
   padding-left: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Proxima Nova', sans-serif;
 }
 .events-email .email-me{
-  font-family: 'Gotham Bold', sans-serif;
+  font-family: 'Montserrat', 'Proxima Nova', sans-serif;
   font-size: 26px;
   display: block;
 }
@@ -355,7 +355,7 @@ ul.picture-gallery > li > div{
 }
 @media screen and (min-width: 992px){
   .events-email .my-location > label {
-    font-family: 'Gotham Bold', sans-serif;
+    font-family: 'Montserrat', 'Proxima Nova', sans-serif;
     font-size: 26px;
   }
   .events-email input#locationAutoComplete,

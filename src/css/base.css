@@ -91,7 +91,7 @@ p{
 }
 
 h1, h2 {
-  font-family: 'Gotham Bold', sans-serif;
+  font-family: 'Montserrat', 'Proxima Nova', sans-serif;
 }
 
 h3, h4, h5, h6{
@@ -150,12 +150,6 @@ h6{
   h3 {
     font-size: 26px;
   }
-}
-
-.playfair {
-  font-family: "Playfair Display", serif;
-  font-weight: bold;
-  letter-spacing: .65px;
 }
 
 a.silent {
