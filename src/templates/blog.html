@@ -2,6 +2,7 @@
         route="^(?:news|blog)\/(?:article|posts)\/([^\/]*)\/?"
         page-title="Article"
         transform="transformPost"
+        completed="completedPost"
         source="$newshost/json/posts/$1.json">
     {{#loading}}
     {{>loading-view}}

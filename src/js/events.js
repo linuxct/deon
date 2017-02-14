@@ -308,7 +308,7 @@ function completedEventPage (source, obj) {
   var meta = {
     'og:title': title,
     'og:description': '',
-    'og:type': 'profile',
+    'og:type': 'website',
     'og:url': location.toString(),
     'og:image': obj.data.posterImageUri
   }

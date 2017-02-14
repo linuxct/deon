@@ -1,5 +1,4 @@
 function transformPost(obj){
-	if (obj.title) setPageTitle(obj.title)
 	obj.date = formatDate(obj.date)
 	obj.image = transformLegacyImages(obj.image)
   obj.url = window.location.href
@@ -15,6 +14,18 @@ function openShare(e, el){
   if (network) window.open(el.dataset.href, '', options+'height='+networks[network].height+',width='+networks[network].width);
   e.preventDefault
   return false
+}
+function completedPost(source, obj){
+  setPageTitle(obj.data.title)
+  var meta = {
+    'og:title': obj.data.title,
+    'og:description': transformExcerptToText(obj.data.excerpt),
+    'og:type': 'article',
+    'og:url': location.toString(),
+    'og:image': obj.data.image
+  }
+  setMetaData(meta)
+  pageIsReady()
 }
 function completedMarkdownPost(){
   var twitterEmbeds = document.querySelector('.twitter-tweet');
