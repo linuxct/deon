@@ -61,6 +61,7 @@ function openBrowsePage (q) {
 function transformMusicBrowseResults (obj, done) {
   var tracks = obj.results
   var playIndexOffset = obj.skip || 0
+  
   getArtistsAtlas(tracks, function (err, atlas) {
     if (!atlas) atlas = {}
     var rmap = {}
@@ -182,7 +183,8 @@ function filterBrowseMusic (e, el) {
     }
   })
   delete q.pages
-  go(browseUri + '?' + objectToQueryString(q))
+  delete q.page
+  go('?' + objectToQueryString(q))
 }
 filterBrowseMusic.filters = [
   'tags',

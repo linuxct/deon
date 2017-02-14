@@ -1,0 +1,126 @@
+<script type="text/template"
+        route="^catalog"
+        page-title="Catalog Music"
+        transform="transformCatalogMusic"
+        completed="completedCatalogMusic">
+    {{#data}}
+    <div class="container">
+        <div class="flex" data-set="browse-filters">
+            <div class="col-xs-12 browse-filters browse-filters--table" source="$endpoint/catalog/browse/filters"
+                 template="catalog-filters">
+            </div>
+            <div class="col-xs-12 catalog-table" role="catalog-pages"></div>
+        </div>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="catalog-filters">
+    {{#loading}}{{>loading-view}}{{/loading}}
+    {{#error}}<p>{{message}}</p>{{/error}}
+    {{#data}}
+    <div class="flex">
+      <!--
+      <div class="col-xs-12 col-md-3 search-wrapper" trigger-target="searchForm" data-set="search-form">
+        <button class="faux search-button" action="search" trigger="searchForm" data-set-target="search-form">
+            <i class="fa fa-search"></i>
+        </button>
+        <input data-set-target="search-form" name="term" type="text" placeholder="Search" value=""/>
+      </div>
+      -->
+
+      <div class="col-xs-12 col-md-10 flex browse-fieldsets">
+        <fieldset class="filter-group">
+          <select name="type" onchange="addBrowseFilter(null, this)">
+            <option value="">Release Type</option>
+            {{#types}}
+            <option value="{{.}}">{{.}}</option>
+            {{/types}}
+          </select>
+        </fieldset>
+        <fieldset class="filter-group">
+          <select name="genre" onchange="addBrowseFilter(null, this)">
+            <option value="">Genre</option>
+            {{#genres}}
+            <option value="{{name}}">{{name}}</option>
+            {{/genres}} 
+          </select>
+        </fieldset>
+        <fieldset class="filter-group">
+          <select name="tag" onchange="addBrowseFilter(null, this)">
+            <option value="">Tag</option>
+            {{#tags}}
+            <option value="{{.}}">{{.}}</option>
+            {{/tags}}
+          </select>
+        </fieldset>
+      </div>
+
+      <div class="col-xs-12 col-md-2 button-group button-group--filters">
+          <button class="button--cta button--full" action="filterBrowseMusic" data-set-target="browse-filters">Apply</button>
+      </div>
+    </div>
+    <div>
+    </div>
+    {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="catalog-page">
+    <div template="catalog-rows" source="{{source}}"></div>
+    </footer>
+</script>
+
+<script type="text/template"
+        template-name="catalog-rows"
+        transform="transformMusicCatalogResults"
+        completed="completedBrowseFilters">
+  {{#loading}}{{>loading-view}}{{/loading}}
+  {{#error}}<p>{{message}}</p>{{/error}}
+  {{#data}}
+  <header class="flex">
+    <div class="col-xs-12 col-sm-6 browse-table-tags">
+      <ul class="filter-list" role="filters-list-types"></ul>
+      <ul class="filter-list" role="filters-list-genres"></ul>
+      <ul class="filter-list" role="filters-list-tags"></ul>
+    </div>
+    <div class="col-xs-12 col-sm-6 pagination-right">
+      {{>searchPagination}}
+    </div>
+  </header>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Track</th>
+        <th>Artists</th>
+        <th>Release</th>
+        <th class="col-xs-hidden col-md-visible">Time</th>
+        <th class="col-xs-hidden col-md-visible">BPM</th>
+        <th class="col-xs-hidden col-md-visible">Genre</th>
+        <th class="col-xs-hidden col-md-visible">Date</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#results}}
+      <tr dblc-action="playSongDblC">
+        <td>{{>playSong}}</td>
+        <td>{{title}}</td>
+        <td>{{artistsTitle}}</td>
+        <td><a href="/release/{{release.catalogId}}">{{release.title}}</a></td>
+        <td class="col-xs-hidden col-md-visible">{{time}}</td>
+        <td class="col-xs-hidden col-md-visible">{{bpm}}</td>
+        <td class="col-xs-hidden col-md-visible">{{genre}}</td>
+        <td class="col-xs-hidden col-md-visible">
+          {{releaseDate.month}}&nbsp;{{releaseDate.day}},&nbsp;{{releaseDate.year}}
+        </td>
+        <td>{{>trackButtons}}</td>
+      </tr>
+      {{/results}}
+    </tbody>
+  </table>
+  <footer class="pagination-right">{{>searchPagination}}</footer>
+  {{/data}}
+</script>

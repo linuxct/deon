@@ -260,7 +260,8 @@ button > i.active,
 .button--release-cta > span{
   display: none;
 }
-.button--mobile[role=play-song]{
+.button--mobile[role=play-song],
+.button--mobile.in-early-access{
   font-size: 2rem;
 }
 .track-container{
@@ -280,7 +281,8 @@ button > i.active,
   .track-container{
     max-width: 200px;
   }
-  .button--mobile[role=play-song]{
+  .button--mobile[role=play-song],
+  .button--mobile.in-early-access{
     font-size: 1.5rem;
   }
 }

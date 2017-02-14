@@ -90,6 +90,33 @@
   padding: 1rem 2rem;
   color: white;
 }
+.catalog-table th,
+.catalog-table td {
+  padding: 0.2rem 1rem;
+}
+.browse-fieldsets > fieldset {
+  flex: 1 auto;
+}
+
+.browse-filters--table .search-wrapper{
+  position: relative;
+}
+.browse-filters--table input[type="text"] {
+  width: 100%;
+  font-size: 1rem;
+}
+.browse-filters--table button.search-button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+.browse-filters--table fieldset {
+  width: 100%;
+  margin: .5rem 0 0;
+}
+.browse-filters--table .button-group--filters{
+  margin: .5rem 0;
+}
 @media screen and (min-width: 992px){
   .panel .music-browse{
     margin-left: 1rem;
@@ -107,6 +134,50 @@
     float: left;
     margin: 0;
     margin-right: 2em;
+  }
+
+  .browse-filters--table input[type="text"] {
+    height: 35px;
+  }
+  .browse-filters--table{
+    padding-right: 0;
+  }
+  .browse-table-tags .filter-list{
+    float: left;
+    margin-top: .5rem;
+  }
+  .browse-filters--table fieldset{
+    margin: 0;
+    margin-left: .5rem;
+    width: auto;
+  }
+  .browse-filters--table fieldset:first-child{
+    margin-left: 0;
+  }
+  .browse-filters--table fieldset:last-child{
+    margin-right: .5rem;
+  }
+  .browse-filters--table .button-group--filters{
+    margin: .5rem 0;
+  }
+  .browse-filters--table fieldset .filter-list{
+    margin: 0.5rem 0;
+  }
+  .browse-filters--table fieldset select{
+    height: 35px;
+    line-height: 1;
+    padding: 0 .65rem;
+  }
+  .browse-filters--table .button-group{
+    margin: 0;
+    text-align: right;
+  }
+  .browse-filters--table .button-group--filters button {
+    padding: .4rem;
+  }
+  .pagination-right > .pagination {
+    text-align: right;
+    margin-right: 0;
   }
 }
 @media screen and (min-width: 1700px){
