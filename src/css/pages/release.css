@@ -264,21 +264,21 @@ button > i.active,
 .button--mobile.in-early-access{
   font-size: 2rem;
 }
-.track-container{
+.scroll-container{
   max-width: 90%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   vertical-align: bottom;
 }
-.track-title{
+.scroll-title{
   text-indent: 0px;
   transition: text-indent 0.7s ease;
   white-space: nowrap;
   display: inline-block;
 }
 @media screen and (min-width: 992px){
-  .track-container{
+  .scroll-container{
     max-width: 200px;
   }
   .button--mobile[role=play-song],
@@ -287,7 +287,7 @@ button > i.active,
   }
 }
 @media screen and (min-width: 1080px){
-  .track-container{
+  .scroll-container{
     max-width: 220px;
   }
   .button--release-cta > span{
@@ -327,12 +327,12 @@ button > i.active,
   }
 }
 @media screen and (min-width: 1200px){
-  .track-container{
+  .scroll-container{
     max-width: 325px;
   }
 }
 @media screen and (min-width: 1500px){
-  .track-container{
+  .scroll-container{
     max-width: 400px;
   }
 }

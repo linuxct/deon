@@ -299,18 +299,18 @@ function prepareTrackTitle(item){
   return trackTitle
 }
 
-function scrollTrackTitle(){
-  var el = document.querySelector(sel.title)
-  var elContainer = document.querySelector(sel.link)
-  if (!el || !elContainer) return
-  if (el.offsetWidth>elContainer.offsetWidth){
-    var scrollDistance = el.offsetWidth - elContainer.offsetWidth
-    el.style.textIndent = -scrollDistance + 'px';
+function scrollTrackTitle(elementContainer){
+  var scrollingElement = elementContainer.querySelector('.scroll-title')
+  if (!elementContainer || !scrollingElement) return
+  if (scrollingElement.offsetWidth>elementContainer.offsetWidth){
+    var scrollDistance = scrollingElement.offsetWidth - elementContainer.offsetWidth
+    scrollingElement.style.textIndent = -scrollDistance + 'px';
   }
 }
-function removeScrollTrackTitle(){
-  var el = document.querySelector(sel.title)
-  if (el) el.style.textIndent = '0px';
+function removeScrollTrackTitle(elementContainer){
+  var scrollingElement = elementContainer.querySelector('.scroll-title')
+  if (!elementContainer || !scrollingElement) return
+  scrollingElement.style.textIndent = '0px';
 }
 
 function updateControls () {

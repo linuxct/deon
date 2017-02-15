@@ -94,6 +94,7 @@
 .catalog-table td {
   padding: 0.2rem 1rem;
 }
+
 .browse-fieldsets > fieldset {
   flex: 1 auto;
 }
@@ -118,6 +119,21 @@
   margin: .5rem 0;
 }
 @media screen and (min-width: 992px){
+
+  .catalog-table td{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+  }
+  .catalog-table td.col-xs-hidden{
+    max-width: 125px;
+  }
+  .catalog-table .button--mobile[role=play-song], 
+  .catalog-table .button--mobile.in-early-access{
+    font-size: 1.2rem;
+  }
+
   .panel .music-browse{
     margin-left: 1rem;
   }
@@ -180,8 +196,48 @@
     margin-right: 0;
   }
 }
+
+@media screen and (min-width: 1080px){
+  .catalog-table td{
+    max-width: 220px;
+  }
+  .catalog-table td.col-xs-hidden{
+    max-width: 125px;
+  }
+}
+@media screen and (min-width: 1200px){
+  .scroll-container{
+    max-width: 325px;
+  }
+  .catalog-table td.col-xs-hidden{
+    max-width: 125px;
+  }
+}
+@media screen and (min-width: 1500px){
+  .scroll-container{
+    max-width: 400px;
+  }
+  .catalog-table td.col-xs-hidden{
+    max-width: 125px;
+  }
+}
+
 @media screen and (min-width: 1700px){
   .button-group--filters button{
     width: auto;
+  }
+}
+
+/* small reset for catalog mobile pages */
+@media screen and (max-width: 991px){
+  .catalog-table table .scroll-container {
+    overflow: initial;
+    white-space: normal;
+    max-width: initial;
+    text-overflow: initial;
+  }
+
+  .catalog-table table .scroll-title {
+      white-space: normal;
   }
 }

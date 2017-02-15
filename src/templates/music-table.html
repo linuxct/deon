@@ -107,9 +107,23 @@
       {{#results}}
       <tr dblc-action="playSongDblC">
         <td>{{>playSong}}</td>
-        <td>{{title}}</td>
-        <td>{{artistsTitle}}</td>
-        <td><a href="/release/{{release.catalogId}}">{{release.title}}</a></td>
+        <td class="longer-width">
+          <div class="scroll-container"
+               onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+            <span class="scroll-title">{{title}}</span>
+          </div>
+        </td>
+        <td class="longer-width">
+          {{artistsTitle}}
+        </td>
+        <td class="longer-width">
+          <div class="scroll-container"
+               onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+            <a class="scroll-title" href="/release/{{release.catalogId}}">
+              {{release.title}}
+            </a>
+          </div>
+        </td>
         <td class="col-xs-hidden col-md-visible">{{time}}</td>
         <td class="col-xs-hidden col-md-visible">{{bpm}}</td>
         <td class="col-xs-hidden col-md-visible">{{genre}}</td>
