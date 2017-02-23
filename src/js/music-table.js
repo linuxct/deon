@@ -47,5 +47,64 @@ function transformMusicCatalogResults(obj, done){
 
     return track
   })
+
+  obj.tableHeaders = getSortableHeaders()
+
   return obj
+}
+
+function getSortableHeaders (sortBy, direction) {
+  var qo = queryStringToObject(window.location.search)
+
+  var headers = 
+  [ { label: 'Track'
+    , field: 'title'
+    , xsHidden: false
+    } , 
+    { label: 'Artists'
+    , field: 'artists'
+    , xsHidden: false
+    } ,
+    { label: 'Release'
+    , field: 'release'
+    , xsHidden: false
+    } ,
+    { label: 'Time'
+    , field: 'time'
+    , xsHidden: true
+    } ,
+    { label: 'BPM'
+    , field: 'bpm'
+    , xsHidden: true
+    } ,
+    { label: 'Genre'
+    , field: 'genre'
+    , xsHidden: true
+    } ,
+    { label: 'Date'
+    , field: 'date'
+    , xsHidden: true
+    }
+  ]
+
+  headers = headers.map(function (h) {
+    var qo = queryStringToObject(window.location.search)
+    h.active = qo.sortOn == h.field
+    h.asc = qo.sortValue == 1
+    h.desc = qo.sortValue == -1
+
+    qo.sortOn = h.field
+
+    if(h.active) {
+      qo.sortValue = h.asc ? -1 : 1
+    }
+    else {
+      qo.sortValue = 1
+    }
+
+    h.href = '/catalog?' + objectToQueryString(qo)
+    return h
+  })
+
+  return headers
 }

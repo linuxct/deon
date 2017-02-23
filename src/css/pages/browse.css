@@ -91,6 +91,49 @@
   color: white;
 }
 
+.catalog-table th a,
+.catalog-table td {
+  padding: 0.2rem 1rem;
+}
+
+.catalog-table th {
+  padding: 0px;
+}
+
+.catalog-table th a {
+  font-weight: normal;
+  display:  block;
+  text-decoration: none;
+}
+
+.catalog-table th a:hover .fa,
+.catalog-table th.active a .fa {
+  color: dodgerblue;
+}
+
+.catalog-table th a .fa {
+  float: right;
+  color: #666;
+}
+
+.catalog-table th a .fa-sort-asc {
+  margin-top: 5px;
+}
+
+.catalog-table th a .fa-sort-desc {
+  margin-bottom: 5px;
+}
+
+.catalog-table th.active a,
+.catalog-table th a:hover {
+  color: dodgerblue;
+  background: #f5f5f5
+}
+
+.catalog-table th.active a {
+  font-weight: bold;
+}
+
 .browse-fieldsets > fieldset {
   flex: 1 auto;
 }

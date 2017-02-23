@@ -73,6 +73,11 @@
 </script>
 
 <script type="text/template"
+        mustache-name="catalog-sorting-header">
+<a href="#" class="{{#sorting}}sorting-active {{/sorting}}{{#desc}}sorting-desc {{/#desc}}{{#asc}}sorting-asc{{/asc}}">{{label}}</a>
+</script>
+
+<script type="text/template"
         template-name="catalog-rows"
         transform="transformMusicCatalogResults"
         completed="completedBrowseFilters">
@@ -93,13 +98,15 @@
     <thead>
       <tr>
         <th></th>
-        <th>Track</th>
-        <th>Artists</th>
-        <th>Release</th>
-        <th class="col-xs-hidden col-md-visible">Time</th>
-        <th class="col-xs-hidden col-md-visible">BPM</th>
-        <th class="col-xs-hidden col-md-visible">Genre</th>
-        <th class="col-xs-hidden col-md-visible">Date</th>
+        {{#tableHeaders}}
+          <th class="{{#xsHidden}}col-xs-hidden col-md-visible{{/xsHidden}}{{#active}} active{{/active}}">
+            <a href="{{href}}">
+              {{label}} 
+              {{#active}}<span class="fa {{#asc}}fa-sort-asc{{/asc}}{{#desc}}fa-sort-desc{{/desc}}"></span>{{/active}}
+              {{^active}}<span class="fa fa-sort"></span>{{/active}}
+            </a>
+          </th>
+        {{/tableHeaders}}
         <th></th>
       </tr>
     </thead>
