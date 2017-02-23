@@ -134,6 +134,40 @@ function completedAccount () {
   initLocationAutoComplete()
 }
 
+function transformVerify (obj) {
+  obj.code = window.location.pathname.split('/')[2]
+  obj.isSignedIn = isSignedIn()
+  return obj
+}
+
+function completedVerify () {
+  initLocationAutoComplete()
+}
+
+function verifyInvite (e, el) {
+  var data = getTargetDataSet(el)
+
+  if(!data.googleMapsPlaceId) {
+    return alert('Location is required.')
+  }
+
+  if(!data.password) {
+    return alert('Password is required.')
+  }
+
+  requestJSON({
+    url: endhost + '/invite/complete',
+    method: 'POST',
+    data: data
+  }, function (err, result) {
+    if(err) {
+      return toasty(new Error(err))
+    }
+    toasty('Account verified, please sign in')
+    go('/signin')
+  })
+}
+
 function transformAccountSettings (obj) {
   obj.downloadOptions = transformAccountSettings.options.map(function (opt) {
     opt = cloneObject(opt)

@@ -1,4 +1,67 @@
 <script type="text/template"
+    route="^verify\/(.*)"
+    source="$endhost/invite/info/$1"
+    transform="transformVerify"
+    completed="completedVerify"
+    page-title="Verify"
+    >
+    <div class="container">
+        {{#loading}}
+        {{>loading-view}}
+        {{/loading}}
+        {{#error}}
+        <p>{{message}}</p>
+        {{/error}}
+        {{#data}}
+        <h1>Complete Signup</h1>
+        {{^isSignedIn}}
+            <form onsubmit="false" data-set="verify" data-submit-action="verifyInvite" class="col-xs-12 col-md-6 panel">
+                <input type="hidden" name="code" value="{{code}}" />
+                <table class="form signup-verify">
+                    <tbody>
+                        <tr>
+                            <th>Real Name</th>
+                            <td>
+                                <input type="text"
+                                       name="realName"
+                                       placeholder=""
+                                       value="" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Password</th>
+                            <td>
+                                <input type="password"
+                                       name="password"
+                                       placeholder="a secret"/>
+                                <button
+                                    class="faux password"
+                                    action="togglePassword"
+                                    tabindex="999"
+                                    toggle-target="password">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Location</th>
+                            <td>
+                                {{>location-autocomplete}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button button--cta">Submit</button>
+            </form>
+        {{/isSignedIn}}
+        {{#isSignedIn}}
+        <p>You are already signed in.</p>
+        {{/isSignedIn}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
         route="^(signin|sign-in)"
         transform="transformSignIn"
         page-title="Sign In">
