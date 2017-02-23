@@ -187,6 +187,35 @@
 </script>
 
 <script type="text/template"
+        mustache-name="trackCellsOneLine">
+<td class="longer-width">
+  <div class="scroll-container"
+       onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+    <span class="scroll-title">{{title}}{{>early-access-msg}}{{>unlicensable}}</span>
+  </div>
+</td>
+{{#playlistId}}
+<td class="longer-width">
+  <div class="scroll-container"
+       onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+    <a href="/release/{{releaseId}}" class="scroll-title">{{releaseTitle}}</a>
+  </div>
+</td>
+{{/playlistId}}
+<td class="longer-width">
+    {{^artists}}
+    Id
+    {{/artists}}
+    {{#artists}}
+    <a href="/artist/{{uri}}">{{name}}</a>
+    {{/artists}}
+</td>
+<td class="col-xs-hidden col-md-visible genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
+<td class="col-xs-hidden col-md-visible">{{time}}</td>
+<td class="col-xs-hidden col-md-visible">{{bpm}}</td>
+</script>
+
+<script type="text/template"
         mustache-name="trackCells">
 <td>{{title}}{{>early-access-msg}}{{>unlicensable}}</td>
 {{#playlistId}}
