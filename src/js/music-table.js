@@ -9,6 +9,20 @@ function transformCatalogMusic (obj) {
   return obj
 }
 
+function transformCatalogFilters (obj) {
+  var q = queryStringToObject(window.location.search)
+  obj.search = q.search
+  return obj
+}
+
+function completedCatalogFilters () {
+  setTimeout(function () {
+    var input = document.querySelector('input[name=search]')
+    input.focus()
+    input.value = input.value
+  }, 1)
+}
+
 function completedCatalogMusic () {
   var q = getBrowseMusicQuery()
   q.limit = catalogMusicLimit

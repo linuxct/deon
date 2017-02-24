@@ -184,6 +184,17 @@ function filterBrowseMusic (e, el) {
   })
   delete q.pages
   delete q.page
+  if(data.search) {
+    q.search = data.search
+
+    var bpm = parseInt(q.search)
+    if(!isNaN(bpm)) {
+      q.search = 'bpm:' + bpm
+    }
+  }
+  else {
+    delete q.search
+  }
   go('?' + objectToQueryString(q))
 }
 filterBrowseMusic.filters = [
