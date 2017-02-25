@@ -122,7 +122,8 @@
                {{>payment-method-recurring}}
                <button class="button--cta"
                        action="checkoutSubscriptions" data-set-target="pay-method">
-                    Purchase
+                    {{#splitTestA}}Purchase{{/splitTestA}}
+                    {{#splitTestB}}Complete Purchase{{/splitTestB}}
                 </button>
             </div>
         </div>
