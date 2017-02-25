@@ -148,7 +148,7 @@
         </div>
     </div>
     <div class="release container" >
-        <div class="panel panel--mobile"
+        <div 
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>
@@ -292,57 +292,65 @@
         template-name="release-tracks"
         transform="transformReleaseTracks"
         completed="completedReleaseTracks">
-    <table>
-        <thead>
-            <tr>
-                <th class="shrink">#</th>
-                <th class="shrink nohpad"></th>
-                <th>Title</th>
-                <th>Artists</th>
-                <th class="col-xs-hidden col-md-visible">Genre</th>
-                <th class="col-xs-hidden col-md-visible">Time</th>
-                <th class="col-xs-hidden col-md-visible">BPM</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#loading}}
-            <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
-            {{/loading}}
-            {{#error}}
-            <tr><td colspan="5"><p>{{message}}</p></td></tr>
-            {{/error}}
-            {{#data}}
-            {{#results}}
-            <tr dblc-action="playSongDblC">
-                <td class="shrink">{{trackNumber}}.</td>
-                <td class="shrink nohpad">
-                  {{>playSong}}
-                </td>
-                {{>trackCells}}
-                <td class="push-right">
-                    {{>trackButtons}}
-                    {{#canPlaylist}}
-                    <select
-                        onchange="addToPlaylist(null, this)"
-                        source="$endpoint/playlist"
-                        class="col-xs-hidden col-md-visible inline"
-                        template="select-playlist"
-                        release-id="{{releaseId}}"
-                        track-id="{{_id}}">
-                    </select>
-                    {{/canPlaylist}}
-                </td>
-            </tr>
-            {{/results}}
-            {{/data}}
-        </tbody>
-    </table>
+    <div class="panel panel--mobile">
+        <table>
+            <thead>
+                <tr>
+                    <th class="shrink">#</th>
+                    <th class="shrink nohpad"></th>
+                    <th>Title</th>
+                    <th>Artists</th>
+                    <th class="col-xs-hidden col-md-visible">Genre</th>
+                    <th class="col-xs-hidden col-md-visible">Time</th>
+                    <th class="col-xs-hidden col-md-visible">BPM</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#loading}}
+                <tr><td class="loading-table" colspan="10"><i class="fa fa-spin fa-refresh"></i></td></tr>
+                {{/loading}}
+                {{#error}}
+                <tr><td colspan="5"><p>{{message}}</p></td></tr>
+                {{/error}}
+                {{#data}}
+                {{#results}}
+                <tr dblc-action="playSongDblC">
+                    <td class="shrink">{{trackNumber}}.</td>
+                    <td class="shrink nohpad">
+                      {{>playSong}}
+                    </td>
+                    {{>trackCells}}
+                    <td class="push-right">
+                        {{>trackButtons}}
+                        {{#canPlaylist}}
+                        <select
+                            onchange="addToPlaylist(null, this)"
+                            source="$endpoint/playlist"
+                            class="col-xs-hidden col-md-visible inline"
+                            template="select-playlist"
+                            release-id="{{releaseId}}"
+                            track-id="{{_id}}">
+                        </select>
+                        {{/canPlaylist}}
+                    </td>
+                </tr>
+                {{/results}}
+                {{/data}}
+            </tbody>
+        </table>
+        {{#hiddenTracks}}
+        <br />
+        <p>This release contains <strong>{{hiddenTracks}} more songs</strong> that will be available when it is fully released. <a href="/gold">Monstercat Gold</a> subscribers will be able to stream them 20hrs early.</p>
+        {{/hiddenTracks}}
+    </div>
     {{#data}}
-    {{#hiddenTracks}}
-    <br />
-    <p>This release contains <strong>{{hiddenTracks}} more songs</strong> that will be available when it is fully released. <a href="/gold">Monstercat Gold</a> subscribers will be able to stream them 20hrs early.</p>
-    {{/hiddenTracks}}
+    {{#shopifyEmbeds}}
+    <div class="panel">
+        <h2>Buy {{name}} Merch</h2>
+        <div role="shopify-embed" collection-id="{{shopifyCollectionId}}"></div>
+    </div>
+    {{/shopifyEmbeds}}
     {{/data}}
 </script>
 
@@ -400,6 +408,12 @@
         <div source="$endpoint/catalog/artist/{{_id}}/releases"
             template="user-releases">
         </div>
+        {{#shopifyCollectionId}}
+        <div class="panel">
+            <h2>Buy {{name}} Merch</h2>
+            <div role="shopify-embed"></div>
+        </div>
+        {{/shopifyCollectionId}}
     </div>
     {{/data}}
 </script>

@@ -501,6 +501,7 @@ function mapWebsiteDetails (o) {
   if (o.urls) {
     o.socials = getSocials(o.urls)
   }
+
   return o
 }
 
@@ -793,6 +794,18 @@ function transformReleaseTracks (obj, done) {
       track.time = formatDuration(track.duration)
     })
     obj.hasGoldAccess = hasGoldAccess()
+    
+    obj.shopifyEmbeds = []
+    for(var k in atlas) {
+      var artist = atlas[k]
+      if(artist.shopifyCollectionId) {
+        obj.shopifyEmbeds.push({
+          name: artist.name,
+          shopifyCollectionId: artist.shopifyCollectionId
+        })
+      }
+    }
+
     done(null, obj)
   })
 }
@@ -871,16 +884,20 @@ function completedReleaseTracks (source, obj) {
     return
   }
   appendSongMetaData(obj.data.results)
-  var artists = [];
+  var artistLinks = [];
   getArtistsAtlas(obj.data.results, function (err, atlas) {
     for(var i in atlas) {
-      artists.push('https://' + window.location.host + '/artist/' + i)
+      artistLinks.push('https://' + window.location.host + '/artist/' + i)
     }
   })
   appendMetaData({
-    'music:musician': artists
+    'music:musician': artistLinks
   })
   pageIsReady()
+  var embeds = document.querySelectorAll('[collection-id][role=shopify-embed]')
+  embeds.forEach(function (node) {
+    ShopifyBuyInit(node.getAttribute('collection-id'), node)
+  })
 }
 
 function completedMusic (source, obj) {
@@ -922,6 +939,9 @@ function completedArtist (source, obj) {
   }
   setMetaData(meta)
   pageIsReady()
+  if(obj.data.shopifyCollectionId) {
+    ShopifyBuyInit(obj.data.shopifyCollectionId)
+  }
 }
 
 function completedMusic (source, obj) {
