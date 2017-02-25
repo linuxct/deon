@@ -585,7 +585,8 @@ function transformSocialSettings (obj) {
   return obj
 }
 
-function transformServices () {
+var purchaseButtonSplitTest = null
+function transformServices (obj, done) {
   var user = isSignedIn() ? session.user : {}
   var opts = {
     isSignedIn: isSignedIn(),
@@ -596,10 +597,32 @@ function transformServices () {
   if (isLegacyUser()) {
     opts = {hasLegacy: true}
   }
-  return {
-    user: opts,
-    qs: encodeURIComponent(window.location.search)
-  }
+  var splitTestA = true
+  var splitTestB = false
+
+  purchaseButtonSplitTest = new SplitTest({
+    name: 'purchase-button-text',
+    dontCheckStarter: true,
+    modifiers: {
+      'a': function (_this) {
+        splitTestA = true
+        splitTestB = false
+      },
+      'b' : function (_this) {
+        splitTestA = false
+        splitTestB = true
+      }
+    },
+    onStarted: function () {
+      done(null,  {
+        user: opts,
+        splitTestA: splitTestA,
+        splitTestB: splitTestB,
+        qs: encodeURIComponent(window.location.search)
+      })
+    }
+  })
+  purchaseButtonSplitTest.start()
 }
 
 function transformGoldSubscription (obj) {

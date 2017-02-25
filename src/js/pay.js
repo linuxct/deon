@@ -178,6 +178,7 @@ function checkoutSubscriptions (e, el) {
   if (!subs.length) return
   var data = getTargetDataSet(el)
   if (!isValidPayMethod(data.method, checkoutSubscriptions)) return
+  purchaseButtonSplitTest.convert()
   checkoutSubscriptions[data.method](data, subs)
 }
 
