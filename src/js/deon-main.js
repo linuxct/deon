@@ -829,6 +829,11 @@ function transformReleaseTracks (obj, done) {
       }
     }
 
+    //Limit number of embeds to 1
+    if(obj.shopifyEmbeds.length > 1) {
+      obj.shopifyEmbeds = []
+    }
+
     done(null, obj)
   })
 }
