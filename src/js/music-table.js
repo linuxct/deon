@@ -45,14 +45,14 @@ function openCatalogPage (q) {
   loadSubSources(div)
 }
 
-function transformMusicCatalogResults(obj, done){
+function transformMusicCatalogResults (obj, done){
 	if (obj.total > 1) obj.showPagination = true
   setPagination(obj, obj.limit)
   
-  var trackAtlas = toAtlas(obj.results, '_id')
   obj.results = obj.results.map(function (item, index, arr) {
 
-    var track = mapReleaseTrack(trackAtlas[item._id] || {}, index, arr)
+    var track = mapReleaseTrack(item, index, arr)
+
     track.artist = track.artistsTitle
     track.releaseDate = formatDateJSON(track.release.releaseDate)
     track.playUrl = getPlayUrl(track.albums, track.releaseId)
