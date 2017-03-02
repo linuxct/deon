@@ -1045,14 +1045,6 @@ function openReleaseArt (e, el) {
   })
 }
 
-function openTrackLicensing (e, el) {
-  openModal('track-licensing-modal', {
-    trackId:   el.getAttribute('track-id'),
-    releaseId: el.getAttribute('release-id'),
-    signedIn: isSignedIn()
-  })
-}
-
 function transformCurrentUrl (data) {
   data = data || {}
   data.currentUrl = encodeURIComponent(window.location.pathname + window.location.search)

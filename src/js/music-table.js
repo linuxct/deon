@@ -54,6 +54,7 @@ function transformMusicCatalogResults (obj, done){
     var track = mapReleaseTrack(item, index, arr)
 
     track.artist = track.artistsTitle
+    track.releaseId = track.release._id
     track.releaseDate = formatDateJSON(track.release.releaseDate)
     track.playUrl = getPlayUrl(track.albums, track.releaseId)
     track.downloadLink = getDownloadLink(track.release._id, track._id)
