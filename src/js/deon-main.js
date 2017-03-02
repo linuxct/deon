@@ -485,7 +485,7 @@ function mapRelease (o) {
   return o
 }
 
-function mapWebsiteDetails (o) {
+function transformWebsiteDetails (o) {
   if (o.profileImageUrl) {
     o.image = o.profileImageUrl
     o.imageSmall = o.profileImageUrl + "?image_width=256"
