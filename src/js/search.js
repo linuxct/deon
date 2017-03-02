@@ -218,7 +218,7 @@ function transformSearchTrackResults (obj, done) {
 function transformSearchArtistsResults (obj, done) {
   var type = getSearchType('artists')
   setPagination(obj, type.perPage)
-  obj.results = obj.results.map(mapWebsiteDetails)
+  obj.results = obj.results.map(transformWebsiteDetails)
   return obj
 }
 

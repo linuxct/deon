@@ -48,10 +48,7 @@ function transformEvent (i) {
   }
   i.showCtaButton = i.ctaUri && i.upcoming
   if(i.artistDetails) {
-    i.artistDetails = i.artistDetails.map(function (detail) {
-      detail.image = datapoint + '/blobs/' + detail.profileImageBlobId
-      return detail
-    })
+    i.artistDetails = i.artistDetails.map(transformWebsiteDetails)
   }
   else {
     i.artistDetails = []
