@@ -819,18 +819,22 @@ function transformReleaseTracks (obj, done) {
     obj.hasGoldAccess = hasGoldAccess()
     
     obj.shopifyEmbeds = []
+    var artistsCount = 0
+
     for(var k in atlas) {
       var artist = atlas[k]
-      if(artist.shopifyCollectionId) {
+      // prevent Monstercat counting as Artist on Podcasts
+      if(artist.name !== "Monstercat" && artist.shopifyCollectionId) {
         obj.shopifyEmbeds.push({
           name: artist.name,
           shopifyCollectionId: artist.shopifyCollectionId
         })
       }
+      artistsCount++
     }
 
     //Limit number of embeds to 1
-    if(obj.shopifyEmbeds.length > 1) {
+    if(artistsCount > 1) {
       obj.shopifyEmbeds = []
     }
 
