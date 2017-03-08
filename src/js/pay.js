@@ -38,7 +38,7 @@ function transformBuyOut (obj) {
 }
 
 function transformBuyWhitelist (obj) {
-  obj = transformServices(obj)
+  obj = transformServicesPage(obj)
   var qo = searchStringToObject()
   for(var i in qo) {
     obj[i] = qo[i]

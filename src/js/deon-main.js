@@ -501,7 +501,6 @@ function transformWebsiteDetails (o) {
   if (o.urls) {
     o.socials = getSocials(o.urls)
   }
-
   return o
 }
 
@@ -585,8 +584,7 @@ function transformSocialSettings (obj) {
   return obj
 }
 
-var purchaseButtonSplitTest = null
-function transformServices (obj, done) {
+function transformServicesPage (obj) {
   var user = isSignedIn() ? session.user : {}
   var opts = {
     isSignedIn: isSignedIn(),
@@ -597,6 +595,15 @@ function transformServices (obj, done) {
   if (isLegacyUser()) {
     opts = {hasLegacy: true}
   }
+  return {
+    user: opts,
+    qs: window.location.search
+  }
+}
+
+var purchaseButtonSplitTest = null
+function transformServices (obj, done) {
+  var opts = transformServicesPage(obj)
   var splitTestA = true
   var splitTestB = false
 

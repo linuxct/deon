@@ -23,6 +23,9 @@ function ShopifyBuyInit(collectionId, node) {
             "buttonWithQuantity": false,
             "quantity": false
           },
+          "text": {
+            "button": "Add to Cart"
+          },
           "styles": {
             "product": {
               "@media (min-width: 601px)": {
@@ -32,9 +35,16 @@ function ShopifyBuyInit(collectionId, node) {
               }
             },
             "button": {
+              "background-color": "#1e90ff",
               "font-size": "14px",
               "padding-top": "15px",
-              "padding-bottom": "15px"
+              "padding-bottom": "15px",
+              ":hover": {
+                "background-color": "#1b82e6"
+              },
+              ":focus": {
+                "background-color": "#1b82e6"
+              }
             },
             "title": {
               "font-size": "14px"
