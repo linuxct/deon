@@ -55,7 +55,7 @@
                    Upon subscribing for 20 months, all your previously uploaded videos within
                    your subscribed time period are safe from content ID claims even if you unsubscribe.</p>
                 <br/>
-                <p>To buy a license in full go <a href="/account/services/buyout">here</a>.</p>
+                <p>To prepay for 20 months go <a href="/account/services/buyout">here</a>.</p>
                 {{#user.isSignedIn}}
                 <br/>
                 <table>
@@ -91,7 +91,7 @@
                     <button
                         action="buyoutNewLicense"
                         data-set-target="new-license">
-                        Buy In Full
+                        Prepay for 20 Months
                         <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
                     </button>
                     {{>channel-id-help-text}}
@@ -246,7 +246,7 @@
                target="_blank">View License</a>
             {{/licenseUrl}}
             {{^canBuyOut}}
-            <a href="/account/services/buyout/{{_id}}">Buy Out</a>
+            <a href="/account/services/buyout/{{_id}}">Prepay 20 Months</a>
             {{/canBuyOut}}
             {{#cancel}}
             <button class="faux"
@@ -405,9 +405,9 @@
         transform="transformBuyOut"
         completed="completedBuyOut"
         source="$endpoint/self/whitelist/$1"
-        page-title="Whitelist Buy Out">
+        page-title="Whitelist Prepay">
     <div class="container">
-        <h1>Buy Out Whitelist</h1>
+        <h1>Prepay for 20 Months of Whitelist</h1>
         <div class="panel">
             <p>Pre-pay the rest of your whitelist license. All videos created with the
                 cleared Monstercat catalog during this time period will never receive content-ID claims.</p>
@@ -451,7 +451,7 @@
                 </table>
                 {{>payment-method}}
                 <div class="button-group">
-                    <button class="button--full" trigger="buyLicense" action="buyLicenseAction" data-set-target="buy-out-license">Buy Out</button>
+                    <button class="button--full" trigger="buyLicense" action="buyLicenseAction" data-set-target="buy-out-license">Buy License</button>
                 </div>
             </div>
             {{/data}}

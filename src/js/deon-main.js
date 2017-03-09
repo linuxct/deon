@@ -622,7 +622,7 @@ function transformServices (obj, done) {
     },
     onStarted: function () {
       done(null,  {
-        user: opts,
+        user: opts.user,
         splitTestA: splitTestA,
         splitTestB: splitTestB,
         qs: encodeURIComponent(window.location.search)
