@@ -28,7 +28,14 @@ function transformEvents (results) {
 }
 
 function transformEvent (i) {
+  var endDate = i.endDate ? new Date(i.endDate) : false
   i.upcoming = new Date(i.startDate) > new Date()
+  if(endDate) {
+    i.ongoing = !i.upcoming && endDate > new Date()
+  }
+  else {
+    i.ongoing = false
+  }
   i.dateString = formatDate(i.startDate)
   i.date = formatDateJSON(i.startDate)
   i.icalDownloadLink = endpoint + '/events/addtocalendar/' + i._id
@@ -46,7 +53,7 @@ function transformEvent (i) {
   else {
     i.descriptionHtml = ''
   }
-  i.showCtaButton = i.ctaUri && i.upcoming
+  i.showCtaButton = i.ctaUri && (i.upcoming || i.ongoing)
   if(i.artistDetails) {
     i.artistDetails = i.artistDetails.map(transformWebsiteDetails)
   }
