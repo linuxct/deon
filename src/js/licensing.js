@@ -113,6 +113,13 @@ function showCrediting (e, el) {
   }
 }
 
+function copyCrediting (e, el){
+  el.focus()
+  el.select()
+  document.execCommand('copy')
+  toasty('Crediting copied to clipboard.')
+}
+
 function openTrackLicensing (e, el) {
   openModal('track-licensing-modal', {
     trackId:   el.getAttribute('track-id'),

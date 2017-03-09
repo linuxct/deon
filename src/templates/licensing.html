@@ -360,18 +360,11 @@
 
 <script type="text/template"
         mustache-name="licensing-modal-main">
-  <div class="section content-creators">
-      <h3>Content Creators</h3>
+  <div class="section content-creators flex-buttons">
       {{>licensingContentCreatorCTAs}}
-      <span class="or">or</span>
-      <a href="/licensing/content-creators">read more</a>
-  </div>
-
-  <div class="section commercial">
-      <h3>Commercial Licensing</h3>
       <a class="button button-cta button-cta--mobile" href="/licensing/commercial" action="closeModal">
-        <span class="title">Commercial Use</span>
-        <span class="subtitle">Movies, TV Shows, Commercials</span>
+        <span class="title">Commercial</span>
+        <span class="subtitle">Movies, TV Shows</span>
       </a> 
   </div>
 </script>
@@ -394,10 +387,22 @@
             {{>licensing-modal-main}}
             <div class="section crediting">
               <h3>Credit the Artists</h3>
-              <button action="showCrediting" credit-type="youtube" class="button button-cta--mobile">YouTube</button>
-              <button action="showCrediting" credit-type="other" class="button button-cta--mobile">Twitter/Facebook/Instagram</button>
-              <textarea class="copycredits hide" credit-type="youtube">{{track.copycredit}}</textarea>
-              <textarea class="copycredits hide" credit-type="other">{{track.copycreditOther}}</textarea>
+              <div class="flex">
+                <div class="col-xs-12 col-sm-6 flex-buttons">
+                  <button action="showCrediting" credit-type="youtube" class="button button-cta button-cta--mobile button--youtube">
+                    <span class="title">YouTube</span>
+                    <span class="subtitle">on Description</span>
+                  </button>
+                  <button action="showCrediting" credit-type="other" class="button button-cta button-cta--mobile">
+                    <span class="title">Other</span>
+                    <span class="subtitle">Facebook/Twitter</span>
+                  </button>
+                </div>
+                <div class="col-xs-12 col-sm-6 flex-buttons">
+                  <textarea action="copyCrediting" class="copycredits hide" credit-type="youtube">{{track.copycredit}}</textarea>
+                  <textarea action="copyCrediting" class="copycredits hide" credit-type="other">{{track.copycreditOther}}</textarea>
+                </div>
+              </div>
             </div>
             {{/data}}
             <button class="button--close faux" action="closeModal">

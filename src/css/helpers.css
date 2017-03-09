@@ -168,7 +168,7 @@ td.push-right > * {
   background: #f5f5f5;
 }
 
-.cl-white *:not(i) {
+.cl-white *:not(i){
   color: white;
 }
 
@@ -177,6 +177,11 @@ td.push-right > * {
 .cl-white button.faux:active,
 .cl-white button.faux:hover{
   color: dodgerblue;
+}
+
+.cl-white .button--gold:active,
+.cl-white .button--gold:hover {
+  color: black;
 }
 
 .cl-white p{

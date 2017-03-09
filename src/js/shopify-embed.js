@@ -35,20 +35,23 @@ function ShopifyBuyInit(collectionId, node) {
               }
             },
             "button": {
-              "background-color": "#1e90ff",
               "font-size": "14px",
               "padding-top": "15px",
               "padding-bottom": "15px",
+              "background-color": "dodgerblue",
+              "border-radius": "0px",
+              "font-weight": "bold",
+              "letter-spacing": "2px",
               ":hover": {
-                "background-color": "#1b82e6"
+                "background-color": '#000'
               },
               ":focus": {
-                "background-color": "#1b82e6"
+                "background-color": '#000'
               }
             },
             "title": {
               "font-size": "14px"
-            },
+            }
           }
         },
         "cart": {
@@ -58,6 +61,24 @@ function ShopifyBuyInit(collectionId, node) {
           "styles": {
             "footer": {
               "background-color": "#ffffff"
+            },
+            "button": {
+              "font-size": "14px",
+              "padding-top": "15px",
+              "padding-bottom": "15px",
+              "background-color": "dodgerblue",
+              "border-radius": "0px",
+              "font-weight": "bold",
+              "letter-spacing": "2px",
+              ":hover": {
+                "background-color": '#000'
+              },
+              ":focus": {
+                "background-color": '#000'
+              }
+            },
+            "title": {
+              "font-size": "14px"
             }
           }
         },
@@ -74,6 +95,20 @@ function ShopifyBuyInit(collectionId, node) {
                 "max-width": "100%",
                 "margin-left": "0px",
                 "margin-bottom": "0px"
+              }
+            }
+          }
+        },
+        "toggle": {
+          "styles": {
+            "toggle": {
+              "background-color": "dodgerblue",
+              "border-radius": "0px",
+              ":hover": {
+                "background-color": '#000'
+              },
+              ":focus": {
+                "background-color": '#000'
               }
             }
           }

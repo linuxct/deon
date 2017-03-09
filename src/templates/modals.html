@@ -43,8 +43,13 @@
 </script>
 
 <script type="text/template" template-name="subscription-required-modal">
-    <div class="modal">
-        <div class="panel panel--padded pointer-events">
+    <div class="modal modal--background">
+        <div class="banner" style="background-image:url(/img/banner.jpg)">
+          <div class="banner-shade"></div>
+          <div class="gradient gradient--inverted"></div>
+        </div>
+        <div class="panel panel--padded pointer-events cl-white">
+
             <h1>Get Gold!</h1>
             <div class="modal-content">
               <h2 class="pricing">$5/month</h2>
@@ -57,11 +62,11 @@
             </div>
             {{^hasGold}}
                 {{#signedIn}}
-                    <a class="button button--cta" href="/account/services" action="closeModal">Get your Gold membership!</a>
+                    <a class="button button--gold" href="/account/services" action="closeModal">Get your Gold membership!</a>
                 {{/signedIn}}
             {{/hasGold}}
             {{^signedIn}}
-                <a class="button button--cta" href="/sign-up?redirect=%2Faccount%2Fservices%3Fgold" action="closeModal">Sign up for an account!</a>
+                <a class="button button--gold" href="/sign-up?redirect=%2Faccount%2Fservices%3Fgold" action="closeModal">Sign up for an account!</a>
             {{/signedIn}}
             <button class="button--close faux" action="closeModal">
               <i class="fa fa-remove"></i>

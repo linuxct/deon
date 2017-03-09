@@ -531,10 +531,6 @@ blockquote code {
 
 /** MODAL **/
 
-.modal--licensing .section {
-  margin-bottom: 2em;
-}
-
 .modal--licensing .section.youtube {
   margin-bottom: 0em;
 }
@@ -553,6 +549,31 @@ blockquote code {
 }
 .faq h4:first-of-type {
   margin-top: 0em;
+}
+
+.modal--licensing .flex-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.modal--licensing .flex-buttons .button {
+  text-align: center;
+  flex: 1 0 0;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.modal--licensing .section.crediting{
+  margin-top: 2rem;
+}
+textarea.copycredits{
+  border: 0;
+  margin: 0;
+  min-height: initial;
+  height: 90px;
+  padding: 1rem;
 }
 @media screen and (min-width: 768px){
   #licenseForm .col-sm-6 {
