@@ -937,6 +937,7 @@ function completedReleaseTracks (source, obj) {
   embeds.forEach(function (node) {
     ShopifyBuyInit(node.getAttribute('collection-id'), node)
   })
+  updateControls()
 }
 
 function completedMusic (source, obj) {
