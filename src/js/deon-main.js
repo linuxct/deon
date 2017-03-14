@@ -43,6 +43,7 @@ openRoute.completed.push(function () {
   recordPage()
   renderHeader()
   closeModal()
+  window.scrollTo(0,0)
   if (location.pathname == "/") getStats()
 })
 openRoute.started.push(function () {
