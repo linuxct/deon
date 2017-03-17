@@ -144,6 +144,9 @@ function getSignInBuying () {
     var qos = redirectTo.substr(redirectTo.indexOf('?')+1)
     var qo = queryStringToObject(qos)
     buying = qo
+    if(qo.ref == 'gold') {
+      buying.gold = true
+    }
   }
 
   return buying
