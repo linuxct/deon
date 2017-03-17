@@ -312,7 +312,7 @@ function getDownloadLink (releaseId, trackId) {
 }
 
 function getGetGoldLink () {
-  var goldUrl = '/account/services?gold'
+  var goldUrl = '/account/services?ref=gold'
   return isSignedIn() ? goldUrl : '/sign-up?redirect=' + encodeURIComponent(goldUrl)
 }
 
@@ -602,36 +602,69 @@ function transformServicesPage (obj) {
   }
 }
 
-var purchaseButtonSplitTest = null
 function transformServices (obj, done) {
   var opts = transformServicesPage(obj)
   var splitTestA = true
   var splitTestB = false
+  var qo = queryStringToObject(window.location.search)
 
-  purchaseButtonSplitTest = new SplitTest({
-    name: 'purchase-button-text',
-    dontCheckStarter: true,
-    modifiers: {
-      'a': function (_this) {
-        splitTestA = true
-        splitTestB = false
+  var scope =  {
+    user: opts.user,
+    qs: encodeURIComponent(window.location.search),
+    showGold: true,
+    showLicenses: true
+  }
+
+  //The referrer is a link that is meant specifically to buy gold
+  if(qo.hasOwnProperty('ref') && qo.ref == 'gold') {
+    //Create the split test
+    transformServices.abTest = new SplitTest({
+      name: 'buy-gold-ref',
+      dontCheckStarter: true,
+      modifiers: {
+        'default': function (_this) {
+          scope.showGold = true
+          scope.showLicenses = true
+        },
+        'hide-licenses' : function (_this) {
+          scope.showGold = true
+          scope.showLicenses = false
+        }
       },
-      'b' : function (_this) {
-        splitTestA = false
-        splitTestB = true
+      onStarted: function () {
+        done(null, scope)
       }
-    },
-    onStarted: function () {
-      done(null,  {
-        user: opts.user,
-        splitTestA: splitTestA,
-        splitTestB: splitTestB,
-        qs: encodeURIComponent(window.location.search)
-      })
-    }
-  })
-  purchaseButtonSplitTest.start()
+    })
+    transformServices.abTest.start()
+  }
+  //The referrer is a link meant specifically to buy a license
+  else if(qo.hasOwnProperty('vendor')) {
+    transformServices.abTest = new SplitTest({
+      name: 'buy-license-ref',
+      dontCheckStarter: true,
+      modifiers: {
+        'default': function (_this) {
+          scope.showGold = true
+          scope.showLicenses = true
+        },
+        'hide-gold' : function (_this) {
+          scope.showGold = false
+          scope.showLicenses = true
+        }
+      },
+      onStarted: function () {
+        done(null, scope)
+      }
+    })
+    transformServices.abTest.start()  
+  }
+  //Just a generic link to their services
+  else {
+    transformServices.abTest = null
+    done(null, scope)
+  }
 }
+transformServices.abTest = null
 
 function transformGoldSubscription (obj) {
   var nobj = {

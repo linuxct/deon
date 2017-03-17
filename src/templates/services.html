@@ -15,9 +15,9 @@
         {{/hasLegacy}}
         {{^hasLegacy}}
         <div class="flex">
-
             {{#user}}
-            <div class="col-xs-12 col-lg-4 col-lg-last panel panel--dark">
+            {{#showGold}}
+            <div class="{{#showLicenses}}col-xs-12 col-lg-4 col-lg-last {{/showLicenses}}{{^showLicenses}}col-xs-12{{/showLicenses}} panel panel--dark">
                 <h1>Gold Membership</h1>
                 <h2 class="pricing pricing--gold">$5/month</h2>
                 <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
@@ -47,9 +47,11 @@
                 </div>
                 {{/goldSubscribe}}
             </div>
+            {{/showGold}}
             {{/user}}
-
-            <div class="col-xs-12 col-lg-8 panel">
+    
+            {{#showLicenses}}
+            <div class="col-xs-12{{#showGold}} col-lg-8{{/showGold}} panel">
                 <h1>Licensing Services</h1>
                 <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Beam.
                    Upon subscribing for 20 months, all your previously uploaded videos within
@@ -101,6 +103,7 @@
                 <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
                 {{/user.isSignedIn}}
             </div>
+            {{/showLicenses}}
         </div>
         <div id="new-subscriptions" class="hide panel">
             <h1>Checkout</h1>
@@ -122,8 +125,7 @@
                {{>payment-method-recurring}}
                <button class="button--cta"
                        action="checkoutSubscriptions" data-set-target="pay-method">
-                    {{#splitTestA}}Purchase{{/splitTestA}}
-                    {{#splitTestB}}Complete Purchase{{/splitTestB}}
+                    Complete Purchase
                 </button>
             </div>
         </div>

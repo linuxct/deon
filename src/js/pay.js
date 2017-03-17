@@ -178,7 +178,9 @@ function checkoutSubscriptions (e, el) {
   if (!subs.length) return
   var data = getTargetDataSet(el)
   if (!isValidPayMethod(data.method, checkoutSubscriptions)) return
-  purchaseButtonSplitTest.convert()
+  if(transformServices.abTest && transformServices.abTest.convert) {
+    transformServices.abTest.convert()
+  }
   checkoutSubscriptions[data.method](data, subs)
 }
 
@@ -284,7 +286,7 @@ function bindIdentityBlur () {
 
 function completedServices (source, obj) {
   var vendorSelect = document.querySelector('select[name=vendor]')
-  if (!vendorSelect) return
+  //if (!vendorSelect) return
   var qp = queryStringToObject(window.location.search)
   if(qp.vendor) {
     var vendor = qp.vendor.toLowerCase()
@@ -308,12 +310,16 @@ function completedServices (source, obj) {
     }
   }
 
-  if(qp.hasOwnProperty('gold')) {
+  //If they are coming from the gold page then we automatcially add gold
+  //to their cart
+  if(qp.ref == 'gold') {
     subscribeGold({}, document.querySelector('[action=subscribeGold]'))
   }
 
   bindIdentityBlur()
-  vendorSelect.addEventListener('change', vendorChanged)
+  if(vendorSelect) {
+    vendorSelect.addEventListener('change', vendorChanged)
+  }
   vendorChanged()
   bindPayPalGermanyWarning()
 }
