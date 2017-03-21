@@ -537,7 +537,14 @@ function subscribeGold (e, el) {
       if (err) return window.alert(err.message)
       if (!obj) return window.alert(strings.error)
       if (!obj.valid) return window.alert(strings.codeNotValid)
-      opts.name += " (" + obj.code + ' - ' + obj.durationDays + " Free Days)"
+      if(obj.autoRenews) {
+        opts.name += " - Code: " + obj.code + ' - ' + obj.durationDays + " days free ($5/mo after)"
+      }
+      else {
+        opts.name += " - Code: " + obj.code + ' - ' + obj.durationDays + " days free (with no auto-renew)"
+      }
+      opts.fields[2].value = 0
+      opts.cost = "0.00"
       opts.fields.push({ key: "trialCode", value: obj.code })
       fin(opts)
     })
