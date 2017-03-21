@@ -26,3 +26,11 @@
 .humble-step-inactive {
   color: #666;
 }
+
+.humble-header {
+  text-align: center;
+}
+
+.humble-header img {
+  max-width: 90%;
+}
