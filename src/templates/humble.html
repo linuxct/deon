@@ -1,0 +1,72 @@
+<script type="text/template"
+        route="^humble"
+        page-title="Humble Bundle Redeem"
+        transform="transformHumbleBundleRedeemPage"
+        completed="completedHumbleBundleRedemeePage">
+{{#data}}
+<div class="container flex humble-steps">
+  <div class="col-md-4 col-xs-12 humble-step">
+    <div class="panel">
+      <h2>Step 1.</h2>
+      <p>Sign in or create an account.</p>
+      {{#showSignInStep}}
+        {{#doneSignInStep}}
+          <div class="humble-step-done">
+            <span class="fa fa-check-circle"></span>
+            Done!
+          </div>
+        {{/doneSignInStep}}
+        {{^doneSignInStep}}
+          <div class="humble-step-action">
+            <a href="{{signUpUrl}}" class="button button--cta">Sign Up</a> or <a href="{{signInUrl}}">login</a>
+          </div>
+        {{/doneSignInStep}}
+      {{/showSignInStep}}
+    </div>
+    
+  </div>
+
+  <div class="col-md-4 col-xs-12 humble-step{{^showGoldStep}} humble-step-inactive{{/showGoldStep}}">
+    <div class="panel">
+      <h2>Step 2.</h2>
+      <p>Redeem your Humble Bundle code for Gold and get your Twitch License.</p>
+      {{#showGoldStep}}
+        {{#doneGoldStep}}
+          <div class="humble-step-done">
+            <span class="fa fa-check-circle"></span>
+            Done!
+          </div>
+        {{/doneGoldStep}}
+        {{^doneGoldStep}}
+          <div class="humble-step-action">
+            <a href="/account/services?humble" class="button button--cta">Redeem Code</a>
+          </div>
+        {{/doneGoldStep}}
+      {{/showGoldStep}}
+    </div>
+  </div>
+
+  <div class="col-md-4 col-xs-12 humble-step{{^showTwitchStep}} humble-step-inactive{{/showTwitchStep}}">
+    <div class="panel">
+      <h2>Step 3.</h2>
+      <p>Enter your Twitch username to set up your license.</p>
+      {{#showTwitchStep}}
+        {{#doneTwitchStep}}
+          <div class="humble-step-done">
+            <span class="fa fa-check-circle"></span>
+            Done!
+          </div>
+          <a href="/account/services">View licenses</a>
+        {{/doneTwitchStep}}
+        {{^doneTwitchStep}}
+          <form class="humble-step-action" trigger-target="submitHumbleTwitch" data-set="humble-twitch">
+            <div><input type="text" name="username" placeholder="username" /></div>
+            <button class="btn button--cta" action="submitHumbleTwitch" trigger="submitHumbleTwitch" data-set-target="humble-twitch" role="submit-humble-twitch">Submit</button>
+          </form>
+        {{/doneTwitchStep}}
+      {{/showTwitchStep}}
+    </div>
+  </div>
+</div>
+{{/data}}
+</script>

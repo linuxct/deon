@@ -1,0 +1,28 @@
+.humble-steps {
+  padding-bottom: 1.5em;
+}
+
+.humble-step {
+  padding: 0px 5px;
+  margin: 0 0 1.5em;
+}
+
+.humble-step-action,
+.humble-step-done {
+  padding: 1em 0 0.25em;
+}
+
+.humble-step-done {
+  font-size: 1.75em;
+  color: green;
+}
+
+.humble-step .panel {
+  min-height: 100%;
+  margin-bottom: 0px;
+  padding-bottom: 1rem;
+}
+
+.humble-step-inactive {
+  color: #666;
+}

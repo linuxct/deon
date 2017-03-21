@@ -19,7 +19,7 @@
             {{#showGold}}
             <div class="{{#showLicenses}}col-xs-12 col-lg-4 col-lg-last {{/showLicenses}}{{^showLicenses}}col-xs-12{{/showLicenses}} panel panel--dark">
                 <h1>Gold Membership</h1>
-                <h2 class="pricing pricing--gold">$5/month</h2>
+                <h2 class="pricing pricing--gold">{{#humble}}<span style="text-decoration: line-through; color: inherit; font-weight: normal;">$5/month</span> <i class="fa fa-arrow-right"></i> $0{{/humble}}{{^humble}}$5/month{{/humble}}</h2>
                 <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
                 {{#hasGoldPermanent}}
                 <p>You have Gold Membership.</p>
@@ -36,10 +36,11 @@
                     <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
                     <li>Direct support via e-mail and on site.</li>
                 </ul>
-                <div data-set="subscribe-gold" class="services-form">
-                    <input type="text" name="trialCode" placeholder="Special Code (optional)"/>
+                <div data-set="subscribe-gold" class="services-form" trigger-target="subscribeGold">
+                    <input type="text" name="trialCode" placeholder="{{#humble}}Humble Bundle Code{{/humble}}{{^humble}}Special Code (optional){{/humble}}" />
                     <button class="button--gold"
                             action="subscribeGold"
+                            trigger="subscribeGold"
                             data-set-target="subscribe-gold">
                         Subscribe
                         <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>

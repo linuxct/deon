@@ -660,6 +660,10 @@ function transformServices (obj, done) {
   }
   //Just a generic link to their services
   else {
+    if(qo.hasOwnProperty('humble')) {
+      scope.showLicenses = false
+      scope.user.humble = true
+    }
     transformServices.abTest = null
     done(null, scope)
   }

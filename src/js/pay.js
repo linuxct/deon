@@ -185,13 +185,18 @@ function checkoutSubscriptions (e, el) {
 }
 
 checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs) {
+  var returnUrl = location.origin + '/account/services/processing?type=subscriptions'
+  var qo = queryStringToObject(window.location.search)
+  if(qo.hasOwnProperty('humble')) {
+    returnUrl += '&humble=1'
+  }
   requestJSON({
     url: endpoint + '/self/subscription/services',
     method: 'POST',
     withCredentials: true,
     data: {
       provider: 'paypal',
-      returnUrl: location.origin + '/account/services/processing?type=subscriptions',
+      returnUrl: returnUrl,
       cancelUrl: location.origin + '/account/services/canceled-payment',
       services: subs
     }
@@ -207,6 +212,7 @@ checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs)
 }
 
 checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs) {
+  var qo = queryStringToObject(window.location.search)
   var handler = StripeCheckout.configure({
     key: STRIPE_PK,
     image: '/img/default.png',
@@ -224,7 +230,12 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
         }
       }, function (err, body, xhr) {
         if (err) return recordErrorAndAlert(err, 'Checkout Subscriptions Stripe')
-        go('/account/services/subscribed')
+        if(qo.hasOwnProperty('humble')) {
+          go('/humble')
+        }
+        else {
+          go('/account/services/subscribed')
+        }
       })
     }
   })
@@ -408,6 +419,10 @@ function completedProcessing () {
   if (obj.type == 'subscriptions' || obj.type == 'resume') {
     uri     = 'subscription/services/complete'
     forward = '/account/services/subscribed'
+
+    if(obj.humble) {
+      forward = '/humble'
+    }
   }
   if (!uri) {
     // TODO display in page and check all data was recieved
@@ -424,7 +439,7 @@ function completedProcessing () {
   }, function (err, obj, xhr) {
     if (err)
       return recordErrorAndAlert(err, 'Complete Processing')
-    go(forward)
+      go(forward)
   })
 }
 
