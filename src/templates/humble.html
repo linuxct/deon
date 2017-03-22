@@ -76,10 +76,15 @@
 <div class="container">
   <div class="panel">
     <h2>Have a question?</h2>
+    {{#isSignedIn}}
     <button class="button" action="showIntercom" role="feedback">
         <i class="fa fa-comments-o"></i>
         Talk to us
     </button>  
+    {{/isSignedIn}}
+    {{^isSignedIn}}
+    <p>Email us at <a href="mailto:info@monstercat.com">info@monstercat.com</a>.</p>
+    {{/isSignedIn}}
   </div>
 </div>
 {{/data}}
