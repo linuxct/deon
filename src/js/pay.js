@@ -540,6 +540,8 @@ function subscribeGold (e, el) {
     }
   }
   if (data.trialCode) {
+    data.trialCode = data.trialCode.trim()
+    document.querySelector('input[name=trialCode]').value = data.trialCode
     el.classList.add('working')
     el.disabled = true
     return requestJSON({
