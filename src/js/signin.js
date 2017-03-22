@@ -125,7 +125,6 @@ function signUpAt (e, el, where) {
 
 function signUp (e, el) {
   var data = getTargetDataSet(el)
-  console.log('data', data)
   if(!data.googleMapsPlaceId) {
     return alert('Please enter your location')
   }

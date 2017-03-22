@@ -6,7 +6,8 @@ function transformHumbleBundleRedeemPage (obj, done) {
     obj.showGoldStep = false
     obj.showTwitchStep = false
     
-    obj.doneSignInStep = isSignedIn()
+    obj.isSignedIn = isSignedIn()
+    obj.doneSignInStep = obj.isSignedIn
     obj.doneGoldStep = hasGoldAccess()
     obj.doneTwitchStep = false
     
