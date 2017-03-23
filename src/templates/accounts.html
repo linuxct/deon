@@ -650,33 +650,21 @@
 </script>
 
 <script type="text/template" template-name="joinDiscordResponse">
-{{#loading}}
-{{/loading}}
-
+{{#loading}}{{/loading}}
 {{#error}}
-  <p class="error-box">{{message}}</p>
+<p class="error-box">{{message}}</p>
 {{/error}}
-
 {{#data}}
-{{#gold}}
 <br/>
-{{#joinUrl}}
-  <p class="success-box">Please join the gold channel here, <a href="{{.}}">{{.}}</a>. Link expires in 10 minutes.</p>
-{{/joinUrl}}
-{{#error}}
-  <p class="error-box">{{.}}</p>
-{{/error}}
-{{/gold}}
-
-{{#licensee}}
+<p class="success-box">
+Success please join the following channels with the links below:<br/><br/>
+{{#goldJoinUrl}}
+<strong>Gold Channel:</strong> <a href="{{.}}">{{.}}</a>
+{{/goldJoinUrl}}
+{{#licenseeJoinUrl}}
 <br/>
-{{#joinUrl}}
-  <p class="success-box">Please join the <strong>Licensee</strong> channel here, <a href="{{.}}">{{.}}</a>. Link expires in 10 minutes.</p>
-{{/joinUrl}}
-{{#error}}
-<p class="error-box">{{.}}</p>
-{{/error}}
-{{/licensee}}
+<strong>Licensee Channel:</strong> <a href="{{.}}">{{.}}</a>.</p>
+{{/licenseeJoinUrl}}
 {{/data}}
 </script>
 

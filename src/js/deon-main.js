@@ -1222,12 +1222,13 @@ function joinDiscord (e, el) {
     withCredentials: true, 
     data: data
   }, function (err, body, xhr) { 
-		el.disabled = false
-		el.classList.remove("on")
-    if (!err && body.gold.success)
-      body.gold.joinUrl = "https://discord.gg/" + body.gold.invite.code
-    if (!err && body.licensee.success)
-      body.licensee.joinUrl = "https://discord.gg/" + body.licensee.invite.code
+    el.disabled = false;
+    el.classList.remove("on");
+    var invites = body.invites;
+    if (!err && invites) {
+      if (invites.gold) body.goldJoinUrl = "https://discord.gg/" + invites.gold
+      if (invites.licensee) body.licenseeJoinUrl = "https://discord.gg/" + invites.licensee
+    }
     render(container, template.textContent, {
       error: err,
       data: body 
