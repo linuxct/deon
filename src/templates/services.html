@@ -71,7 +71,7 @@
                             <th>Paid Off</th>
                             <th>Remaining</th>
                             <th>Monthly Cost</th>
-                            <th>Next Billing Date</th>
+                            <th>Next Date</th>
                             <th>Options</th>
                         </tr>
                     </thead>
@@ -243,7 +243,17 @@
             N/A
             {{/cost}}
         </td>
-        <td>{{nextBillingDate}}</td>
+        <td>
+            {{#subscriptionActive}}
+                Next Payment: {{nextBillingDate}}
+            {{/subscriptionActive}}
+            {{^subscriptionActive}}
+                {{#nextBillingDate}}
+                    Expires: {{nextBillingDate}}
+                {{/nextBillingDate}}
+            {{/subscriptionActive}}
+            
+        </td>
         <td>
             {{#licenseUrl}}
             <a href="{{licenseUrl}}"
