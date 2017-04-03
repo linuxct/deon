@@ -87,8 +87,10 @@ p.description{
 }
 .spotify-wrapper{
   position: relative;
+  background: #000 url('/img/banner_spotify.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
 }
-
 .spotify-playlists{
   margin-top: 2rem;
 }
