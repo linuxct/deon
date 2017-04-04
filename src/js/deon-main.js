@@ -468,10 +468,8 @@ function mapRelease (o) {
     o.preReleaseDateObj = null
   }
   o.artists = o.renderedArtists
-  if(o.thumbHashes) {
-    o.cover = datapoint + '/blobs/' + o.thumbHashes["512"]
-    o.coverBig = datapoint + '/blobs/' + o.thumbHashes["1024"]
-  }
+  o.cover = o.coverUrl + '?image_width=512';
+  o.coverBig = o.coverUrl + '?image_width=1024';
   if (o.urls instanceof Array) {
     o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
     o.share = getReleaseShareLink(o.urls)
@@ -513,9 +511,6 @@ function transformHome (obj) {
   })
   results.sort(sortRelease)
   obj.featured = results.shift()
-  //console.log('releaseDateObj', obj.featured.releaseDateObj.toISOString())
-  //console.log('releaseDateObj', obj.featured.releaseDateObj)
-  //console.log('now', new Date().toISOString())
   obj.releases = results
   obj.releases.length = 8
   obj.hasGoldAccess = hasGoldAccess()
@@ -566,16 +561,16 @@ function transformRoster () {
 function transformRosterYear (obj) {
   obj.results.forEach(function (doc) {
     if (doc.profileImageUrl)
-      doc.uri = doc.vanityUri || doc.websiteDetailsId || doc._id
-      doc.image = doc.profileImageUrl //datapoint + '/blobs/' + doc.profileImageBlobId
-  })
+      doc.uri = doc.vanityUri || doc.websiteDetailsId || doc._id;
+      doc.image = doc.profileImageUrl;
+  });
   obj.results.sort(function (a, b) {
     a = a.name.toLowerCase()
     b = b.name.toLowerCase()
     if (a < b) return -1
     if (a > b) return 1
     return 0
-  })
+  });
   return obj
 }
 
@@ -735,7 +730,7 @@ function transformGoldLanding (obj) {
 
 function transformMusic () {
   var q    = queryStringToObject(window.location.search)
-  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(',')
+  q.fields = ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'coverUrl', 'catalogId'].join(',')
   objSetPageQuery(q, q.page, {perPage: 24})
   var fuzzy   = commaStringToObject(q.fuzzy)
   var filters = commaStringToObject(q.filters)

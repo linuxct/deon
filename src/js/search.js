@@ -94,7 +94,7 @@ function getSearchTypes () {
       fuzzyFields: ['title', 'renderedArtists'],
       q: {},
       title: 'Search Releases',
-      fields: ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'thumbHashes', 'catalogId'].join(','),
+      fields: ['title', 'renderedArtists', 'releaseDate', 'preReleaseDate', 'coverUrl', 'catalogId'].join(','),
       perPage: 10,
       searchForm: {
         placeholder: 'Search releases...',
