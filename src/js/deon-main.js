@@ -444,10 +444,10 @@ function mapReleaseTrack (o, index) {
   }
   o.trackNumber = index + 1
   o.index       = index
-  o.canPlaylist = isSignedIn() && !o.inEarlyAccess ? { _id: o._id } : null
+  o.canPlaylist = isSignedIn() && !o.inEarlyAccess && o.streamable ? { _id: o._id } : null
   o.bpm         = Math.round(o.bpm)
   o.licensable  = o.licensable === false ? false : true
-  o.showDownloadLink = o.downloadable || o.freeDownloadForUsers
+  o.showDownloadLink = (o.downloadable && o.streamable) || o.freeDownloadForUsers
 
   return o
 }
