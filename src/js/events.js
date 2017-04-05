@@ -66,6 +66,10 @@ function transformEvent (i) {
     i.coverImageLarge = i.coverImageUri + '?image_width=2048'
     i.coverImageSmall = i.coverImageUri + '?image_width=512'
   }
+  if(i.posterImageUri) {
+    i.posterImageLarge = i.posterImageUri + '?image_width=2048'
+    i.posterImageSmall = i.posterImageUri + '?image_width=512'
+  }
   var weekdays = {
     'Sat': 'urday',
     'Sun': 'day',
