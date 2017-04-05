@@ -311,7 +311,7 @@
   <div class="container panel events-email events-email-signin">
     <form onsubmit="false" data-set="credentials" data-submit-action="signUpForEventEmail" trigger-target="signUpForEventEmail">
       <div class="form form-inline mobile">
-        <label class="email-me">Email me about Monstercat news and events.</label>
+        <label class="email-me">Email me about Monstercat events.</label>
         <input type="text" name="email" id="eventOptInEmail" placeholder="Email" />
         {{>location-autocomplete}}
         <input type="hidden" name="placeNameFull" value="" />
@@ -339,9 +339,9 @@
 {{#data}}
   {{^fullyOptedIn}}
   <div class="container panel events-email">
-    <form onsubmit="false" data-set="credentials" data-submit-action="subscribeEventsPromotionsOptIn">
+    <form onsubmit="false" data-set="credentials" data-submit-action="subscribeEventsOptIn">
       <div class="form form-inline mobile">
-        <label class="email-me">Email me about Monstercat news and events.</label>
+        <label class="email-me">Email me about Monstercat events.</label>
         <div class="form-block my-location">
           <label>My location: </label>
           {{>location-autocomplete}}

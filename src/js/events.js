@@ -129,7 +129,7 @@ function transformEventsEmailOptin (obj) {
   obj.isSignedIn = isSignedIn()
   if (obj.isSignedIn) {
     obj.emailOptIns = transformEmailOptins(obj.emailOptIns)
-    obj.fullyOptedIn = obj.emailOptIns.promotions && !isLegacyLocation()
+    obj.fullyOptedIn = obj.emailOptIns.events && !isLegacyLocation()
 
     //Legacy Location
     //delete obj.googleMapsPlaceId
@@ -153,30 +153,12 @@ function transformEventsEmailOptin (obj) {
   return obj
 }
 
-function subscribeEventsEmailOptIn (e, el) {
+function subscribeEventsOptIn (e, el) {
   var data = getTargetDataSet(el, true, true)
-  if(!data.googleMapsPlaceId) {
-    alert('Please enter your location')
-    return
-  }
-  data['emailOptIns[eventsNearMe]'] = true
+  data['emailOptIns[events]'] = true
   update('self', null, data, function (err, obj) {
     if (err) return window.alert(err.message)
-    toasty('You are now subscribed to hear about Monstercat events near you')
-
-    resetTargetInitialValues(el, obj)
-    loadSession(function (err, obj) {
-      loadSubSources(document.querySelector('[role=events-email-optin]'), true, true)
-    })
-  })
-}
-
-function subscribeEventsPromotionsOptIn (e, el) {
-  var data = getTargetDataSet(el, true, true)
-  data['emailOptIns[promotions]'] = true
-  update('self', null, data, function (err, obj) {
-    if (err) return window.alert(err.message)
-    toasty('You are now subscribed to hear about Monstercat news and events')
+    toasty('You are now subscribed to hear about Monstercat events')
 
     resetTargetInitialValues(el, obj)
     loadSession(function (err, obj) {

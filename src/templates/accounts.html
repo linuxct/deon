@@ -331,9 +331,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Email settings</th>
+                        <th valign="top">Email settings</th>
                         <td>
-                            {{>account-email-optin-promotions}}
+                            {{>account-email-optins}}
                         </td>
                     </tr>
                     <tr>
@@ -558,33 +558,45 @@
                 {{>location-autocomplete}}
             </td>
         </tr>
-        {{>account-email-optins}}
+        <tr>
+            <td colspan="2">
+                {{>account-email-optin-news}}
+                {{>account-email-optin-events}}
+            </td>
+        </tr>
     </tbody>
 </script>
 
 <script type="text/template"
         mustache-name="account-email-optins">
-<tr>
-    <td colspan="2">
-        {{>account-email-optin-promotions}}
-    </td>
-</tr>
+    <div class="checkbox email-optin-checkbox">
+        <label>
+            <input type="checkbox" checked disabled />
+            Email me about important service updates
+        </label>
+    </div>
+    {{>account-email-optin-news}}
+    {{>account-email-optin-events}}
 </script>
 
 <script type="text/template"
-        mustache-name="account-email-optin-promotions">
-<label>
-    <input type="checkbox" name="emailOptIns[promotions]"{{#emailOptIns.promotions}} checked="checked"{{/emailOptIns.promotions}} value="1" />
-    Email me about Monstercat news and events
-</label>
+        mustache-name="account-email-optin-news">
+<div class="checkbox email-optin-checkbox">
+    <label>
+        <input type="checkbox" name="emailOptIns[news]"{{#emailOptIns.news}} checked="checked"{{/emailOptIns.news}} value="1" />
+        Email me about Monstercat news
+    </label>
+</div>
 </script>
 
 <script type="text/template"
-        mustache-name="account-email-optin-eventsnearme">
-<label>
-    <input type="checkbox" name="emailOptIns[eventsNearMe]"{{#emailOptIns.eventsNearMe}} checked="checked"{{/emailOptIns.eventsNearMe}} value="1" />
-    Email me about Monstercat events near <span role="my-location">{{#placeNameFull}}<strong>{{placeNameFull}}</strong>{{/placeNameFull}}{{^placeNameFull}}my city{{/placeNameFull}}</span>
-</label>
+        mustache-name="account-email-optin-events">
+<div class="checkbox email-optin-checkbox">
+    <label>
+        <input type="checkbox" name="emailOptIns[events]"{{#emailOptIns.events}} checked="checked"{{/emailOptIns.events}} value="1" />
+        Email me about official Monstercat events
+    </label>
+</div>
 </script>
 
 <script type="text/template"
