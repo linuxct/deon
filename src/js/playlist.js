@@ -100,7 +100,7 @@ function transformPlaylist (obj) {
       obj.downloadLinks = []
       var frm = 1;
       var to = 0;
-      for(var i = 1; (i-1) * 50 <= obj.tracks.length; i++) {
+      for(var i = 1; (i-1) * 50 < obj.tracks.length; i++) {
         opts.page = i
         frm = (i - 1) * 50 + 1
         to = Math.min(obj.tracks.length, frm + 49)
