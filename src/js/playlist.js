@@ -97,16 +97,18 @@ function transformPlaylist (obj) {
       obj.downloadUrl = endpoint + '/playlist/' + obj._id + '/download?' + objectToQueryString(opts)
     }
     else {
-      obj.downloadLinks = []
-      var frm = 1;
-      var to = 0;
-      for(var i = 1; (i-1) * 50 < obj.tracks.length; i++) {
-        opts.page = i
-        frm = (i - 1) * 50 + 1
-        to = Math.min(obj.tracks.length, frm + 49)
+      obj.downloadLinks = [];
+      var tracksPerPage = 50;
+      var frm;
+      var to;
+      var numPages = Math.ceil(obj.tracks.length / tracksPerPage);
+      for(var page = 1; page <= numPages; page++) {
+        opts.page = page
+        frm = (page - 1) * tracksPerPage + 1
+        to = Math.min(obj.tracks.length, frm + tracksPerPage - 1)
 
         obj.downloadLinks.push({
-          label: ((i == 1) ? 'Download ' : '') + 'Part ' + i,
+          label: ((page == 1) ? 'Download ' : '') + 'Part ' + page,
           hover: 'Tracks ' + frm + ' to ' + to,
           url: endpoint + '/playlist/' + obj._id + '/download?' + objectToQueryString(opts)
         })
