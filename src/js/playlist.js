@@ -99,13 +99,11 @@ function transformPlaylist (obj) {
     else {
       obj.downloadLinks = [];
       var tracksPerPage = 50;
-      var frm;
-      var to;
       var numPages = Math.ceil(obj.tracks.length / tracksPerPage);
       for(var page = 1; page <= numPages; page++) {
         opts.page = page
-        frm = (page - 1) * tracksPerPage + 1
-        to = Math.min(obj.tracks.length, frm + tracksPerPage - 1)
+        var frm = (page - 1) * tracksPerPage + 1
+        var to = Math.min(obj.tracks.length, frm + tracksPerPage - 1)
 
         obj.downloadLinks.push({
           label: ((page == 1) ? 'Download ' : '') + 'Part ' + page,
