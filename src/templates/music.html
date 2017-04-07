@@ -101,16 +101,18 @@
                                 <span>Spotify</span>
                             </a>                            
                             {{/share}}
+                            {{^preReleaseDate}}
                             <a class="silent button button--release-cta button--white"
-                            href="{{downloadLink}}"
-                            target="_blank"
-                            release-title="{{title}}"
-                            title="Download {{title}}"
-                            free-download-for-users="{{freeDownloadForUsers}}"
-                            action="accessDownloadOrModal">
+                               href="{{downloadLink}}"
+                               target="_blank"
+                               release-title="{{title}}"
+                               title="Download {{title}}"
+                               free-download-for-users="{{freeDownloadForUsers}}"
+                               action="accessDownloadOrModal">
                                 <i class="fa fa-download"></i>
                                 <span>Download</span>
                             </a>
+                            {{/preReleaseDate}}
                             <button class="button--release-cta button--white"
                                     title="License this release"
                                     action="openReleaseLicensing">
