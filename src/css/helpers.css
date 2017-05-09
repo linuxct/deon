@@ -347,3 +347,74 @@ td.push-right > * {
 .action-toggle.on .on {
   display: inherit;
 }
+
+ul.errors {
+  list-style: none inside;
+  padding: 0.5em 0.5em 0 0.5em;
+  background: #FFE0E0;
+  border: 1px solid red;
+  margin-bottom: 0.5em;
+  border-radius: 3px;
+}
+
+ul.errors li {
+  margin-bottom: 0.5em;
+}
+
+#front-form {
+  position: fixed;
+  right: 1vw;
+  bottom: -90vh;
+  width: 400px;
+  z-index: 0;
+  padding: 1em 1.25em 0em;
+  background: #fff;
+  overflow: auto;
+  max-height: 90vh;
+  transition: bottom 0.5s ease;
+  box-shadow: 0 0 35px rgba(0,0,0,0.45);
+  text-align: left;
+}
+
+#front-form .button--close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+}
+
+#front-form h3 {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+#front-form label {
+  display: block;
+  font-size: 16px;
+  margin: 0.25em 0;
+}
+
+#front-form .form-group {
+  margin-bottom: 1.5em;
+}
+
+#front-form  .form-group-inline.row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+#front-form  .form-group-inline label {
+  font-weight: bold;
+  padding: 1rem 0;
+  margin: 0px;
+}
+
+#front-form input,
+#front-form textarea {
+  width: 100%;
+  font-size: 14px;
+}
+
+#front-form.show {
+  bottom: 0px;
+}
