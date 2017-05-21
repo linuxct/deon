@@ -6,40 +6,33 @@ function searchMobile(e, el, url) {
 }
 //TODO: Look at all of this duplicate code. Be the change you want to see in the code.
 function search (e, el, url) {
-  var data   = getTargetDataSet(el, false, true) || {}
+  var data = getTargetDataSet(el, false, true) || {}
   var types = getSearchTypes()
   var searchType = getSearchType('all')
   var q = queryStringToObject(window.location.search)
-  if (!data.term) return
+  if (!data.term && data.term !== 0) return
   data.term = data.term.toString()
   var searchTerm = data.term
-  if(data.term) {
-    for(var i in types) {
-      if(types[i].searchPrefix) {
-        var prefixes = [types[i].searchPrefix].concat(types[i].searchPrefixAliases)
-        var found  = false
-        for(var k = 0; k < prefixes.length; k++) {
-          var prefix = prefixes[k]
-          if(data.term.substr(0, prefix.length).toLowerCase() == prefix) {
-            searchType = types[i]
-            searchTerm = data.term.substr(prefix.length).trim()
-            found = true
-            break
-          }
-        }
-        if(found) {
+  for(var i in types) {
+    if(types[i].searchPrefix) {
+      var prefixes = [types[i].searchPrefix].concat(types[i].searchPrefixAliases)
+      var found  = false
+      for(var k = 0; k < prefixes.length; k++) {
+        var prefix = prefixes[k]
+        if(data.term.substr(0, prefix.length).toLowerCase() == prefix) {
+          searchType = types[i]
+          searchTerm = data.term.substr(prefix.length).trim()
+          found = true
           break
         }
+      }
+      if(found) {
+        break
       }
     }
   }
   var url = searchType.url
-  if (searchTerm) {
-    q.term = searchTerm
-  }
-  else {
-    delete q.term
-  }
+  q.term = searchTerm
   delete q.page
   go(url + '?' + objectToQueryString(q))
 }
