@@ -102,17 +102,24 @@
                         <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
                         Save Order</button>
                 {{/canPublic}}
-                {{#downloadUrl}}
-                <a class="silent button--mobile"
-                   title="Download Playlist"
-                   action="accessGoldOrModal"
-                   href="{{downloadUrl}}"><i class="fa fa-fw fa-cloud-download"></i></a>
-                {{/downloadUrl}}
-                <button class="faux button--mobile">
+                 <button class="faux button--mobile">
                     <i class="fa fa-fw fa-play"
                        action="playSongs"
                        role="play-playlist"></i>
                 </button>
+               {{#downloadUrl}}
+                <a class="silent button--mobile"
+                   title="Download Playlist"
+                   action="accessGoldOrModal"
+                   href="{{downloadUrl}}"><i class="fa fa-fw fa-download"></i> Download</a>
+                {{/downloadUrl}}
+                {{#downloadLinks}}
+                <a class="silent button--mobile"
+                   title="Download {{hover}}"
+                   action="accessGoldOrModal"
+                   href="{{url}}"><i class="fa fa-fw fa-download"></i> {{label}}</a>
+                {{/downloadLinks}}
+
             </div>
             <table class="drag-sortable one-line">
                 <thead>

@@ -93,7 +93,25 @@ function transformPlaylist (obj) {
       method: 'download',
       type: getMyPreferedDownloadOption()
     }
-    obj.downloadUrl = endpoint + '/playlist/' + obj._id + '/download?' + objectToQueryString(opts)
+    if(obj.tracks.length < 50) {
+      obj.downloadUrl = endpoint + '/playlist/' + obj._id + '/download?' + objectToQueryString(opts)
+    }
+    else {
+      obj.downloadLinks = [];
+      var tracksPerPage = 50;
+      var numPages = Math.ceil(obj.tracks.length / tracksPerPage);
+      for(var page = 1; page <= numPages; page++) {
+        opts.page = page
+        var frm = (page - 1) * tracksPerPage + 1
+        var to = Math.min(obj.tracks.length, frm + tracksPerPage - 1)
+
+        obj.downloadLinks.push({
+          label: ((page == 1) ? 'Download ' : '') + 'Part ' + page,
+          hover: 'Tracks ' + frm + ' to ' + to,
+          url: endpoint + '/playlist/' + obj._id + '/download?' + objectToQueryString(opts)
+        })
+      }
+    }
   }
   return obj
 }
