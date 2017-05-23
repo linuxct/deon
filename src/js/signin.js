@@ -12,11 +12,13 @@ function transformSignIn (o) {
 }
 
 function signIn (e, el) {
+  var data = getTargetDataSet(el);
+  data.password = data.password.toString();
   requestJSON({
     url: endhost + '/signin',
     method: 'POST',
     withCredentials: true,
-    data: getTargetDataSet(el)
+    data: data
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     if (xhr.status != 209)
@@ -106,11 +108,13 @@ function updatePassword (e, el) {
 
 
 function signUpAt (e, el, where) {
+  var data = getTargetDataSet(el);
+  data.password = data.password.toString();
   requestJSON({
     url: endpoint + where,
     method: 'POST',
     withCredentials: true,
-    data: getTargetDataSet(el)
+    data: data
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     getSession(function (err, sess) {
