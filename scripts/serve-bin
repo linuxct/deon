@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+web-build $PWD/bin/index.html serve --static $PWD/bin --port ${1:-8080}

@@ -1,19 +1,22 @@
 {
-  "name": "explore-client",
+  "name": "deon",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The Monstercat website.",
   "scripts": {
-    "start": "node index.js",
-    "test": "./build-bin && ./test-phantom"
+    "start": "./scripts/serve",
+    "start-prod": "./scripts/serve-bin",
+    "build": "./scripts/build",
+    "test": "./scripts/build && ./scripts/test-phantom"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/monstercat/deon.git"
   },
-  "author": "Thomas Mathews",
+  "author": "tmathews",
+  "contributors": ["lostlevels", "Vindexus", "juanferreras"],
   "license": "ISC",
   "dependencies": {
+    "web-build": "git+https://github.com/monstercat/web-build.git",
     "express": "^4.13.3"
   }
 }
