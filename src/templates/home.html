@@ -4,9 +4,8 @@
     <div role="home-featured">
         <div source="$endpoint/catalog/release?limit=15" template="home-featured"></div>
     </div>
-    <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="home-podcast"></div>
     <div source="https://shopcollections.monstercat.com/394974148" template="home-merch"></div>
-    <div source="$newshost/json/home.json" template="blog-stories"></div>
+    <div source="$endpoint/catalog/release?filters=type,Podcast&limit=8" template="home-podcast"></div>
     {{>spotify-and-social}}
 </script>
 
@@ -119,7 +118,7 @@
     <p>{{message}}</p>
     {{/error}}
     {{#data}}
-    <section class="v-padding podcast">
+    <section class="podcast">
         <div class="container latest">
             <header class="flex top-cta">
                 <div class="col-xs-6">
@@ -184,8 +183,6 @@
                             <img src="{{ images.0.src }}"/>
                         </div>
                         <label class="title one-line-ellipsis">{{title}}</label>
-                        <br/>
-                        <label class="artist one-line-ellipsis">${{variants.0.price}} USD</label>
                     </a>
                 </li>
             {{/products}}
