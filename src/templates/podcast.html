@@ -1,9 +1,175 @@
 <script type="text/template"
-        route="^(?:podcast|cotw|COTW)"
+        route="^(?:podcast|cotw|COTW)\/?$"
         page-title="Monstercat | Call of the Wild"
         completed="iframeHeight">
     <div class="fullpage-wrapper">
         <iframe class="fullpage-iframe" height="900" src="https://www.monstercat.com/podcast-iframe/"></iframe>
         {{>loading-view}}
     </div>
+</script>
+
+<script type="text/template"
+        route="^photo-gallery\/?$"
+        page-title="Photo Gallery Submission"
+        completed="onPodcastPageOpened">
+<div class="top-banner top-banner--no-margin ">
+  <div class="banner">
+      <div class="banner" id="podcast-oscillate" style="background-image:url('https://assets.monstercat.com/podcast/image1.jpg?image_width=1024')">
+        <div class="banner-shade" style="background: rgba(0, 0, 0, 0.25);"></div>
+        <div class="gradient"></div>
+      </div>
+  </div>
+  <div class="container flex">
+    <div class="col-xs-12 col-sm-12 col-md-6 cl-white featured-details">
+      <h1 class="title uppercase">Photo Gallery <br/>Submission</h1>
+      <h3>Want to see you works on <a href="https://live.monstercat.com">Monstercat FM</a>?</h3>
+      <p class="date">Submit your photo for a chance to be seen by millions!</p>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6">
+      <div class="container panel">
+        <form onsubmit="false" data-set="submit-gallery" >
+          <input type="hidden" name="type" name="podcast-gallery"/>
+          <table class="form mobile" trigger-target="saveAccount">
+            <tbody data-set="account">
+              <tr>
+                  <th>Image</th>
+                  <td>
+                    <input style="border:none;padding:0;background:transparent;" 
+                           type="file" name="file" accept=".png,.jpg">
+                    <p class="date" style="font-size: 12px;">
+                    Minimum resolution of 1920x1080 in PNG or JPG.
+                    </p>
+                  </td>
+              </tr>
+              <tr>
+                  <th>Display Name</th>
+                  <td><input class="responsive" type="text" name="display_name"></td>
+              </tr>
+              <tr>
+                  <th>Social Link</th>
+                  <td><input class="responsive" type="text" name="social_link"></td>
+              </tr>
+              <tr>
+                  <th>Contact Email</th>
+                  <td><input class="responsive" type="text" name="email"></td>
+              </tr>
+              <tr>
+                  <th></th>
+                  <td>
+                    <div class="checkbox email-optin-checkbox">
+                        <label>
+                            <input id="podcast-gallery-tos" type="checkbox" name="agree_tos">
+                            I agree to the <a href="https://www.monstercat.com/photo-gallery/terms-of-service" target="_blank">Terms of Service</a>.
+                        </label>
+                    </div>
+                  </td>
+              </tr>
+              <tr>
+                  <th></th>
+                  <td>
+                    <button type="submit"
+                            class="button--cta button--full action-toggle"
+                            action="submitPodcastGallery"
+                            data-set-target="submit-gallery">
+                      <span class="on">Loading <i class="fa fa-gear fa-spin"></i></span>
+                      <span class="off">Submit</span>
+                    </button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+
+<script type="text/javascript">
+
+function onPodcastPageOpened () {
+  preLoadImage(makePodcastImg(1));
+  preLoadImage(makePodcastImg(8));
+  preLoadImage(makePodcastImg(7));
+  preLoadImage(makePodcastImg(4));
+  oscillatePodcastGallery();
+}
+
+function makePodcastImg(num) {
+  return 'https://assets.monstercat.com/podcast/image'+num+'.jpg?image_width=1024';
+}
+
+/*
+bad method is bad, the lazy programmer succeeds 
+I will banhammer anyone that copies and pastes this code. Beware - Thomas
+*/
+function oscillatePodcastGallery (timestamp) {
+  var fn = oscillatePodcastGallery;
+  if (!timestamp) return requestAnimationFrame(fn);
+  var delta = timestamp - (fn.last || timestamp);
+  fn.total = (fn.total || 0) + delta;
+  fn.last = timestamp;
+  var el = document.querySelector('#podcast-oscillate');
+  if (!el) return;
+  var shade = el.querySelector('.banner-shade');
+  var begin = 5000;
+  var halfway = 6000;
+  var finish = 9000;
+  var norm = 0.25;
+  var x = norm;
+  if (fn.total > begin && fn.total <= halfway) {
+    x = norm + ((fn.total - begin) / (halfway - begin) * 0.75);
+    shade.style.background = 'rgba(0, 0, 0, '+x+')';
+  }
+  else if (fn.total > halfway) {
+    x = 1 - ((fn.total - halfway) / (finish - halfway) * 0.75);
+    shade.style.background = 'rgba(0, 0, 0, '+x+')';
+  }
+  if (fn.total - delta < halfway && fn.total >= halfway) {
+    var items = [1, 8, 7, 4];
+    var pick = items[Math.floor(Math.random()*items.length)]; 
+    el.style.backgroundImage = 'url("'+ makePodcastImg(pick)+'")';
+  }
+  if (fn.total > finish) {
+    fn.total = 0;
+  }
+  requestAnimationFrame(fn);
+}
+
+function submitPodcastGallery (e, el) {
+  e.preventDefault();
+  var p = getDataSetTargetElement(el);
+  var tos = p.querySelector('#podcast-gallery-tos');
+  var file = p.querySelector('[type="file"]');
+  var name = p.querySelector('[name="display_name"]');
+  var social = p.querySelector('[name="social_link"]');
+  var email = p.querySelector('[name="email"]');
+  var btn = p.querySelector('button');
+  if (!tos || !tos.checked) return alert('You need to agree to the Terms of Service.');
+  if (!file.value || !name.value || !social.value || !email.value) return alert('Please fill out the form.');
+  btn.disabled = true;
+  btn.classList.add('disabled', 'on');
+  request({
+    url: 'https://submit.monstercat.com',
+    method: 'POST',
+    data: new FormData(p)
+  }, function (err, body, xhr) {
+    btn.disabled = false;
+    btn.classList.remove('disabled', 'on');
+    if (err) return recordErrorAndAlert(err, 'Submit Podcast Gallery');
+    toasty('Your photo has been accepted. Thank you!');
+    //name.value = "";
+    //email.value = "";
+    //social.value = "";
+    tos.checked = false;
+  });
+  return false;
+}
+</script>
+
+<script type="text/template"
+        route="^photo-gallery\/terms-of-service\/?$"
+        transform="transformMarkdown"
+        source="https://raw.githubusercontent.com/monstercat/docs/master/site/Podcast%20Gallery%20Terms%20of%20Service.md">
+  {{>markdown-basic}}
 </script>
