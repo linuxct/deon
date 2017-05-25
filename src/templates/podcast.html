@@ -9,7 +9,7 @@
 </script>
 
 <script type="text/template"
-        route="^photo-gallery\/?$"
+        route="^photo-?gallery\/?$"
         page-title="Photo Gallery Submission"
         completed="onPodcastPageOpened">
 <div class="top-banner top-banner--no-margin ">
@@ -59,7 +59,7 @@
                     <div class="checkbox email-optin-checkbox">
                         <label>
                             <input id="podcast-gallery-tos" type="checkbox" name="agree_tos">
-                            I agree to the <a href="https://www.monstercat.com/photo-gallery/terms-of-service" target="_blank">Terms of Service</a>.
+                            I agree to the <a href="https://www.monstercat.com/photogallery/terms-of-service" target="_blank">Terms of Service</a>.
                         </label>
                     </div>
                   </td>
@@ -168,7 +168,7 @@ function submitPodcastGallery (e, el) {
 </script>
 
 <script type="text/template"
-        route="^photo-gallery\/terms-of-service\/?$"
+        route="^photo-?gallery\/terms-of-service\/?$"
         transform="transformMarkdown"
         source="https://raw.githubusercontent.com/monstercat/docs/master/site/Podcast%20Gallery%20Terms%20of%20Service.md">
   {{>markdown-basic}}
