@@ -300,7 +300,7 @@ function getMonths () {
 
 function serviceUrlToChannelId (user) {
   user = user || ""
-  var m = user.toString().match(/^\s*(?:(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube|twitch|beam)?\.(?:com\/|tv\/|pro\/)?)?\/?(?:user\/|channel\/|c\/)?([^\/\?]+)/i);
+  var m = user.toString().match(/^\s*(?:(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube|twitch|beam|mixer)?\.(?:com\/|tv\/|pro\/)?)?\/?(?:user\/|channel\/|c\/)?([^\/\?]+)/i);
   return m && m[1] || user;
 }
 

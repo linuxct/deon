@@ -14,6 +14,14 @@ var vendorPrices = {
   }
 }
 
+function getVendorName (vendor) {
+  if(vendor == 'Beam') {
+    return 'Mixer';
+  }
+
+  return vendor;
+}
+
 function isValidPayMethod (str, obj) {
   if (str != 'stripe' && str != 'paypal') return false
   if (typeof obj[str] != 'function') return false
@@ -612,7 +620,7 @@ function subscribeNewLicense (e, el) {
       return go('/sign-up?redirect=' + encodeURIComponent(url))
     }
 
-    var name = "Whitelisting for " + data.identity + " on " + data.vendor
+    var name = "Whitelisting for " + data.identity + " on " + getVendorName(data.vendor)
     addSub({
       name: name,
       cost: (vendorPrices[data.vendor].monthly / 100).toFixed(2),

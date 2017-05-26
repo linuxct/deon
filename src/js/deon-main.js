@@ -925,6 +925,7 @@ function transformWhitelists (obj) {
       whitelist.resume = { _id: whitelist._id, amount: whitelist.monthlyCost }
     if (whitelist.subscriptionActive)
       whitelist.cancel = { _id: whitelist._id }
+    whitelist.vendorName = getVendorName(whitelist.vendor);
     return whitelist
   })
   return obj
