@@ -1158,13 +1158,16 @@ function accessDownloadOrModal (e, el) {
     }
   }
   else {
-    return accessGoldOrModal(e, el)
+    return canDownloadOrModal(e, el)
   }
 }
 
-function accessGoldOrModal (e, el) {
-  var hasit = hasGoldAccess()
-  if (hasit) return
+function canDownload () {
+  return hasGoldAccess() || (session.user && session.user.type && session.user.type.indexOf('artist') > -1);
+}
+
+function canDownloadOrModal (e, el) {
+  if(canDownload()) return true
   e.preventDefault()
   openModal('subscription-required-modal', {
     signedIn: isSignedIn()
