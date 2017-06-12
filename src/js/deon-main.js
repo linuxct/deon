@@ -492,25 +492,27 @@ function openPurchaseRelease (e, el) {
 
 function removeYouTubeClaim (e, el) {
   var data = getTargetDataSet(el)
+  var videoIdInput = document.querySelector('input[name="videoId"]');
   if (!data || !data.videoId) return
 
   var videoId = data.videoId
   if (videoId.indexOf('youtu')>-1){
     videoId = youTubeIdParser(videoId)
     if (!videoId) return toasty(Error('Please make sure to enter a YouTube ID or a valid YouTube URL.'))
+    videoIdInput.value = videoId;
   }
 
   requestJSON({
     url: endpoint + '/self/remove-claims',
     method: 'POST',
     data: {
-      videoId: data.videoId
+      videoId: videoId
     },
     withCredentials: true
   }, function (err, obj, xhr) {
     if (err) return window.alert(err.message)
     toasty(strings.claimReleased)
-    document.querySelector('input[name="videoId"]').value = ""
+    videoIdInput.value = ""
   })
 }
 
