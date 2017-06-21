@@ -16,7 +16,6 @@
   "contributors": ["lostlevels", "Vindexus", "juanferreras"],
   "license": "ISC",
   "dependencies": {
-    "web-build": "git+https://github.com/monstercat/web-build.git",
-    "express": "^4.13.3"
+    "web-build": "git+https://github.com/monstercat/web-build.git"
   }
 }
