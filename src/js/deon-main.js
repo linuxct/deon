@@ -643,7 +643,7 @@ function transformRoster () {
   }
   return {
     years: arr,
-    selectedYear: q.year || 0 // featured year is 0
+    selectedYear: q.year || 2017//0 // featured year is 0
   }
 }
 
