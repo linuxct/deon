@@ -62,7 +62,7 @@ textarea{
   border-radius: 0;
   border-bottom: 2px solid #ccc;
   background: #eee;
-  padding: 1rem;
+  padding: 0.6rem 1rem 0.4rem 1rem;
   transition: border-color .4s ease;
 }
 input:focus,
