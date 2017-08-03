@@ -13,6 +13,17 @@ npm install
 npm start
 ```
 
+## Production Testing
+These commands will load in `production.html` instead of `development.html` which changes the endpoint and the Stripe public key.
+
+From src folder: `npm start -- production`
+
+From bin folder:  
+```
+npm run build
+npm run serve-bin
+```
+
 Read the package.json for more commands.
 
 ## Contributing

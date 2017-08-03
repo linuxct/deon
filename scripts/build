@@ -38,7 +38,7 @@ echo -e "${YELLOW}HTML${RESET}"
 echo -e "Combining all HTML and Templates..."
 
 gawk -v root=src -f $PWD/scripts/stamp-qs.awk < $HTML/head.html > tmp.html
-web-build $HTML/begin.html tmp.html $HTML/begin-body.html $HTML/body.html $TEMPLATES $HTML/end.html build > built.html
+web-build $HTML/begin.html $HTML/production.html tmp.html $HTML/begin-body.html $HTML/body.html $TEMPLATES $HTML/end.html build > built.html
 rm tmp.html
 mv built.html $BIN/index.html
 

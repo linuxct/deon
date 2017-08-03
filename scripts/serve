@@ -6,9 +6,10 @@ HTML=$SRC/html
 TEMPLATES=$(find "$SRC/templates" -iname '*.html')
 
 web-build $HTML/begin.html \
+  $HTML/${1:-development}.html \
 	$HTML/head.html \
 	$HTML/begin-body.html \
 	$HTML/body.html \
 	$TEMPLATES \
 	$HTML/end.html \
-	serve --static $SRC --port ${1:-8080}
+	serve --static $SRC --port ${2:-8080}

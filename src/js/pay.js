@@ -1,4 +1,3 @@
-var STRIPE_PK = 'pk_live_4afTMPX9ckO9an6kq9zGz0QQ' //'pk_test_zZldjt2HNSnXVxLsv3XSjeI3'
 var vendorPrices = {
   YouTube: {
     monthly: 1000,
