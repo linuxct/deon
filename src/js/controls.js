@@ -51,10 +51,16 @@ document.addEventListener('DOMContentLoaded', function(e) {
 })
 
 function recordPlayerEvent (e) {
-  recordEvent('Deon AP ' + capitalizeFirstLetter(e.type), flattenObject(e.detail))
+  var opts = e.detail.item;
+  opts.label = opts.title + ' by ' + opts.artistTitle;
+  opts.category = 'Music Player';
+  opts.releaseId = opts.releaseId;
+  opts.trackId = opts.trackId;
+  recordEvent('Deon AP ' + capitalizeFirstLetter(e.type), opts)
 }
 
 function recordPlayerError (e) {
+  e.category = 'Music Player';
   recordEvent('Deon AP Error', e)
 }
 
@@ -362,6 +368,7 @@ function mapTrackElToPlayer (el) {
     skip:       isSignedIn() && !el.hasAttribute('licensable') && (session.settings || {}).hideNonLicensableTracks,
     title:      el.getAttribute('title'),
     artist:      el.getAttribute('artist'),
+    artistTitle: el.getAttribute('artists-title'),
     trackId:    el.getAttribute('track-id'),
     playlistId: el.getAttribute('playlist-id'),
     releaseId:  el.getAttribute('release-id')
@@ -369,13 +376,16 @@ function mapTrackElToPlayer (el) {
 }
 
 function scrub (e, el) {
+  var seekTo
   if (e.clientY>100){
     var margin = 0
     if (document.body) margin = document.body.clientWidth - el.offsetWidth || 0
-    player.seek((e.clientX - margin/2) / el.offsetWidth)
+    seekTo = (e.clientX - margin/2) / el.offsetWidth;
   } else{
-    player.seek(e.clientX / el.offsetWidth)
+    seekTo = e.clientX / el.offsetWidth;
   }
+  player.seek(seekTo);
+  //TODO: Add google analytics event to track from here
 }
 
 function updatePlayerProgress () {

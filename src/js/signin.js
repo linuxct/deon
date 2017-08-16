@@ -8,6 +8,7 @@ function transformRedirectTo (obj) {
 function transformSignIn (o) {
   o = transformRedirectTo(o)
   o.buying = getSignInBuying()
+  trackSignUpEvents();
   return o
 }
 
@@ -196,5 +197,13 @@ function mapConfirmSignup () {
 
 function completedSignUp () {
   google.maps.event.addDomListener(window, 'load', initLocationAutoComplete);
+  trackSignUpEvents();
   initLocationAutoComplete()
+}
+
+function trackSignUpEvents () {
+  var redirectTo = getRedirectTo();
+  if(redirectTo == '/account/services?ref=gold') {
+    recordSubscriptionEvent('Redirect to Sign Up', 'Gold Redirect to Signup')
+  }
 }

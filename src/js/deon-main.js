@@ -150,8 +150,14 @@ function recordPage () {
 function recordEvent (name, obj, done) {
   if (typeof done != 'function')
     done = function (err, obj, xhr) {}
-  if (location.host.indexOf('localhost') == 0)
-    return done(Error('Localhost not supported.'))
+  if (ENV=='development') {
+    //This is here to quickly toggle between wanting to record events and not wanting to
+    if(false) {
+      return done(Error('Not recording events in development mode.'))
+    }
+    console.warn('Recording an event while in development mode: ', name, obj)
+  }
+
   requestJSON({
     url: endhost + '/analytics/record/event',
     withCredentials: true,
@@ -177,6 +183,23 @@ function recordErrorAndGo (err, where, uri) {
     where: where
   })
   go(uri)
+}
+
+function recordGoldEvent (action, obj, done) {
+  obj = obj || {};
+  obj.category = 'Gold';
+  return recordEvent(name, obj, done);
+}
+
+function recordSubscriptionEvent (name, obj, done) {
+  if(typeof(obj) == 'string') {
+    obj = {
+      label: obj
+    };
+  }
+  obj = obj || {};
+  obj.category = 'Subscriptions';
+  return recordEvent(name, obj, done);
 }
 
 function trackUser () {
