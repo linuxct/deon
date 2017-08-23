@@ -456,6 +456,7 @@ function completedProcessing () {
 function unsubscribeGold (e, el) {
   if (!window.confirm(strings.unsubscribeGold))
     return
+  recordGoldEvent('Click Unsubscribe');
   requestJSON({
     url: endpoint + '/self/subscription/gold/cancel',
     withCredentials: true,
@@ -513,7 +514,6 @@ function addSub (obj) {
   container.appendChild(div.firstElementChild)
   updateTotalCheckoutCost()
   showNewSubscriptions();
-  recordSubscriptionEvent('Subscription Added to Cart', obj.label);
 }
 
 function removeSub (e, el) {
@@ -535,7 +535,7 @@ function subscribeGold (e, el) {
   }
   var opts = {
     name: "Gold Membership",
-    label: 'Gold',
+    label: 'Add Gold Subscription',
     cost: "5.00",
     fields: [
       { key: "name", value: "Gold Membership" },
@@ -549,6 +549,7 @@ function subscribeGold (e, el) {
   var fin = function (opts) {
     if(isSignedIn()) {
       addSub(opts)
+      recordGoldEvent('Gold Added to Cart');
       toasty(strings.goldAdded)
       scrollToCheckout()
     }
@@ -597,10 +598,10 @@ function buyoutNewLicense (e, el) {
   var data = getTargetDataSet(el)
   if (!data) return
   if (!data.vendor) return
-  if (!data.identity) return  
+  if (!data.identity) return
   data.identity = serviceUrlToChannelId(data.identity)
   recordSubscriptionEvent('Prepay New License', {
-    label: getVendorname(data.vendor),
+    label: getVendorName(data.vendor),
     vendor: data.vendor
   });
   return go('/account/services/buyout?vendor=' + data.vendor + '&identity=' + data.identity)
@@ -627,7 +628,7 @@ function subscribeNewLicense (e, el) {
   //This strips https://twitch/tv and http://youtube.com/channel/ stuff from the identity
   data.identity = serviceUrlToChannelId(data.identity)
   document.querySelector('input[name=identity]').value = data.identity
-  
+
   el.classList.add('working')
   el.disabled = true
   convertIdentityAndValidateLicense(data.identity, data.vendor, function (err, identity) {
@@ -647,7 +648,7 @@ function subscribeNewLicense (e, el) {
     var name = "Whitelisting for " + data.identity + " on " + getVendorName(data.vendor)
     addSub({
       name: name,
-      label: 'Whitelist ' + getVendorName(data.vendor),
+      label: 'Add Whitelist ' + getVendorName(data.vendor) + ' Subscription',
       cost: (vendorPrices[data.vendor].monthly / 100).toFixed(2),
       fields: [
         { key: "amount", value: vendorPrices[data.vendor].monthly },
@@ -656,6 +657,7 @@ function subscribeNewLicense (e, el) {
         { key: "identity", value: data.identity }
       ]
     });
+    recordSubscriptionEvent('Whitelist Added to Cart', getVendorName(data.vendor));
     toasty(strings.whitelistAdded)
     scrollToCheckout()
   })

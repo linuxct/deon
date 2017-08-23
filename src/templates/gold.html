@@ -19,7 +19,7 @@
           <p>You already have Gold, {{sessionName}}. You're cool.</p>
           {{/hasGoldAccess}}
           {{^hasGoldAccess}}
-          <a class="button button--gold" href="{{getGoldUrl}}">
+          <a class="button button--gold" href="{{getGoldUrl}}" click-action="Click Get Gold" click-label="Gold Landing Header" click-category="Gold">
             Get Gold - $5/mo
           </a>
           {{/hasGoldAccess}}
@@ -54,7 +54,7 @@
                   {{/hasGoldAccess}}
                 {{/reddit}}
                 {{^hasGoldAccess}}
-                  <a class="button button--gold-light" href="{{getGoldUrl}}" target="_BLANK">
+                  <a class="button button--gold-light" href="{{getGoldUrl}}" click-label="{{title}}" click-action="Click Get Gold" click-category="Gold" target="_BLANK">
                     Get Gold - $5/mo
                   </a>
                 {{/hasGoldAccess}}
@@ -76,7 +76,7 @@
           {{/hasGoldAccess}}
           {{^hasGoldAccess}}
           <h2>Be Gold.</h2>
-          <a class="button button--gold" href="{{getGoldUrl}}">Get Gold - $5/mo</a>
+          <a class="button button--gold" href="{{getGoldUrl}}" click-action="Click Get Gold" click-label="Gold Landing Footer" click-category="Gold">Get Gold - $5/mo</a>
           {{/hasGoldAccess}}
         </div>
       </div>
