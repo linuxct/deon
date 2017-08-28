@@ -1,4 +1,12 @@
-window.splittestlog = []
+window.splittestlog = [];
+window.testlogs = function () {
+  console.log(' ');
+  console.log('='.repeat(40));
+  window.splittestlog.forEach(function (obj) {
+    console.log(obj);
+  });
+  console.log('='.repeat(40));
+}
 function SplitTest (opts) {
   //console.log('opts', opts)
   this.alts = []

@@ -47,5 +47,19 @@ var musicReleasesVsBrowseTest = new SplitTest({
       _this.getNavItem().setAttribute('href', '/browse')
     }
   }
-})
+});
 
+var servicesSignUpTest = new SplitTest({
+  name: 'services-sign-up',
+  dontCheckStarter: true,
+  modifiers: {
+    default: function () {
+      transformServices.scope.onpageSignUp = false;
+      transformServices.scope.signUpRedirect = true;
+    },
+    'onpage-sign-up': function () {
+      transformServices.scope.onpageSignUp = true;
+      transformServices.scope.signUpRedirect = false;
+    }
+  },
+});

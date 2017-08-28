@@ -115,3 +115,11 @@
 .vendor-help.none .none {
   display: inherit;
 }
+
+.sign-on-fields a {
+  text-decoration: underline;
+}
+
+.services table.form.sign-on {
+  margin-bottom: 1rem;
+}

@@ -16,43 +16,38 @@
         {{^hasLegacy}}
         <div class="flex">
             {{#user}}
-            {{#showGold}}
-            <div class="{{#showLicenses}}col-xs-12 col-lg-4 col-lg-last {{/showLicenses}}{{^showLicenses}}col-xs-12{{/showLicenses}} panel panel--dark">
-                <h1>Gold Membership</h1>
-                <h2 class="pricing pricing--gold">{{#humble}}<span style="text-decoration: line-through; color: inherit; font-weight: normal;">$5/month</span> <i class="fa fa-arrow-right"></i> $0{{/humble}}{{^humble}}$5/month{{/humble}}</h2>
-                <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
-                {{#hasGoldPermanent}}
-                <p>You have Gold Membership.</p>
-                {{/hasGoldPermanent}}
-                {{#goldUnsubscribe}}
-                <div source="$endpoint/self/gold-subscription"
-                     template="gold-subscription"
-                     transform="transformGoldSubscription">
-                </div>
-                {{/goldUnsubscribe}}
-                {{#goldSubscribe}}
-                <br/>
-                <ul>
-                    <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
-                    <li>Direct support via e-mail and on site.</li>
-                </ul>
-                <div data-set="subscribe-gold" class="services-form" trigger-target="subscribeGold">
-                    <input type="text" name="trialCode" placeholder="{{#humble}}Humble Bundle Code{{/humble}}{{^humble}}Special Code (optional){{/humble}}" />
-                    <button class="button--gold"
-                            action="subscribeGold"
-                            trigger="subscribeGold"
-                            data-set-target="subscribe-gold">
-                        Subscribe
-                        <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
-                    </button>
-                </div>
-                {{/goldSubscribe}}
+            <div class="col-xs-12 col-lg-4 col-lg-last panel panel--dark">
+                {{#gold}}
+                    <h1>Gold Membership</h1>
+                    <h2 class="pricing pricing--gold">{{#humble}}<span style="text-decoration: line-through; color: inherit; font-weight: normal;">$5/month</span> <i class="fa fa-arrow-right"></i> $0{{/humble}}{{^humble}}$5/month{{/humble}}</h2>
+                    <p>Monstercat Gold Membership allows you to download any of the music in FLAC, MP3, and WAV formats.</p>
+                    {{#permanent}}
+                        <p>You have Gold Membership.</p>
+                    {{/permanent}}
+                    {{#subscribed}}
+                        {{>gold-subscription}}
+                    {{/subscribed}}
+                    {{^has}}
+                    <br/>
+                    <ul>
+                        <li>Unlimited download and streaming access to the Monstercat catalog (800+ full songs)</li>
+                        <li>Direct support via e-mail and on site.</li>
+                    </ul>
+                    <div data-set="subscribe-gold" class="services-form" trigger-target="subscribeGold">
+                        <input type="text" name="trialCode" placeholder="{{#humble}}Humble Bundle Code{{/humble}}{{^humble}}Special Code (optional){{/humble}}" />
+                        <button class="button--gold"
+                                action="subscribeGold"
+                                trigger="subscribeGold"
+                                data-set-target="subscribe-gold">
+                            Subscribe
+                            <span class="working-spinner"><i class="fa fa-spin fa-cog"></i></span>
+                        </button>
+                    </div>
+                    {{/has}}
+                {{/gold}}
             </div>
-            {{/showGold}}
             {{/user}}
-    
-            {{#showLicenses}}
-            <div class="col-xs-12{{#showGold}} col-lg-8{{/showGold}} panel">
+            <div class="col-xs-12 col-lg-8 panel">
                 <h1>Licensing Services</h1>
                 <p>Buy a whitelisting service for use in online media for YouTube, Twitch, or Mixer.
                    Upon subscribing for 20 months, all your previously uploaded videos within
@@ -106,8 +101,8 @@
                 <p>Have a YouTube dispute? Release claims <a href="/release-claim">here</a>.</p>
                 {{/user.isSignedIn}}
             </div>
-            {{/showLicenses}}
         </div>
+
         <div id="new-subscriptions" class="hide panel">
             <h1>Checkout</h1>
             <br/>
@@ -124,10 +119,19 @@
             </table>
             <div><span class="total-cost">$<span role="total-cost">0.00</span></span>/month</div>
             <br/>
+            {{#showSignUp}}
+            <div id="sign-on" data-submit-action="checkoutSubscriptions" trigger-target="checkoutSubscriptions">
+                <div role="sign-on-errors"></div>
+                <div role="sign-on-fields" class="sign-on-fields">
+                    {{>services-sign-up}}
+                </div>
+            </div>
+            <br />
+            {{/showSignUp}}
             <div data-set="pay-method">
                {{>payment-method-recurring}}
                <button class="button--cta"
-                       action="checkoutSubscriptions" data-set-target="pay-method">
+                       action="checkoutSubscriptions" data-set-target="pay-method" trigger="checkoutSubscriptions">
                     Complete Purchase
                 </button>
             </div>
@@ -138,15 +142,41 @@
 </script>
 
 <script type="text/template"
+        mustache-name="services-sign-up"
+        template-name="services-sign-up"
+        >
+<input type="hidden" name="signOnMethod" value="sign-up" />
+<h3>Register</h3>
+<table class="form mobile sign-on"
+    {{>signup-fields}}
+</table>
+<p>
+Already have an account? <a class="switch-sign-on" onclick="servicesChangeSignOnMethod(event, 'sign-in')">Sign in</a>.
+<br />Create an account with <a action="checkoutSubscriptions" data-social="facebook">Facebook</a> or <a action="checkoutSubscriptions" data-social="google">Google</a>.</p>.
+</p>
+</script>
+
+<script type="text/template"
+        mustache-name="services-sign-in"
+        template-name="services-sign-in"
+        >
+<input type="hidden" name="signOnMethod" value="sign-in" />
+<h3>Login</h3>
+<table class="form mobile sign-on"
+    {{>sign-in-fields}}
+</table>
+<!--
+<button class="button--social button--half button--fb" action="signInFacebook"><i class="fa fa-social-f"></i> Sign In</button>
+<button class="button--social button--half button--g" action="signInGoogle"><i class="fa fa-social-g"></i> Sign In</button>
+-->
+<p>New here? <a class="switch-sign-on" onclick="servicesChangeSignOnMethod(event, 'sign-up')">Create an account</a>.
+<br />Log in with <a action="checkoutSubscriptions" data-social="facebook">Facebook</a> or <a action="checkoutSubscriptions" data-social="google">Google</a>.</p>
+</script>
+
+<script type="text/template"
         template-name="gold-subscription"
+        mustache-name="gold-subscription"
         transform="transformGoldSubscription">
-    {{#loading}}
-    <i class="fa fa-spin fa-refresh"></i>
-    {{/loading}}
-    {{#error}}
-    <p>{{message}}</p>
-    {{/error}}
-    {{#data}}
     {{^canceled}}
     <label>Gold Subscription Active</label>
     <p>You are subscribed for $5.00 USD a month</p>
@@ -162,7 +192,6 @@
         <button class="button--gold" action="subscribeGold" data-set-target="subscribe-gold">Re-Subscribe</button>
     </div>
     {{/canceled}}
-    {{/data}}
 </script>
 
 <script type="text/template" mustache-name="payment-method">
@@ -252,7 +281,6 @@
                     Expires: {{nextBillingDate}}
                 {{/nextBillingDate}}
             {{/subscriptionActive}}
-            
         </td>
         <td>
             {{#licenseUrl}}
@@ -297,6 +325,7 @@
 
 <script type="text/template"
         route="^account\/services\/subscribed"
+        transform="transformSubscribed"
         completed="redirectServices">
     <div class="container">
         <h1>Subscribed!</h1>

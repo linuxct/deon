@@ -438,8 +438,7 @@ function getDownloadLink (releaseId, trackId) {
 }
 
 function getGetGoldLink () {
-  var goldUrl = '/account/services?ref=gold'
-  return isSignedIn() ? goldUrl : '/sign-up?redirect=' + encodeURIComponent(goldUrl)
+  return '/account/services?ref=gold'
 }
 
 function updatePlayerPlaylist (playlistId, ptracks) {
@@ -708,99 +707,90 @@ function transformSocialSettings (obj) {
   return obj
 }
 
-function transformServicesPage (obj) {
+function getUserServicesScope (done) {
   var user = isSignedIn() ? session.user : {}
+  var hasGold = !!user.goldService;
   var opts = {
     isSignedIn: isSignedIn(),
-    hasGoldPermanent: !!user.goldService && !user.currentGoldSubscription,
-    goldSubscribe: (!user.goldService && !user.currentGoldSubscription) || !isSignedIn(),
-    goldUnsubscribe: (!!user.goldService && !!user.currentGoldSubscription)
+    gold: {
+      has: hasGold,
+      permanent: hasGold && !user.currentGoldSubscription, //If you have gold and no sub then you have free/permanent gold
+      canSubscribe: !hasGold, //If you don't have it you can sub. If you DO have it, but you've canceled,  you can also sub
+      subscribed: hasGold && user.currentGoldSubscription, //A canceled subscription will set this to true
+      canceled: null, //We get this from the server below
+      endDate: null,
+      nextBillingDate: null
+    }
   }
   if (isLegacyUser()) {
     opts = {hasLegacy: true}
   }
-  return {
+  var scope = {
     user: opts,
     qs: window.location.search
+  }
+
+  if(opts.isSignedIn && opts.gold.subscribed){
+    requestJSON({
+      method: 'GET',
+      url: endhost+ '/api/self/gold-subscription',
+      withCredentials: true
+    }, function (err, json){
+      var gold = transformGoldSubscription(json);
+      scope.user.gold = Object.assign(scope.user.gold, gold);
+      if(scope.user.gold.canceled){
+        scope.user.gold.canSubscribe = true;
+      }
+      done(err, scope);
+    });
+  }
+  else {
+    done(null, scope)
   }
 }
 
 function transformServices (obj, done) {
-  var opts = transformServicesPage(obj)
-  var splitTestA = true
-  var splitTestB = false
-  var qo = queryStringToObject(window.location.search)
+  getUserServicesScope(function (err, opts) {
+    if(err) {
+      return window.alert(err.message);
+    }
+    var qo = queryStringToObject(window.location.search)
 
-  var scope =  {
-    user: opts.user,
-    qs: encodeURIComponent(window.location.search),
-    showGold: true,
-    showLicenses: true
-  }
+    transformServices.scope =  {
+      user: opts.user,
+      qs: encodeURIComponent(window.location.search),
+      signUpRedirect: true,
+      onpageSignUp: false
+    }
 
-  //The referrer is a link that is meant specifically to buy gold
-  if(qo.hasOwnProperty('ref') && qo.ref == 'gold') {
-    //Create the split test
-    transformServices.abTest = new SplitTest({
-      name: 'buy-gold-ref',
-      dontCheckStarter: true,
-      modifiers: {
-        'default': function (_this) {
-          scope.showGold = true
-          scope.showLicenses = true
-        },
-        'hide-licenses' : function (_this) {
-          scope.showGold = true
-          scope.showLicenses = false
-        }
-      },
-      onStarted: function () {
-        done(null, scope)
-      }
-    })
-    transformServices.abTest.start()
-  }
-  //The referrer is a link meant specifically to buy a license
-  else if(qo.hasOwnProperty('vendor')) {
-    transformServices.abTest = new SplitTest({
-      name: 'buy-license-ref',
-      dontCheckStarter: true,
-      modifiers: {
-        'default': function (_this) {
-          scope.showGold = true
-          scope.showLicenses = true
-        },
-        'hide-gold' : function (_this) {
-          scope.showGold = false
-          scope.showLicenses = true
-        }
-      },
-      onStarted: function () {
-        done(null, scope)
-      }
-    })
-    transformServices.abTest.start()  
-  }
-  //Just a generic link to their services
-  else {
     if(qo.hasOwnProperty('humble')) {
-      scope.showLicenses = false
       scope.user.humble = true
     }
-    transformServices.abTest = null
-    done(null, scope)
-  }
+
+    //People who aren't signed in will participate in this test, otherwise they get the vanilla page
+    if(!isSignedIn()) {
+      servicesSignUpTest.onStarted = function () {
+        transformServices.scope.showSignUp = transformServices.scope.onpageSignUp && !isSignedIn();
+        done(null, transformServices.scope);
+      };
+      servicesSignUpTest.start();
+    }
+    else {
+      done(null, transformServices.scope);
+    }
+  });
 }
-transformServices.abTest = null
 
 function transformGoldSubscription (obj) {
   var nobj = {
     nextBillingDate: formatDate(obj.availableUntil),
   }
   if (!obj.subscriptionActive) {
-    nobj.canceled = {
-      endDate: formatDate(obj.availableUntil),
-    }
+    nobj.canceled = true;
+    nobj.endDate = formatDate(obj.availableUntil);
+  }
+  else{
+    nobj.canceled = false;
   }
   return nobj
 }

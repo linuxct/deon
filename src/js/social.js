@@ -65,17 +65,31 @@ function enableGoogleSignin (e, el) {
   })
 }
 
-function signInGoogle (e, el) {
+/**
+ * This is fired by a user clicking the Facebook button
+ */
+function clickSignInFacebook (e, el, done) {
+  signInFacebook(onSocialSignIn);
+}
+
+/**
+ * This is fired by a user clicking the Google button
+ */
+function clickSignInGoogle (e, el, done) {
+  signInGoogle(onSocialSignIn);
+}
+
+function signInGoogle (done) {
   if (!gapi.auth2) return
   var auth = gapi.auth2.getAuthInstance()
   auth.signIn()
   .then(function (user) {
-    sendIdToken(user.getAuthResponse().id_token, '/google/signin', onSocialSignIn)
+    sendIdToken(user.getAuthResponse().id_token, '/google/signin', done)
   })
 }
 
-function signInFacebook (e, el) {
-  sendAccessToken('/facebook/signin', onSocialSignIn)
+function signInFacebook (done) {
+  sendAccessToken('/facebook/signin', done)
 }
 
 function onSocialSignIn (err, status) {
@@ -100,35 +114,73 @@ function signUpSocial (e, el) {
   signUpAt(e, el, where)
 }
 
-function signUpGoogle (e, el) {
+function signUpGoogle (opts) {
+  opts = opts || {};
   if (!gapi.auth2) return
   var auth = gapi.auth2.getAuthInstance()
   auth.signIn()
   .then(function (user) {
-    var obj = {
-      name: user.getBasicProfile().getName(),
-      email: user.getBasicProfile().getEmail(),
-      token: user.getAuthResponse().id_token,
-      submitWhere: '/google/signup'
-    }
-    go('/confirm-sign-up?' + objectToQueryString(obj))
+    signInGoogle(function (err, status){
+      if(status == 200) {
+        //They are trying to sign up for a new account using Google, but we already have an account attachedto that Google account
+        toasty('Account found, reloading page');
+        return location.reload();
+      }
+      else if(status == 303) {
+        var obj = {
+          name: user.getBasicProfile().getName(),
+          email: user.getBasicProfile().getEmail(),
+          token: user.getAuthResponse().id_token,
+          submitWhere: '/google/signup'
+        }
+        if(opts.redirect) {
+          obj.redirect = opts.redirect
+        }
+        return go('/confirm-sign-up?' + objectToQueryString(obj))
+      }
+    })
   })
 }
 
-function signUpFacebook (e, el) {
+function clickSignUpFacebook (e, el) {
+  signUpFacebook({
+    redirect: getRedirectTo()
+  });
+}
+
+function clickSignUpGoogle (e, el){
+  signUpGoogle({
+    redirect: getRedirectTo()
+  });
+}
+
+function signUpFacebook (opts) {
+  opts = opts || {};
   function handle(res) {
     if (res.status != 'connected' || !res.authResponse)
       return
 
     FB.api('/me?fields=name,email', function (ares) {
-      var obj = {
-        name: ares.name,
-        email: ares.email,
-        token: res.authResponse.accessToken,
-        submitWhere: '/facebook/signup'
-      }
-      go('/confirm-sign-up?' + objectToQueryString(obj))
-    })
+      signInFacebook(function (err, status) {
+        if(status == 200) {
+          //They are trying to sign up for a new account using Facebook, but we already have an account attachedto that Facebook account
+          toasty('Account found, reloading page');
+          return location.reload();
+        }
+        else {
+          var obj = {
+            name: ares.name,
+            email: ares.email,
+            token: res.authResponse.accessToken,
+            submitWhere: '/facebook/signup'
+          }
+          if(opts.redirect) {
+            obj.redirect = opts.redirect
+          }
+          return go('/confirm-sign-up?' + objectToQueryString(obj))
+        }
+      });
+    });
   }
 
   FB.login(handle, {scope: 'public_profile,email'})

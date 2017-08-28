@@ -12,20 +12,24 @@ function transformSignIn (o) {
   return o
 }
 
-function signIn (e, el) {
+function submitSignIn (e, el) {
   var data = getTargetDataSet(el);
+  signIn(data, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    if (xhr.status != 209)
+      return onSignIn()
+    go('/authenticate-token')
+  })
+}
+
+function signIn (data, done) {
   data.password = data.password.toString();
   requestJSON({
     url: endhost + '/signin',
     method: 'POST',
     withCredentials: true,
     data: data
-  }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
-    if (xhr.status != 209)
-      return onSignIn()
-    go('/authenticate-token')
-  })
+  }, done)
 }
 
 function authenticateTwoFactorToken (e, el) {
@@ -51,14 +55,19 @@ function resendTwoFactorToken (e, el) {
   })
 }
 
-function onSignIn() {
+function onSignIn(done) {
+  if(!done) {
+    done = function () {
+      go(getRedirectTo());
+    }
+  }
   getSession(function (err, sess) {
     if (err) return window.alert(err.message)
     session = sess
     trackUser()
     renderHeader()
     renderHeaderMobile()
-    go(getRedirectTo())
+    done();
   })
 }
 
@@ -107,9 +116,7 @@ function updatePassword (e, el) {
   })
 }
 
-
-function signUpAt (e, el, where) {
-  var data = getTargetDataSet(el);
+function signUp (data, where, done) {
   data.password = data.password.toString();
   requestJSON({
     url: endpoint + where,
@@ -117,26 +124,37 @@ function signUpAt (e, el, where) {
     withCredentials: true,
     data: data
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
-    getSession(function (err, sess) {
-      if (err) return window.alert(err.message)
-      session = sess
-      renderHeader()
-      renderHeaderMobile()
-      go(getRedirectTo())
-    })
-  })
+    if(err) {
+      return done(err);
+    }
+    onSignIn(done);
+  });
 }
 
-function signUp (e, el) {
-  var data = getTargetDataSet(el)
+function signUpAt (e, el, where) {
+  var data = getTargetDataSet(el);
+  signUp(data, where, function (err, obj, xhr) {
+    if (err) return window.alert(err.message)
+    go(getRedirectTo())
+  });
+}
+
+function validateSignUp (data) {
   if(!data.googleMapsPlaceId) {
-    return alert('Please enter your location')
+    alert('Please enter your location')
+    return
   }
+
+  return true
+}
+
+function submitSignUp (e, el) {
+  var data = getTargetDataSet(el)
+  if(!validateSignUp(data)) return
   signUpAt(e, el, '/signup')
 }
 
-function getRedirectTo() {
+function getRedirectTo () {
   return queryStringToObject(window.location.search).redirect || "/"
 }
 

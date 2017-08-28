@@ -44,13 +44,14 @@ function transformBuyOut (obj) {
   return obj
 }
 
-function transformBuyWhitelist (obj) {
-  obj = transformServicesPage(obj)
-  var qo = searchStringToObject()
-  for(var i in qo) {
-    obj[i] = qo[i]
-  }
-  return obj
+function transformBuyWhitelist (obj, done) {
+  getUserServicesScope(function (err, obj) {
+    var qo = searchStringToObject()
+    for(var i in qo) {
+      obj[i] = qo[i]
+    }
+    done(err, obj);
+  });
 }
 
 function buyWhitelistComplete (obj) {
@@ -183,14 +184,125 @@ function validateLicense (identity, vendor, done) {
 function checkoutSubscriptions (e, el) {
   var els = toArray(document.querySelectorAll('[role="new-subs"] tr') || [])
   var subs = els.map(getDataSet)
-  if (!subs.length) return
-  recordSubscriptionEvent('Checkout');
-  var data = getTargetDataSet(el)
-  if (!isValidPayMethod(data.method, checkoutSubscriptions)) return
-  if(transformServices.abTest && transformServices.abTest.convert) {
-    transformServices.abTest.convert()
+  var submit = function () {
+    if (!subs.length) return
+    recordSubscriptionEvent('Checkout');
+    var data = getDataSet(document.querySelector('[data-set=pay-method]'));
+    if (!isValidPayMethod(data.method, checkoutSubscriptions)) return
+    checkoutSubscriptions[data.method](data, subs)
   }
-  checkoutSubscriptions[data.method](data, subs)
+
+  var buyingGold = false;
+  for(var i = 0; i < subs.length; i++) {
+    if(subs[i].name == 'Gold Membership') {
+      buyingGold = true;
+      break;
+    }
+  }
+
+  if(transformServices.scope.onpageSignUp && !isSignedIn()) {
+    var signOnContainer = document.getElementById('sign-on');
+    var data = getDataSet(signOnContainer);
+    var signOnMethod = data.signOnMethod;
+    var socialSignOn = false;
+
+    //facebook or google or null
+    if(e.target && e.target.getAttribute('data-social')) {
+      socialSignOn = e.target.getAttribute('data-social');
+    }
+
+
+    //After successfully signin in or signup either through us, Facebook, or Google, this is checked
+    var signOn = function (err, obj, xhr) {
+      if(err) {
+        return window.alert(err.message);
+      }
+      signOnContainer.classList.toggle('hide', true);
+      //onSignIn will update their session information and rerender headers and the like
+      onSignIn(function () {
+        //This will look at their current gold subscription from the server
+        getUserServicesScope(function (err, opts) {
+          if(err) {
+            return window.alert(err.message);
+          }
+          //If they can't subscribe we don't let them continue
+          //This can happen if they already have a subscription or they have free gold
+          if(!opts.user.gold.canSubscribe){
+            //If they are buying more than gold stuff, then we remove gold and resubmit the form
+            if(subs.length > 1) {
+              var goldTr = els[i];
+              var removeButton = goldTr.querySelector('[action=removeSub]');
+              removeButton.click();
+              toasty('You already have Gold, removing from cart');
+            }
+            //If they are only buying gold then we can just refresh the page and let them know they already have a subscription
+            else if (buyingGold) {
+              toasty('You already have a Gold subscription');
+              go('/account/services')
+              return
+            }
+          }
+          if(signOnMethod == 'sign-up') {
+            toasty('Account created! Continuing...')
+          }
+          else {
+            toasty('Signed in! Continuing...')
+          }
+          submit();
+        });
+      });
+    }
+
+    if(signOnMethod == 'sign-up') {
+      //The social sign ons require us to send them to the /confirm-sign-up page
+      //which when successfull will redirect them back here and try to update their cart to what it was before
+      var qo = queryStringToObject();
+      if(buyingGold){
+        qo.ref = 'gold';
+      }
+
+      //Go through all subs and find the first license
+      //our URL params that auto-add things to your cart only look for a single
+      //vendor/identity, so we can only do the first license this way
+      for(var i = 0; i < subs.length; i++) {
+        var sub = subs[i];
+        if(sub.name != 'Gold Membership') {
+          qo.vendor = sub.vendor;
+          qo.identity = sub.identity;
+          break
+        }
+      }
+
+      var redirectTo = window.location.pathname + '?' + objectToQueryString(qo);
+      if(socialSignOn == 'google'){
+        signUpGoogle({
+          redirect: redirectTo
+        });
+      }
+      else if (socialSignOn == 'facebook'){
+        signUpFacebook({
+          redirect: redirectTo
+        });
+      }
+      else {
+        if(!validateSignUp(data)) return
+        signUp(data, '/signup', signOn);
+      }
+    }
+    else {
+      if(socialSignOn == 'google') {
+        signInGoogle(signOn);
+      }
+      else if (socialSignOn == 'facebook') {
+        signInFacebook(signOn);
+      } else {
+        signIn(data, signOn);
+      }
+    }
+  }
+  else {
+    submit();
+  }
 }
 
 checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs) {
@@ -331,7 +443,7 @@ function completedServices (source, obj) {
     }
   }
 
-  //If they are coming from the gold page then we automatcially add gold
+  //If they are coming from a link for Gold then we automatcially add gold
   //to their cart
   if(qp.ref == 'gold') {
     subscribeGold({}, document.querySelector('[action=subscribeGold]'))
@@ -343,6 +455,7 @@ function completedServices (source, obj) {
   }
   vendorChanged()
   bindPayPalGermanyWarning()
+  initLocationAutoComplete()
 }
 
 
@@ -533,6 +646,11 @@ function subscribeGold (e, el) {
     recordSubscriptionEvent('Item Already In Cart', 'Gold');
     return window.alert(strings.goldInCart)
   }
+
+  if(!transformServices.scope.user.gold.canSubscribe) {
+    return
+  }
+
   var opts = {
     name: "Gold Membership",
     label: 'Add Gold Subscription',
@@ -547,14 +665,14 @@ function subscribeGold (e, el) {
   var data = getTargetDataSet(el) || {}
 
   var fin = function (opts) {
-    if(isSignedIn()) {
+    if(isSignedIn() || transformServices.scope.onpageSignUp) {
       addSub(opts)
       recordGoldEvent('Gold Added to Cart');
       toasty(strings.goldAdded)
       scrollToCheckout()
     }
     else {
-      var url = '/account/services?gold'
+      var url = '/account/services?ref=gold'
       recordSubscriptionEvent('Redirected to Sign Up', 'Gold');
       return go('/sign-up?redirect=' + encodeURIComponent(url))
     }
@@ -637,7 +755,9 @@ function subscribeNewLicense (e, el) {
     el.disabled = false
     if (err) return window.alert(err.message)
 
-    if(!isSignedIn()) {
+    //If they are not signed AND they aren't part of the section of the split test that
+    //redirects, then we redirect them to the sign up page
+    if(!isSignedIn() && transformServices.scope.signUpRedirect) {
       var url = '/account/services?vendor=' + data.vendor + '&identity=' + data.identity;
       recordSubscriptionEvent('Redirected to Sign Up', {
         label: 'Whitelist ' + getVendorName(data.vendor)
@@ -685,4 +805,22 @@ function togglePayPalGermanyWarning () {
       msg.classList.toggle('hide', val != 'paypal')
     }
   }
+}
+
+function servicesChangeSignOnMethod (e, newMethod) {
+  var email = document.querySelector('[name=email]').value
+  var tel = getTemplateEl('services-' + newMethod);
+  render(document.querySelector('[role=sign-on-fields]'), tel.textContent, {});
+  document.querySelector('[name=email]').value = email;
+  if(newMethod == 'sign-up') {
+    initLocationAutoComplete()
+  }
+}
+
+function transformSubscribed (obj) {
+  obj = obj || {};
+  if(isSignedIn()) {
+    servicesSignUpTest.convert();
+  }
+  return obj;
 }

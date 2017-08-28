@@ -75,39 +75,11 @@
             <h1>Sign In to Continue</h1>
             <p>Sign in or create an account to continue buying {{>buying}}.</p>
         </div>
-        {{/buying}}        
+        {{/buying}}
         <div class="flex sign-split">
-            <form onsubmit="false" data-set="credentials" data-submit-action="signIn" class="col-xs-12 col-md-6 panel">
+            <form onsubmit="false" data-set="credentials" data-submit-action="submitSignIn" class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>
-                <table class="form mobile">
-                    <tbody>
-                        <tr>
-                            <th>Email</th>
-                            <td>
-                                <input
-                                    type="text"
-                                    name="email"
-                                    placeholder="kitty@monstercat.com"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Password</th>
-                            <td>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="a secret"/>
-                                <button
-                                    class="faux password"
-                                    action="togglePassword"
-                                    toggle-target="password"
-                                    type="button">
-                                    <i class="fa fa-eye-slash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                {{>sign-in-fields}}
                 <div class="button-group button-group--margin">
                     <button class="button--cta button--full">Sign In</button>
                 </div>
@@ -118,13 +90,47 @@
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Social</h2>
                 <div class="button-group button-group--margin">
-                    <button class="button--social button--half button--fb" action="signInFacebook"><i class="fa fa-social-f"></i> Sign In</button>
-                    <button class="button--social button--half button--g" action="signInGoogle"><i class="fa fa-social-g"></i> Sign In</button>
+                    <button class="button--social button--half button--fb" action="clickSignInFacebook"><i class="fa fa-social-f"></i> Sign In</button>
+                    <button class="button--social button--half button--g" action="clickSignInGoogle"><i class="fa fa-social-g"></i> Sign In</button>
                 </div>
             </div>
         </div>
     </div>
     {{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="sign-in-fields"
+        >
+<table class="form mobile">
+    <tbody>
+        <tr>
+            <th>Email</th>
+            <td>
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="kitty@monstercat.com"/>
+            </td>
+        </tr>
+        <tr>
+            <th>Password</th>
+            <td>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="a secret"/>
+                <button
+                    class="faux password"
+                    action="togglePassword"
+                    toggle-target="password"
+                    type="button">
+                    <i class="fa fa-eye-slash"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
 </script>
 
 <script type="text/template"
@@ -262,15 +268,15 @@
                     {{>signup-fields}}
                 </table>
                 <div class="button-group">
-                    <button class="button--cta button--full" action="signUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
+                    <button class="button--cta button--full" action="submitSignUp" trigger="signUp" data-set-target="credentials">Sign Up</button>
                     or <a href="/signin?redirect={{redirectTo}}">sign in</a>
                 </div>
             </div>
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Social</h2>
                 <div class="button-group">
-                    <button class="button--social button--half button--fb" action="signUpFacebook"><i class="fa fa-social-f"></i> Sign Up</button>
-                    <button class="button--social button--half button--g" action="signUpGoogle"><i class="fa fa-social-g"></i> Sign Up</button>
+                    <button class="button--social button--half button--fb" action="clickSignUpFacebook"><i class="fa fa-social-f"></i> Sign Up</button>
+                    <button class="button--social button--half button--g" action="clickSignUpGoogle"><i class="fa fa-social-g"></i> Sign Up</button>
                 </div>
             </div>
         </div>
@@ -382,7 +388,7 @@
                 {{^hasGoldAccess}}
                 <p>Get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
                 <div class="button-group">
-                    <a href="/account/services?gold" class="button">Get Monstercat Gold</a>
+                    <a href="/account/services?ref=gold" class="button">Get Monstercat Gold</a>
                 </div>
                 {{/hasGoldAccess}}
             </div>
@@ -392,7 +398,7 @@
                 {{>joinGoldDiscord}}
                 {{^hasGoldAccess}}
                 <div class="button-group">
-                    <a href="/account/services?gold" class="button">Get Monstercat Gold</a>
+                    <a href="/account/services?ref=gold" class="button">Get Monstercat Gold</a>
                 </div>
                 {{/hasGoldAccess}}
             </div>
