@@ -1,6 +1,7 @@
 <script type="text/template"
-        route="^gold$"
+        route="^gold"
         transform="transformGoldLanding"
+        completed="completedGoldLanding"
         page-title="Monstercat Gold">
   {{#data}}
     <div class="top-banner top-banner-gold">
@@ -54,8 +55,8 @@
                   {{/hasGoldAccess}}
                 {{/reddit}}
                 {{^hasGoldAccess}}
-                  <a class="button button--gold-light" href="{{getGoldUrl}}" click-label="{{title}}" click-action="Click Get Gold" click-category="Gold" target="_BLANK">
-                    Get Gold - $5/mo
+                  <a class="button button--gold-light" href="{{getGoldUrl}}" test-kpi="{{id}}" click-label="{{title}}" click-action="Click Get Gold" click-category="Gold" target="_BLANK">
+                    {{cta}} - $5/mo
                   </a>
                 {{/hasGoldAccess}}
                 <a class="back-to-top" href="#top" action="anchorScrollTo">back to top</a>

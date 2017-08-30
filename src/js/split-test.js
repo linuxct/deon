@@ -21,6 +21,11 @@ function SplitTest (opts) {
     this[i] = opts[i]
   }
 
+
+  if(this.checkStart === false) {
+    this.dontCheckStarter = true;
+  }
+
   for(var key in this.modifiers) {
     this.alts.push(key)
   }

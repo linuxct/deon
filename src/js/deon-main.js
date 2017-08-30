@@ -795,7 +795,7 @@ function transformGoldSubscription (obj) {
   return nobj
 }
 
-function transformGoldLanding (obj) {
+function transformGoldLanding (obj, done) {
   obj = obj || {}
   var featureBlocks = []
   featureBlocks.push({
@@ -803,27 +803,32 @@ function transformGoldLanding (obj) {
     title: 'Download Access',
     description: 'Download tracks in MP3, FLAC, and WAV format.',
     image: '1-DownloadAccess-v2.jpg',
+    cta: 'Download Music',
     download: true
   }, {
     id: 'early-streaming',
     title: 'Early Streaming Access',
     description: 'Listen to releases on Monstercat.com 20 hours before they are released to everyone else.',
+    cta: 'Listen Early',
     image: '2-StreamingAccess.jpg',
   }, {
     id: 'support-the-artists',
     title: 'Support the Artists',
     description: 'Artists are paid out from Gold subscriptions based on how much people listen to their songs.',
+    cta: 'Support the Artists',
     image: '3-SupportArtists.jpg',
   }, {
     id: 'discord',
     title: 'Gold-only Discord Chat',
     description: 'Come chat with us and other superfans in our Discord server.',
+    cta: 'Join the Chat',
     image: '5-Discord.jpg',
     discord: true
   }, {
     id: 'reddit',
     title: 'Subreddit Flair on /r/Monstercat',
     description: 'Show your bling off in the Monstercat subreddit.',
+    cta: 'Get Your Flair',
     image: '6-Reddit.png',
     reddit: true
   })
@@ -843,7 +848,41 @@ function transformGoldLanding (obj) {
     obj.redditUsername = false
   }
 
-  return obj
+  var test = new SplitTest({
+    name: 'gold-landing-custom-cta',
+    checkStart: false,
+    modifiers: {
+      'default': function () {
+        obj.featureBlocks = obj.featureBlocks.map(function (block) {
+          block.cta = 'Get Gold';
+          return block;
+        });
+      },
+      'custom-ctas': function () {
+      }
+    },
+    onStarted: function (alt) {
+      done(null, obj);
+    }
+  });
+  transformGoldLanding.test = test;
+  test.start();
+}
+
+function completedGoldLanding () {
+  if(transformGoldLanding.test) {
+    document.querySelectorAll('a[test-kpi]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        var t = e.target;
+        if(!t) return
+        var kpi = t.getAttribute('test-kpi');
+        if(kpi) {
+          transformGoldLanding.test.convertKpi(kpi);
+          transformGoldLanding.test.convert();
+        }
+      })
+    })
+  }
 }
 
 function transformMusic () {
