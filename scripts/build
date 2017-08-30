@@ -33,6 +33,9 @@ ln -s $SRC/js          $BIN/js
 rm -f $BIN/favicon.ico
 ln -s $SRC/favicon.ico $BIN/favicon.ico
 
+rm -f $BIN/manifest.json
+ln -s $SRC/manifest.json $BIN/manifest.json
+
 echo
 echo -e "${YELLOW}HTML${RESET}"
 echo -e "Combining all HTML and Templates..."
