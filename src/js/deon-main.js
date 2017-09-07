@@ -764,7 +764,7 @@ function transformServices (obj, done) {
     }
 
     if(qo.hasOwnProperty('humble')) {
-      scope.user.humble = true
+      transformServices.scope.user.humble = true
     }
 
     //People who aren't signed in will participate in this test, otherwise they get the vanilla page
