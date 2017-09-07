@@ -110,12 +110,15 @@
     <tbody>
       {{#results}}
       <tr dblc-action="playSongDblC">
-        <td>{{>playSong}}</td>
+        <td>
+          {{>playSong}}
+        </td>
         <td class="longer-width">
           <div class="scroll-container"
                onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
             <span class="scroll-title">{{title}}</span>
           </div>
+          {{>unlicensable}}
         </td>
         <td class="longer-width">
           {{artistsTitle}}
