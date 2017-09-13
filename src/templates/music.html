@@ -99,10 +99,11 @@
                             <a class="silent button button--release-cta button--white" href="{{share}}" target="_blank" title="Spotify">
                                 <i class="fa fa-social-sp"></i>
                                 <span>Spotify</span>
-                            </a>                            
+                            </a>
                             {{/share}}
                             {{^preReleaseDate}}
                             <a class="silent button button--release-cta button--white"
+                               role="download-release"
                                href="{{downloadLink}}"
                                target="_blank"
                                release-title="{{title}}"
@@ -150,7 +151,7 @@
         </div>
     </div>
     <div class="release container" >
-        <div 
+        <div
             source="$endpoint/catalog/release/{{_id}}/tracks"
             template="release-tracks">
         </div>

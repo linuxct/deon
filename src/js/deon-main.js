@@ -393,7 +393,10 @@ function loadReleaseAndTrack (obj, done) {
     if (err) return done(err);
     loadCache(endpoint + '/catalog/release/' + obj.releaseId, function(err, release) {
       if (err) return done(err)
-      var title = track.title + ' by ' + track.artistsTitle + ' from ' + release.title
+      var title = track.title + ' by ' + track.artistsTitle;
+      if(track.title != release.title) {
+        title += ' from ' + release.title
+      }
       track.copycredit = createCopycredit(title, release.urls)
       track.copycreditOther = createCopycreditOther(track)
       done(null, {
@@ -1137,6 +1140,12 @@ function completedReleaseTracks (source, obj) {
     ShopifyBuyInit(node.getAttribute('collection-id'), node)
   })
   updateControls()
+  //For releases with a single song, we change the download link of the album
+  //so it's just that song. That way people don't download a ZIP file of one song
+  if(obj.data.results.length == 1) {
+    var button = document.querySelector('a[role=download-release]');
+    button.setAttribute('href', obj.data.results[0].downloadLink)
+  }
 }
 
 function completedMusic (source, obj) {
