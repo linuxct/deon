@@ -123,3 +123,8 @@
 .services table.form.sign-on {
   margin-bottom: 1rem;
 }
+
+tr.blacklisted .vendor,
+tr.blacklisted .identity {
+  text-decoration: line-through;
+}

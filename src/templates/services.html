@@ -249,63 +249,72 @@ Already have an account? <a class="switch-sign-on" onclick="servicesChangeSignOn
     {{/error}}
     {{#data}}
     {{#results}}
-    <tr s-data-set data-set="whitelist-{{_id}}">
-        <td>
-            {{#resume}}
-            <input type="hidden" name="id" value="{{_id}}"/>
-            <input type="hidden" name="amount" value="{{amount}}"/>
-            {{/resume}}
-            <input type="hidden" name="vendor" value="{{vendor}}"/>
-            {{vendorName}}
-        </td>
-        <td>
-            <input type="hidden" name="identity" value="{{identity}}"/>
-            {{identity}}
-        </td>
-        <td>{{paid}}</td>
-        <td>${{remaining}}</td>
-        <td>
-            {{#cost}}
-            ${{cost}}
-            {{/cost}}
-            {{^cost}}
-            N/A
-            {{/cost}}
-        </td>
-        <td>
-            {{#subscriptionActive}}
-                Next Payment: {{nextBillingDate}}
-            {{/subscriptionActive}}
-            {{^subscriptionActive}}
-                {{#nextBillingDate}}
-                    Expires: {{nextBillingDate}}
-                {{/nextBillingDate}}
-            {{/subscriptionActive}}
-        </td>
-        <td>
-            {{#licenseUrl}}
-            <a href="{{licenseUrl}}"
-               title="Open license document."
-               target="_blank">View License</a>
-            {{/licenseUrl}}
-            {{^canBuyOut}}
-            <a href="/account/services/buyout/{{_id}}">Prepay 20 Months</a>
-            {{/canBuyOut}}
-            {{#cancel}}
-            <button class="faux"
-                    action="cancelLicenseSubscription"
-                    whitelist-id="{{_id}}">
-                Cancel Subscription
-            </button>
-            {{/cancel}}
-            {{#resume}}
-            <button class="faux"
-                    action="resumeLicenseSubscription"
-                    data-set-target="whitelist-{{_id}}">
-                Resume Subscription
-            </button>
-            {{/resume}}
-        </td>
+    <tr s-data-set data-set="whitelist-{{_id}}" class="{{#blacklisted}}blacklisted{{/blacklisted}}">
+        {{#blacklisted}}
+            <td class="vendor">{{vendorName}}</td>
+            <td class="identity">{{identity}}</td>
+            <td colspan="5" class="msg">
+                <span class="fa fa-warning"></span> This channel is not eligible for a whitelist license. <a href="/licensing/content-creators#i-own-a-music-promotional-channel-can-i-purchase-a-whitelist-subscription-to-monetize-monstercat-s-music-on-my-channel-">Please see our FAQ</a>.
+            </td>
+        {{/blacklisted}}
+        {{^blacklisted}}
+            <td>
+                {{#resume}}
+                <input type="hidden" name="id" value="{{_id}}"/>
+                <input type="hidden" name="amount" value="{{amount}}"/>
+                {{/resume}}
+                <input type="hidden" name="vendor" value="{{vendor}}"/>
+                {{vendorName}}
+            </td>
+            <td>
+                <input type="hidden" name="identity" value="{{identity}}"/>
+                {{identity}}
+            </td>
+            <td>{{paid}}</td>
+            <td>${{remaining}}</td>
+            <td>
+                {{#cost}}
+                ${{cost}}
+                {{/cost}}
+                {{^cost}}
+                N/A
+                {{/cost}}
+            </td>
+            <td>
+                {{#subscriptionActive}}
+                    Next Payment: {{nextBillingDate}}
+                {{/subscriptionActive}}
+                {{^subscriptionActive}}
+                    {{#nextBillingDate}}
+                        Expires: {{nextBillingDate}}
+                    {{/nextBillingDate}}
+                {{/subscriptionActive}}
+            </td>
+            <td>
+                {{#licenseUrl}}
+                <a href="{{licenseUrl}}"
+                   title="Open license document."
+                   target="_blank">View License</a>
+                {{/licenseUrl}}
+                {{^canBuyOut}}
+                <a href="/account/services/buyout/{{_id}}">Prepay 20 Months</a>
+                {{/canBuyOut}}
+                {{#cancel}}
+                <button class="faux"
+                        action="cancelLicenseSubscription"
+                        whitelist-id="{{_id}}">
+                    Cancel Subscription
+                </button>
+                {{/cancel}}
+                {{#resume}}
+                <button class="faux"
+                        action="resumeLicenseSubscription"
+                        data-set-target="whitelist-{{_id}}">
+                    Resume Subscription
+                </button>
+                {{/resume}}
+            </td>
+        {{/blacklisted}}
     </tr>
     {{/results}}
     {{^results}}

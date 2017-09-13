@@ -176,6 +176,7 @@ function validateLicense (identity, vendor, done) {
     if (err) return done(err)
     if (!obj) return done(Error(strings.error))
     if (!obj.valid) return done(Error(strings.invalidIdentity))
+    if (obj.blacklisted) return done(Error(strings.blacklistedIdentity))
     if (!obj.available) return done(Error(strings.unavailableIdentity))
     done(null, identity)
   })

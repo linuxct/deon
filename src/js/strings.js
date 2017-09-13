@@ -29,5 +29,6 @@ var strings = {
   "codeNotFound": "The code you entered does not exist.",
   "codeNotValid": "The code you entered is not valid any more.",
   "invalidIdentity": "The channel you tried to add is not valid.",
+  "blacklistedIdentity": "That channel is not eligible for a license.",
   "unavailableIdentity": "The identity is already in use."
 }
