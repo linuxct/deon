@@ -38,25 +38,6 @@ function dateToCountdownString (date) {
   return "0s"
 }
 
-function dateToTimeOffset (date, utcOffsetHours, dayOffset, hourOfDay) {
-  return new Date(Date.UTC(date.getFullYear(),
-      date.getMonth(),
-      date.getDate() + dayOffset,
-      -utcOffsetHours + hourOfDay,
-      0,
-      0))
-}
-
-function dateToMidnightWestCoast (date) {
-  var westCoastUTCOffset = -8
-  var mwc = dateToMidnight(date, westCoastUTCOffset)
-  return mwc
-}
-
-function dateToMidnight (date, utcOffsetHours) {
-  return dateToTimeOffset(date, utcOffsetHours, 0, 0)
-}
-
 function startCountdownTicks () {
   clearTimeout(startCountdownTicks.timeout)
   function tick () {

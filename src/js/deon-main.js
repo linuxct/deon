@@ -586,9 +586,9 @@ function mapRelease (o) {
   var pdate = typeof o.preReleaseDate != 'undefined' ? new Date(o.preReleaseDate) : undefined
   var rdate = new Date(o.releaseDate)
   var now = new Date()
-  o.releaseDateObj = dateToMidnightWestCoast(rdate)
+  o.releaseDateObj = new Date(rdate)
   if(pdate && ((o.inEarlyAccess && now < pdate) || (!o.inEarlyAccess && now < rdate))) {
-    o.preReleaseDateObj = dateToMidnightWestCoast(pdate)
+    o.preReleaseDateObj = new Date(pdate)
     o.preReleaseDate = formatDate(o.preReleaseDateObj)
     o.releaseDate = null
     o.releaseDateObj = null
