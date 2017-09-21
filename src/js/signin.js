@@ -100,9 +100,17 @@ function recoverPassword (e, el) {
   })
 }
 
+function transformPasswordReset (obj) {
+  obj = obj || {};
+  var key = queryStringToObject(window.location.search).key;
+  obj.missingKey = !key;
+  return obj;
+}
+
 function updatePassword (e, el) {
   var data = getTargetDataSet(el)
   if (!data.password) return window.alert(strings.passwordMissing)
+  if (data.password != data.confirmPassword) return window.alert(strings.passwordDoesntMatch)
   data.code = queryStringToObject(window.location.search).key
   requestJSON({
     url: endhost + '/password/reset',

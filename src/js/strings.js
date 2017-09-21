@@ -10,6 +10,7 @@ var strings = {
   "reorderedPlaylist": "Playlist order saved.",
   "removedFromPlaylist": "Song succesfully removed from playlist.",
   "passwordMissing": "You must enter a password.",
+  "passwordDoesntMatch": "Your passwords confirmation doesn't match your password.",
   "passwordReset": "Your password has been reset. Please sign in.",
   "passwordResetEmail": "Check your email for a link to reset your password.",
   "twoFactorConfirmed": "Two-factor authentication has been enabled.",

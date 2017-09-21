@@ -183,38 +183,63 @@
 
 <script type="text/template"
         route="^reset-password"
-        page-title="Reset Password">
+        page-title="Reset Password"
+        transform="transformPasswordReset"
+        >
     <div class="container">
-        <h1>Reset Password</h1>
-        <div class="panel">
-        <table class="form mobile" data-set="password">
-            <tbody>
-                <tr>
-                    <th>Password</th>
-                    <td>
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="New Password"/>
-                        <button
-                            class="faux password"
-                            action="togglePassword"
-                            toggle-target="password">
-                            <i class="fa fa-eye-slash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-            <div class="button-group">
-                <button
-                    class="button--cta button-full"
-                    action="updatePassword"
-                    data-set-target="password">
-                    Update Password
-                </button>
+        {{#data}}
+            <h1>Reset Password</h1>
+            <div class="panel">
+            {{#missingKey}}
+                <p>No key provided.</p>
+            {{/missingKey}}
+
+            {{^missingKey}}
+            <table class="form mobile" data-set="password">
+                <tbody>
+                    <tr>
+                        <th>Password</th>
+                        <td>
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="New Password"/>
+                            <button
+                                class="faux password"
+                                action="togglePassword"
+                                toggle-target="password">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Confirm</th>
+                        <td>
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                placeholder="Confirm Password"/>
+                            <button
+                                class="faux password"
+                                action="togglePassword"
+                                toggle-target="confirmPassword">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+                <div class="button-group">
+                    <button
+                        class="button--cta button-full"
+                        action="updatePassword"
+                        data-set-target="password">
+                        Update Password
+                    </button>
+                </div>
             </div>
-        </div>
+            {{/missingKey}}
+        {{/data}}
     </div>
 </script>
 
