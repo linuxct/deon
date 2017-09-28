@@ -365,7 +365,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th valign="top">Email settings</th>
+                            <th valign="top">Email me about</th>
                             <td>
                                 {{>account-email-optins}}
                             </td>
@@ -594,9 +594,11 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <th valign="top">Email me about</th>
+            <td>
                 {{>account-email-optin-news}}
                 {{>account-email-optin-events}}
+                {{>account-email-optin-merch}}
             </td>
         </tr>
     </tbody>
@@ -607,7 +609,7 @@
     <div class="checkbox email-optin-checkbox">
         <label>
             <input type="checkbox" checked disabled />
-            Email me about important service updates
+            Important service updates
         </label>
     </div>
     {{>account-email-optin-news}}
@@ -620,7 +622,17 @@
 <div class="checkbox email-optin-checkbox">
     <label>
         <input type="checkbox" name="emailOptIns[news]"{{#emailOptIns.news}} checked="checked"{{/emailOptIns.news}} value="1" />
-        Email me about Monstercat news
+        Monstercat news
+    </label>
+</div>
+</script>
+
+<script type="text/template"
+        mustache-name="account-email-optin-merch">
+<div class="checkbox email-optin-checkbox">
+    <label>
+        <input type="checkbox" name="emailOptIns[merch]"{{#emailOptIns.merch}} checked="checked"{{/emailOptIns.merch}} value="1" />
+        Shop discounts &amp; promotions
     </label>
 </div>
 </script>
@@ -640,7 +652,7 @@
 <div class="checkbox email-optin-checkbox">
     <label>
         <input type="checkbox" name="emailOptIns[events]"{{#emailOptIns.events}} checked="checked"{{/emailOptIns.events}} value="1" />
-        Email me about official Monstercat events
+        Official Monstercat events
     </label>
 </div>
 </script>
