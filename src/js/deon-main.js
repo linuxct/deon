@@ -1005,8 +1005,9 @@ function transformWhitelists (obj) {
 }
 
 function transformReleaseTracks (obj, done) {
-  var h1 = document.querySelector('h1[release-id]')
-  var releaseId = h1 ? h1.getAttribute('release-id') : ''
+  var input = document.querySelector('input[role=release-id][release-id]')
+  var releaseId = input ? input.getAttribute('release-id') : ''
+
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
     obj.results.forEach(function (track, index, arr) {
@@ -1139,7 +1140,9 @@ function completedReleaseTracks (source, obj) {
   //so it's just that song. That way people don't download a ZIP file of one song
   if(obj.data.results.length == 1) {
     var button = document.querySelector('a[role=download-release]');
-    button.setAttribute('href', obj.data.results[0].downloadLink)
+    if(button) {
+      button.setAttribute('href', obj.data.results[0].downloadLink)
+    }
   }
 }
 

@@ -50,8 +50,9 @@
                 </p>
                 {{#inEarlyAccess}}
                     {{#hasGoldAccess}}
-                        <a href="/release/{{catalogId}}" class="button button--cta button--icon">
-                            Listen Early
+                        {{>home-play-button}}
+                        <a href="/release/{{catalogId}}" class="button button--cta button--icon button--home-view">
+                            View
                             <i class="fa fa-chevron-right"></i>
                         </a>
                         <div class="early-access-message">
@@ -69,7 +70,8 @@
                     {{/hasGoldAccess}}
                 {{/inEarlyAccess}}
                 {{^inEarlyAccess}}
-                    <a href="/release/{{catalogId}}" class="button button--cta button--icon">
+                    {{>home-play-button}}
+                    <a href="/release/{{catalogId}}" class="button button--cta button--icon button--home-view">
                         View
                         <i class="fa fa-chevron-right"></i>
                     </a>
@@ -106,6 +108,24 @@
         </div>
     </div>
     {{/data}}
+</script>
+
+<script type="text/template"
+        template-name="home-play-button"
+        mustache-name="home-play-button"
+>
+<input type="hidden" role="release-id" release-id="{{_id}}" />
+<div style="display: none;"
+    source="$endpoint/catalog/release/{{_id}}/tracks"
+    template="release-tracks">
+</div>
+<a class="button button--cta button--icon button--icon button--home-play {{#inEarlyAccess}}early-access{{/inEarlyAccess}}"
+        action="playSongs"
+        role="play-release"
+        release-id="{{_id}}">
+    <span class="play"><i class="fa fa-play"></i> <span>{{#inEarlyAccess}}Listen Early{{/inEarlyAccess}}{{^inEarlyAccess}}Play{{/inEarlyAccess}}</span></span>
+    <span class="pause"><i class="fa fa-pause"></i> <span>Pause</span></span>
+</a>
 </script>
 
 <script type="text/template"

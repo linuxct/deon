@@ -86,6 +86,7 @@
                 <div class="details-box clearfix">
                     <img class="artwork" src="{{cover}}" action="openReleaseArt" big-src="{{coverBig}}"/>
                     <h1 release-id="{{_id}}" catalog-id="{{catalogId}}">{{title}}</h1>
+                    <input type="hidden" role="release-id" release-id="{{_id}}" />
                     <h2>{{artists}}</h2>
                     <label>
                         {{>albumReleaseDates}}
