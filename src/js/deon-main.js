@@ -1009,20 +1009,15 @@ function transformReleaseTracks (obj, done) {
   var releaseId = h1 ? h1.getAttribute('release-id') : ''
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
-    var num = -1;
     obj.results.forEach(function (track, index, arr) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
-      if(track.playUrl) {
-        num++;
-      }
-      mapReleaseTrack(track, num, arr)
+      mapReleaseTrack(track, index, arr)
       track.releaseId = releaseId
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
       track.time = formatDuration(track.duration)
     })
     obj.hasGoldAccess = hasGoldAccess()
-    
     obj.shopifyEmbeds = []
     var artistsCount = 0
 
