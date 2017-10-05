@@ -352,10 +352,11 @@ Already have an account? <a class="switch-sign-on" onclick="servicesChangeSignOn
 </script>
 
 <script type="text/template"
+        transform="transformCanceledPayment"
         route="^account\/services\/canceled-payment\/?$">
     <div class="container">
         <h1>Payment Canceled</h1>
-        <p>The payment has been canceled. Go back to <a href="/services">services</a>.</p>
+        <p>The payment has been canceled. Go back to <a href="{{returnUrl}}">{{returnLabel}}</a>.</p>
     </div>
 </script>
 

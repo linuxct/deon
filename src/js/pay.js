@@ -214,7 +214,7 @@ function checkoutSubscriptions (e, el) {
 
 
     //After successfully signin in or signup either through us, Facebook, or Google, this is checked
-    var signOn = function (err, obj, xhr) {
+    var signOn = function (err, result, xhr) {
       if(err) {
         return window.alert(err.message);
       }
@@ -278,15 +278,21 @@ function checkoutSubscriptions (e, el) {
       if(socialSignOn == 'google'){
         signUpGoogle({
           redirect: redirectTo
-        });
+        }, signOn);
       }
       else if (socialSignOn == 'facebook'){
         signUpFacebook({
           redirect: redirectTo
-        });
+        }, signOn);
       }
       else {
-        if(!validateSignUp(data)) return
+        var errors = validateSignUp(data)
+        if(errors.length > 0) {
+          errors.forEach(function (err) {
+            toasty(new Error(err));
+          })
+          return
+        }
         signUp(data, '/signup', signOn);
       }
     }
@@ -540,9 +546,13 @@ function completedProcessing () {
     uri     = 'whitelist/buyout/complete'
     forward = '/account/services/buyout/purchased'
   }
-  if (obj.type == 'subscriptions' || obj.type == 'resume') {
+  else if (obj.type == 'subscriptions' || obj.type == 'resume' || obj.type == 'gold') {
     uri     = 'subscription/services/complete'
     forward = '/account/services/subscribed'
+
+    if (obj.type == 'gold') {
+      forward += '?type=gold'
+    }
 
     if(obj.humble) {
       forward = '/humble'
@@ -786,7 +796,7 @@ function subscribeNewLicense (e, el) {
 
 function scrollToCheckout () {
   setTimeout(function () {
-    scrollToAnimated(document.querySelector('#new-subscriptions'))
+    scrollToEl(document.querySelector('#new-subscriptions'))
   }, 500)
 }
 
@@ -818,10 +828,32 @@ function servicesChangeSignOnMethod (e, newMethod) {
   }
 }
 
+function transformCanceledPayment (obj) {
+  obj = obj || {};
+  var qo = queryStringToObject(window.location.search);
+  if(qo.type == 'gold') {
+    obj.returnUrl = '/gold/buy';
+    obj.returnLabel = 'Gold';
+  }
+  else {
+    obj.returnUrl = '/account/services';
+    obj.returnLabel = 'services';
+  }
+  return obj;
+}
+
 function transformSubscribed (obj) {
   obj = obj || {};
+  var qo = queryStringToObject(window.location.search);
   if(isSignedIn()) {
-    servicesSignUpTest.convert();
+    //This cookie is only set to true if you go through the /gold/get page, which redirects you
+    //We don't want to track conversions on this test from people who went directly to /account/services
+    //We only do it through people who clicked a /gold/get link, as that is where the test that redirects
+    //them to one of two checkout pages happens
+    var participating = getCookie('goldBuyVsAccountServicesTestParticipating');
+    if(qo.type == 'gold' && !!participating) {
+      goldBuyVsAccountServicesTest.convert();
+    }
   }
   return obj;
 }

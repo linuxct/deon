@@ -1,0 +1,170 @@
+.gold-subscribe .panel--dark {
+  background: url('/img/banner.jpg') top center no-repeat;
+  background-size: cover;
+  position: relative;
+  z-index: 1;
+}
+
+.gold-subscribe .panel--dark:before {
+  content: " ";
+  background: #000;
+  opacity: 0.75;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  z-index: -1;
+}
+
+.gold-subscribe .form-group label {
+  line-height: 40px;
+}
+
+.gold-subscribe .form-group .email-optins {
+  padding: 0.25em 0;
+}
+
+.gold-subscribe .form-group .email-optins .checkbox {
+  margin-bottom: 0.1em;
+}
+
+.gold-subscribe .form-group .email-optins .checkbox:last-of-type {
+  margin-bottom: 0px;
+}
+
+.gold-subscribe .form-group .email-optins label {
+  line-height: 1.2em;
+}
+
+.gold-subscribe .form-group label.radio {
+  display: inline;
+}
+
+.gold-subscribe label.radio [type="radio"] + span {
+  display: inline-block;
+}
+
+.gold-subscribe input[type=text],
+.gold-subscribe input[type=password] {
+  width: 100%;
+}
+
+
+.gold-subscribe input[type=text]:focus,
+.gold-subscribe input[type=password]:focus {
+  border-color: dodgerblue;
+}
+
+.gold-subscribe input[type=text].inline {
+  width: auto;
+}
+
+.gold-subscribe .coupon-area {
+  padding-top: 1rem;
+}
+
+.gold-subscribe .coupon-area h4 {
+  margin-bottom: 5px;
+}
+
+.gold-subscribe .price-area {
+  line-height: 40px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.gold-subscribe .price-area span {
+  color: goldenrod;
+}
+
+.gold-subscribe .price-area .currency {
+  font-size: 0.7em;
+}
+
+.gold-subscribe .price-area .frequency {
+  font-size: 0.8em;
+}
+
+.gold-subscribe .price-area .trial-fee-days {
+  display: none;
+}
+
+.gold-subscribe .price-area .no-auto-renew {
+  display: none;
+}
+
+.gold-subscribe .price-area .after {
+  display: none;
+  font-weight: normal;
+}
+
+.gold-subscribe .price-area.coupon-code.no-auto-renew .no-auto-renew {
+  display: block;
+}
+
+.gold-subscribe .price-area.coupon-code.no-auto-renew .monthly-cost {
+  display: none;
+}
+
+.gold-subscribe .price-area.coupon-code .after {
+  display: inline;
+  color: #000;
+}
+
+.gold-subscribe .price-area.coupon-code .trial-fee-days {
+  display: block;
+}
+
+.gold-subscribe ul.what-you-get {
+  font-size: 120%;
+}
+
+.gold-subscribe ul.what-you-get a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 100%;
+}
+
+.gold-subscribe ul.what-you-get a:hover {
+  text-decoration: underline;
+}
+
+.gold-subscribe .button-apply-coupon {
+  border-width: 0px;
+  margin: 0px;
+  padding-top: 13px;
+  border-radius: 3px;
+}
+
+.gold-subscribe .button--checkout.button--gold {
+  background: gold;
+  color: black;
+}
+
+.gold-subscribe .payment-method {
+  padding-left: 5px;
+}
+
+.gold-subscribe .switch-sign-on {
+  margin-bottom: 1em;
+  margin-top: -1em;
+  font-size: 0.95em;
+  color: #666;
+}
+
+.gold-subscribe .switch-sign-on a {
+  color: dodgerblue;
+  text-decoration: none;
+}
+
+.gold-subscribe .switch-sign-on a:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+@media screen and (min-width: 992px) {
+  .flex .panel:first-child.col-md-last {
+    margin-top: 0px;
+  }
+}

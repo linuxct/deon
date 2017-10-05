@@ -114,7 +114,7 @@ function signUpSocial (e, el) {
   signUpAt(e, el, where)
 }
 
-function signUpGoogle (opts) {
+function signUpGoogle (opts, found) {
   opts = opts || {};
   if (!gapi.auth2) return
   var auth = gapi.auth2.getAuthInstance()
@@ -122,6 +122,9 @@ function signUpGoogle (opts) {
   .then(function (user) {
     signInGoogle(function (err, status){
       if(status == 200) {
+        if(typeof(found) == 'function') {
+          return found(null, user);
+        }
         //They are trying to sign up for a new account using Google, but we already have an account attachedto that Google account
         toasty('Account found, reloading page');
         return location.reload();
@@ -154,7 +157,7 @@ function clickSignUpGoogle (e, el){
   });
 }
 
-function signUpFacebook (opts) {
+function signUpFacebook (opts, found) {
   opts = opts || {};
   function handle(res) {
     if (res.status != 'connected' || !res.authResponse)
@@ -163,6 +166,9 @@ function signUpFacebook (opts) {
     FB.api('/me?fields=name,email', function (ares) {
       signInFacebook(function (err, status) {
         if(status == 200) {
+          if(typeof(found) == 'function') {
+            return found(null, ares);
+          }
           //They are trying to sign up for a new account using Facebook, but we already have an account attachedto that Facebook account
           toasty('Account found, reloading page');
           return location.reload();

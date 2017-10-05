@@ -423,7 +423,7 @@
                 {{^hasGoldAccess}}
                 <p>Get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
                 <div class="button-group">
-                    <a href="/account/services?ref=gold" class="button">Get Monstercat Gold</a>
+                    <a href="/gold/get" class="button">Get Monstercat Gold</a>
                 </div>
                 {{/hasGoldAccess}}
             </div>
@@ -433,7 +433,7 @@
                 {{>joinGoldDiscord}}
                 {{^hasGoldAccess}}
                 <div class="button-group">
-                    <a href="/account/services?ref=gold" class="button">Get Monstercat Gold</a>
+                    <a href="/gold/get" class="button">Get Monstercat Gold</a>
                 </div>
                 {{/hasGoldAccess}}
             </div>
@@ -622,7 +622,7 @@
 <div class="checkbox email-optin-checkbox">
     <label>
         <input type="checkbox" name="emailOptIns[news]"{{#emailOptIns.news}} checked="checked"{{/emailOptIns.news}} value="1" />
-        Monstercat news
+        Monstercat News
     </label>
 </div>
 </script>
@@ -632,17 +632,7 @@
 <div class="checkbox email-optin-checkbox">
     <label>
         <input type="checkbox" name="emailOptIns[merch]"{{#emailOptIns.merch}} checked="checked"{{/emailOptIns.merch}} value="1" />
-        Shop discounts &amp; promotions
-    </label>
-</div>
-</script>
-
-<script type="text/template"
-        mustache-name="account-email-optin-merch">
-<div class="checkbox email-optin-checkbox">
-    <label>
-        <input type="checkbox" name="emailOptIns[merch]"{{#emailOptIns.merch}} checked="checked"{{/emailOptIns.merch}} value="1" />
-        Email me about shop discounts &amp; promotions
+        Shop Discounts &amp; Promotions
     </label>
 </div>
 </script>
@@ -652,7 +642,7 @@
 <div class="checkbox email-optin-checkbox">
     <label>
         <input type="checkbox" name="emailOptIns[events]"{{#emailOptIns.events}} checked="checked"{{/emailOptIns.events}} value="1" />
-        Official Monstercat events
+        Official Monstercat Events
     </label>
 </div>
 </script>

@@ -56,7 +56,6 @@ SplitTest.prototype.checkStarter = function () {
   clearTimeout(this.checkStarterTimeout)
   if(this.checkStart()) {
     if(!this.started) {
-      window.splittestlog.push('STARTING TEST: "' + this.name + '"')
       this.start()
     }
   }
@@ -69,15 +68,19 @@ SplitTest.prototype.checkStarter = function () {
 }
 
 SplitTest.prototype.start = function () {
+  if(!this.started) {
+    window.splittestlog.push('STARTING TEST: "' + this.name + '"')
+  }
   this.started = true
+
   sixPackSession.participate(this.name, this.alts, function (err, res) {
     if (err) throw err;
     alt = res.alternative.name
     if(this.modifiers.hasOwnProperty(alt)) {
-      window.splittestlog.push('Running alt "' + alt + '"" for "' + this.name + '"')
-      this.modifiers[alt](this)
+      window.splittestlog.push('Running alt "' + alt + '" for "' + this.name + '"')
+      var altData = this.modifiers[alt].bind(this)(this);
       this.alt = alt
-      this.onStarted(alt)
+      this.onStarted(alt, altData)
     }
     else {
       throw new Error('No modifier found for alt "'  + alt + '"')

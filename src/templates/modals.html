@@ -62,11 +62,11 @@
             </div>
             {{^hasGold}}
                 {{#signedIn}}
-                    <a class="button button--gold" href="/account/services" action="closeModal">Get your Gold membership!</a>
+                    <a class="button button--gold" href="/gold/get" action="closeModal">Get your Gold membership!</a>
                 {{/signedIn}}
             {{/hasGold}}
             {{^signedIn}}
-                <a class="button button--gold" href="/sign-up?redirect=%2Faccount%2Fservices%3Fgold" action="closeModal">Sign up for an account!</a>
+                <a class="button button--gold" href="/gold/get" action="closeModal">Sign up for Gold account!</a>
             {{/signedIn}}
             <button class="button--close faux" action="closeModal">
               <i class="fa fa-remove"></i>

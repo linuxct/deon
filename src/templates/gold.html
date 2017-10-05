@@ -1,4 +1,164 @@
 <script type="text/template"
+        mustache-name="gold-subscribe-form"
+        template-name="gold-subscribe-form"
+        >
+<div class="flex gold-subscribe">
+  <div class="col-xs-12 col-md-5 col-md-last col-lg-last panel panel--dark">
+      <h2>What You Get</h2>
+      <ul class="what-you-get">
+        <li>Directly support the artists</li>
+        <li>Download songs in your preferred format</li>
+        <li>Early streaming access to new releases</li>
+        <li><a href="https://www.reddit.com/r/monstercat" target="_blank">/r/Monstercat</a> subreddit flair</li>
+        <li>Gold-only Discord chat</li>
+      </ul>
+      {{^hasGold}}
+        <div class="coupon-area">
+          <h4>Coupon Code</h4>
+          <form onsubmit="submitGoldApplyCoupon(event)" class="form-inline">
+            <input type="text" class="inline" name="trialCode" placeholder="Enter coupon code" />
+            <button type="submit" role="apply-coupon" class="button button-sm button--white button-apply-coupon">Apply</button>
+          </form>
+        </div>
+      {{/hasGold}}
+  </div>
+  <div class="col-xs-12 col-md-7 panel">
+    <form onsubmit="submitCheckoutGold(event)">
+      <h1>{{^isSignedIn}}<span sign-on="sign-in" class="hide">Sign In</span><span sign-on="sign-up">Sign Up</span> &amp; {{/isSignedIn}}Checkout</h1>
+      {{^isSignedIn}}
+      <div role="sign-on-form">
+        <input type="hidden" name="sign-on-method" value="sign-up" />
+        <div role="sign-on-errors"></div>
+        <div class="switch-sign-on">
+          <p class="col-md-offsxet-4" sign-on="sign-up">Have an account? <a onclick="clickGoldSetSignOn(event, 'sign-in');">Login here</a>.</p>
+          <p class="col-md-offsxet-4 hide" sign-on="sign-in" role="sign-in">New here? <a onclick="clickGoldSetSignOn(event, 'sign-up');">Create an account</a>.</p>
+        </div>
+        <div class="form-group row">
+          <div class="col-xs-12 col-md-4">
+            <label>Email</label>
+          </div>
+          <div class="col-xs-12 col-md-8">
+            <input type="text" name="email" placeholder="email@domain.com" />
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-xs-12 col-md-4">
+            <label>Password</label>
+          </div>
+          <div class="col-xs-12 col-md-8">
+            <input type="password" placeholder="" name="password" />
+          </div>
+        </div>
+        <div class="form-group row" sign-on="sign-up">
+          <div class="col-xs-12 col-md-4">
+            <label>Confirm</label>
+          </div>
+          <div class="col-xs-12 col-md-8">
+            <input type="password" placeholder="" name="password_confirm" />
+          </div>
+        </div>
+        <div class="form-group row"  sign-on="sign-up">
+          <div class="col-xs-12 col-md-4">
+            <label>Location</label>
+          </div>
+          <div class="col-xs-12 col-md-8">
+            {{>location-autocomplete}}
+          </div>
+        </div>
+        <div class="form-group row"  sign-on="sign-up">
+          <div class="col-xs-12 col-md-4">
+            <label>Email me about</label>
+          </div>
+          <div class="col-xs-12 col-md-8 checkboxes email-optins">
+            {{>account-email-optin-news}}
+            {{>account-email-optin-events}}
+            {{>account-email-optin-merch}}
+          </div>
+        </div>
+      </div>
+      {{/isSignedIn}}
+      {{#hasGold}}
+        <p>You already have Gold.</p>
+        <br />
+        <a href="/account/services" class="button button--cta">View You Subscriptions</a>
+      {{/hasGold}}
+      {{^hasGold}}
+        <div class="form-group row">
+          <div class="col-xs-12 col-md-4">
+            <label>Payment Method</label>
+          </div>
+          <div class="col-xs-12 col-md-8 payment-method">
+            <label class="radio">
+                <input type="radio" name="method" value="stripe" checked>
+                <span><i class="fa fa-fw fa-cc-stripe"></i></span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="method" value="paypal">
+                <span><i class="fa fa-fw fa-cc-paypal"></i></span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-xs-12 col-md-4">
+            <label>Monstercat Gold</label>
+          </div>
+          <div class="col-xs-12 col-md-8 price-area">
+            <div role="trial-free-days"></div>
+            <div class="monthly-cost">
+              <span class="amount">$5</span><span class="frequency">/month</span>
+              <span class="currency">USD</span>
+              <span class="after">after</span>
+            </div>
+            <div class="no-auto-renew">with no auto-renew</div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-offset-4">
+          <button class="{{#goldButton}}button--gold{{/goldButton}}{{#ctaButton}}button--cta{{/ctaButton}} button--checkout button" role="checkout">
+              Complete Checkout
+          </button>
+        </div>
+      {{/hasGold}}
+    </form>
+  </div>
+</div>
+</script>
+
+
+<script type="text/template"
+        route="^gold/get"
+        transform="transformGetGold"
+        page-title="Buy Monstercat Gold">
+</script>
+
+<script type="text/template"
+        route="^gold/buy/success"
+        transform="transformBuyGoldSuccess"
+        page-title="Monstercat Gold">
+        <div class="container">
+          <div class="panel">
+            <h1>Success</h1>
+            <p>Your subscription is successful.</p>
+            <code>TODO: Make this page nicer.</code>
+          </div>
+        </div>
+</script>
+
+
+<script type="text/template"
+        route="^gold/buy"
+        transform="transformGoldBuyPage"
+        completed="completedGoldBuyPage"
+        page-title="Buy Monstercat Gold">
+  {{#data}}
+    <div class="container">
+      {{#goldSubscribe}}
+        {{>gold-subscribe-form}}
+      {{/goldSubscribe}}
+    </div>
+  {{/data}}
+</script>
+
+<script type="text/template"
         route="^gold"
         transform="transformGoldLanding"
         completed="completedGoldLanding"

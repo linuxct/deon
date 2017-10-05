@@ -15,7 +15,7 @@ function transformSignIn (o) {
 function submitSignIn (e, el) {
   var data = getTargetDataSet(el);
   signIn(data, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     if (xhr.status != 209)
       return onSignIn()
     go('/authenticate-token')
@@ -39,7 +39,7 @@ function authenticateTwoFactorToken (e, el) {
     data: getTargetDataSet(el),
     withCredentials: true
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     onSignIn()
   })
 }
@@ -50,7 +50,7 @@ function resendTwoFactorToken (e, el) {
     method: 'POST',
     withCredentials: true
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     toasty(strings.tokenResent)
   })
 }
@@ -62,7 +62,7 @@ function onSignIn(done) {
     }
   }
   getSession(function (err, sess) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     session = sess
     trackUser()
     renderHeader()
@@ -77,7 +77,7 @@ function signOut (e, el) {
     method: 'POST',
     withCredentials: true
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     session.user = null
     untrackUser()
     renderHeader()
@@ -95,7 +95,7 @@ function recoverPassword (e, el) {
     withCredentials: true,
     data: data
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     window.alert(strings.passwordResetEmail)
   })
 }
@@ -118,7 +118,7 @@ function updatePassword (e, el) {
     withCredentials: true,
     data: data
   }, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     window.alert(strings.passwordReset)
     go('/signin')
   })
@@ -142,18 +142,26 @@ function signUp (data, where, done) {
 function signUpAt (e, el, where) {
   var data = getTargetDataSet(el);
   signUp(data, where, function (err, obj, xhr) {
-    if (err) return window.alert(err.message)
+    if (err) return toasty(new Error(err.message))
     go(getRedirectTo())
   });
 }
 
-function validateSignUp (data) {
+function validateSignUp (data, errors) {
+  var errors = []
   if(!data.googleMapsPlaceId) {
-    alert('Please enter your location')
-    return
+    errors.push('Please enter your location')
   }
 
-  return true
+  if(!data.password && !data.password_confirmation) {
+    errors.push('Password is required');
+  }
+
+  if(!data.email || data.email.indexOf('@') == -1) {
+    errors.push('Please enter a valid email');
+  }
+
+  return errors
 }
 
 function submitSignUp (e, el) {
