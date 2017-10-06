@@ -568,11 +568,14 @@ function youTubeIdParser(url){
  * Should conform to the array map method parameters.
  */
 
-function mapReleaseTrack (o, index) {
+function mapReleaseTrack (o, index, trackNumber) {
   if(!o) {
     return {}
   }
-  o.trackNumber = index + 1
+  if(arguments.length < 3) {
+    trackNumber = index + 1
+  }
+  o.trackNumber = trackNumber
   o.index       = index
   o.canPlaylist = isSignedIn() && !o.inEarlyAccess && o.streamable ? { _id: o._id } : null
   o.bpm         = Math.round(o.bpm)
@@ -908,9 +911,13 @@ function transformReleaseTracks (obj, done) {
 
   getArtistsAtlas(obj.results, function (err, atlas) {
     if (!atlas) atlas = {}
+    var trackIndex = 0;
     obj.results.forEach(function (track, index, arr) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
-      mapReleaseTrack(track, index, arr)
+      mapReleaseTrack(track, trackIndex, index+1)
+      if(track.playUrl) {
+        trackIndex++
+      }
       track.releaseId = releaseId
       track.artists = mapTrackArtists(track, atlas)
       track.downloadLink = getDownloadLink(releaseId, track._id)
