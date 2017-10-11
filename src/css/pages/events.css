@@ -358,7 +358,7 @@ ul.picture-gallery > li > div{
     font-family: 'Montserrat', 'Proxima Nova', sans-serif;
     font-size: 26px;
   }
-  .events-email input#locationAutoComplete,
+  .events-email input.location-auto-complete,
   .events-email input#eventOptInEmail {
     font-size: 1rem;
     padding: .9rem 1rem;

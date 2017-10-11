@@ -22,6 +22,10 @@ body {
   font-feature-settings: "kern", "liga";
 }
 
+body.show-notice {
+  padding-top: 100px;
+}
+
 body,
 input[type="text"],
 input[type="password"]{

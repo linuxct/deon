@@ -322,3 +322,13 @@ function youTubeUserToChannelID (user, done) {
     done(channelId)
   })
 }
+
+function hookValueSelects (selects) {
+  selects = selects || document.querySelectorAll('select[value]')
+  selects.forEach(function (el) {
+    var selected = el.querySelector('option[value="' + el.getAttribute('value') + '"]')
+    if(selected) {
+      selected.setAttribute('selected', true)
+    }
+  })
+}

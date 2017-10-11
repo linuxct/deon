@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     });
     stateChange(location.pathname + location.search)
     stickyPlayer()
+    completeProfileNotice.start();
   })
 })
 
@@ -94,6 +95,14 @@ function pageIsReady () {
 
 function isSignedIn () {
   return !!(session && session.user)
+}
+
+function hasCompletedProfile () {
+  if(!isSignedIn()) {
+    return false
+  }
+  var user = session.user;
+  return !(!user.birthday || !user.emailOptIns || user.emailOptIns.length < 3 || !user.geoLocation);
 }
 
 function isLegacyUser () {

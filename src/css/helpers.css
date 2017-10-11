@@ -418,3 +418,86 @@ ul.errors li {
 #front-form.show {
   bottom: 0px;
 }
+
+#site-notice {
+  height: auto;
+  background: dodgerblue;
+  color: #fff;
+  padding: 1em 0;
+  width: 100%;
+  top: 0px;
+  z-index: 999;
+}
+
+#site-notice.hide {
+  height: 0px;
+  overflow: hidden;
+}
+
+#site-notice .button--close-notice {
+  float: right;
+  color: black;
+  font-size: 18px;
+  background: #fff;
+  padding: 5px 8px 5px 10px;
+  margin: 5px 5px 0 0;
+  text-align: center;
+}
+
+#site-notice .button--close-notice:hover {
+  background: #F0F0F0;
+}
+
+#site-notice.complete-profile {
+  text-align: center;
+  cursor: pointer;
+  padding: 0px;
+}
+
+#notice-complete-profile {
+  padding: 1.25em 1em 1em;
+}
+
+#complete-profile-modal label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.25em;
+}
+
+#complete-profile-modal button.button--cta {
+  width: 100%;
+  margin-top: 2em;
+}
+
+#complete-profile-modal .checkbox label {
+  font-weight: normal;
+  margin-bottom: 0px;
+}
+
+#complete-profile-modal .complete-section {
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.modal.modal--complete-profile {
+  max-width: 550px;
+}
+
+.modal.modal--complete-profile .modal-content {
+  margin-bottom: 0px;
+}
+
+@media screen and (min-width: 992px) {
+  #complete-profile-modal .form-group label {
+    line-height: 40px;
+    margin-bottom: 0px;
+  }
+
+  #complete-profile-modal .form-group .checkbox label {
+    line-height: 1.4;
+  }
+
+  #complete-profile-modal .complete-profile-subscribe label {
+    line-height: 1.5;
+  }
+}

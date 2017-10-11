@@ -28,8 +28,27 @@ form input[type=password]  {
   transition: border-color .3s ease;
 }
 
+.form-group > div > input {
+  width: 100%;
+}
+
 table.form select{
   width: 220px;
+}
+
+table.form select.birthday-month,
+table.form select.birthday-day,
+select.birthday-month,
+select.birthday-day {
+  width: auto;
+  height: 40px;
+  top: -2px;
+  position: relative;;
+}
+
+input.birthday-year,
+.form-group > div > input.birthday-year {
+  width: auto;
 }
 
 table.form th {
@@ -436,7 +455,7 @@ label[for] {
     position: relative;
   }
 
-  table.form.mobile td > input{
+  table.form.mobile td > input {
     width: 100%;
     max-width: initial;
     background: #eee;
@@ -456,6 +475,12 @@ label[for] {
     padding: 1rem;
     height: 55px;
   }
+
+  table.form.mobile select.birthday-month,
+  table.form.mobile select.birthday-day{
+    margin-bottom: 0.25em;
+  }
+
   .button-group{
     font-size: 0;
   }

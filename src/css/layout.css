@@ -339,6 +339,10 @@ h1 + .panel.md-container,
   letter-spacing: 2px;
 }
 
+body.showing-notice .controls.fixed.playing {
+  top: attr(noticeTop);
+}
+
 .controls {
   width: 100%;
   justify-content: center;
@@ -792,7 +796,7 @@ span.note a {
 
 .modal-layer {
   display: none;
-  z-index: 9999;
+  z-index: 999;
 }
 .modal-layer.open {
   display: block;
@@ -885,6 +889,7 @@ span.note a {
     transform: translateZ(0) translateY(-50%) perspective(1px) scale(1);
   }
 }
+
 
 .modal--artwork{
   max-width: 800px;

@@ -1,0 +1,60 @@
+<script type="text/template"
+        template-name="notice-complete-profile">
+<div id="notice-complete-profile" onclick="clickCompleteProfile(event)">
+  <div class="container">
+    <p><strong>Please click here to complete your profile.</strong></p>
+  </div>
+</div>
+</script>
+
+
+<script type="text/template" template-name="complete-profile-modal">
+    <div class="modal modal--complete-profile">
+      <div class="panel pointer-events" id="complete-profile-modal">
+        <h1>Complete Your Profile</h1>
+        <div class="modal-content">
+          <form onsubmit="submitCompleteProfile(event)" role="complete-profile-form">
+            {{#sections.location}}
+              <div class="form-group row">
+                <div class="col-xs-12 col-md-3">
+                  <label>Your Location</label>
+                </div>
+                <div class="col-xs-12 col-md-9">
+                  {{>location-autocomplete}}
+                </div>
+              </div>
+            {{/sections.location}}
+            {{#sections.birthday}}
+              <div class="form-group row">
+                <div class="col-xs-12 col-md-3">
+                  <label>Your Birthday</label>
+                </div>
+                <div class="col-xs-12 col-md-9">
+                  {{>birthday-fields}}
+                </div>
+              </div>
+            {{/sections.birthday}}
+            {{#sections.emails}}
+              <div class="form-group row complete-profile-subscribe">
+                <div class="col-xs-12 col-md-3">
+                  <label>Subscribe to</label>
+                </div>
+                <div class="col-xs-12 col-md-9">
+                  {{>account-email-optin-news}}
+                  {{>account-email-optin-events}}
+                  {{>account-email-optin-merch}}
+                </div>
+              </div>
+            {{/sections.emails}}
+            <button class="button button--cta">Save</button>
+          </form>
+        </div>
+        <button class="button--close faux" action="closeModal">
+          <i class="fa fa-remove"></i>
+        </button>
+      </div>
+    </div>
+</script>
+
+
+

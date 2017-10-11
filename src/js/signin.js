@@ -6,6 +6,10 @@ function transformRedirectTo (obj) {
 }
 
 function transformSignIn (o) {
+  if(isSignedIn()) {
+    toasty('You are already logged in');
+    return go('/account');
+  }
   o = transformRedirectTo(o)
   o.buying = getSignInBuying()
   trackSignUpEvents();
@@ -67,6 +71,7 @@ function onSignIn(done) {
     trackUser()
     renderHeader()
     renderHeaderMobile()
+    completeProfileNotice.start();
     done();
   })
 }
@@ -82,6 +87,7 @@ function signOut (e, el) {
     untrackUser()
     renderHeader()
     renderHeaderMobile()
+    completeProfileNotice.close();
     go("/")
   })
 }
@@ -141,24 +147,23 @@ function signUp (data, where, done) {
 
 function signUpAt (e, el, where) {
   var data = getTargetDataSet(el);
+  data = transformSubmittedAccountData(data);
   signUp(data, where, function (err, obj, xhr) {
     if (err) return toasty(new Error(err.message))
     go(getRedirectTo())
   });
 }
 
+
 function validateSignUp (data, errors) {
-  var errors = []
-  if(!data.googleMapsPlaceId) {
-    errors.push('Please enter your location')
-  }
+  var errors = validateAccountData(data);
 
   if(!data.password && !data.password_confirmation) {
     errors.push('Password is required');
   }
 
   if(!data.email || data.email.indexOf('@') == -1) {
-    errors.push('Please enter a valid email');
+    errors.push('A valid email is required');
   }
 
   return errors
@@ -166,7 +171,14 @@ function validateSignUp (data, errors) {
 
 function submitSignUp (e, el) {
   var data = getTargetDataSet(el)
-  if(!validateSignUp(data)) return
+  data = transformSubmittedAccountData(data);
+  var errors = validateSignUp(data)
+  if(errors.length) {
+    errors.forEach(function (err) {
+      toasty(new Error(err));
+    })
+    return
+  }
   signUpAt(e, el, '/signup')
 }
 
@@ -193,6 +205,11 @@ function getSignInBuying () {
 function transformSignUp () {
   var redirectTo = getRedirectTo()
   var buying = getSignInBuying()
+
+  if(isSignedIn()) {
+    toasty('You are already logged in');
+    return go('/account');
+  }
 
   obj = {
     countries: getAccountCountries(),
