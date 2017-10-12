@@ -608,7 +608,7 @@ function unsubscribeGold (e, el) {
 
 function redirectServices (e, el) {
   setTimeout(function () {
-    go('/account/services')
+    window.location = location.origin + '/account/services'
   }, 5000)
 }
 
