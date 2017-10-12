@@ -15,14 +15,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
   renderHeader()
   loadSession(function (err, obj) {
-    if(obj && obj.user) {
-      sixPackSession = new sixpack.Session({
-        client_id: obj.user._id
-      });
-    }
-    else {
-      sixPackSession  = new sixpack.Session();
-    }
+    sixPackSession  = new sixpack.Session();
     trackUser()
     renderHeader()
     renderHeaderMobile()

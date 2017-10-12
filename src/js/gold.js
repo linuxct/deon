@@ -1,13 +1,10 @@
 var goldBuyVsAccountServicesTest;
-var goldBuyCheckoutButtonTest;
 document.addEventListener('DOMContentLoaded', function () {
   goldBuyVsAccountServicesTest= new SplitTest({
-    name: 'goldbuy-vs-accountservices',
+    name: 'goldbuy-vs-accountservices2',
     checkStart: false,
+    //force: 'gold_buy',
     onStarted: function () {
-      //We check this on the success page so that we only register a conversion
-      //for people who got there through the /gold/get link
-      setCookie('goldBuyVsAccountServicesTestParticipating', true);
     },
     modifiers: {
       'account_services': function (_this) {
@@ -27,33 +24,10 @@ function transformGetGold () {
 function transformGoldBuyPage (obj, done) {
   obj = obj || {};
   obj.goldSubscribe = transformGoldSubscribeForm();
-
-  goldBuyCheckoutButtonTest= new SplitTest({
-    name: 'gold-checkout-button',
-    checkStart: false,
-    onStarted: function (alt, altData) {
-      obj.goldSubscribe.goldButton = alt == 'gold-button';
-      obj.goldSubscribe.ctaButton = alt == 'blue-button';
-      done(null, obj);
-    },
-    modifiers: {
-      'blue-button': function () {
-      },
-      'gold-button' : function () {
-      }
-    }
-  });
-  goldBuyCheckoutButtonTest.start();
+  return obj;
 }
 
 function completedGoldBuyPage () {
-  var checkoutButton = document.querySelector('[role=checkout]');
-  if (checkoutButton) {
-    checkoutButton.addEventListener('click', function () {
-      goldBuyCheckoutButtonTest.convert();
-    })
-  }
-
   initLocationAutoComplete();
 }
 
@@ -78,7 +52,7 @@ function enableGoldCheckoutForm () {
 function submitCheckoutGold (e) {
   e.preventDefault();
   var form = e.target;
-  var data = formToObject(form);
+  var data = getDataSet(form);
 
   var checkoutButton = document.querySelector('[role=checkout]');
   var checkoutText = checkoutButton.textContent;
@@ -129,6 +103,7 @@ function submitCheckoutGold (e) {
     }
 
     if(signOnMethod == 'sign-up') {
+      data = transformSubmittedAccountData(data);
       var errors = validateSignUp(data);
       if(data.password != data.password_confirm) {
         errors.push('Passwords don\'t match');
@@ -188,7 +163,7 @@ submitCheckoutGold.stripe = function () {
         }
       }, function (err, body, xhr) {
         if (err) return recordErrorAndAlert(err, 'Checkout Subscriptions Stripe')
-        go('/account/services/subscribed');
+        go('/account/services/subscribed?type=gold');
       })
     },
     closed: function () {
@@ -317,41 +292,9 @@ function transformGoldLanding (obj, done) {
   else {
     obj.redditUsername = false
   }
-
-  var test = new SplitTest({
-    name: 'gold-landing-custom-cta',
-    checkStart: false,
-    modifiers: {
-      'default': function () {
-        obj.featureBlocks = obj.featureBlocks.map(function (block) {
-          block.cta = 'Get Gold';
-          return block;
-        });
-      },
-      'custom-ctas': function () {
-      }
-    },
-    onStarted: function (alt) {
-      done(null, obj);
-    }
-  });
-  transformGoldLanding.test = test;
-  test.start();
+  return obj;
 }
 
 function completedGoldLanding () {
-  if(transformGoldLanding.test) {
-    document.querySelectorAll('a[test-kpi]').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        var t = e.target;
-        if(!t) return
-        var kpi = t.getAttribute('test-kpi');
-        if(kpi) {
-          transformGoldLanding.test.convertKpi(kpi);
-          transformGoldLanding.test.convert();
-        }
-      })
-    })
-  }
 }
 

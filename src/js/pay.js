@@ -255,6 +255,8 @@ function checkoutSubscriptions (e, el) {
     }
 
     if(signOnMethod == 'sign-up') {
+      data = transformSubmittedAccountData(data);
+
       //The social sign ons require us to send them to the /confirm-sign-up page
       //which when successfull will redirect them back here and try to update their cart to what it was before
       var qo = queryStringToObject();
@@ -313,11 +315,19 @@ function checkoutSubscriptions (e, el) {
 }
 
 checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs) {
-  var returnUrl = location.origin + '/account/services/processing?type=subscriptions'
+  var returnUrl = location.origin + '/account/services/processing?type=';
   var qo = queryStringToObject(window.location.search)
+  if(qo.ref == 'gold') {
+    returnUrl += 'gold'
+  }
+  else {
+    returnUrl += 'subscriptions;'
+  }
+
   if(qo.hasOwnProperty('humble')) {
     returnUrl += '&humble=1'
   }
+
   requestJSON({
     url: endpoint + '/self/subscription/services',
     method: 'POST',
@@ -363,7 +373,11 @@ checkoutSubscriptions.stripe = function checkoutSubscriptionsStripe (data, subs)
           go('/humble')
         }
         else {
-          go('/account/services/subscribed')
+          var url = '/account/services/subscribed';
+          if(qo.ref == 'gold') {
+            url += '?type=gold';
+          }
+          go(url);
         }
       })
     }
@@ -594,7 +608,7 @@ function unsubscribeGold (e, el) {
 
 function redirectServices (e, el) {
   setTimeout(function () {
-    window.location = location.origin + '/account/services'
+    go('/account/services')
   }, 5000)
 }
 
@@ -846,12 +860,10 @@ function transformSubscribed (obj) {
   obj = obj || {};
   var qo = queryStringToObject(window.location.search);
   if(isSignedIn()) {
-    //This cookie is only set to true if you go through the /gold/get page, which redirects you
-    //We don't want to track conversions on this test from people who went directly to /account/services
-    //We only do it through people who clicked a /gold/get link, as that is where the test that redirects
-    //them to one of two checkout pages happens
-    var participating = getCookie('goldBuyVsAccountServicesTestParticipating');
-    if(qo.type == 'gold' && !!participating) {
+    //The ?type=gold should only be added for peopleing come from /gold/get
+    //Which redirects to /gold/buy or /account/services?ref=gold
+    //Those two pages will append type=gold on this return URL is needed
+    if(qo.type == 'gold') {
       goldBuyVsAccountServicesTest.convert();
     }
   }

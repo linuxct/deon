@@ -57,7 +57,7 @@
             <input type="password" placeholder="" name="password_confirm" />
           </div>
         </div>
-        <div class="form-group row"  sign-on="sign-up">
+        <div class="form-group row" sign-on="sign-up">
           <div class="col-xs-12 col-md-4">
             <label>Location</label>
           </div>
@@ -65,7 +65,15 @@
             {{>location-autocomplete}}
           </div>
         </div>
-        <div class="form-group row"  sign-on="sign-up">
+        <div class="form-group row" sign-on="sign-up">
+          <div class="col-xs-12 col-md-4">
+            <label>Birthday</label>
+          </div>
+          <div class="col-xs-12 col-md-8">
+            {{>birthday-fields}}
+          </div>
+        </div>
+        <div class="form-group row" sign-on="sign-up">
           <div class="col-xs-12 col-md-4">
             <label>Email me about</label>
           </div>
@@ -113,7 +121,7 @@
           </div>
         </div>
         <div class="col-xs-12 col-md-offset-4">
-          <button class="{{#goldButton}}button--gold{{/goldButton}}{{#ctaButton}}button--cta{{/ctaButton}} button--checkout button" role="checkout">
+          <button class="button--gold button--checkout button" role="checkout">
               Complete Checkout
           </button>
         </div>

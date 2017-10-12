@@ -245,11 +245,6 @@ function playSongDblC (e, el) {
 function loadAndPlayTracks (index) {
   var tracks = buildTracks()
 
-  //A/B
-  if(musicReleasesVsBrowseTest.recordPlays) {
-    splitTestConvertKpi('music-releases-vs-browse', 'song-played')
-  }
-
   if (areTracksLoaded(tracks)) {
     player.toggle(index)
   }
