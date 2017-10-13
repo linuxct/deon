@@ -321,7 +321,7 @@ checkoutSubscriptions.paypal = function checkoutSubscriptionsStripe (data, subs)
     returnUrl += 'gold'
   }
   else {
-    returnUrl += 'subscriptions;'
+    returnUrl += 'subscriptions'
   }
 
   if(qo.hasOwnProperty('humble')) {
