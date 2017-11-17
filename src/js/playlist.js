@@ -131,7 +131,7 @@ function transformPlaylistTracks (obj, done) {
     getArtistsAtlas(obj.results, function (err, artistAtlas) {
       if (!artistAtlas) artistAtlas = {}
       obj.results = obj.results.map(function (item, index, arr) {
-        var track = mapReleaseTrack(trackAtlas[item._id] || {}, index, arr)
+        var track = mapReleaseTrack(trackAtlas[item._id] || {}, index, index + 1)
         var release = releaseAtlas[item.release._id] || {}
         track.releaseTitle = release.title
         track.releaseId = release._id
