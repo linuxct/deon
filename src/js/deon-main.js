@@ -669,9 +669,7 @@ function transformPodcast (obj) {
 }
 
 function transformMerch (obj) {
-  var products = obj
-  obj = {}
-  obj.products = products.slice(0,8)
+  obj.products = obj.products.slice(0,8)
   return obj
 }
 
