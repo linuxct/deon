@@ -1,0 +1,71 @@
+#black-friday {
+  background: url(/img/blackfriday2017/bg.png) #171717;
+  color: #fff;
+  padding: 5px 0 0 0;
+}
+
+#black-friday a.go {
+}
+
+#black-friday .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#black-friday .info {
+  display: block;
+  background: url(/img/blackfriday2017/title-desktop.png) center left no-repeat;
+  background-size: 100% auto;
+  height: 100px;
+  width: 60%;
+}
+
+#black-friday .actions {
+  text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+#black-friday .actions a.button--cta {
+  border: 0px;
+}
+
+#black-friday .actions a.button--cta:hover {
+  color: #171717;
+  background: #fff;
+}
+
+#black-friday .button-container {
+  padding-left: 20px;
+}
+
+#black-friday .countdown-container {
+}
+
+#black-friday .countdown-container .label {
+  font-size: 16px;
+}
+
+#black-friday .countdown-container .countdown {
+  font-size: 22px;
+}
+
+#black-friday .countdown-container .countdown .unit {
+  display: inline-block;
+  width: 1.7em;
+}
+
+#black-friday .countdown-container .countdown .unit.m {
+  width: 2em;
+}
+
+@media screen and (max-width: 840px) {
+  #black-friday .info {
+    background: url(/img/blackfriday2017/title-mobile.png) center left no-repeat;
+    background-size: contain;
+    width: 40%;
+  }
+}

@@ -12,7 +12,8 @@ function repeatString(str, times) {
   }, "")
 }
 
-function dateToCountdownString (date) {
+function dateToCountdownString (date, opts) {
+  opts = opts || {};
   var end = new Date(date)
   var diff = dateToRemainingTime(date)
   var cd = new Date(diff)
@@ -22,10 +23,20 @@ function dateToCountdownString (date) {
   var minutes = cd.getUTCMinutes()
   var seconds = cd.getUTCSeconds()
   if(days > 0) {
-    hours += days * 24
+    if(opts.showDays) {
+      parts.push(zeroPad(days) + 'd');
+    }
+    else {
+      hours += days * 24
+    }
   }
-  if(hours > 0) {
-    parts.push(hours + 'h')
+  if(hours > 0 || (days > 0 && opts.showDays)) {
+    if(days > 0 && opts.showDays) {
+      parts.push(zeroPad(hours, 2) + 'h')
+    }
+    else {
+      parts.push(hours + 'h')
+    }
   }
   parts.push(zeroPad(minutes, 2) + 'm')
   parts.push(zeroPad(seconds, 2) + 's')
@@ -74,6 +85,10 @@ function updateCountdownEls () {
         el.setAttribute('completed-called', 'true')
       }
     }
-    el.innerHTML = dateToCountdownString(date)
+    var opts = {};
+    if(parseInt(el.getAttribute('show-days')) == 1) {
+      opts.showDays = true;
+    }
+    el.innerHTML = dateToCountdownString(date, opts)
   }
 }

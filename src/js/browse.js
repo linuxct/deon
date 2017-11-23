@@ -61,7 +61,7 @@ function openBrowsePage (q) {
 function transformMusicBrowseResults (obj, done) {
   var tracks = obj.results
   var playIndexOffset = obj.skip || 0
-  
+
   getArtistsAtlas(tracks, function (err, atlas) {
     if (!atlas) atlas = {}
     var rmap = {}
