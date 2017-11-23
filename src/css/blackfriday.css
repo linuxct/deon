@@ -19,7 +19,7 @@
   background: url(/img/blackfriday2017/title-desktop.png) center left no-repeat;
   background-size: 100% auto;
   height: 100px;
-  width: 60%;
+  width: 70%;
 }
 
 #black-friday .actions {
@@ -60,6 +60,12 @@
 
 #black-friday .countdown-container .countdown .unit.m {
   width: 2em;
+}
+
+@media screen and (max-width: 990px) {
+  #black-friday .info {
+    width: 65%;
+  }
 }
 
 @media screen and (max-width: 840px) {
