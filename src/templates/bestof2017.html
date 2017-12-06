@@ -5,7 +5,7 @@
 <form id="tweet-vote" onsubmit="submitTweetBestOf2017(event)">
   <textarea name="tweet" rows="3">{{votedForTweet}}</textarea>
   <div>
-    <a class="button button--cta" target="_blank" role="tweet">Tweet Your Votes</a>
+    <a class="button button--cta" target="_blank" role="tweet" href="{{tweetIntentURL}}">Tweet Your Votes</a>
     {{#viewResultsLink}}
     <a class="button" href="/bestof2017/results">View Live results</a>
     {{/viewResultsLink}}
