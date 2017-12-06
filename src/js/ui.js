@@ -17,7 +17,7 @@ function toasty (obj, time) {
     return toast({
       error: true,
       message: obj.message,
-      time: time
+      time: time || 5000
     })
   }
   if (typeof obj == 'string') {

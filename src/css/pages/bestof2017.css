@@ -1,0 +1,1874 @@
+.bestof2017-voting {
+  width: 80%;
+  margin: 0px 10%;
+}
+
+.bestof2017-voting h2 {
+  margin-bottom: 0px;
+}
+
+.bestof2017-page p {
+  margin-bottom: 1em;
+  max-width: 75ch;
+}
+
+.bestof2017-page .top-banner {
+  color: #fff;
+}
+
+.bestof2017-page .top-banner a {
+  color: dodgerblue;
+  text-decoration: none;
+}
+
+.bestof2017-page .top-banner a.button.button--cta {
+  color: white;
+  background: dodgerblue;
+  border-color: dodgerblue;
+}
+
+.bestof2017-page .top-banner a.button.button--cta:hover {
+  color: black;
+  background: white;
+  border-color: white;
+}
+
+.bestof2017-page .top-banner a.button {
+  border-color: white;
+  color: white;
+  background: none;
+}
+
+.bestof2017-page .top-banner a.button:hover {
+  background-color: #fff;
+  color: black;
+}
+
+.bestof2017-page .top-banner p.gray {
+  color: #aaa;
+}
+
+.bestof2017-voting .artist-row.no-artist .favorite-song-title {
+  opacity: 0.5;
+}
+
+.bestof2017-voting .artist-row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.bestof2017-voting select {
+  width: 100%;
+  opacity: 0.9;
+}
+
+.bestof2017-voting select[disabled] {
+  opacity: 0.5;
+}
+
+
+.bestof2017 .artist-row {
+  margin: 0 0 0.75rem 0;
+  padding: 1rem;
+  border: 1px solid #eee;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.bestof2017 .artist-row h3 {
+  color: #fff;
+  transition: all 0.5s ease 0.25s;
+  font-weight: bold;
+}
+
+.bestof2017-voting .artist-row.empty h3 {
+  color: #333;
+  text-shadow: none;
+  transition-delay: 0s;
+}
+
+.bestof2017 .artist-row .banner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: 102% auto;
+  background-repeat: no-repeat;
+  z-index: -1;
+  background-color: transparent;
+  left: 0px;
+  top: 0px;
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.bestof2017 .artist-row:hover {
+  cursor: pointer;
+}
+
+.bestof2017-results .artist-row:hover .banner {
+  transform: scale(1.05);
+  transition-duration: 0.25s;
+}
+
+.bestof2017 .artist-row:hover .top-song button {
+  color: dodgerblue;
+}
+
+.bestof2017 .artist-row .banner.on {
+  opacity: 1;
+}
+
+.bestof2017-voting .artist-row.empty .banner {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+.bestof2017 .artist-row .banner:before {
+  content: " ";
+  background: #000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.bestof2017-voting .voting-col-artists {
+  padding-bottom: 1rem;
+}
+
+.bestof2017-voting .voting-col-songs {
+  padding-left: 1rem;
+}
+
+.submit-container {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.submit-container .button--cta {
+  padding: 1.5rem;
+  font-size: 1.25rem;
+}
+
+.bestof2017-results {
+  height: 3180px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.bestof2017-results.loading {
+  text-align: left;
+}
+
+.bestof2017-results.loading .artist-row {
+  opacity: 0.1 !important;
+}
+
+.bestof2017-results .artist-row {
+  opacity: 1;
+  transition: all 0.5s ease;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  transform: translateY(1060px);
+  color: #fff;
+  height: 106px;
+  padding: 1.25rem 1rem 0.5rem 3rem;
+  background: #000;
+}
+
+.bestof2017-results .artist-row.top {
+  opacity: 1;
+}
+
+.bestof2017-results .artist-row .top-song-container {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.bestof2017-results .artist-row.no-top-song {
+  display: none;
+}
+
+.bestof2017-results .artist-row.no-top-song .top-song-container {
+  opacity: 0;
+}
+
+.bestof2017-results .rank {
+  background: dodgerblue;
+  overflow: hidden;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0.25rem;
+  font-size: 20px;
+  text-align: center;
+  width: 2rem;
+  font-weight: bold;
+}
+
+.bestof2017-results .votes {
+  opacity: 0.9;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.bestof2017-results .artist-row h4 {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.bestof2017-results .artist-row .top-song-container {
+  margin-top: 6px;
+}
+
+.bestof2017-results .artist-row .top-song button {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.bestof2017-results .artist-row .top-song button.active {
+  color: dodgerblue;
+}
+
+.bestof2017-results .download-area {
+  position: absolute;
+  right: 25px;
+  top: 20px;
+  opacity: 0.25;
+  text-align: center;
+}
+
+.bestof2017-results .download-area .requires-gold {
+  padding: 2px 0 0 0;
+  font-size: 0.8em;
+}
+
+.bestof2017-results .download-area .requires-gold a {
+  color: gold;
+  font-size: 1em;
+}
+
+.bestof2017-results .artist-row:hover .download-area {
+  opacity: 1;
+}
+
+.bestof2017-results .download-area.has-gold {
+  top: 25px;
+}
+
+.bestof2017-results .download-area a.download {
+  color: #fff;
+}
+
+#tweet-vote textarea {
+  width: 100%;
+  margin-bottom: 0.25rem;
+  font-size: 14px;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  background: #FFF;
+  color: #333;
+}
+
+#tweet-vote .button {
+  padding: 10px 12px 10px 15px;
+}
+
+.bestof2017-results #tweet-vote .view-results {
+  display: none;
+}
+
+.last-updated-msg {
+  color: #aaa;
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+
+.bestof2017-page h1 {
+  margin-bottom: 0px;
+}
+
+
+.bestof2017 .artist-row.demoted {
+  display: none;
+}
+
+.banner[release] {
+  background-position-y: 50%;
+}
+
+
+/*
+xs: 0 - 767px
+sm: 768 - 991px
+md: 992px - 1649px
+lg: 1650px - ~
+*/
+
+@media screen and (max-width: 1200px) {
+  .bestof2017-voting {
+    width: 90%;
+    margin: 0 5%;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .bestof2017-results .top-song-container .button--mobile {
+    padding: 0px;
+  }
+
+  .bestof2017-page .button--vote-now {
+    float: right;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  a.button--vote-now {
+    float: right;
+  }
+}
+
+@media screen and (max-width: 767px) {
+
+  .bestof2017-page .button--vote-now {
+    width: 100%;
+  }
+
+  .bestof2017-page .panel {
+    padding: 0.5rem;
+    margin: 0px;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .bestof2017-voting {
+    width: 100%;
+    margin: 0%;
+  }
+
+  .bestof2017-voting form {
+    margin: 0 -10px;
+  }
+
+  .bestof2017 .artist-row {
+    padding: 0.75em 0.5em;
+    margin-bottom: 0.75em;
+    border: 1px solid #eee;
+  }
+
+  .bestof2017-results .artist-row {
+    padding: 1.75em 0.5em 0.75em 0.75em;
+    border: none;
+  }
+
+  .bestof2017-results .artist-row .top-song-container {
+    margin-top: 0px;
+  }
+
+  .bestof2017-results .rank {
+      padding: 0.1rem 0;
+      width: 1.5em;
+      font-size:16px;
+  }
+
+  .bestof2017-results .download-area {
+    top: 0px;
+    right: 0px;
+    opacity: 1;
+  }
+
+  .bestof2017-results .download-area.has-gold {
+    top: 0px;
+  }
+
+  .bestof2017-results .download-area .txt {
+    display: none;
+  }
+
+  .bestof2017-results .download-area .requires-gold {
+    display: none;
+  }
+
+  .bestof2017-results .download-area a.download {
+    padding: 5px 4px 4px 7px;
+    background: white;
+    color: dodgerblue;
+    border: none;
+  }
+
+  #tweet-vote .button {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1em;
+  }
+
+  #tweet-vote textarea {
+    margin-bottom: 1em;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .voting-col-artists {
+    padding-right: 1rem;
+    padding-bottom: 0px;
+  }
+
+  #tweet-vote textarea {
+    width: 100%;
+  }
+}
+
+/* Custom positioning for releases */
+
+.banner[release="connecting-the-dots-ep-conro"] {
+  background-position-y: 27%;
+}
+
+.banner[release="someone-new-feat-desi-valentine-unlike-pluto"] {
+  background-position-y: 55%;
+}
+
+.banner[release="the-meaning-gent-jawns"] {
+  background-position-y: 45%;
+}
+
+.banner[release="saving-light-feat-haliene-gareth-emery-standerwick"] {
+  background-position-y: 42%;
+}
+
+.banner[release="sweet-feat-mister-blonde-unlike-pluto"] {
+  background-position-y: 30.5%;
+}
+
+.banner[release="stay-feat-holly-delta-heavy-x-dirty-audio"] {
+  background-position-y: 71%;
+}
+
+.banner[release="bomb-feat-leyet-bishu"] {
+  background-position-y: 48%;
+}
+
+.banner[release="new-dawn-bad-computer"] {
+  background-position-y: 47.5%;
+}
+
+.banner[release=told-ya-so-grabbitz] {
+  background-position-y: 49.5%;
+}
+
+.banner[release=freak-zac-waters] {
+  background-position-y: 43%;
+}
+
+.banner[release=party-dont-stop-darren-styles-dougal-gammer] {
+  background-position-y: 17%;
+}
+
+.banner[release="monstercat-uncaged-vol-3-various-artists"] {
+  background-position-y: 46%;
+}
+
+.banner[release=got-your-love-dirtyphonics-x-riot] {
+  background-position-y: 52%;
+}
+
+.banner[release=eclipse-lookas] {
+  background-position-y: 55%;
+}
+
+.banner[release=rocket-league-x-monstercat-vol-1-various-artists] {
+  background-position-y: 38.7%;
+}
+
+.banner[release=we-are-one-flite] {
+  background-position-y: 56%;
+}
+
+.banner[release=i-hear-you-vicetone] {
+  background-position-y: 47%;
+}
+
+.banner[release=cold-hearted-seven-lions-kill-the-noise] {
+  background-position-y: 28.5%;
+}
+
+.banner[release=disorder-riot] {
+  background-position-y: 37%;
+}
+
+.banner[release=orbiter-orbiter] {
+    background-position-y: 4.25%;
+}
+
+.banner[release=got-to-be-topi] {
+  background-position-y: 37%;
+}
+
+.banner[release=home-nitro-fun] {
+    background-position-y: 65%;
+}
+
+.banner[release=vantablack-ep-dirtyphonics-sullivan-king] {
+    background-position-y: 55%;
+}
+
+.banner[release=roller-coaster-dirty-audio-max-styler] {
+    background-position-y: 65%;
+}
+.banner[release=spectrum-ep-muzzy] {
+    background-position-y: 82.5%;
+}
+.banner[release=ready-to-go-feat-kingdms-aruna-rameses-b] {
+    background-position-y: 30%;
+}
+.banner[release=extraordinary-feat-elizaveta-pegboard-nerds-spyker] {
+    background-position-y: 13.5%;
+}
+.banner[release=holy-feat-micah-martin-kayzo-slander] {
+    background-position-y: 46%;
+}
+.banner[release=nobushi-reach] {
+    background-position-y: 26%;
+}
+.banner[release=bandit-kuuro] {
+    background-position-y: 79%;
+}
+.banner[release=watch-out-feat-ragga-twins-dirtyphonics-bassnectar] {
+    background-position-y: 45%;
+}
+.banner[release=bollywood-stunna-reach] {
+    background-position-y: 26.5%;
+}
+.banner[release=without-you-feat-dylan-matthew-slander-kayzo] {
+    background-position-y: 59%;
+}
+.banner[release=tomorrow-feat-matt-van-holly-drummond-mr-fijiwiji-direct] {
+    background-position-y: 74%;
+}
+.banner[release=dynamo-puppet] {
+    background-position-y: 17.5%;
+}
+.banner[release=fear-is-fleeting-ep-puppet] {
+    background-position-y: 20%;
+}
+.banner[release=chipland-nanobii] {
+    background-position-y: 60%;
+}
+.banner[release=jump-feat-nevve-droeloe] {
+    background-position-y: 45%;
+}
+.banner[release=decoy-world-feat-park-avenue-intercom] {
+    background-position-y: 38%;
+}
+.banner[release=andromeda-feat-matt-van-mr-fijiwiji-exist-strategy] {
+    background-position-y: 73%;
+}
+.banner[release=boom-ricci] {
+    background-position-y: 36%;
+}
+.banner[release=get-it-all-feat-emily-hendrix-myrne-popeska] {
+    background-position-y: 54%;
+}
+.banner[release=escape-noisestorm] {
+    background-position-y: 75%;
+}
+.banner[release=you-me-and-gravity-koven-crystal-skies] {
+    background-position-y: 57%;
+}
+.banner[release=superhuman-gammer-remix-feat-eric-leva-slander] {
+    background-position-y: 70%;
+}
+.banner[release=crazy-tokyo-machine] {
+    background-position-y: 30%;
+}
+.banner[release=losing-you-ephixa-laura-brehm] {
+    background-position-y: 55%;
+}
+.banner[release=someone-new-feat-desi-valentine-unlike-pluto] {
+    background-position-y: 56%;
+}
+.banner[release=borneo-wolfgang-gartner-aero-chord] {
+    background-position-y: 52%;
+}
+.banner[release=resistance-aero-chord] {
+  background-position-y: 33%;
+}
+.banner[release=us-against-the-world-darren-styles]{
+  background-position-y: 36%;
+}
+.banner[release=the-drop-gammer] {
+    background-position-y: 20%;
+}
+.banner[release="are-we-still-young-feat-jessi-mason-grant"] {
+    background-position-y: 70%;
+}
+.banner[release=constellations-feat-jessi-mason-grant] {
+    background-position-y: 48%;
+}
+.banner[release=spitfire-infected-mushroom] {
+    background-position-y: 58%;
+}
+.banner[release=rapture-feat-mc-mota-kuuro] {
+    background-position-y: 75%;
+}
+.banner[release=higher-modestep] {
+  background-position-y: 64%;
+}
+.banner[release=tomorrow-feat-matt-van-holly-drummond-mr-fijiwiji-direct] {
+  background-position-y: 72.2151%;
+}
+.banner[release=spectrum-ep-muzzy] {
+  background-position-y: 51.7238%;
+}
+.banner[release=confessions-feat-cozi-zuehlsdorff-myrne] {
+  background-position-y: 29.3959%;
+}
+.banner[release=feel-something-feat-kayla-diamond-anevo] {
+  background-position-y: 70.3124%;
+}
+.banner[release=waiting-on-your-call-feat-park-avenue-anevo] {
+  background-position-y: 55.1127%;
+}
+.banner[release=without-you-feat-victoria-zaro-grant-anevo-conro] {
+  background-position-y: 51.6127%;
+}
+.banner[release=eyes-wide-open-bishu] {
+  background-position-y: 21.5044%;
+}
+
+.banner[release=blast-tokyo-machine] {
+    background-position-y: 77%;
+}
+
+.banner[release=ripped-to-pieces-feat-emel-stonebank] {
+    background-position-y: 43%;
+}
+.banner[release=moving-hectic-feat-harry-shotta-slips-slurs] {
+    background-position-y: 71%;
+}
+
+/* We should use SASS
+
+@for $i from 1 through 120 {
+   .bestof2017 .artist-row.rank-#{$i} {
+    transform: translateY(($i - 1) * 106px);
+    z-index: 121 - $i;
+  }
+
+  .bestof2017 .artist-row.rank-#{$i} .top-song-container,
+  .bestof2017 .artist-row.rank-#{$i}{
+    transition-delay: (0.10s * $i);
+  }
+}
+*/
+
+.bestof2017 .artist-row.rank-1 {
+  transform: translateY(0px);
+  z-index: 120;
+}
+
+.bestof2017 .artist-row.rank-1 .top-song-container,
+.bestof2017 .artist-row.rank-1 {
+  transition-delay: 0.1s;
+}
+
+.bestof2017 .artist-row.rank-2 {
+  transform: translateY(106px);
+  z-index: 119;
+}
+
+.bestof2017 .artist-row.rank-2 .top-song-container,
+.bestof2017 .artist-row.rank-2 {
+  transition-delay: 0.2s;
+}
+
+.bestof2017 .artist-row.rank-3 {
+  transform: translateY(212px);
+  z-index: 118;
+}
+
+.bestof2017 .artist-row.rank-3 .top-song-container,
+.bestof2017 .artist-row.rank-3 {
+  transition-delay: 0.3s;
+}
+
+.bestof2017 .artist-row.rank-4 {
+  transform: translateY(318px);
+  z-index: 117;
+}
+
+.bestof2017 .artist-row.rank-4 .top-song-container,
+.bestof2017 .artist-row.rank-4 {
+  transition-delay: 0.4s;
+}
+
+.bestof2017 .artist-row.rank-5 {
+  transform: translateY(424px);
+  z-index: 116;
+}
+
+.bestof2017 .artist-row.rank-5 .top-song-container,
+.bestof2017 .artist-row.rank-5 {
+  transition-delay: 0.5s;
+}
+
+.bestof2017 .artist-row.rank-6 {
+  transform: translateY(530px);
+  z-index: 115;
+}
+
+.bestof2017 .artist-row.rank-6 .top-song-container,
+.bestof2017 .artist-row.rank-6 {
+  transition-delay: 0.6s;
+}
+
+.bestof2017 .artist-row.rank-7 {
+  transform: translateY(636px);
+  z-index: 114;
+}
+
+.bestof2017 .artist-row.rank-7 .top-song-container,
+.bestof2017 .artist-row.rank-7 {
+  transition-delay: 0.7s;
+}
+
+.bestof2017 .artist-row.rank-8 {
+  transform: translateY(742px);
+  z-index: 113;
+}
+
+.bestof2017 .artist-row.rank-8 .top-song-container,
+.bestof2017 .artist-row.rank-8 {
+  transition-delay: 0.8s;
+}
+
+.bestof2017 .artist-row.rank-9 {
+  transform: translateY(848px);
+  z-index: 112;
+}
+
+.bestof2017 .artist-row.rank-9 .top-song-container,
+.bestof2017 .artist-row.rank-9 {
+  transition-delay: 0.9s;
+}
+
+.bestof2017 .artist-row.rank-10 {
+  transform: translateY(954px);
+  z-index: 111;
+}
+
+.bestof2017 .artist-row.rank-10 .top-song-container,
+.bestof2017 .artist-row.rank-10 {
+  transition-delay: 1s;
+}
+
+.bestof2017 .artist-row.rank-11 {
+  transform: translateY(1060px);
+  z-index: 110;
+}
+
+.bestof2017 .artist-row.rank-11 .top-song-container,
+.bestof2017 .artist-row.rank-11 {
+  transition-delay: 1.1s;
+}
+
+.bestof2017 .artist-row.rank-12 {
+  transform: translateY(1166px);
+  z-index: 109;
+}
+
+.bestof2017 .artist-row.rank-12 .top-song-container,
+.bestof2017 .artist-row.rank-12 {
+  transition-delay: 1.2s;
+}
+
+.bestof2017 .artist-row.rank-13 {
+  transform: translateY(1272px);
+  z-index: 108;
+}
+
+.bestof2017 .artist-row.rank-13 .top-song-container,
+.bestof2017 .artist-row.rank-13 {
+  transition-delay: 1.3s;
+}
+
+.bestof2017 .artist-row.rank-14 {
+  transform: translateY(1378px);
+  z-index: 107;
+}
+
+.bestof2017 .artist-row.rank-14 .top-song-container,
+.bestof2017 .artist-row.rank-14 {
+  transition-delay: 1.4s;
+}
+
+.bestof2017 .artist-row.rank-15 {
+  transform: translateY(1484px);
+  z-index: 106;
+}
+
+.bestof2017 .artist-row.rank-15 .top-song-container,
+.bestof2017 .artist-row.rank-15 {
+  transition-delay: 1.5s;
+}
+
+.bestof2017 .artist-row.rank-16 {
+  transform: translateY(1590px);
+  z-index: 105;
+}
+
+.bestof2017 .artist-row.rank-16 .top-song-container,
+.bestof2017 .artist-row.rank-16 {
+  transition-delay: 1.6s;
+}
+
+.bestof2017 .artist-row.rank-17 {
+  transform: translateY(1696px);
+  z-index: 104;
+}
+
+.bestof2017 .artist-row.rank-17 .top-song-container,
+.bestof2017 .artist-row.rank-17 {
+  transition-delay: 1.7s;
+}
+
+.bestof2017 .artist-row.rank-18 {
+  transform: translateY(1802px);
+  z-index: 103;
+}
+
+.bestof2017 .artist-row.rank-18 .top-song-container,
+.bestof2017 .artist-row.rank-18 {
+  transition-delay: 1.8s;
+}
+
+.bestof2017 .artist-row.rank-19 {
+  transform: translateY(1908px);
+  z-index: 102;
+}
+
+.bestof2017 .artist-row.rank-19 .top-song-container,
+.bestof2017 .artist-row.rank-19 {
+  transition-delay: 1.9s;
+}
+
+.bestof2017 .artist-row.rank-20 {
+  transform: translateY(2014px);
+  z-index: 101;
+}
+
+.bestof2017 .artist-row.rank-20 .top-song-container,
+.bestof2017 .artist-row.rank-20 {
+  transition-delay: 2s;
+}
+
+.bestof2017 .artist-row.rank-21 {
+  transform: translateY(2120px);
+  z-index: 100;
+}
+
+.bestof2017 .artist-row.rank-21 .top-song-container,
+.bestof2017 .artist-row.rank-21 {
+  transition-delay: 2.1s;
+}
+
+.bestof2017 .artist-row.rank-22 {
+  transform: translateY(2226px);
+  z-index: 99;
+}
+
+.bestof2017 .artist-row.rank-22 .top-song-container,
+.bestof2017 .artist-row.rank-22 {
+  transition-delay: 2.2s;
+}
+
+.bestof2017 .artist-row.rank-23 {
+  transform: translateY(2332px);
+  z-index: 98;
+}
+
+.bestof2017 .artist-row.rank-23 .top-song-container,
+.bestof2017 .artist-row.rank-23 {
+  transition-delay: 2.3s;
+}
+
+.bestof2017 .artist-row.rank-24 {
+  transform: translateY(2438px);
+  z-index: 97;
+}
+
+.bestof2017 .artist-row.rank-24 .top-song-container,
+.bestof2017 .artist-row.rank-24 {
+  transition-delay: 2.4s;
+}
+
+.bestof2017 .artist-row.rank-25 {
+  transform: translateY(2544px);
+  z-index: 96;
+}
+
+.bestof2017 .artist-row.rank-25 .top-song-container,
+.bestof2017 .artist-row.rank-25 {
+  transition-delay: 2.5s;
+}
+
+.bestof2017 .artist-row.rank-26 {
+  transform: translateY(2650px);
+  z-index: 95;
+}
+
+.bestof2017 .artist-row.rank-26 .top-song-container,
+.bestof2017 .artist-row.rank-26 {
+  transition-delay: 2.6s;
+}
+
+.bestof2017 .artist-row.rank-27 {
+  transform: translateY(2756px);
+  z-index: 94;
+}
+
+.bestof2017 .artist-row.rank-27 .top-song-container,
+.bestof2017 .artist-row.rank-27 {
+  transition-delay: 2.7s;
+}
+
+.bestof2017 .artist-row.rank-28 {
+  transform: translateY(2862px);
+  z-index: 93;
+}
+
+.bestof2017 .artist-row.rank-28 .top-song-container,
+.bestof2017 .artist-row.rank-28 {
+  transition-delay: 2.8s;
+}
+
+.bestof2017 .artist-row.rank-29 {
+  transform: translateY(2968px);
+  z-index: 92;
+}
+
+.bestof2017 .artist-row.rank-29 .top-song-container,
+.bestof2017 .artist-row.rank-29 {
+  transition-delay: 2.9s;
+}
+
+.bestof2017 .artist-row.rank-30 {
+  transform: translateY(3074px);
+  z-index: 91;
+}
+
+.bestof2017 .artist-row.rank-30 .top-song-container,
+.bestof2017 .artist-row.rank-30 {
+  transition-delay: 3s;
+}
+
+.bestof2017 .artist-row.rank-31 {
+  transform: translateY(3180px);
+  z-index: 90;
+}
+
+.bestof2017 .artist-row.rank-31 .top-song-container,
+.bestof2017 .artist-row.rank-31 {
+  transition-delay: 3.1s;
+}
+
+.bestof2017 .artist-row.rank-32 {
+  transform: translateY(3286px);
+  z-index: 89;
+}
+
+.bestof2017 .artist-row.rank-32 .top-song-container,
+.bestof2017 .artist-row.rank-32 {
+  transition-delay: 3.2s;
+}
+
+.bestof2017 .artist-row.rank-33 {
+  transform: translateY(3392px);
+  z-index: 88;
+}
+
+.bestof2017 .artist-row.rank-33 .top-song-container,
+.bestof2017 .artist-row.rank-33 {
+  transition-delay: 3.3s;
+}
+
+.bestof2017 .artist-row.rank-34 {
+  transform: translateY(3498px);
+  z-index: 87;
+}
+
+.bestof2017 .artist-row.rank-34 .top-song-container,
+.bestof2017 .artist-row.rank-34 {
+  transition-delay: 3.4s;
+}
+
+.bestof2017 .artist-row.rank-35 {
+  transform: translateY(3604px);
+  z-index: 86;
+}
+
+.bestof2017 .artist-row.rank-35 .top-song-container,
+.bestof2017 .artist-row.rank-35 {
+  transition-delay: 3.5s;
+}
+
+.bestof2017 .artist-row.rank-36 {
+  transform: translateY(3710px);
+  z-index: 85;
+}
+
+.bestof2017 .artist-row.rank-36 .top-song-container,
+.bestof2017 .artist-row.rank-36 {
+  transition-delay: 3.6s;
+}
+
+.bestof2017 .artist-row.rank-37 {
+  transform: translateY(3816px);
+  z-index: 84;
+}
+
+.bestof2017 .artist-row.rank-37 .top-song-container,
+.bestof2017 .artist-row.rank-37 {
+  transition-delay: 3.7s;
+}
+
+.bestof2017 .artist-row.rank-38 {
+  transform: translateY(3922px);
+  z-index: 83;
+}
+
+.bestof2017 .artist-row.rank-38 .top-song-container,
+.bestof2017 .artist-row.rank-38 {
+  transition-delay: 3.8s;
+}
+
+.bestof2017 .artist-row.rank-39 {
+  transform: translateY(4028px);
+  z-index: 82;
+}
+
+.bestof2017 .artist-row.rank-39 .top-song-container,
+.bestof2017 .artist-row.rank-39 {
+  transition-delay: 3.9s;
+}
+
+.bestof2017 .artist-row.rank-40 {
+  transform: translateY(4134px);
+  z-index: 81;
+}
+
+.bestof2017 .artist-row.rank-40 .top-song-container,
+.bestof2017 .artist-row.rank-40 {
+  transition-delay: 4s;
+}
+
+.bestof2017 .artist-row.rank-41 {
+  transform: translateY(4240px);
+  z-index: 80;
+}
+
+.bestof2017 .artist-row.rank-41 .top-song-container,
+.bestof2017 .artist-row.rank-41 {
+  transition-delay: 4.1s;
+}
+
+.bestof2017 .artist-row.rank-42 {
+  transform: translateY(4346px);
+  z-index: 79;
+}
+
+.bestof2017 .artist-row.rank-42 .top-song-container,
+.bestof2017 .artist-row.rank-42 {
+  transition-delay: 4.2s;
+}
+
+.bestof2017 .artist-row.rank-43 {
+  transform: translateY(4452px);
+  z-index: 78;
+}
+
+.bestof2017 .artist-row.rank-43 .top-song-container,
+.bestof2017 .artist-row.rank-43 {
+  transition-delay: 4.3s;
+}
+
+.bestof2017 .artist-row.rank-44 {
+  transform: translateY(4558px);
+  z-index: 77;
+}
+
+.bestof2017 .artist-row.rank-44 .top-song-container,
+.bestof2017 .artist-row.rank-44 {
+  transition-delay: 4.4s;
+}
+
+.bestof2017 .artist-row.rank-45 {
+  transform: translateY(4664px);
+  z-index: 76;
+}
+
+.bestof2017 .artist-row.rank-45 .top-song-container,
+.bestof2017 .artist-row.rank-45 {
+  transition-delay: 4.5s;
+}
+
+.bestof2017 .artist-row.rank-46 {
+  transform: translateY(4770px);
+  z-index: 75;
+}
+
+.bestof2017 .artist-row.rank-46 .top-song-container,
+.bestof2017 .artist-row.rank-46 {
+  transition-delay: 4.6s;
+}
+
+.bestof2017 .artist-row.rank-47 {
+  transform: translateY(4876px);
+  z-index: 74;
+}
+
+.bestof2017 .artist-row.rank-47 .top-song-container,
+.bestof2017 .artist-row.rank-47 {
+  transition-delay: 4.7s;
+}
+
+.bestof2017 .artist-row.rank-48 {
+  transform: translateY(4982px);
+  z-index: 73;
+}
+
+.bestof2017 .artist-row.rank-48 .top-song-container,
+.bestof2017 .artist-row.rank-48 {
+  transition-delay: 4.8s;
+}
+
+.bestof2017 .artist-row.rank-49 {
+  transform: translateY(5088px);
+  z-index: 72;
+}
+
+.bestof2017 .artist-row.rank-49 .top-song-container,
+.bestof2017 .artist-row.rank-49 {
+  transition-delay: 4.9s;
+}
+
+.bestof2017 .artist-row.rank-50 {
+  transform: translateY(5194px);
+  z-index: 71;
+}
+
+.bestof2017 .artist-row.rank-50 .top-song-container,
+.bestof2017 .artist-row.rank-50 {
+  transition-delay: 5s;
+}
+
+.bestof2017 .artist-row.rank-51 {
+  transform: translateY(5300px);
+  z-index: 70;
+}
+
+.bestof2017 .artist-row.rank-51 .top-song-container,
+.bestof2017 .artist-row.rank-51 {
+  transition-delay: 5.1s;
+}
+
+.bestof2017 .artist-row.rank-52 {
+  transform: translateY(5406px);
+  z-index: 69;
+}
+
+.bestof2017 .artist-row.rank-52 .top-song-container,
+.bestof2017 .artist-row.rank-52 {
+  transition-delay: 5.2s;
+}
+
+.bestof2017 .artist-row.rank-53 {
+  transform: translateY(5512px);
+  z-index: 68;
+}
+
+.bestof2017 .artist-row.rank-53 .top-song-container,
+.bestof2017 .artist-row.rank-53 {
+  transition-delay: 5.3s;
+}
+
+.bestof2017 .artist-row.rank-54 {
+  transform: translateY(5618px);
+  z-index: 67;
+}
+
+.bestof2017 .artist-row.rank-54 .top-song-container,
+.bestof2017 .artist-row.rank-54 {
+  transition-delay: 5.4s;
+}
+
+.bestof2017 .artist-row.rank-55 {
+  transform: translateY(5724px);
+  z-index: 66;
+}
+
+.bestof2017 .artist-row.rank-55 .top-song-container,
+.bestof2017 .artist-row.rank-55 {
+  transition-delay: 5.5s;
+}
+
+.bestof2017 .artist-row.rank-56 {
+  transform: translateY(5830px);
+  z-index: 65;
+}
+
+.bestof2017 .artist-row.rank-56 .top-song-container,
+.bestof2017 .artist-row.rank-56 {
+  transition-delay: 5.6s;
+}
+
+.bestof2017 .artist-row.rank-57 {
+  transform: translateY(5936px);
+  z-index: 64;
+}
+
+.bestof2017 .artist-row.rank-57 .top-song-container,
+.bestof2017 .artist-row.rank-57 {
+  transition-delay: 5.7s;
+}
+
+.bestof2017 .artist-row.rank-58 {
+  transform: translateY(6042px);
+  z-index: 63;
+}
+
+.bestof2017 .artist-row.rank-58 .top-song-container,
+.bestof2017 .artist-row.rank-58 {
+  transition-delay: 5.8s;
+}
+
+.bestof2017 .artist-row.rank-59 {
+  transform: translateY(6148px);
+  z-index: 62;
+}
+
+.bestof2017 .artist-row.rank-59 .top-song-container,
+.bestof2017 .artist-row.rank-59 {
+  transition-delay: 5.9s;
+}
+
+.bestof2017 .artist-row.rank-60 {
+  transform: translateY(6254px);
+  z-index: 61;
+}
+
+.bestof2017 .artist-row.rank-60 .top-song-container,
+.bestof2017 .artist-row.rank-60 {
+  transition-delay: 6s;
+}
+
+.bestof2017 .artist-row.rank-61 {
+  transform: translateY(6360px);
+  z-index: 60;
+}
+
+.bestof2017 .artist-row.rank-61 .top-song-container,
+.bestof2017 .artist-row.rank-61 {
+  transition-delay: 6.1s;
+}
+
+.bestof2017 .artist-row.rank-62 {
+  transform: translateY(6466px);
+  z-index: 59;
+}
+
+.bestof2017 .artist-row.rank-62 .top-song-container,
+.bestof2017 .artist-row.rank-62 {
+  transition-delay: 6.2s;
+}
+
+.bestof2017 .artist-row.rank-63 {
+  transform: translateY(6572px);
+  z-index: 58;
+}
+
+.bestof2017 .artist-row.rank-63 .top-song-container,
+.bestof2017 .artist-row.rank-63 {
+  transition-delay: 6.3s;
+}
+
+.bestof2017 .artist-row.rank-64 {
+  transform: translateY(6678px);
+  z-index: 57;
+}
+
+.bestof2017 .artist-row.rank-64 .top-song-container,
+.bestof2017 .artist-row.rank-64 {
+  transition-delay: 6.4s;
+}
+
+.bestof2017 .artist-row.rank-65 {
+  transform: translateY(6784px);
+  z-index: 56;
+}
+
+.bestof2017 .artist-row.rank-65 .top-song-container,
+.bestof2017 .artist-row.rank-65 {
+  transition-delay: 6.5s;
+}
+
+.bestof2017 .artist-row.rank-66 {
+  transform: translateY(6890px);
+  z-index: 55;
+}
+
+.bestof2017 .artist-row.rank-66 .top-song-container,
+.bestof2017 .artist-row.rank-66 {
+  transition-delay: 6.6s;
+}
+
+.bestof2017 .artist-row.rank-67 {
+  transform: translateY(6996px);
+  z-index: 54;
+}
+
+.bestof2017 .artist-row.rank-67 .top-song-container,
+.bestof2017 .artist-row.rank-67 {
+  transition-delay: 6.7s;
+}
+
+.bestof2017 .artist-row.rank-68 {
+  transform: translateY(7102px);
+  z-index: 53;
+}
+
+.bestof2017 .artist-row.rank-68 .top-song-container,
+.bestof2017 .artist-row.rank-68 {
+  transition-delay: 6.8s;
+}
+
+.bestof2017 .artist-row.rank-69 {
+  transform: translateY(7208px);
+  z-index: 52;
+}
+
+.bestof2017 .artist-row.rank-69 .top-song-container,
+.bestof2017 .artist-row.rank-69 {
+  transition-delay: 6.9s;
+}
+
+.bestof2017 .artist-row.rank-70 {
+  transform: translateY(7314px);
+  z-index: 51;
+}
+
+.bestof2017 .artist-row.rank-70 .top-song-container,
+.bestof2017 .artist-row.rank-70 {
+  transition-delay: 7s;
+}
+
+.bestof2017 .artist-row.rank-71 {
+  transform: translateY(7420px);
+  z-index: 50;
+}
+
+.bestof2017 .artist-row.rank-71 .top-song-container,
+.bestof2017 .artist-row.rank-71 {
+  transition-delay: 7.1s;
+}
+
+.bestof2017 .artist-row.rank-72 {
+  transform: translateY(7526px);
+  z-index: 49;
+}
+
+.bestof2017 .artist-row.rank-72 .top-song-container,
+.bestof2017 .artist-row.rank-72 {
+  transition-delay: 7.2s;
+}
+
+.bestof2017 .artist-row.rank-73 {
+  transform: translateY(7632px);
+  z-index: 48;
+}
+
+.bestof2017 .artist-row.rank-73 .top-song-container,
+.bestof2017 .artist-row.rank-73 {
+  transition-delay: 7.3s;
+}
+
+.bestof2017 .artist-row.rank-74 {
+  transform: translateY(7738px);
+  z-index: 47;
+}
+
+.bestof2017 .artist-row.rank-74 .top-song-container,
+.bestof2017 .artist-row.rank-74 {
+  transition-delay: 7.4s;
+}
+
+.bestof2017 .artist-row.rank-75 {
+  transform: translateY(7844px);
+  z-index: 46;
+}
+
+.bestof2017 .artist-row.rank-75 .top-song-container,
+.bestof2017 .artist-row.rank-75 {
+  transition-delay: 7.5s;
+}
+
+.bestof2017 .artist-row.rank-76 {
+  transform: translateY(7950px);
+  z-index: 45;
+}
+
+.bestof2017 .artist-row.rank-76 .top-song-container,
+.bestof2017 .artist-row.rank-76 {
+  transition-delay: 7.6s;
+}
+
+.bestof2017 .artist-row.rank-77 {
+  transform: translateY(8056px);
+  z-index: 44;
+}
+
+.bestof2017 .artist-row.rank-77 .top-song-container,
+.bestof2017 .artist-row.rank-77 {
+  transition-delay: 7.7s;
+}
+
+.bestof2017 .artist-row.rank-78 {
+  transform: translateY(8162px);
+  z-index: 43;
+}
+
+.bestof2017 .artist-row.rank-78 .top-song-container,
+.bestof2017 .artist-row.rank-78 {
+  transition-delay: 7.8s;
+}
+
+.bestof2017 .artist-row.rank-79 {
+  transform: translateY(8268px);
+  z-index: 42;
+}
+
+.bestof2017 .artist-row.rank-79 .top-song-container,
+.bestof2017 .artist-row.rank-79 {
+  transition-delay: 7.9s;
+}
+
+.bestof2017 .artist-row.rank-80 {
+  transform: translateY(8374px);
+  z-index: 41;
+}
+
+.bestof2017 .artist-row.rank-80 .top-song-container,
+.bestof2017 .artist-row.rank-80 {
+  transition-delay: 8s;
+}
+
+.bestof2017 .artist-row.rank-81 {
+  transform: translateY(8480px);
+  z-index: 40;
+}
+
+.bestof2017 .artist-row.rank-81 .top-song-container,
+.bestof2017 .artist-row.rank-81 {
+  transition-delay: 8.1s;
+}
+
+.bestof2017 .artist-row.rank-82 {
+  transform: translateY(8586px);
+  z-index: 39;
+}
+
+.bestof2017 .artist-row.rank-82 .top-song-container,
+.bestof2017 .artist-row.rank-82 {
+  transition-delay: 8.2s;
+}
+
+.bestof2017 .artist-row.rank-83 {
+  transform: translateY(8692px);
+  z-index: 38;
+}
+
+.bestof2017 .artist-row.rank-83 .top-song-container,
+.bestof2017 .artist-row.rank-83 {
+  transition-delay: 8.3s;
+}
+
+.bestof2017 .artist-row.rank-84 {
+  transform: translateY(8798px);
+  z-index: 37;
+}
+
+.bestof2017 .artist-row.rank-84 .top-song-container,
+.bestof2017 .artist-row.rank-84 {
+  transition-delay: 8.4s;
+}
+
+.bestof2017 .artist-row.rank-85 {
+  transform: translateY(8904px);
+  z-index: 36;
+}
+
+.bestof2017 .artist-row.rank-85 .top-song-container,
+.bestof2017 .artist-row.rank-85 {
+  transition-delay: 8.5s;
+}
+
+.bestof2017 .artist-row.rank-86 {
+  transform: translateY(9010px);
+  z-index: 35;
+}
+
+.bestof2017 .artist-row.rank-86 .top-song-container,
+.bestof2017 .artist-row.rank-86 {
+  transition-delay: 8.6s;
+}
+
+.bestof2017 .artist-row.rank-87 {
+  transform: translateY(9116px);
+  z-index: 34;
+}
+
+.bestof2017 .artist-row.rank-87 .top-song-container,
+.bestof2017 .artist-row.rank-87 {
+  transition-delay: 8.7s;
+}
+
+.bestof2017 .artist-row.rank-88 {
+  transform: translateY(9222px);
+  z-index: 33;
+}
+
+.bestof2017 .artist-row.rank-88 .top-song-container,
+.bestof2017 .artist-row.rank-88 {
+  transition-delay: 8.8s;
+}
+
+.bestof2017 .artist-row.rank-89 {
+  transform: translateY(9328px);
+  z-index: 32;
+}
+
+.bestof2017 .artist-row.rank-89 .top-song-container,
+.bestof2017 .artist-row.rank-89 {
+  transition-delay: 8.9s;
+}
+
+.bestof2017 .artist-row.rank-90 {
+  transform: translateY(9434px);
+  z-index: 31;
+}
+
+.bestof2017 .artist-row.rank-90 .top-song-container,
+.bestof2017 .artist-row.rank-90 {
+  transition-delay: 9s;
+}
+
+.bestof2017 .artist-row.rank-91 {
+  transform: translateY(9540px);
+  z-index: 30;
+}
+
+.bestof2017 .artist-row.rank-91 .top-song-container,
+.bestof2017 .artist-row.rank-91 {
+  transition-delay: 9.1s;
+}
+
+.bestof2017 .artist-row.rank-92 {
+  transform: translateY(9646px);
+  z-index: 29;
+}
+
+.bestof2017 .artist-row.rank-92 .top-song-container,
+.bestof2017 .artist-row.rank-92 {
+  transition-delay: 9.2s;
+}
+
+.bestof2017 .artist-row.rank-93 {
+  transform: translateY(9752px);
+  z-index: 28;
+}
+
+.bestof2017 .artist-row.rank-93 .top-song-container,
+.bestof2017 .artist-row.rank-93 {
+  transition-delay: 9.3s;
+}
+
+.bestof2017 .artist-row.rank-94 {
+  transform: translateY(9858px);
+  z-index: 27;
+}
+
+.bestof2017 .artist-row.rank-94 .top-song-container,
+.bestof2017 .artist-row.rank-94 {
+  transition-delay: 9.4s;
+}
+
+.bestof2017 .artist-row.rank-95 {
+  transform: translateY(9964px);
+  z-index: 26;
+}
+
+.bestof2017 .artist-row.rank-95 .top-song-container,
+.bestof2017 .artist-row.rank-95 {
+  transition-delay: 9.5s;
+}
+
+.bestof2017 .artist-row.rank-96 {
+  transform: translateY(10070px);
+  z-index: 25;
+}
+
+.bestof2017 .artist-row.rank-96 .top-song-container,
+.bestof2017 .artist-row.rank-96 {
+  transition-delay: 9.6s;
+}
+
+.bestof2017 .artist-row.rank-97 {
+  transform: translateY(10176px);
+  z-index: 24;
+}
+
+.bestof2017 .artist-row.rank-97 .top-song-container,
+.bestof2017 .artist-row.rank-97 {
+  transition-delay: 9.7s;
+}
+
+.bestof2017 .artist-row.rank-98 {
+  transform: translateY(10282px);
+  z-index: 23;
+}
+
+.bestof2017 .artist-row.rank-98 .top-song-container,
+.bestof2017 .artist-row.rank-98 {
+  transition-delay: 9.8s;
+}
+
+.bestof2017 .artist-row.rank-99 {
+  transform: translateY(10388px);
+  z-index: 22;
+}
+
+.bestof2017 .artist-row.rank-99 .top-song-container,
+.bestof2017 .artist-row.rank-99 {
+  transition-delay: 9.9s;
+}
+
+.bestof2017 .artist-row.rank-100 {
+  transform: translateY(10494px);
+  z-index: 21;
+}
+
+.bestof2017 .artist-row.rank-100 .top-song-container,
+.bestof2017 .artist-row.rank-100 {
+  transition-delay: 10s;
+}
+
+.bestof2017 .artist-row.rank-101 {
+  transform: translateY(10600px);
+  z-index: 20;
+}
+
+.bestof2017 .artist-row.rank-101 .top-song-container,
+.bestof2017 .artist-row.rank-101 {
+  transition-delay: 10.1s;
+}
+
+.bestof2017 .artist-row.rank-102 {
+  transform: translateY(10706px);
+  z-index: 19;
+}
+
+.bestof2017 .artist-row.rank-102 .top-song-container,
+.bestof2017 .artist-row.rank-102 {
+  transition-delay: 10.2s;
+}
+
+.bestof2017 .artist-row.rank-103 {
+  transform: translateY(10812px);
+  z-index: 18;
+}
+
+.bestof2017 .artist-row.rank-103 .top-song-container,
+.bestof2017 .artist-row.rank-103 {
+  transition-delay: 10.3s;
+}
+
+.bestof2017 .artist-row.rank-104 {
+  transform: translateY(10918px);
+  z-index: 17;
+}
+
+.bestof2017 .artist-row.rank-104 .top-song-container,
+.bestof2017 .artist-row.rank-104 {
+  transition-delay: 10.4s;
+}
+
+.bestof2017 .artist-row.rank-105 {
+  transform: translateY(11024px);
+  z-index: 16;
+}
+
+.bestof2017 .artist-row.rank-105 .top-song-container,
+.bestof2017 .artist-row.rank-105 {
+  transition-delay: 10.5s;
+}
+
+.bestof2017 .artist-row.rank-106 {
+  transform: translateY(11130px);
+  z-index: 15;
+}
+
+.bestof2017 .artist-row.rank-106 .top-song-container,
+.bestof2017 .artist-row.rank-106 {
+  transition-delay: 10.6s;
+}
+
+.bestof2017 .artist-row.rank-107 {
+  transform: translateY(11236px);
+  z-index: 14;
+}
+
+.bestof2017 .artist-row.rank-107 .top-song-container,
+.bestof2017 .artist-row.rank-107 {
+  transition-delay: 10.7s;
+}
+
+.bestof2017 .artist-row.rank-108 {
+  transform: translateY(11342px);
+  z-index: 13;
+}
+
+.bestof2017 .artist-row.rank-108 .top-song-container,
+.bestof2017 .artist-row.rank-108 {
+  transition-delay: 10.8s;
+}
+
+.bestof2017 .artist-row.rank-109 {
+  transform: translateY(11448px);
+  z-index: 12;
+}
+
+.bestof2017 .artist-row.rank-109 .top-song-container,
+.bestof2017 .artist-row.rank-109 {
+  transition-delay: 10.9s;
+}
+
+.bestof2017 .artist-row.rank-110 {
+  transform: translateY(11554px);
+  z-index: 11;
+}
+
+.bestof2017 .artist-row.rank-110 .top-song-container,
+.bestof2017 .artist-row.rank-110 {
+  transition-delay: 11s;
+}
+
+.bestof2017 .artist-row.rank-111 {
+  transform: translateY(11660px);
+  z-index: 10;
+}
+
+.bestof2017 .artist-row.rank-111 .top-song-container,
+.bestof2017 .artist-row.rank-111 {
+  transition-delay: 11.1s;
+}
+
+.bestof2017 .artist-row.rank-112 {
+  transform: translateY(11766px);
+  z-index: 9;
+}
+
+.bestof2017 .artist-row.rank-112 .top-song-container,
+.bestof2017 .artist-row.rank-112 {
+  transition-delay: 11.2s;
+}
+
+.bestof2017 .artist-row.rank-113 {
+  transform: translateY(11872px);
+  z-index: 8;
+}
+
+.bestof2017 .artist-row.rank-113 .top-song-container,
+.bestof2017 .artist-row.rank-113 {
+  transition-delay: 11.3s;
+}
+
+.bestof2017 .artist-row.rank-114 {
+  transform: translateY(11978px);
+  z-index: 7;
+}
+
+.bestof2017 .artist-row.rank-114 .top-song-container,
+.bestof2017 .artist-row.rank-114 {
+  transition-delay: 11.4s;
+}
+
+.bestof2017 .artist-row.rank-115 {
+  transform: translateY(12084px);
+  z-index: 6;
+}
+
+.bestof2017 .artist-row.rank-115 .top-song-container,
+.bestof2017 .artist-row.rank-115 {
+  transition-delay: 11.5s;
+}
+
+.bestof2017 .artist-row.rank-116 {
+  transform: translateY(12190px);
+  z-index: 5;
+}
+
+.bestof2017 .artist-row.rank-116 .top-song-container,
+.bestof2017 .artist-row.rank-116 {
+  transition-delay: 11.6s;
+}
+
+.bestof2017 .artist-row.rank-117 {
+  transform: translateY(12296px);
+  z-index: 4;
+}
+
+.bestof2017 .artist-row.rank-117 .top-song-container,
+.bestof2017 .artist-row.rank-117 {
+  transition-delay: 11.7s;
+}
+
+.bestof2017 .artist-row.rank-118 {
+  transform: translateY(12402px);
+  z-index: 3;
+}
+
+.bestof2017 .artist-row.rank-118 .top-song-container,
+.bestof2017 .artist-row.rank-118 {
+  transition-delay: 11.8s;
+}
+
+.bestof2017 .artist-row.rank-119 {
+  transform: translateY(12508px);
+  z-index: 2;
+}
+
+.bestof2017 .artist-row.rank-119 .top-song-container,
+.bestof2017 .artist-row.rank-119 {
+  transition-delay: 11.9s;
+}
+
+.bestof2017 .artist-row.rank-120 {
+  transform: translateY(12614px);
+  z-index: 1;
+}
+
+.bestof2017 .artist-row.rank-120 .top-song-container,
+.bestof2017 .artist-row.rank-120 {
+  transition-delay: 12s;
+}
+
+div div.bestof2017 .artist-row {
+  transition-delay: 0s !important;
+}

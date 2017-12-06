@@ -13,7 +13,7 @@ TEMPLATES=$(find "$SRC/templates" -iname '*.html')
 
 echo
 echo -e "Making \"bin\" directory"
-mkdir -p $BIN 
+mkdir -p $BIN
 
 echo
 echo -e "Linking assets"

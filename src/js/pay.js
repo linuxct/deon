@@ -212,7 +212,6 @@ function checkoutSubscriptions (e, el) {
       socialSignOn = e.target.getAttribute('data-social');
     }
 
-
     //After successfully signin in or signup either through us, Facebook, or Google, this is checked
     var signOn = function (err, result, xhr) {
       if(err) {

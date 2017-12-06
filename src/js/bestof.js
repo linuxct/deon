@@ -19,7 +19,7 @@ function transformPollChoices(obj){
   var choices = []
   for (var i = 0; i<obj.choices.length; i++){
     choices.push({
-      'index': i, 
+      'index': i,
       'choice': obj.choices[i]
     })
   }
@@ -72,7 +72,6 @@ function hideAllTabs(){
   for (var i = 0; i<tabsNav.length; i++){
     var itemNav = tabsNav[i]
     var itemContent = tabsContent[i]
-    
     itemNav.classList.remove("active")
     itemContent.classList.remove("visible")
     itemContent.classList.add("hidden")

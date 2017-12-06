@@ -48,7 +48,6 @@ function openCatalogPage (q) {
 function transformMusicCatalogResults (obj, done){
 	if (obj.total > 1) obj.showPagination = true
   setPagination(obj, obj.limit)
-  
   var streamableIndex = 0
   obj.results = obj.results.map(function (item, index, arr) {
     var track = mapReleaseTrack(item, index, arr)

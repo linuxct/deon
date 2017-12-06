@@ -1,0 +1,170 @@
+<script type="text/template"
+        mustache-name="voted-for-tweet"
+        template-name="voted-for-tweet"
+        >
+<form id="tweet-vote" onsubmit="submitTweetBestOf2017(event)">
+  <textarea name="tweet" rows="3">{{votedForTweet}}</textarea>
+  <div>
+    <a class="button button--cta" target="_blank" role="tweet">Tweet Your Votes</a>
+    {{#viewResultsLink}}
+    <a class="button" href="/bestof2017/results">View Live results</a>
+    {{/viewResultsLink}}
+  </div>
+</form>
+</script>
+
+<script type="text/template"
+        route="^[Bb]est[Oo]f2017\/results$"
+        page-title="Best of 2017 Results"
+        transform="transformBestOf2017Results"
+        completed="completedBestOf2017Results">
+<div class="container bestof2017 bestof2017-page">
+  <div class="panel">
+    {{#data}}
+      {{^loading}}
+        {{#status.canVote}}
+        <a href="/bestof2017" class="button button--vote-now">Vote Now</a>
+        {{/status.canVote}}
+      {{/loading}}
+    {{/data}}
+    <h1>
+        Best of 2017 {{^data.status.ended}}Live {{/data.status.ended}}Results
+    </h1>
+    {{#data}}
+      {{#loading}}
+        <div class="loading" role=bestof2017-results-loading>
+          <span class="loader"></span>
+        </div>
+      {{/loading}}
+      {{^loading}}
+        <p class="last-updated-msg hide" role="last-updated"></p>
+        {{#showThankYou}}
+          <div class="alert alert-info" role="thank-you-alert">
+            <button type="button" class="button button--close" onclick="clickCloseBestOf2017ThankYou()"><i class="fa fa-remove"></i></button>
+            <h2>Thank you for voting!</h2>
+            {{>voted-for-tweet}}
+          </div>
+        {{/showThankYou}}
+        <div role="bestof2017-results" class="bestof2017-results bestof2017 loading">
+          {{>bestof2017-results}}
+        </div>
+      {{/loading}}
+    {{/data}}
+  </div>
+</div>
+</script>
+
+<script type="text/template"
+        template-name=""
+        mustache-name="bestof2017-results"
+        >
+      {{#results}}
+        <div class="artist-row bestof2017-result empty no-top-song rank-{{rank}}" rank="{{rank}}" artist-id="{{artist._id}}">
+          <div class="banner"></div>
+          <span role="rank" class="rank">{{rank}}</span>
+          <h3>{{artist.name}} <span class="votes" role="votes"></span></h3>
+          <div class="top-song-container" role="top-song">loading...</div>
+        </div>
+      {{/results}}
+</script>
+
+<script type="text/template" mustache-name="bestof2017-topsong" template-name="bestof2017-topsong">
+{{#_id}}
+  <div class="top-song">{{>playSong}} <span class="top-song-name">{{title}} by {{artistsTitle}}</span></div>
+  <div class="download-area {{#hasGold}}has-gold{{/hasGold}}">
+    <a class="silent button button--cta download"
+       target="_blank"
+       title="Download Track"
+       track-title="{{title}}"
+       action="accessDownloadOrModal"
+       href="{{downloadLink}}">
+        <i class="fa fa-download"></i> <span class="txt">Download Song</span>
+    </a>
+    {{^hasGold}}
+      <div class="requires-gold">Requires <a href="/gold">Gold</a></div>
+    {{/hasGold}}
+  </div>
+{{/_id}}
+</script>
+
+<script type="text/template"
+        route="^[Bb]est[Oo]f2017$"
+        page-title="Best of 2017"
+        transform="transformBestOf2017"
+        completed="completedBestOf2017">
+<div class="bestof2017 bestof2017-page">
+  {{#data}}
+    <div class="top-banner">
+      <div class="banner" style="background-image: url('https://assets.monstercat.com/bestof2017header.jpg')">
+        <div class="banner-gradient"></div>
+        <div class="banner-shade"></div>
+      </div>
+      <div class="container flex">
+        <div class="col-xs-12 col-sm-12 col-md-6 featured-details">
+          {{^status.open}}
+            <h2>Voting is over!</h2>
+            <p><a href="/bestof2017/results">See the results</a>.</p>
+          {{/status.open}}
+          {{#status.open}}
+            {{#status.voted}}
+              <h2>Thank you for voting!</h2>
+              <p>Thank you for submitting your vote, and making 2017 Monstercat's biggest year ever. The fun doesn't stop here though, make sure to tweet at your favourite artists to let them know that their tracks were your top picks of the year. Then head over to the live results leaderboard to check out the action!</p>
+              {{>voted-for-tweet}}
+            {{/status.voted}}
+            {{^status.voted}}
+              <div>
+                <h1>Your Top 10!</h1>
+                {{#isSignedIn}}
+                  <h3>Vote For Your Top 10 Artists of 2017</h3>
+                {{/isSignedIn}}
+                {{^isSignedIn}}
+                  <h3>Sign In to Vote For Your Top 10 Artists of 2017</h3>
+                {{/isSignedIn}}
+                <p>It's that time of year again! With the Monstercat Best of 2017 voting, we've amped up the system to provide real-time live polling! Simply select your top 10 artists for 2017, in no particular order, and your favourite track from each (no duplicates please).</p>
+
+                <p class="gray">Once submitted, your votes will automatically populate the live results leader board. On {{votingCloseTime}}, the polls will close and the top 30 songs from 2017 will be officially selected!</p>
+
+                {{^isSignedIn}}
+                  <p>You need to <a href="/sign-in?redirect=bestof2017">sign in</a> or <a href="/sign-up?redirect=bestof2017">register</a> to vote.</p>
+                {{/isSignedIn}}
+              </div>
+            {{/status.voted}}
+          {{/status.open}}
+        </div>
+      </div>
+    </div>
+    {{#status.open}}
+      {{^status.voted}}
+        <div class="bestof2017-voting container">
+          <div class="panel">
+            <form role="bestof2017">
+              {{#artistBlocks}}
+                <div class="row artist-row artist-row-{{.}} empty no-artist">
+                  <div class="banner"></div>
+                  <div class="col-md-6 col-xs-12 voting-col voting-col-artists">
+                    <h3 role="artist-name">Select an Artist</h3>
+                    <select name="artist[{{.}}]" role="bestof2017-artist">
+                      {{#artistOptions}}
+                        <option value="{{_id}}">{{name}}</option>
+                      {{/artistOptions}}
+                    </select>
+                  </div>
+                  <div class="col-md-6 col-xs-12 voting-col voting-col-song">
+                    <h3 class="favorite-song-title">Favorite <span role="artist-name" class="artist-name"></span> Song</h3>
+                    <select disabled role="song-poll" name="artistSongs[{{.}}]">
+                    </select>
+                  </div>
+                </div>
+              {{/artistBlocks}}
+              <div class="submit-container">
+                <button class="btn button--cta width--full" type="button" onclick="clickSubmitBestOf2017(event)">Submit Your Votes</button>
+                <br /><br /><a href="/bestof2017/results">View Live Results</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      {{/status.voted}}
+    {{/status.open}}
+  {{/data}}
+</div>
+</script>

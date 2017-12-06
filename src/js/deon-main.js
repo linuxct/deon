@@ -385,6 +385,27 @@ function getArtistsTitle(artists) {
   return names.join(', ') + ' & ' + names.pop()
 }
 
+//How you should mention an artist on twitter
+//Use their @ username if we have, otherwise just their name
+function getArtistTwitterMention (artist) {
+  if(artist.urls) {
+    var socials = getSocialsAtlas(artist.urls);
+    if(socials.twitter) {
+      var matches = socials.twitter.link.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?([^\/]+)(\/\w+)*$/);
+      var username;
+      if(matches && matches[3]) {
+        var username = matches[3]
+        if(username.substr(0, 1) != '@') {
+          username = '@' + username;
+        }
+        return username;
+      }
+    }
+  }
+
+  return artist.name
+}
+
 /* Loads the required release and track data specified by the object.
  * Object Requirments:
  *   releaseId
@@ -491,6 +512,15 @@ function getSocials (urls) {
     }
   })
   return arr
+}
+
+function getSocialsAtlas (urls) {
+  var socials = getSocials(urls);
+  var atlas = socials.reduce(function (at, value, index) {
+    at[value.icon] = value;
+    return at
+  }, {})
+  return atlas;
 }
 
 function getReleaseShareLink (urls) {

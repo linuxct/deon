@@ -67,15 +67,15 @@
         page-title="Sign In">
     {{#data}}
     <div class="container">
-        {{^buying}}
+        {{^continueTo}}
         <h1>Sign In</h1>
-        {{/buying}}
-        {{#buying}}
+        {{/continueTo}}
+        {{#continueTo}}
         <div class="panel">
             <h1>Sign In to Continue</h1>
-            <p>Sign in or create an account to continue buying {{>buying}}.</p>
+            <p>Sign in or create an account to continue {{>continueTo}}.</p>
         </div>
-        {{/buying}}
+        {{/continueTo}}
         <div class="flex sign-split">
             <form onsubmit="false" data-set="credentials" data-submit-action="submitSignIn" class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>
@@ -329,16 +329,16 @@
         transform="transformSignUp">
     <div class="container">
         {{#data}}
-            {{^buying}}
+            {{^continueTo}}
             <h1>Sign Up</h1>
-            {{/buying}}
+            {{/continueTo}}
 
-            {{#buying}}
+            {{#continueTo}}
             <div class="panel">
                 <h1>Sign Up to Continue</h1>
-                <p>Create an account or sign in to continue buying {{>buying}}.</p>
+                <p>Create an account or sign in to continue {{>continueTo}}.</p>
             </div>
-            {{/buying}}
+            {{/continueTo}}
         <div class="flex sign-split">
             <div class="col-xs-12 col-md-6 panel">
                 <h2>With Email</h2>
@@ -791,4 +791,6 @@ Success please join the following channels with the links below:<br/><br/>
         mustache-name="required"><span class="required">*</span></script>
 
 <script type="text/template"
-        mustache-name="buying">{{#vendor}}a <strong>{{vendor}}</strong> license for <strong>{{identity}}</strong>{{/vendor}}{{#gold}}a <strong><a href="/gold">Gold subscription</a></strong>{{/gold}}</script>
+        mustache-name="continueTo">
+{{#buying}}{{#vendor}}a <strong>{{vendor}}</strong> license for <strong>{{identity}}</strong>{{/vendor}}{{#gold}}a <strong><a href="/gold">Gold subscription</a></strong>{{/gold}}{{/buying}}
+{{#msg}}{{{msg}}}{{/msg}}</script>

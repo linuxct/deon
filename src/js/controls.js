@@ -10,7 +10,7 @@ var sel = {
   volumeInnerSlider: '.volume-slider-inner',
   volumeOuterSlider: '.volume-slider-outer',
   volumeSliderContainer: '.volume-slider-container',
-  controls: '.controls'  
+  controls: '.controls'
 }
 
 var playerEvents = {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
   player.setStoredVolume(volume)
   player.setVolume(volume)
   bindVolumeEvents()
-  setVolumeDisplay()  
+  setVolumeDisplay()
 })
 
 function recordPlayerEvent (e) {
@@ -260,7 +260,15 @@ function loadAndPlayTracks (index) {
 }
 
 function buildTracks () {
-  var els = Array.prototype.slice.call(document.querySelectorAll('[play-link]'))
+  var els = Array.prototype.slice.call(document.querySelectorAll('[play-link]'));
+  els = els.sort(function (el1, el2) {
+    var idx1 = parseInt(el1.getAttribute('index'));
+    var idx2 = parseInt(el2.getAttribute('index'));
+    if(idx1 == idx2) {
+      return 0;
+    }
+    return idx1 > idx2 ? 1 : -1;
+  });
   return els.map(mapTrackElToPlayer)
 }
 
@@ -331,7 +339,19 @@ function updateControls () {
   var playing = player.playing || player.loading
   var item = player.items[player.index]
   var selector = '[role="play-song"][play-link="' + (item ? item.source : '') + '"]'
-  var el = item ? document.querySelector(selector) : undefined
+
+  var allMatches = document.querySelectorAll(selector)
+  var el;
+  if(item) {
+    if(allMatches.length > 1) {
+      //try to find one with a matching index first
+      el = document.querySelector(selector+ '[index="' + player.index + '"]');
+    }
+    if(!el) {
+      el = allMatches[0]
+    }
+  }
+
   if (el) {
     el.classList.toggle('active', playing)
   }
@@ -362,6 +382,7 @@ function mapTrackElToPlayer (el) {
     source:     el.getAttribute('play-link'),
     skip:       isSignedIn() && !el.hasAttribute('licensable') && (session.settings || {}).hideNonLicensableTracks,
     title:      el.getAttribute('title'),
+    index:      el.getAttribute('index'),
     artist:      el.getAttribute('artist'),
     artistTitle: el.getAttribute('artists-title'),
     trackId:    el.getAttribute('track-id'),

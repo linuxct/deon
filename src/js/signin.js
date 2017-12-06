@@ -11,7 +11,7 @@ function transformSignIn (o) {
     return go('/account');
   }
   o = transformRedirectTo(o)
-  o.buying = getSignInBuying()
+  o.continueTo = getSignInContinueTo()
   trackSignUpEvents();
   return o
 }
@@ -186,25 +186,34 @@ function getRedirectTo () {
   return queryStringToObject(window.location.search).redirect || "/"
 }
 
-function getSignInBuying () {
+function getSignInContinueTo () {
   var redirectTo = getRedirectTo()
-  var buying = false
+  var continueTo = false
 
   if(redirectTo.substr(0, '/account/services'.length) == '/account/services') {
     var qos = redirectTo.substr(redirectTo.indexOf('?')+1)
     var qo = queryStringToObject(qos)
-    buying = qo
+    continueTo = {
+      buying: qo
+    }
     if(qo.ref == 'gold') {
-      buying.gold = true
+      continueTo.buying.gold = true
+    }
+    continueTo.msg = false;
+  }
+
+  if(redirectTo.indexOf('bestof2017') >= 0) {
+    continueTo = {
+      msg: 'voting on <a href="/bestof2017">Best of 2017</a>'
     }
   }
 
-  return buying
+  return continueTo
 }
 
 function transformSignUp () {
   var redirectTo = getRedirectTo()
-  var buying = getSignInBuying()
+  var continueTo = getSignInContinueTo()
 
   if(isSignedIn()) {
     toasty('You are already logged in');
@@ -213,7 +222,7 @@ function transformSignUp () {
 
   obj = {
     countries: getAccountCountries(),
-    buying: buying,
+    continueTo: continueTo,
     redirectTo: encodeURIComponent(redirectTo)
   }
 

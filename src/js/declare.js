@@ -435,6 +435,15 @@ function getTemplateEl(name) {
   return document.querySelector('[template-name="' + name + '"]');
 }
 
+function getTemplate (name) {
+  var el = getTemplateEl(name)
+  if(el) {
+    return el.textContent;
+  }
+
+  return ""
+}
+
 function getElementValue (el) {
   return parseElementValue(el, el.value)
 }
