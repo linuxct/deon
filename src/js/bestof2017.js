@@ -81,7 +81,7 @@ function transformBestOf2017Results (obj, done) {
             track.downloadLink = getDownloadLink(track.releaseId, track._id);
             atlas[track._id] = track;
             return atlas;
-          });
+          }, []);
           obj.loading = false;
           done(null, obj);
         });
@@ -112,7 +112,7 @@ function completedBestOf2017Results () {
     }
     clearTimeout(timeoutUpdateResults);
     if(new Date(transformBestOf2017Results.poll.end) > new Date()) {
-      timeoutUpdateResults = setTimeout(updateResults, 30000);
+      timeoutUpdateResults = setTimeout(updateResults, 180000);
     }
   }
   updateResults();
@@ -243,7 +243,6 @@ function updateBestOf2017Results () {
         if(pollA.artist.rank == pollB.artist.rank) {
           return 0
         }
-
         return pollA.artist.rank > pollB.artist.rank ? 1 : -1;
       });
 
@@ -272,8 +271,9 @@ function updateBestOf2017Results () {
           if(a.votes == b.votes) {
             return 0;
           }
-          return a.votes > b.votes ? 1 : -1;
+          return a.votes > b.votes ? -1 : 1;
         });
+
 
         var topSong;
         var songIndex = 0;
@@ -531,7 +531,8 @@ function updateArtistRowReleaseArt (artistId, song) {
   var artistRowEl = document.querySelector('.artist-row[artist-id="' + artistId + '"]');
   var banner = artistRowEl.querySelector('.banner');
 
-  if(!song) {
+  //Doing || true so that we never load the release art
+  if(!song || true) {
     artistRowEl.classList.toggle('empty', true);
     banner.classList.toggle('on', false);
     banner.setAttribute('release', '');

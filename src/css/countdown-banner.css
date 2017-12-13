@@ -1,0 +1,184 @@
+#countdown-banner {
+  background: #171717;
+  color: #fff;
+  padding: 5px 0 0 0;
+  display: none;
+  position: relative;
+}
+
+#countdown-banner.show {
+  display: block;
+}
+
+#countdown-banner a.go {
+}
+
+#countdown-banner .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 0;
+}
+
+#countdown-banner .info {
+  display: block;
+  background: /*url(/img/blackfriday2017/title-desktop.png)*/ center left no-repeat;
+  background-size: 100% auto;
+  height: 100px;
+  width: 70%;
+  color: #fff;
+  text-decoration: none;
+  font-size: 2em;
+  line-height: 100px;
+}
+
+#countdown-banner .actions {
+  text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+#countdown-banner .actions a.button--cta {
+  border: 0px;
+  text-align: center;
+}
+
+#countdown-banner .actions a.button--cta:hover {
+  color: #171717;
+  background: #fff;
+}
+
+#countdown-banner .button-container {
+  padding-left: 20px;
+}
+
+#countdown-banner .countdown-container {
+}
+
+#countdown-banner .countdown-container .label {
+  font-size: 16px;
+}
+
+#countdown-banner .countdown-container .countdown {
+  font-size: 22px;
+}
+
+#countdown-banner .countdown-container .countdown .unit {
+  display: inline-block;
+  width: 2em;
+  text-align: center;
+}
+
+#countdown-banner .countdown-container .countdown .unit.m {
+  width: 2.2em;
+}
+
+/*********/
+
+#countdown-banner.endofyear {
+  background: #b22020;
+  height: 85px;
+}
+
+/*
+#countdown-banner.endofyear:before {
+  content: " ";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: rgba(0,0,0,0.45);
+}
+*/
+
+#countdown-banner.endofyear .info {
+  height: 85px;
+  line-height: 85px;
+  padding-left: 320px;
+  background: url(https://assets.monstercat.com/endofyearlabel.png) 0px center no-repeat;
+  background-size: auto 80%;
+  overflow: auto;
+  width: 600px;
+}
+
+#countdown-banner.endofyear span {
+  display: block;
+  float: left;
+  position: relative;
+}
+
+#countdown-banner.endofyear .sale-unit:before {
+  content: " ";
+}
+
+#countdown-banner.endofyear .sale-unit {
+  height: 85px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+#countdown-banner.endofyear .sale-unit.quantity {
+  width: 1em;
+}
+
+#countdown-banner.endofyear .sale-unit.discount {
+  width: 2.5em;
+}
+
+#countdown-banner.endofyear .sale-unit span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 0px;
+  left: 0px;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  top: 50%;
+  margin-top: -15px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#countdown-banner.endofyear .sale-unit span.active {
+  opacity: 1;
+}
+
+@media screen and (max-width: 990px) {
+  #countdown-banner.endofyear .info {
+    padding-left: 230px;
+    width: 500px;
+    background-size: auto 60%;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  #countdown-banner.endofyear .info {
+    width: 300px;
+    background-size: auto 80%;
+    background-position: center center;
+    padding-left: 200px;
+  }
+
+  #countdown-banner.endofyear .info span{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  #countdown-banner.endofyear .info {
+    width: 200px;
+    background-size: auto 50%;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  #countdown-banner.endofyear .countdown-container {
+    display: none;
+  }
+}

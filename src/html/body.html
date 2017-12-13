@@ -1,18 +1,33 @@
-<div id="black-friday">
-    <div class="container">
-        <a class="info" href="https://shop.monstercat.com/pages/black-friday-2017?utm_source=website-banner&utm_campaign=bfcm">
-        </a>
-        <div class="actions">
-            <div class="button-container">
-                <a href="https://shop.monstercat.com/pages/black-friday-2017?utm_source=website-banner&utm_campaign=bfcm" class="button button--cta">Go to Shop</a>
-            </div>
-            <div class="countdown-container">
-                <div class="label">Starts In</div>
-                <div class="countdown" show-days="1" role="countdown" to="Thu Nov 23 2017 21:00:00 GMT-0800 (PST)" completed="blackFridayCountdownEnd"></div>
-            </div>
+<div id="countdown-banner">
+
+</div>
+<script type="text/template"
+        template-name="endofyear-countdown-info"
+>
+<span>Buy</span>
+    <span class="sale-unit quantity"><span class="active">1</span><span>2</span><span>3</span><span>4</span><span>5</span></span>
+    <span>get</span>
+    <span class="sale-unit discount"><span class="active">10%</span><span>15%</span><span>20%</span><span>25%</span><span>30%</span></span> <span>off</span>
+</script>
+
+<script type="text/template"
+        template-name="countdown-banner"
+>
+<div class="container">
+    <a class="info" href="{{urlInfo}}">
+        {{{info}}}
+    </a>
+    <div class="actions">
+        <div class="button-container">
+            <a href="{{urlButton}}" class="button button--cta">{{buttonLabel}}</a>
+        </div>
+        <div class="countdown-container">
+            <div class="label">{{label}}</div>
+            <div class="countdown" show-days="1" role="countdown" to="{{to}}" completed="countdownBannerCompleted"></div>
         </div>
     </div>
-</div>
+    </div>
+</script>
 <div id="site-notice" class="hide">
 
 </div>
