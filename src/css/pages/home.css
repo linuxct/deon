@@ -420,3 +420,54 @@ ul.social-grid {
     display: inline-block;
   }
 }
+
+#home-instinct-uncaged {
+  height: calc(100vh - 180px);
+  background: url(https://assets.monstercat.com/UncagedInstinctBanner.jpg) center center no-repeat;
+  background-size: cover;
+  position: relative;
+  overflow: hidden;
+}
+
+#home-instinct-uncaged .rotator {
+  width: 4000px;
+  height: 3000px;
+  position: absolute;
+  top: 50%;
+  margin-top: -1500px;
+  left: 50%;
+  margin-left: -2000px;
+  transform: rotate(27deg);
+}
+
+#home-instinct-uncaged a {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 100%;
+  position: relative
+}
+
+#home-instinct-uncaged a:before {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  content: " ";
+  opacity: 0;
+  background: #fff;
+}
+
+@media screen and (max-width: 1020px) {
+  #home-instinct-uncaged {
+    height: 400px;
+  }
+}
+
+@media screen and (max-width: 699px) {
+  #home-instinct-uncaged {
+    height: 200px;
+  }
+}
