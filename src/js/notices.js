@@ -4,11 +4,26 @@ function SiteNotice (args) {
   for(var k in args) {
     this[k] = args[k];
   }
+  if(!this.transform) {
+    this.transform = function (done) {
+      done(null, {});
+    }
+  }
+
+  if(!this.completed) {
+    this.completed = function () {};
+  }
+
+  if(!this.shouldOpen) {
+    this.shouldOpen = function () {
+      return true;
+    }
+  }
 }
 
 SiteNotice.prototype.start = function () {
   var scope = {};
-  if(!this.shouldOpen() || !this.cookieExpired()) {
+  if(!this.shouldOpen() || !this.isCookieExpired()) {
     this.close();
     return
   }
@@ -22,7 +37,7 @@ SiteNotice.prototype.getCookieName = function () {
   return 'hide_notice_' + this.name;
 }
 
-SiteNotice.prototype.cookieExpired = function () {
+SiteNotice.prototype.isCookieExpired = function () {
   var iso = getCookie(this.getCookieName());
   if(!iso || !iso.length) {
     return true
@@ -139,4 +154,15 @@ function clickCompleteProfile (e) {
   }
   openModal('complete-profile-modal', obj);
   initLocationAutoComplete();
+}
+
+/*======*/
+var instinctNotice = new SiteNotice({
+  hideForDays: 1,
+  name: 'instinct-video',
+  template: 'notice-instinct-video'
+});
+
+function clickCloseInstinctVideoNotice (e) {
+  instinctNotice.closeByUser();
 }

@@ -14,6 +14,7 @@ preLoadImage('/img/artist.jpg')
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
   renderHeader()
+  instinctNotice.start();
   loadSession(function (err, obj) {
     sixPackSession  = new sixpack.Session();
     trackUser()
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     });
     stateChange(location.pathname + location.search)
     stickyPlayer()
-    completeProfileNotice.start();
+    //completeProfileNotice.start();
   })
 })
 
