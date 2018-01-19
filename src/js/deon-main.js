@@ -709,16 +709,17 @@ function transformRoster () {
   var thisYear = (new Date()).getFullYear()
   var arr = []
   var i = thisYear
+  var year = q.year || thisYear;
   while (i >= 2011) {
     arr.push({
       year: i,
-      selected: i == q.year
+      selected: i == year
     })
     i--
   }
   return {
     years: arr,
-    selectedYear: q.year || 2017//0 // featured year is 0
+    selectedYear: year
   }
 }
 
