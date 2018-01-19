@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     });
     stateChange(location.pathname + location.search)
     stickyPlayer()
-    //completeProfileNotice.start();
+    completeProfileNotice.start();
   })
 })
 

@@ -47,8 +47,21 @@ SiteNotice.prototype.isCookieExpired = function () {
   return expired;
 }
 
+SiteNotice.prototype.getNoticeEl = function () {
+  var el = document.querySelector('#site-notices [notice=' + this.name + ']');
+  if(!el) {
+    var div = document.createElement('div');
+    div.setAttribute('notice', this.name);
+    div.setAttribute('class', 'notice-container');
+    document.querySelector('#site-notices').appendChild(div);
+    return div;
+  }
+
+  return el
+}
+
 SiteNotice.prototype.render = function (scope) {
-  var noticeEl = document.querySelector('#site-notice');
+  var noticeEl = this.getNoticeEl();
   render(noticeEl, getTemplateEl(this.template).textContent, scope);
   noticeEl.classList.toggle('hide', false);
   var height = noticeEl.getBoundingClientRect().height
@@ -61,7 +74,7 @@ SiteNotice.prototype.render = function (scope) {
 
 SiteNotice.prototype.close = function () {
   document.body.classList.toggle('showing-notice', true);
-  var noticeEl = document.querySelector('#site-notice');
+  var noticeEl = this.getNoticeEl();
   noticeEl.classList.toggle('hide', true);
   noticeEl.classList.toggle(this.name, false);
 }
