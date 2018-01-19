@@ -863,7 +863,10 @@ function transformSubscribed (obj) {
     //Which redirects to /gold/buy or /account/services?ref=gold
     //Those two pages will append type=gold on this return URL is needed
     if(qo.type == 'gold') {
-      goldBuyVsAccountServicesTest.convert();
+      var cook = getCookie('goldbuy-test');
+      if(cook && cook.length > 0 && window[cook]) {
+        window[cook].convert();
+      }
     }
   }
   return obj;

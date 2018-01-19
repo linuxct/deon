@@ -1,7 +1,23 @@
-var goldBuyVsAccountServicesTest;
+var goldBuyLoggedInTest;
+var goldBuyLoggedOutTest;
 document.addEventListener('DOMContentLoaded', function () {
-  goldBuyVsAccountServicesTest= new SplitTest({
-    name: 'goldbuy-vs-accountservices2',
+  goldBuyLoggedInTest = new SplitTest({
+    name: 'goldbuy-loggedin',
+    checkStart: false,
+    //force: 'gold_buy',
+    onStarted: function () {
+    },
+    modifiers: {
+      'account_services': function (_this) {
+        go('/account/services?ref=gold');
+      },
+      'gold_buy' : function (_this) {
+        go('/gold/buy');
+      }
+    }
+  });
+  goldBuyLoggedOutTest = new SplitTest({
+    name: 'goldbuy-loggedout',
     checkStart: false,
     //force: 'gold_buy',
     onStarted: function () {
@@ -18,7 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function transformGetGold () {
-  goldBuyVsAccountServicesTest.start();
+  if(isSignedIn()) {
+    setCookie('goldbuy-test', 'goldBuyLoggedInTest');
+    goldBuyLoggedInTest.start();
+  }
+  else {
+    setCookie('goldbuy-test', 'goldBuyLoggedOutTest');
+    goldBuyLoggedOutTest.start();
+  }
 }
 
 function transformGoldBuyPage (obj, done) {
