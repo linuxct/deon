@@ -47,7 +47,8 @@ document.addEventListener("DOMContentLoaded", function (e) {
     stateChange(location.pathname + location.search)
     stickyPlayer()
     completeProfileNotice.start();
-  })
+  });
+  document.querySelector('.credit [role=year]').innerText = new Date().getFullYear();
 })
 
 openRoute.completed.push(function () {
