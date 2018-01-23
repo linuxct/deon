@@ -344,6 +344,50 @@ function youTubeUserToChannelID (user, done) {
   })
 }
 
+function findParentWith (el, match) {
+  var parent = el;
+  while(parent) {
+    parent = parent.parentElement;
+    if(elMatches(parent, match)) {
+      return parent;
+    }
+  }
+  return false
+}
+
+function copyToClipboard (e) {
+  var parent = findParentWith(e.target, 'div');
+  var input = parent.querySelector('textarea,input[type=text]');
+  var error = false;
+  if(!input) {
+    toasty(new Error("Can't find textbox to copy."));
+    return
+  }
+  input.select();
+  try {
+    var successful = document.execCommand('copy');
+    if(successful) {
+      if (document.selection) {
+        document.selection.empty();
+      }
+      else if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+      }
+      return toasty('Copied!')
+    }
+    else{
+      error = true;
+    }
+  }
+  catch (ex) {
+    error = true;
+  }
+
+  if(error) {
+    toasty(new Error('Unable to copy automatically. Try ctrl+c or cmd+c'));
+  }
+}
+
 function hookValueSelects (selects) {
   selects = selects || document.querySelectorAll('select[value]')
   selects.forEach(function (el) {

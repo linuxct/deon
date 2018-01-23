@@ -147,7 +147,7 @@
             </button>
             <button class="faux volume-toggle" action="toggleVolume" role="volumeControl" onmouseover="startVolumeSliderShow(event)" onmouseleave="startVolumeSliderHide()">
                 <i class="fa fa-volume-up"></i>
-            </button>            
+            </button>
         </div>
     </div>
 </header>
@@ -285,6 +285,14 @@
     {{/errors}}
     </ul>
 {{/errors.length}}
+</script>
+
+<script type="text/template" mustache-name="error">
+    <div class="container">
+        <ul class="errors">
+            <li>{{message}}</li>
+        </ul>
+    </div>
 </script>
 
 <script type="text/template" mustache-name="loading-view-black">

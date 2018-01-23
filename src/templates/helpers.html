@@ -3,3 +3,9 @@
     <input class="location-auto-complete" type="text" placeholder="City, Country" autocomplete="on" value="{{placeNameFull}}">
     <input type="hidden" name="googleMapsPlaceId" value="{{googleMapsPlaceId}}" />
 </script>
+
+<script type="text/template"
+        mustache-name="copy-clipboard-button"
+>
+  <button type="button" class="button copy-clipboard-button" onclick="copyToClipboard(event)"><i class="fa fa-copy"></i></button>
+</script>

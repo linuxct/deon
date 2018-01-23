@@ -1,0 +1,55 @@
+.panel.current-code {
+  text-align: center;
+}
+
+.shop-codes input.code,
+#account-gold input.code {
+  font-size: 1.5em;
+  width: 10em ;
+  text-align: center;
+  margin: 0 0 0.5em 0;
+}
+
+.shop-codes .discount {
+  font-weight: bold;
+}
+
+.shop-codes a.button--cta {
+  font-size: 1.3em;
+  margin-top: 1em;
+}
+
+.shop-codes .code-description {
+  font-size: 1.3em;
+}
+
+.shop-codes .code-description a {
+  font-size: 1em;
+}
+
+.shop-codes .next-code {
+  margin-top: 0.5em;
+  font-size: 0.9em;
+}
+
+.milestone-codes table {
+  max-width: 500px;
+}
+
+.shop-codes .next-code .unit {
+  display: inline-block;
+  width: 1.7em;
+}
+.shop-codes .next-code .unit.m {
+  width: 2em;
+}
+
+.shop-codes input+button.copy-clipboard-button {
+  font-size: 1.3em;
+  padding: 0.3em;
+  top: -3px;
+}
+
+.shop-codes input+button.copy-clipboard-button i {
+  font-size: 0.9em;
+}

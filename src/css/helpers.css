@@ -1,3 +1,65 @@
+.s[num="1"] {
+  display: none;
+}
+
+.s[num]:not([num="1"]):before {
+  content: "s";
+}
+
+.ml-1 {
+  margin-left: 0.5em;
+}
+.ml-2 {
+  margin-left: 1em;
+}
+.ml-3 {
+  margin-left: 1.5em;
+}
+.ml-4 {
+  margin-left: 2em;
+}
+
+.mr-1 {
+  margin-right: 0.5em;
+}
+.mr-2 {
+  margin-right: 1em;
+}
+.mr-3 {
+  margin-right: 1.5em;
+}
+.mr-4 {
+  margin-right: 2em;
+}
+
+.mt-1 {
+  margin-top: 0.5em;
+}
+.mt-2 {
+  margin-top: 1em;
+}
+.mt-3 {
+  margin-top: 1.5em;
+}
+.mt-4 {
+  margin-top: 2em;
+}
+
+.mb-1 {
+  margin-bottom: 0.5em;
+}
+.mb-2 {
+  margin-bottom: 1em;
+}
+.mb-3 {
+  margin-bottom: 1.5em;
+}
+.mb-4 {
+  margin-bottom: 2em;
+}
+
+
+
 .flex {
   display: flex;
   flex-wrap: wrap;
@@ -172,10 +234,6 @@ td.push-right > * {
   background: #f5f5f5;
 }
 
-.cl-white *:not(i){
-  color: white;
-}
-
 .cl-white a:active,
 .cl-white a:hover,
 .cl-white button.faux:active,
@@ -189,12 +247,25 @@ td.push-right > * {
 }
 
 .cl-white .button--gold:active,
-.cl-white .button--gold:hover {
+.cl-white .button--gold:hover,
+.cl-white .button.button--gold:active,
+.cl-white .button.button--gold:hover {
   color: black;
 }
 
-.cl-white p{
-  color: #aaa;
+
+.cl-white h1,
+.cl-white h2,
+.cl-white h3,
+.cl-white h4,
+.cl-white h5,
+.cl-white a {
+  color: #fff;
+}
+
+.cl-white p,
+.cl-white p span {
+  color: #ccc;
 }
 
 .flex-strong {

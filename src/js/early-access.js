@@ -24,22 +24,35 @@ function dateToCountdownString (date, opts) {
   var seconds = cd.getUTCSeconds()
   if(days > 0) {
     if(opts.showDays) {
-      parts.push(zeroPad(days) + 'd');
+      var label = opts.dayLabel;
+
+      if(label.indexOf('/') > 0) {
+        var pluralize = label.split('/');
+        label = pluralize[days == 1 ? 0 : 1];
+      }
+
+      parts.push(zeroPad(days) + label);
     }
     else {
       hours += days * 24
     }
   }
   if(hours > 0 || (days > 0 && opts.showDays)) {
-    if(days > 0 && opts.showDays) {
-      parts.push(zeroPad(hours, 2) + 'h')
-    }
-    else {
-      parts.push(hours + 'h')
+    if(opts.showHours) {
+      if(days > 0 && opts.showDays) {
+        parts.push(zeroPad(hours, 2) + 'h')
+      }
+      else {
+        parts.push(hours + 'h')
+      }
     }
   }
-  parts.push(zeroPad(minutes, 2) + 'm')
-  parts.push(zeroPad(seconds, 2) + 's')
+  if(opts.showMinutes) {
+    parts.push(zeroPad(minutes, 2) + 'm')
+  }
+  if(opts.showSeconds) {
+    parts.push(zeroPad(seconds, 2) + 's')
+  }
   parts=parts.map(function (p) {
     return '<span class="unit ' + p.substr(-1,1) + '">' + p + '</span>'
   })
@@ -86,9 +99,11 @@ function updateCountdownEls () {
       }
     }
     var opts = {};
-    if(parseInt(el.getAttribute('show-days')) == 1) {
-      opts.showDays = true;
-    }
+    opts.showDays = parseInt(el.getAttribute('show-days')) == 1;
+    opts.showHours = parseInt(el.getAttribute('show-hours')) != 0;
+    opts.showMinutes = parseInt(el.getAttribute('show-minutes')) != 0;
+    opts.showSeconds = parseInt(el.getAttribute('show-seconds')) != 0;
+    opts.dayLabel = el.hasAttribute('day-label') ? el.getAttribute('day-label') : 'd';
     el.innerHTML = dateToCountdownString(date, opts)
   }
 }

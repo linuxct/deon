@@ -1,0 +1,16 @@
+#account-gold h1 {
+  color: gold;
+}
+
+#account-gold input.code {
+  font-size: 1.4em;
+}
+
+#account-gold input.code+button.copy-clipboard-button{
+  font-size: 1.1em;
+  padding: 0.5em;
+}
+
+.top-banner--account-gold {
+  min-height: 300px;
+}

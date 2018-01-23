@@ -202,6 +202,17 @@ button:hover,
   background: gold;
   border-color: gold;
 }
+.button--gold-dark {
+  color: black;
+  background: gold;
+  border-color: gold;
+}
+.button--gold-dark:active,
+.button--gold-dark:hover {
+  color: goldenrod;
+  border-color: goldenrod;
+  background: #fff;
+}
 .button--black{
   color: #000;
   border-color: #ddd;

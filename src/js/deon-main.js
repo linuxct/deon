@@ -31,14 +31,14 @@ document.addEventListener("DOMContentLoaded", function (e) {
     document.addEventListener("click", function (e) {
       var t = e.target;
       var action = t.getAttribute("click-action");
-      if(action) {
+      if (action) {
         var opts = {};
         var label = t.getAttribute('click-label');
         var category = t.getAttribute('click-category');
-        if(label) {
+        if (label) {
           opts.label = label;
         }
-        if(category) {
+        if (category) {
           opts.category = category;
         }
         recordEvent(action, opts);
@@ -59,7 +59,7 @@ openRoute.completed.push(function () {
   if (location.pathname == "/") getStats()
 })
 openRoute.started.push(function () {
-  if(typeof(stopCountdownTicks) == 'function') {
+  if (typeof(stopCountdownTicks) == 'function') {
     stopCountdownTicks()
   }
 })
@@ -93,7 +93,7 @@ function isSignedIn () {
 }
 
 function hasCompletedProfile () {
-  if(!isSignedIn()) {
+  if (!isSignedIn()) {
     return false
   }
   var user = session.user;
@@ -122,6 +122,10 @@ function hasGoldAccess () {
   return !!session.user.goldService || hasLegacyAccess()
 }
 
+function hasFreeGold () {
+  return hasGoldAccess() && !session.user.currentGoldSubscription
+}
+
 function hasLegacyAccess () {
   if (!isLegacyUser()) return false
   if (session.subscription) return !!session.subscription.subscriptionActive
@@ -141,7 +145,7 @@ function loadSession (done) {
     if (err) {
       // TODO handle this!
       console.warn(err.message)
-      if(err && endhost.indexOf('localhost') > 0) {
+      if (err && endhost.indexOf('localhost') > 0) {
         alert('Make sure you have ' + endhost + ' running!')
       }
     }
@@ -152,11 +156,11 @@ function loadSession (done) {
 
 function getSessionName () {
   var names = []
-  if(session.user) {
+  if (session.user) {
     names = names.concat([session.user.name, session.user.realName, session.user.email.substr(0, session.user.email.indexOf('@'))])
   }
   for(var i = 0; i < names.length; i++) {
-    if(names[i] && names[i].length > 0) {
+    if (names[i] && names[i].length > 0) {
       return names[i]
     }
   }
@@ -173,7 +177,7 @@ function recordEvent (name, obj, done) {
     done = function (err, obj, xhr) {}
   if (ENV=='development') {
     //This is here to quickly toggle between wanting to record events and not wanting to
-    if(false) {
+    if (false) {
       return done(Error('Not recording events in development mode.'))
     }
     console.warn('Recording an event while in development mode: ', name, obj)
@@ -213,7 +217,7 @@ function recordGoldEvent (action, obj, done) {
 }
 
 function recordSubscriptionEvent (name, obj, done) {
-  if(typeof(obj) == 'string') {
+  if (typeof(obj) == 'string') {
     obj = {
       label: obj
     };
@@ -247,7 +251,7 @@ function showFront (e, el) {
     value: bowser.name + ' ' + bowser.version
   }];
 
-  if(isSignedIn()) {
+  if (isSignedIn()) {
     scope.email = session.user.email;
     meta.push({
       name: 'uid',
@@ -272,7 +276,7 @@ function renderFrontForm () {
 }
 
 function closeFrontForm (e) {
-  if(e) {
+  if (e) {
     e.preventDefault();
   }
   document.getElementById('front-form').classList.toggle('show', false);
@@ -289,15 +293,15 @@ function submitFrontForm (e, el) {
 
   var errors = [];
 
-  if(!formData.email) {
+  if (!formData.email) {
     errors.push('Email is required');
   }
 
-  if(!formData.body) {
+  if (!formData.body) {
     errors.push('Message is required');
   }
 
-  if(errors.length > 0) {
+  if (errors.length > 0) {
     showFront.scope.errors = errors;
     renderFrontForm();
     return;
@@ -312,7 +316,7 @@ function submitFrontForm (e, el) {
   }, function (err, resp, xhr) {
     button.disabled = false;
     button.innerHTML = 'Submit';
-    if(err) {
+    if (err) {
       showFront.scope.errors = [err.toString()];
       renderFrontForm();
       return;
@@ -351,7 +355,7 @@ function createCopycredit (title, urls) {
   urls.forEach(function (url) {
     if (!url) return
     for(var site in prefixes) {
-      if(url.indexOf(site) > 0) {
+      if (url.indexOf(site) > 0) {
         credit += prefixes[site] + url + "\n";
       }
     }
@@ -390,14 +394,14 @@ function getArtistsTitle(artists) {
 //How you should mention an artist on twitter
 //Use their @ username if we have, otherwise just their name
 function getArtistTwitterMention (artist) {
-  if(artist.urls) {
+  if (artist.urls) {
     var socials = getSocialsAtlas(artist.urls);
-    if(socials.twitter) {
+    if (socials.twitter) {
       var matches = socials.twitter.link.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?([^\/]+)(\/\w+)*$/);
       var username;
-      if(matches && matches[3]) {
+      if (matches && matches[3]) {
         var username = matches[3]
-        if(username.substr(0, 1) != '@') {
+        if (username.substr(0, 1) != '@') {
           username = '@' + username;
         }
         return username;
@@ -419,7 +423,7 @@ function loadReleaseAndTrack (obj, done) {
     loadCache(endpoint + '/catalog/release/' + obj.releaseId, function(err, release) {
       if (err) return done(err)
       var title = track.title + ' by ' + track.artistsTitle;
-      if(track.title != release.title) {
+      if (track.title != release.title) {
         title += ' from ' + release.title
       }
       track.copycredit = createCopycredit(title, release.urls)
@@ -603,10 +607,10 @@ function youTubeIdParser(url){
  */
 
 function mapReleaseTrack (o, index, trackNumber) {
-  if(!o) {
+  if (!o) {
     return {}
   }
-  if(arguments.length < 3) {
+  if (arguments.length < 3) {
     trackNumber = index + 1
   }
   o.trackNumber = trackNumber
@@ -624,7 +628,7 @@ function mapRelease (o) {
   var rdate = new Date(o.releaseDate)
   var now = new Date()
   o.releaseDateObj = new Date(rdate)
-  if(pdate && ((o.inEarlyAccess && now < pdate) || (!o.inEarlyAccess && now < rdate))) {
+  if (pdate && ((o.inEarlyAccess && now < pdate) || (!o.inEarlyAccess && now < rdate))) {
     o.preReleaseDateObj = new Date(pdate)
     o.preReleaseDate = formatDate(o.preReleaseDateObj)
     o.releaseDate = null
@@ -681,7 +685,7 @@ function transformHome (obj) {
   obj.releases = results
   obj.releases.length = 8
   obj.hasGoldAccess = hasGoldAccess()
-  if(obj.hasGoldAccess) {
+  if (obj.hasGoldAccess) {
     var thankyous = ['Thanks for being Gold, ' + getSessionName() + '.',
     'Stay golden, ' + getSessionName() + '.',
     "Here's an early taste for you, " + getSessionName() + '.',
@@ -769,7 +773,7 @@ function getUserServicesScope (done) {
     qs: window.location.search
   }
 
-  if(opts.isSignedIn && opts.gold.subscribed){
+  if (opts.isSignedIn && opts.gold.subscribed){
     requestJSON({
       method: 'GET',
       url: endhost+ '/api/self/gold-subscription',
@@ -777,7 +781,7 @@ function getUserServicesScope (done) {
     }, function (err, json){
       var gold = transformGoldSubscription(json);
       scope.user.gold = Object.assign(scope.user.gold, gold);
-      if(scope.user.gold.canceled){
+      if (scope.user.gold.canceled){
         scope.user.gold.canSubscribe = true;
       }
       done(err, scope);
@@ -790,7 +794,7 @@ function getUserServicesScope (done) {
 
 function transformServices (obj, done) {
   getUserServicesScope(function (err, opts) {
-    if(err) {
+    if (err) {
       return window.alert(err.message);
     }
     var qo = queryStringToObject(window.location.search)
@@ -802,11 +806,11 @@ function transformServices (obj, done) {
       onpageSignUp: false
     }
 
-    if(qo.hasOwnProperty('humble')) {
+    if (qo.hasOwnProperty('humble')) {
       transformServices.scope.user.humble = true
     }
 
-    if(!isSignedIn()) {
+    if (!isSignedIn()) {
       transformServices.scope.onpageSignUp = true;
       transformServices.scope.signUpRedirect = false;
       transformServices.scope.showSignUp = transformServices.scope.onpageSignUp && !isSignedIn();
@@ -888,11 +892,11 @@ function anchorScrollTo (e, el) {
 }
 
 function scrollToHighlightHash () {
-  if(location.hash) {
+  if (location.hash) {
     var attempts = 0
     var attempt = function () {
       var el = document.querySelector(location.hash)
-      if(el) {
+      if (el) {
         setTimeout(function () {
           scrollToAnimated(el)
           el.classList.add('anchor-highlight')
@@ -903,7 +907,7 @@ function scrollToHighlightHash () {
       }
       else {
         attempts++
-        if(attempts < 10) {
+        if (attempts < 10) {
           setTimeout(attempt, 100)
         }
       }
@@ -948,7 +952,7 @@ function transformReleaseTracks (obj, done) {
     obj.results.forEach(function (track, index, arr) {
       track.playUrl = getPlayUrl(track.albums, releaseId)
       mapReleaseTrack(track, trackIndex, index+1)
-      if(track.playUrl) {
+      if (track.playUrl) {
         trackIndex++
       }
       track.releaseId = releaseId
@@ -963,7 +967,7 @@ function transformReleaseTracks (obj, done) {
     for(var k in atlas) {
       var artist = atlas[k]
       // prevent Monstercat counting as Artist on Podcasts
-      if(artist.name !== "Monstercat" && artist.shopifyCollectionId) {
+      if (artist.name !== "Monstercat" && artist.shopifyCollectionId) {
         obj.shopifyEmbeds.push({
           name: artist.name,
           shopifyCollectionId: artist.shopifyCollectionId
@@ -973,7 +977,7 @@ function transformReleaseTracks (obj, done) {
     }
 
     //Limit number of embeds to 1
-    if(artistsCount > 1) {
+    if (artistsCount > 1) {
       obj.shopifyEmbeds = []
     }
 
@@ -989,7 +993,7 @@ function transformTracks (obj, done) {
     obj.results.forEach(function (track, index, arr) {
       var releaseId = track.albums[0].albumId
       track.playUrl = getPlayUrl(track.albums, releaseId)
-      if(track.playUrl) {
+      if (track.playUrl) {
         num++;
       }
       mapReleaseTrack(track, num, arr)
@@ -1037,7 +1041,7 @@ function completedRelease (source, obj) {
 
   var releaseDate = new Date(r.releaseDate)
   var months = getMonths()
-  if(r.releaseDate) {
+  if (r.releaseDate) {
     description += ' released on ' + months[releaseDate.getMonth()] + ' ' + releaseDate.getDay() + ' ' + releaseDate.getYear()
   }
   description += '.'
@@ -1055,7 +1059,7 @@ function completedRelease (source, obj) {
 }
 
 function completedReleaseTracks (source, obj) {
-  if(!obj) {
+  if (!obj) {
     return
   }
   appendSongMetaData(obj.data.results)
@@ -1076,20 +1080,20 @@ function completedReleaseTracks (source, obj) {
   updateControls()
   //For releases with a single song, we change the download link of the album
   //so it's just that song. That way people don't download a ZIP file of one song
-  if(obj.data.results.length == 1) {
+  if (obj.data.results.length == 1) {
     var button = document.querySelector('a[role=download-release]');
-    if(button) {
+    if (button) {
       button.setAttribute('href', obj.data.results[0].downloadLink)
     }
   }
 }
 
 function completedMusic (source, obj) {
-  if(obj.error) return
+  if (obj.error) return
   var parts = []
   var qs = queryStringToObject(window.location.search)
   var filter = qs.filters
-  if(qs.filters) {
+  if (qs.filters) {
     //TODO: better pluralization
     //TODO: better support for filtering by more than just type
     parts.push(qs.filters.substr('type,'.length) + 's')
@@ -1097,13 +1101,13 @@ function completedMusic (source, obj) {
   else {
     parts.push('Music')
   }
-  if(qs.fuzzy) {
+  if (qs.fuzzy) {
     //TODO: make this better for if/when fuzzy thing changes
     parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
   }
-  if(qs.page) {
+  if (qs.page) {
     qs.page = parseInt(qs.page)
-    if(qs.page > 1) {
+    if (qs.page > 1) {
       parts.push('Page ' + qs.page)
     }
   }
@@ -1112,7 +1116,7 @@ function completedMusic (source, obj) {
 }
 
 function completedArtist (source, obj) {
-  if(obj.error) return
+  if (obj.error) return
   setPageTitle(obj.data.name)
   var meta = {
     'og:title': obj.data.name,
@@ -1123,17 +1127,17 @@ function completedArtist (source, obj) {
   }
   setMetaData(meta)
   pageIsReady()
-  if(obj.data.shopifyCollectionId) {
+  if (obj.data.shopifyCollectionId) {
     ShopifyBuyInit(obj.data.shopifyCollectionId)
   }
 }
 
 function completedMusic (source, obj) {
-  if(obj.error) return
+  if (obj.error) return
   var parts = []
   var qs = queryStringToObject(window.location.search)
   var filter = qs.filters
-  if(qs.filters) {
+  if (qs.filters) {
     //TODO: better pluralization
     //TODO: better support for filtering by more than just type
     parts.push(qs.filters.substr('type,'.length) + 's')
@@ -1141,13 +1145,13 @@ function completedMusic (source, obj) {
   else {
     parts.push('Music')
   }
-  if(qs.fuzzy) {
+  if (qs.fuzzy) {
     //TODO: make this better for if/when fuzzy thing changes
     parts.push('Search: ' + qs.fuzzy.substr('title,'.length))
   }
-  if(qs.skip) {
+  if (qs.skip) {
     var page = Math.round(parseInt(qs.skip) / parseInt(qs.limit)) + 1
-    if(page > 1) {
+    if (page > 1) {
       parts.push('Page ' + page)
     }
   }
@@ -1167,8 +1171,8 @@ function completedRoster (){
 /* UI Stuff */
 
 function accessDownloadOrModal (e, el) {
-  if(el.getAttribute('free-download-for-users') == 'true') {
-    if(isSignedIn()) {
+  if (el.getAttribute('free-download-for-users') == 'true') {
+    if (isSignedIn()) {
       return true
     }
     else {
@@ -1191,7 +1195,7 @@ function canDownload () {
 }
 
 function canDownloadOrModal (e, el) {
-  if(canDownload()) return true
+  if (canDownload()) return true
   e.preventDefault()
   openModal('subscription-required-modal', {
     signedIn: isSignedIn()

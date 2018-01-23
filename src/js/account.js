@@ -1,6 +1,6 @@
 function transformSubmittedAccountData (data) {
   var str = data.birthday_year + '-' + data.birthday_month + '-' + data.birthday_day;
-  if(!data.birthday_year || data.birthday_year <= 1900) {
+  if (!data.birthday_year || data.birthday_year <= 1900) {
     data.birthday = null;
   }
   else {
@@ -15,13 +15,13 @@ function transformSubmittedAccountData (data) {
 function validateAccountData (data, exclude) {
   exclude = exclude || {};
   var errors = [];
-  if(!exclude.birthday) {
-    if(!data.birthday || data.birthday.toString() == 'Invalid Date' || data.birthday.getFullYear() < 1900 || data.birthday.getFullYear() > new Date().getFullYear()) {
+  if (!exclude.birthday) {
+    if (!data.birthday || data.birthday.toString() == 'Invalid Date' || data.birthday.getFullYear() < 1900 || data.birthday.getFullYear() > new Date().getFullYear()) {
       errors.push('Invalid birthday entered');
     }
   }
-  if(!exclude.location) {
-    if(!data.googleMapsPlaceId) {
+  if (!exclude.location) {
+    if (!data.googleMapsPlaceId) {
       errors.push('Location is required');
     }
   }
@@ -34,7 +34,7 @@ function saveAccount (e, el) {
   if (!data) return
   var wasLegacy = isLegacyLocation()
   var errors = validateAccountData(data);
-  if(errors.length > 0) {
+  if (errors.length > 0) {
     errors.forEach(function (err) {
       toasty(new Error(err));
     })
@@ -46,7 +46,7 @@ function saveAccount (e, el) {
     document.querySelector('[name="password"]').value = ""
     resetTargetInitialValues(el, obj)
     loadSession(function (err, obj) {
-      if(wasLegacy && !isLegacyLocation()) {
+      if (wasLegacy && !isLegacyLocation()) {
         reloadPage()
       }
       completeProfileNotice.start();
@@ -145,14 +145,14 @@ function mapAccount (o) {
     }
     o.twoFactor = false
   }
-  else if(o.pendingTwoFactorId) {
+  else if (o.pendingTwoFactorId) {
     o.confirmingTwoFactor = true
     o.twoFacotr = false
   }
-  else if(o.twoFactorId) {
+  else if (o.twoFactorId) {
     o.twoFactor = true
   }
-  if(o.birthday) {
+  if (o.birthday) {
     var date = new Date(o.birthday);
     o.birthday_year = date.getUTCFullYear();
     o.birthday_day = ('0' + (date.getUTCDate()).toString()).substr(-2);
@@ -166,8 +166,59 @@ function mapAccount (o) {
   return o
 }
 
+function transformAccountGold (o, done) {
+  var thankyous = [
+    "Very cool!",
+    "Thank you!",
+    "Thanks for the support :)",
+    "We appreciate it :)",
+    "That's awesome!",
+    "Noice."
+  ]
+  var obj = {
+    self: o,
+    hasGoldAccess: hasGoldAccess(),
+    hasFreeGold: hasFreeGold(),
+    displayName: getSessionName(),
+    thankYou: thankyous[randomChooser(thankyous.length)-1],
+    isSignedIn: isSignedIn()
+  }
+
+  if (!obj.isSignedIn) {
+    return done(null, obj);
+  }
+
+  requestJSON({
+    url: endpoint + '/self',
+    withCredentials: true
+  }, function (err, selfResult) {
+    if (err) {
+      return done(err);
+    }
+
+    obj.self = selfResult;
+
+    if (!obj.hasGoldAccess) {
+      return done(null, obj);
+    }
+
+    requestSelfShopCodes(function (err, result) {
+      if (err) {
+        return done(err);
+      }
+      obj = Object.assign(obj, result);
+      done(null, obj);
+    });
+  });
+}
+
+function completedAccountGold () {
+  scrollToHighlightHash();
+  startCountdownTicks();
+}
+
 function transformEmailOptins (optinsArray) {
-  if(!optinsArray) return {}
+  if (!optinsArray) return {}
   return optinsArray.reduce(function (atlas, value) {
     atlas[value.type] = value.in
     return atlas
@@ -193,11 +244,11 @@ function completedVerify () {
 function verifyInvite (e, el) {
   var data = getTargetDataSet(el)
 
-  if(!data.googleMapsPlaceId) {
+  if (!data.googleMapsPlaceId) {
     return alert('Location is required.')
   }
 
-  if(!data.password) {
+  if (!data.password) {
     return alert('Password is required.')
   }
 
@@ -206,7 +257,7 @@ function verifyInvite (e, el) {
     method: 'POST',
     data: data
   }, function (err, result) {
-    if(err) {
+    if (err) {
       return toasty(new Error(err))
     }
     toasty('Account verified, please sign in')

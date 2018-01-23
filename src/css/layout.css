@@ -79,10 +79,23 @@ h1 + .panel.md-container,
   margin-top: 1rem;
 }
 
+.flex.flex-pt {
+  padding-top: 1rem;
+}
+
+.flex.flex-pt .panel:first-child {
+  margin-top: 0px;
+}
+
 @media screen and (min-width: 1650px){
   .flex .panel.col-lg-last:first-child{
     margin-top: 0;
   }
+}
+
+.panel--danger {
+  background: #FFE0E0;
+  border: 1px solid #CC0000;
 }
 
 .panel--dark{
@@ -96,8 +109,13 @@ h1 + .panel.md-container,
 .panel--dark p,
 .panel--dark span,
 .panel--dark ul,
+.panel--dark a,
 .panel--dark label{
   color: white;
+}
+
+.panel--dark a {
+  text-decoration: underline;
 }
 
 .panel h1{

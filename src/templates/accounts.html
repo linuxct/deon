@@ -363,12 +363,169 @@
 </script>
 
 <script type="text/template"
+        route="^account\/gold\/?"
+        page-title="My Gold Features"
+        transform="transformAccountGold"
+        completed="completedAccountGold"
+        >
+    <div id="account-gold">
+        {{#loading}}
+            {{>loading-view}}
+        {{/loading}}
+        {{#error}}
+            {{>error}}
+        {{/error}}
+        {{#data}}
+            <div class="top-banner top-banner--no-margin top-banner--account-gold">
+                <div class="banner">
+                    <div class="banner" style="background-image:url('/img/gold.jpg');">
+                      <div class="banner-shade"></div>
+                      <div class="gradient"></div>
+                    </div>
+                </div>
+                <div class="container flex">
+                    <div class="col-xs-12 col-sm-12 col-md-12 cl-white featured-details">
+                        {{#isSignedIn}}
+                            <a href="/account/services" class="button button--cta pull-right ml-1 mt-4">Subscriptions</a>
+                            <a href="/account" class="button button--cta pull-right button--icon button--icon-left mt-4">
+                                <i class="fa fa-chevron-left"></i>
+                                My Account
+                            </a>
+                            <h1 class="title uppercase">My Gold Features</h1>
+                            {{#hasGoldAccess}}
+                                <p>Hey {{displayName}},
+                                    {{#hasFreeGold}}
+                                    you have a free Gold subscription.
+                                    {{/hasFreeGold}}
+                                    {{^hasFreeGold}}
+                                    you've been Gold for {{gold.months}} month<span class="s" num="{{gold.months}}"></span>. {{thankYou}}
+                                    {{/hasFreeGold}}</p>
+                            {{/hasGoldAccess}}
+                            {{^hasGoldAccess}}
+                                <p>Hey {{displayName}}, to use these features you'll need to <a href="/gold/get">get Gold</a>.</p>
+                            {{/hasGoldAccess}}
+                        {{/isSignedIn}}
+                        {{^isSignedIn}}
+                            <h1>Gold Features</h1>
+                            <p>You aren't logged in. <a href="/sign-in">Sign in</a>.</p>
+                            <p>Gold is a monthly subscription for supporting the artists, downloading music, early streaming, and more.</p>
+                        {{/isSignedIn}}
+
+                        {{^hasGoldAccess}}
+                        <br /><a href="/gold/get" class="button button--gold button--icon">Get Gold  <i class="fa fa-chevron-right"></i></a>
+                        <span class="or">or</span>
+                        <a href="/sign-in?redirect=%2Faccount%2Fgold" class="button button--cta-outline">Sign In</a>
+                        {{/hasGoldAccess}}
+
+                    </div>
+                </div>
+            </div>
+            {{#isSignedIn}}
+            <div class="container">
+                <div class="flex flex-pt {{#hasGoldAccess}}{{/hasGoldAccess}}">
+                    <div class="col-xs-12 {{#hasGoldAccess}}col-md-6{{/hasGoldAccess}}{{^hasGoldAccess}}col-md-12{{/hasGoldAccess}} panel" id="shop-codes">
+                        <h2>Shop Code</h2>
+                        {{#hasGoldAccess}}
+                            {{#codes}}
+                                {{#currentCode}}
+                                <p class="code-description">
+                                    <input class="code" size="32" type="text" value="{{code}}" role="clipboard" />{{>copy-clipboard-button}}
+                                    gets you <span class="discount">{{discountText}}</span>.
+                                    <br /><small>{{#expires}}
+                                    Single use and expires on {{expiresFormatted}}.
+                                    {{/expires}}
+                                    {{^expires}}
+                                        Single use and does not expire.
+                                    {{/expires}}
+                                    Next code in <span role="countdown" to="{{nextCodeDate}}" day-label=" day/ days" show-days="1" show-hours="0" show-minutes="0" show-seconds="0"></span>.</small>
+                                </p>
+                                {{/currentCode}}
+                                <div class="button-group">
+                                    <a href="https://shop.monstercat.com/?utm_source=gold&utm_campaign=shop_discount" class="button button--cta button--icon" target="_blank">
+                                        Go to Shop
+                                        <i class="fa fa-external-link"></i>
+                                    </a>
+                                </div>
+                            {{/codes}}
+                        {{/hasGoldAccess}}
+                        {{^hasGoldAccess}}
+                        <p>Get a discount code in the <a href="https://shop.monstercat.com">Monstercat Shop</a> every month that you have <a href="/gold">Gold</a>.</p>
+                        <div class="button-group">
+                            <a href="/gold/get" class="button">Get Monstercat Gold</a>
+                        </div>
+                        {{/hasGoldAccess}}
+                    </div>
+                    {{#hasGoldAccess}}
+                    <div class="panel panel--dark rewards col-md-6 col-sm-12 col-xs-12">
+                        <h2>Shop Code Beta</h2>
+                        <p>This system is currently in <strong>beta</strong>. Please <a action="showFront">send us your feedback</a>.</p>
+                        <br />
+                        <p>What shop rewards would you like to see for being subscribed to Monstercat Gold for longer?</p>
+                        <br />
+                        <button type="button" action="showFront" class="button">Submit Feedback</button>
+                    </div>
+                    {{/hasGoldAccess}}
+                </div>
+                <div class="flex sign-split">
+                    <div class="col-xs-12 col-md-6 panel" id="reddit">
+                        <h2>/r/Monstercat Flair</h2>
+                        {{#hasGoldAccess}}
+                            {{#self}}
+                            <p>Put in your reddit username to get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
+                            <table class="form mobile" data-set="reddit-flair" trigger-target="saveRedditUsername">
+                                <tbody>
+                                    <tr>
+                                        <th>reddit username</th>
+                                        <td><input type="text" name="redditUsername" placeholder="Username" value="{{redditUsername}}" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="button-group">
+                                <button class="button--full" action="saveRedditUsername" trigger="saveRedditUsername" data-set-target="reddit-flair">Save</button>
+                            </div>
+                            {{/self}}
+                        {{/hasGoldAccess}}
+                        {{^hasGoldAccess}}
+                        <p>Get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
+                        <div class="button-group">
+                            <a href="/gold/get" class="button">Get Monstercat Gold</a>
+                        </div>
+                        {{/hasGoldAccess}}
+                    </div>
+                    <div class="col-xs-12 col-md-6 panel">
+                        <h2>Gold-only Discord Chat</h2>
+                        <p>Join us on our <a href="https://discord.gg/j8N75GN">Discord server</a> in the exclusive Gold members only chat. Please join the server before using the form below.</p>
+                        {{>joinGoldDiscord}}
+                        {{^hasGoldAccess}}
+                        <div class="button-group">
+                            <a href="/gold/get" class="button">Get Monstercat Gold</a>
+                        </div>
+                        {{/hasGoldAccess}}
+                    </div>
+                </div>
+            </div>
+            {{/isSignedIn}}
+        {{/data}}
+    </div>
+</script>
+
+<script type="text/template"
         route="^(account\/?$|account\/?\?(.*)$)"
         source="$endpoint/self"
         page-title="My Account"
         completed="completedAccount"
         transform="mapAccount">
     <div class="container">
+        {{^hasGoldAccess}}
+            <a href="/account/gold" class="button button--gold-dark pull-right button--icon">
+                My Gold Features
+                <i class="fa fa-chevron-right"></i>
+            </a>
+        {{/hasGoldAccess}}
+        {{#hasGoldAccess}}
+            <a href="/gold/get" class="button button--gold-dark pull-right">Upgrade to Gold</a>
+            <br /><a href="/gold"><small>What is Gold?</small></a>
+        {{/hasGoldAccess}}
         <h1>My Account</h1>
         <div class="flex sign-split">
 
@@ -455,100 +612,68 @@
                     <button class="button--danger button--full" action="signOut">Sign Out</button>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 panel" id="settings">
-                <h2>Settings</h2>
-                <div source="$endpoint/self/settings"
-                     template="account-settings">
-                </div>
-            </div>
-        </div>
-        <div class="flex sign-split">
-            <div class="col-xs-12 col-md-6 panel" id="reddit">
-                <h2>/r/Monstercat Flair</h2>
-                {{#hasGoldAccess}}
-                <p>Put in your reddit username to get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
-                <table class="form mobile" data-set="reddit-flair" trigger-target="saveRedditUsername">
-                    <tbody>
-                        <tr>
-                            <th>reddit username</th>
-                            <td><input type="text" name="redditUsername" placeholder="Username" value="{{redditUsername}}" /></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="button-group">
-                    <button class="button--full" action="saveRedditUsername" trigger="saveRedditUsername" data-set-target="reddit-flair">Save</button>
-                </div>
-                {{/hasGoldAccess}}
-                {{^hasGoldAccess}}
-                <p>Get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
-                <div class="button-group">
-                    <a href="/gold/get" class="button">Get Monstercat Gold</a>
-                </div>
-                {{/hasGoldAccess}}
-            </div>
             <div class="col-xs-12 col-md-6 panel">
-                <h2>Gold-only Discord Chat</h2>
-                <p>Join us on our <a href="https://discord.gg/j8N75GN">Discord server</a> in the exclusive Gold members only chat. Please join the server before using the form below.</p>
-                {{>joinGoldDiscord}}
-                {{^hasGoldAccess}}
-                <div class="button-group">
-                    <a href="/gold/get" class="button">Get Monstercat Gold</a>
+                <div id="settings">
+                    <h2>Settings</h2>
+                    <div source="$endpoint/self/settings"
+                         template="account-settings">
+                    </div>
                 </div>
-                {{/hasGoldAccess}}
+                <br />
+                <div id="two-factor">
+                    <h2>Two-Factor Auth</h2>
+                    {{#twoFactor}}
+                    <p>Two-factor auth is currently <strong>enabled</strong>.</p>
+                    <br />
+                    <button action="disableTwoFactor">Disable</button>
+                    {{/twoFactor}}
+                    {{#enableTwoFactor}}
+                    <table class="form mobile" data-set="2-factor">
+                        <tbody>
+                            <tr>
+                                <th>Country Code</th>
+                                <td>
+                                    <select name="countryCode">
+                                        <option value="" selected>Select</option>
+                                        {{#countries}}
+                                        <option value="{{dial_code}}">{{name}} ({{dial_code}})</option>
+                                        {{/countries}}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Phone Number</th>
+                                <td>
+                                    <input type="text" name="number" placeholder="Phone Number"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="button-group">
+                        <button class="button--full" action="enableTwoFactor" data-set-target="2-factor">Enable</button>
+                    </div>
+                    {{/enableTwoFactor}}
+                    {{#confirmingTwoFactor}}
+                    <p>Enter the token to confirm your phone number and complete your two factor setup.</p>
+                    <table class="form mobile" data-set="confirm-auth-token">
+                        <tr>
+                            <th>Token</th>
+                            <td>
+                                <input type="text" name="token" placeholder="Enter Here"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="button-group">
+                        <button class="button--cta button--full" action="confirmTwoFactor" data-set-target="confirm-auth-token">Confirm Two Factor</button>
+                        <button class="button--full" action="resendTwoFactorToken">Resend Token</button>
+                        <button class="button--full" action="disableTwoFactor">Cancel</button>
+                    </div>
+                    {{/confirmingTwoFactor}}
+                </div>
+                {{/data}}
+                </div>
             </div>
         </div>
-        <div class="panel panel--no-margin-top" id="two-factor">
-            <h2>Two-Factor Auth</h2>
-            {{#twoFactor}}
-            <p>Two-factor auth is currently <strong>enabled</strong>.</p>
-            <br />
-            <button action="disableTwoFactor">Disable</button>
-            {{/twoFactor}}
-            {{#enableTwoFactor}}
-            <table class="form mobile" data-set="2-factor">
-                <tbody>
-                    <tr>
-                        <th>Country Code</th>
-                        <td>
-                            <select name="countryCode">
-                                <option value="" selected>Select</option>
-                                {{#countries}}
-                                <option value="{{dial_code}}">{{name}} ({{dial_code}})</option>
-                                {{/countries}}
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Phone Number</th>
-                        <td>
-                            <input type="text" name="number" placeholder="Phone Number"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="button-group">
-                <button class="button--full" action="enableTwoFactor" data-set-target="2-factor">Enable</button>
-            </div>
-            {{/enableTwoFactor}}
-            {{#confirmingTwoFactor}}
-            <p>Enter the token to confirm your phone number and complete your two factor setup.</p>
-            <table class="form mobile" data-set="confirm-auth-token">
-                <tr>
-                    <th>Token</th>
-                    <td>
-                        <input type="text" name="token" placeholder="Enter Here"/>
-                    </td>
-                </tr>
-            </table>
-            <div class="button-group">
-                <button class="button--cta button--full" action="confirmTwoFactor" data-set-target="confirm-auth-token">Confirm Two Factor</button>
-                <button class="button--full" action="resendTwoFactorToken">Resend Token</button>
-                <button class="button--full" action="disableTwoFactor">Cancel</button>
-            </div>
-            {{/confirmingTwoFactor}}
-        </div>
-        {{/data}}
-    </div>
 </script>
 
 <script type="text/template"
