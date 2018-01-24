@@ -107,9 +107,7 @@ function isLegacyUser () {
   return user.type.indexOf('gold') > -1 ||
     user.type.indexOf('golden') > -1 ||
     user.type.indexOf('license') > -1 ||
-    user.type.indexOf('subscriber') > -1 ||
-    user.type.indexOf('admin') > -1 ||
-    user.type.indexOf('admin_readonly') > -1
+    user.type.indexOf('subscriber') > -1
 }
 
 function isLegacyLocation () {

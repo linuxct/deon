@@ -412,15 +412,17 @@
                         {{/isSignedIn}}
 
                         {{^hasGoldAccess}}
-                        <br /><a href="/gold/get" class="button button--gold button--icon">Get Gold  <i class="fa fa-chevron-right"></i></a>
-                        <span class="or">or</span>
-                        <a href="/sign-in?redirect=%2Faccount%2Fgold" class="button button--cta-outline">Sign In</a>
+                            <br /><a href="/gold/get" class="button button--gold button--icon">Get Gold  <i class="fa fa-chevron-right"></i></a>
+                            {{^isSignedIn}}
+                                <span class="or">or</span>
+                                <a href="/sign-in?redirect=%2Faccount%2Fgold" class="button button--cta-outline">Sign In</a>
+                            {{/isSignedIn}}
                         {{/hasGoldAccess}}
 
                     </div>
                 </div>
             </div>
-            {{#isSignedIn}}
+            {{#hasGoldAccess}}
             <div class="container">
                 <div class="flex flex-pt {{#hasGoldAccess}}{{/hasGoldAccess}}">
                     <div class="col-xs-12 {{#hasGoldAccess}}col-md-6{{/hasGoldAccess}}{{^hasGoldAccess}}col-md-12{{/hasGoldAccess}} panel" id="shop-codes">
@@ -504,7 +506,7 @@
                     </div>
                 </div>
             </div>
-            {{/isSignedIn}}
+            {{/hasGoldAccess}}
         {{/data}}
     </div>
 </script>
@@ -516,16 +518,18 @@
         completed="completedAccount"
         transform="mapAccount">
     <div class="container">
-        {{^hasGoldAccess}}
-            <a href="/account/gold" class="button button--gold-dark pull-right button--icon">
-                My Gold Features
-                <i class="fa fa-chevron-right"></i>
-            </a>
-        {{/hasGoldAccess}}
-        {{#hasGoldAccess}}
-            <a href="/gold/get" class="button button--gold-dark pull-right">Upgrade to Gold</a>
-            <br /><a href="/gold"><small>What is Gold?</small></a>
-        {{/hasGoldAccess}}
+        <a href="/account/services" class="button button--cta pull-right ml-1">Subscriptions</a>
+        {{#data}}
+            {{#hasGoldAccess}}
+                <a href="/account/gold" class="button button--gold-dark pull-right button--icon">
+                    My Gold Features
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            {{/hasGoldAccess}}
+            {{^hasGoldAccess}}
+                <a href="/gold/get" class="button button--gold-dark pull-right">Upgrade to Gold</a>
+            {{/hasGoldAccess}}
+        {{/data}}
         <h1>My Account</h1>
         <div class="flex sign-split">
 
@@ -619,7 +623,7 @@
                          template="account-settings">
                     </div>
                 </div>
-                <br />
+                <hr class="mt-4 mb-4" />
                 <div id="two-factor">
                     <h2>Two-Factor Auth</h2>
                     {{#twoFactor}}
