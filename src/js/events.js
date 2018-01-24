@@ -24,7 +24,7 @@ function transformEvents (results) {
   results = results.map(function (r) {
     return transformEvent(r)
   })
-  return results  
+  return results
 }
 
 function transformEvent (i) {
@@ -45,7 +45,12 @@ function transformEvent (i) {
   }
   else {
     i.externalUrl = true
-    i.url = 'http://www.bandsintown.com/event/' + i.bandsInTownId + '/buy_tickets'
+    //TODO: Fix how we get and generate these URLs
+    //    This method of building the URL gives 404s
+    //i.url = 'http://www.bandsintown.com/t/' + i.bandsInTownId
+    if(i.ctaUri) {
+      i.url = i.ctaUri;
+    }
   }
   if(i.description && i.description.length > 0) {
     i.descriptionHtml = marked(i.description)
@@ -80,7 +85,7 @@ function transformEvent (i) {
     'Fri': 'day'
   }
   i.localWeekdayLong = i.localWeekday + weekdays[i.localWeekday]
-  return i  
+  return i
 }
 
 function transformEventGallery (event) {

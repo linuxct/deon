@@ -197,9 +197,17 @@
     </td>
     <td class="push-right">
       <div>
-          <a class="faux silent button--mobile buy-tickets" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
-              <i class="fa fa-shopping-cart"></i> <span>Buy Tickets</span>
-          </a>
+          {{#url}}
+            <a class="faux silent button--mobile buy-tickets" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
+                <i class="fa fa-shopping-cart"></i>
+                <span>
+                  {{ctaLabel}}
+                  {{^ctaLabel}}
+                    Buy Tickets
+                  {{/ctaLabel}}
+                </span>
+            </a>
+          {{/url}}
           <a class="faux button--mobile" action="addToCalendar" title="Download iCal" target="_blank" href="{{icalDownloadLink}}">
               <i class="fa fa-calendar-plus-o"></i>
           </a>
