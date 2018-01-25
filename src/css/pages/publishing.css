@@ -1,0 +1,142 @@
+.top-banner--publishing h1 span {
+  display: block;
+}
+
+.publishing-articles .article-banner {
+  background: #dcddde;
+}
+
+.publishing-articles .side-banner.kobalt {
+  background-image: url(https://assets.monstercat.com/publishing/Kobalt.png);
+  background-size: auto
+}
+
+.publishing-articles .side-banner.youtube {
+  background-image: url(https://assets.monstercat.com/publishing/youtube.svg);
+  background-size: auto 20%;
+}
+
+.publishing-articles .side-banner.roster {
+  background-image: url(/img/gold-landing/3-SupportArtists.jpg);
+  background-size: cover;
+  background-position: top left;
+}
+
+.publishing-articles .side-banner.reporting {
+  background-image: url(https://assets.monstercat.com/publishing/publishing-reporting.png);
+  background-size: auto 60%;
+}
+
+.publishing-articles .client {
+  width: 15%;
+  border: 2px solid #fff;
+  background: #fff;
+}
+
+.publishing-articles .clients-wrapper:nth-child(1) .client:nth-child(2n+1),
+.publishing-articles .clients-wrapper:nth-child(2) .client:nth-child(2n) {
+  background: transparent;
+}
+
+.publishing-articles .client div {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: center center no-repeat;
+  background-size: 80% auto;
+}
+
+.article-clients {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.article-clients .clients-wrapper {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.article-clients .clients-wrapper .client {
+  display: flex;
+  min-height: 100px;
+  min-width: 100px;
+}
+
+.publishing-roster {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.publishing-roster .publishing-roster-container {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+}
+
+.publishing-roster .publishing-roster-container ul {
+  text-align: center;
+}
+
+.publishing-roster .hover-wrapper {
+  padding: 0.5rem;
+}
+
+@media screen and (min-width: 992px) {
+  .publishing-roster .art-list.artist-list > li {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .publishing-roster .art-list.artist-list > li {
+    width: 20%;
+  }
+
+  .publishing-articles .article-banner {
+    height: 200px;
+  }
+
+  .publishing-articles .article-banner.publishing-roster {
+    height: 350px;
+  }
+
+  .publishing-articles .article-clients {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .publishing-articles .side-banner.kobalt {
+  }
+
+  .publishing-articles .article-banner {
+    height: 200px;
+  }
+
+  .publishing-roster .art-list.artist-list > li {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .top-banner--publishing h1 span {
+    display: inline;
+  }
+
+  .top-banner--publishing {
+    padding: 1em 0;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .publishing-articles .side-banner.kobalt {
+    background-size: 80% auto;
+  }
+}
+

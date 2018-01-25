@@ -1323,8 +1323,8 @@ function joinDiscord (e, el) {
   var template = getTemplateEl("joinDiscordResponse")
   var div = document.createElement("div")
   render(container, template.textContent, {loading: true})
-	el.disabled = true
-	el.classList.add("on")
+  el.disabled = true
+  el.classList.add("on")
   requestJSON({
     method:"POST", 
     url: endpoint + "/self/discord/join", 

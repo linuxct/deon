@@ -1,0 +1,142 @@
+<script type="text/template"
+        route="^sync"
+        page-title="Sync - Monstercat"
+        transform="transformSyncPage"
+>
+<div class="top-banner top-banner--sync cl-white">
+  <div class="banner" style="background-image: url('https://assets.monstercat.com/sync/banner.jpg')">
+    <div class="banner-gradient"></div>
+    <div class="banner-shade"></div>
+  </div>
+  <div class="container flex flex-col">
+    <h1 class="line-bottom">Sync Is Our Specialty</h1>
+  </div>
+</div>
+<div class="container">
+{{#data}}
+  <div class=" sync-reel-container">
+    <div class="aspect-container aspect-container-16x9 mt-4 col-md-12">
+      <iframe type="text/html"
+          width="90%"
+          height="auto"
+          src="https://www.youtube.com/embed/5BIBrbsrNEo"
+          frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 class="line-top">Recent Projects</h2>
+    <div class="row no-margin sync-projects">
+      {{#projects}}
+        <div class="col-md-2 col-sm-4 col-xs-6 sync-project">
+          <a class="aspect-container aspect-container-16x9" onclick="openSyncProjectModal(event)" youtube-id="{{youTubeId}}" project-name="{{name}}">
+            <img src="{{thumbnailUrl}}" />
+          </a>
+          <strong>{{name}}</strong>
+        </div>
+      {{/projects}}
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 class="line-top">Featured Sync Tracks</h2>
+    <div  source="$endpoint/catalog/browse/?tags=Featured%20Sync&limit=12"
+          template="sync-tracks"
+          >
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="row no-margin">
+      <div class="col-md-6">
+        <h2 class="line-top">Looking for Music?</h2>
+        <p>We'll offer personalized support every step of the way. From finding the perfect song to executing the license, you'll deal with a single representative to ensure that your project receives the unique attention it deserves. Email us at: <a href="mailto:Licensing@Monstercat.com">Licensing@Monstercat.com</a>.</p>
+        <br />
+      </div>
+      <div class="col-md-6">
+        <form id="sync-contact-form" data-set="commercial-license-form" trigger-target="commercial-license-form">
+          <div id="errorForm"></div>
+          <div class="flex">
+            <div class="col-xs-12 col-sm-6">
+              <input type="text" name="fullName" id="name" placeholder="Full Name" required="required" tabindex="1"/>
+              <input type="text" name="company" id="company" placeholder="Company" tabindex="3"/>
+              <input type="text" name="songs" id="songs" placeholder="Songs" required="required" tabindex="4"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <input type="email" name="email" id="email" placeholder="E-mail" required="required" tabindex="2"/>
+              <textarea name="message" placeholder="Brief description of the project, term, territory, available budget, license media" id="message" tabindex="5"></textarea>
+            </div>
+          </div>
+          <div class="flex submit-wrapper">
+            <input id="submitBtn" type="submit" data-set-target="commercial-license-form" trigger="commercial-license-form" action="submitSyncContactForm" value="License our music" tabindex="6" class="button expand"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h2 class="line-top">Our Clients</h2>
+    <p>See why these brands keep coming back.</p>
+    <br />
+    <div class="row no-margin">
+    {{#clients}}
+      <div class="sync-client">
+        <a class="aspect-container aspect-container-1x1" target="_blank" href="{{url}}" style="background-image: url(https://assets.monstercat.com/sync/clients/{{filename}}?image_width=128)">
+        </a>
+      </div>
+    {{/clients}}
+    </div>
+  </div>
+</div>
+{{/data}}
+</script>
+
+<script type="text/template"
+        template-name="sync-project-modal">
+  <div class="modal modal--sync-project">
+    <div class="panel pointer-events">
+      <h2>{{name}}</h2>
+      <div class="aspect-container aspect-container-16x9">
+        <iframe type="text/html"
+            width="{{iframeWidth}}"
+            height="{{iframeHeight}}"
+            src="{{src}}"
+            frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template"
+        transform="transformSyncTracks"
+        template-name="sync-tracks">
+<ul class="art-list art-list--play art-list--full-width sync-tracks">
+  {{#data}}
+    {{#results}}
+      <li class="{{#inEarlyAccess}}in-early-access{{/inEarlyAccess}}">
+        <div class="image-wrapper">
+            <img src="/img/artwork.jpg" class="preload" />
+            <img src="{{release.cover}}" />
+            <a  class="button button--cta"
+                index="{{index}}"
+                action="playSong"
+                role="play-song"
+                play-link="{{playUrl}}"
+                title="{{title}}"
+                artists-title="{{artistsTitle}}"
+                track-id="{{_id}}"
+                {{#licensable}}licensable{{/licensable}}
+                {{#playlistId}}playlist-id="{{playlistId}}"{{/playlistId}}
+                release-id="{{releaseId}}">
+                <i class="fa fa-play"></i>
+                  Play
+            </a>
+        </div>
+        <label class="title one-line-ellipsis">{{title}}</label>
+        <br/>
+        <label class="artist one-line-ellipsis">{{artistsTitle}}</label>
+    </li>
+    {{/results}}
+  {{/data}}
+</div>
+</script>

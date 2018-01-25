@@ -103,18 +103,12 @@
       <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-6">
         <h1>Monstercat Music Licensing</h1>
         <div class="licensing-box">
-          <ul class="selling-points">
-            <li>35 artists from 20 countries</li>
-            <li>Multiple #1 hits on iTunes Dance</li>
-            <li>Over 1.3m records sold in 2015</li>
-            <li>3 new releases weekly</li>
-          </ul>
           <div class="licensing-ctas button-group">
             <a href="/licensing/content-creators" class="button button--full cl-white">
               <span class="title">Content Creators</span>
               <span class="subtitle">YouTube, Twitch, and Mixer</span>
             </a>
-            <a href="/licensing/commercial" class="button button--full button--gold">
+            <a href="/sync" class="button button--full button--gold">
               <span class="title">Commercial Use</span>
               <span class="subtitle">Movies, TV shows, Advertisements</span>
             </a>
@@ -129,81 +123,6 @@
 <script type="text/template"
         route="^license\/?$"
         redirect="/licensing">
-</script>
-
-<script type="text/template"
-        route="^licensing\/commercial\/?$"
-        page-title="Commercial Licensing"
-        transform="transformCommercialLicensing"
-        completed="completedCommercialLicensing">
-  <div class="licensing">
-    <div class="banner" id="licensing">
-      <div class="banner-shade"></div>
-    </div>
-    <div class="container">
-      <div class="flex">
-      <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-6">
-        <h1>Commercial Music Licensing</h1>
-        <div class="licensing-box">
-          <ul class="selling-points">
-            <li>1000+ track catalogue</li>
-            <li>Personalized music supervision services</li>
-            <li>Streamlined licensing process</li>
-            <!--<li class="cta-email"><a href="mailto:licensing@monstercat.com">licensing@monstercat.com</a></li>-->
-          </ul>
-          <form id="licenseForm" data-set="commercial-license-form" trigger-target="commercial-license-form">
-            <div id="errorForm"></div>
-            <div class="flex">
-              <div class="col-xs-12 col-sm-6">
-                <input type="text" name="fullName" id="name" placeholder="Full Name" required="required" tabindex="1"/>
-                <input type="text" name="company" id="company" placeholder="Company" tabindex="3"/>
-                <input type="text" name="songs" id="songs" placeholder="Songs" required="required" tabindex="4"/>
-              </div>
-              <div class="col-xs-12 col-sm-6">
-                <input type="email" name="email" id="email" placeholder="E-mail" required="required" tabindex="2"/>
-                <textarea name="message" placeholder="Message" id="message" tabindex="5"></textarea>
-              </div>
-            </div>
-            <div class="flex submit-wrapper">
-              <input id="submitBtn" type="submit" data-set-target="commercial-license-form" trigger="commercial-license-form" action="submitCommercialLicensing" value="License our music" tabindex="6" class="button expand"/>
-            </div>
-          </form>
-        </div>
-      </div>
-      </div>
-    </div>
-    </div>
-
-
-    <div class="container">
-    <div class="panel md-container licensing-content-creator-info">
-      <div class="flex">
-        <div class="licensing-box col-xs-12 col-sm-12 col-md-6">
-          <h2>About</h2>
-          <p>Music licensing doesn't have to be hard. Our dedicated team of music licensing professionals can offer personalized support every step of the way. From finding the perfect song to executing the license, you'll deal with a single representative to ensure that your project receives the unique attention it deserves. To further facilitate the licensing process, Monstercat Connect was developed for our clients to access our catalog and find that perfect song. Email us at <a href="mailto:licensing@monstercat.com">licensing@monstercat.com</a>.</p>
-        </div>
-        <div class="licensing-box col-sm-12 col-md-5 col-md-offset-1">
-          <h2>Our Clients</h2>
-          <ul class="vertical-line-list client-list clients">
-            <li>EA Sports</li>
-            <li>NBC</li>
-            <li>Ubisoft</li>
-            <li>Les Mills</li>
-            <li>MTV</li>
-            <li>Lyric House Publishing</li>
-            <li>Speed Motion Films</li>
-            <li>Knack Studios</li>
-          </ul>
-        </div>
-      </div>
-      <div class="flex">
-        <div class="col-sm-12 columns col-lg-8">
-          <h3>Need a YouTube, Twitch, or Mixer license?</h3>
-          <p><a href="/licensing/content-creators">See our content creators licensing options</a>.</p>
-        </div>
-      </div>
-    </div>
-  </div>
 </script>
 
 <!-- POLICY PAGES -->
@@ -346,7 +265,7 @@
     <li><a href="https://www.youtube.com/user/pixiwoo" target="_blank">Pixiwoo</a></li>
     <li><a href="https://www.youtube.com/user/KSIOlajidebt" target="_blank">KSI</a></li>
     <li><a href="https://www.facebook.com/peopleareawesome/" target="_blank">People Are Awesome</a></li>
-  </ul>        
+  </ul>
 </script>
 
 <script type="text/template"
@@ -361,11 +280,10 @@
 <script type="text/template"
         mustache-name="licensing-modal-main">
   <div class="section content-creators flex-buttons">
-      {{>licensingContentCreatorCTAs}}
-      <a class="button button-cta button-cta--mobile" href="/licensing/commercial" action="closeModal">
+      <a class="button button-cta button-cta--mobile" href="/sync" action="closeModal">
         <span class="title">Commercial</span>
         <span class="subtitle">Movies, TV Shows</span>
-      </a> 
+      </a>
   </div>
 </script>
 

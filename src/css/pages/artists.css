@@ -13,7 +13,7 @@
 }
 .panel .button-list > li{
   display: inline-block;
-  width: 50%;    
+  width: 50%;
 }
 .panel .button-list > li > a{
   text-align: center;
@@ -51,7 +51,7 @@
   }
   .panel .button-list > li{
     width: initial;
-    flex: 1;    
+    flex: 1;
   }
   .panel .button-list > li:nth-child(even) > a{
     border-right-width: 0px;

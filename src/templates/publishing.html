@@ -1,0 +1,124 @@
+<script type="text/template"
+        route="^publishing"
+        page-title="Publishing - Monstercat"
+        transform="transformPublishingPage"
+>
+{{#data}}
+  <div class="top-banner top-banner--publishing cl-white">
+    <div class="banner" style="background-image: url('https://assets.monstercat.com/publishing/publishing-banner.jpg?image_width=1024')">
+      <div class="banner-gradient"></div>
+      <div class="banner-shade"></div>
+    </div>
+    <div class="container flex flex-col">
+      <h1 class="line-bottom">Focus on writing songs, <span>we'll handle the rest.</span></h1>
+    </div>
+  </div>
+  <div class="publishing-articles">
+    <article class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 article-banner banner--scaled col-md-last">
+          <div class="side-banner kobalt"></div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+          <div class="article-wrapper">
+              <h2 class="line-top">Worldwide Administration</h2>
+              <p class="description">Our administration team focuses on the business of publishing so you can focus on your art. Writers enjoy the benefit of Kobalt's technological approach to royalty collection, with the support of a boutique team at Monstercat offering personalized support with registrations, licensing, and ensuring they receive every penny they are owed.</p>
+          </div>
+      </div>
+    </article>
+    <article class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 article-banner article-clients banner--scaled">
+        <div class="clients-wrapper">
+          <div class="client">
+            <div class="aspect-container aspect-container-1x1" href="{{url}}" style="background-image: url(https://assets.monstercat.com/sync/clients/Apple.png?image_width=128)"></div>
+          </div>
+          <div class="client">
+            <div class="aspect-container aspect-container-1x1" href="{{url}}" style="background-image: url(https://assets.monstercat.com/sync/clients/MTV.png?image_width=128)"></div>
+          </div>
+          <div class="client">
+            <div class="aspect-container aspect-container-1x1" href="{{url}}" style="background-image: url(https://assets.monstercat.com/sync/clients/T-mobile.png?image_width=128)"></div>
+          </div>
+        </div>
+        <div class="clients-wrapper">
+          <div class="client">
+            <div class="aspect-container aspect-container-1x1" href="{{url}}" style="background-image: url(https://assets.monstercat.com/sync/clients/Toyota.png?image_width=128)"></div>
+          </div>
+          <div class="client">
+            <div class="aspect-container aspect-container-1x1" href="{{url}}" style="background-image: url(https://assets.monstercat.com/sync/clients/netflix.png?image_width=128)"></div>
+          </div>
+          <div class="client">
+            <div class="aspect-container aspect-container-1x1" href="{{url}}" style="background-image: url(https://assets.monstercat.com/sync/clients/UBISOFT.png?image_width=128)"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+          <div class="article-wrapper">
+              <h2 class="line-top">Sync</h2>
+              <p class="description">When music licensing is this easy, it's no surprise our clients keep coming back. With one-signature clearance on nearly the whole catalogue, our sync licensing experts work your releases early to proactively place your music in advertisements, TV shows, video games, and films. Last year, we had more than 100 TV Placements in the U.S. alone!</p>
+              <a class="button button--black button--icon" href="/sync">
+                Learn more
+                <i class="fa fa-chevron-right"></i>
+              </a>
+          </div>
+      </div>
+    </article>
+    <article class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 article-banner banner--scaled col-md-last">
+        <div class="side-banner partner-program" style="background-image: url(https://assets.monstercat.com/publishing/publishing-partner-program.jpg?image_width=1024);"></div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+          <div class="article-wrapper">
+              <h2 class="line-top">Partner Program</h2>
+              <p class="description">Our first-in-class subscription micro synchronization service grants content creators the opportunity to use Monstercat catalogue in their videos, vlogs, and streams. All while generating tens of thousands of unique impressions and additional royalties for writers and co-publishers each month.</p>
+          <p>Looking to get a license for your YouTube, Twitch or Mixer Channel? <a href="/licensing/content-creators">Learn more</a> about our partner program.</p>
+          </div>
+      </div>
+    </article>
+
+    <article class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 article-banner banner--scaled">
+        <div class="side-banner youtube"></div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+          <div class="article-wrapper">
+              <h2 class="line-top">Make More on YouTube</h2>
+              <p class="description">We never stop fans from using our songs in their videos - in fact we encourage it! Rather than take-down these videos, we work directly with YouTube to find and monetize every use of your work.</p>
+          </div>
+      </div>
+    </article>
+    <article class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 article-banner banner--scaled col-md-last">
+        <div class="side-banner reporting"></div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+          <div class="article-wrapper">
+              <h2 class="line-top">Transparent, Monthly Reporting</h2>
+              <p class="description">Each month, every writer and co-publisher receives their direct payment and an itemized monthly statement clearly outlining all royalties, top tracks, top performing markets, and top stores.</p>
+          </div>
+      </div>
+    </article>
+
+    <article class="flex">
+      <div class="col-xs-12 col-sm-12 col-md-6 article-banner banner--scaled publishing-roster">
+        <div class="publishing-roster-container">
+          <div class="roster-row"
+          source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId,profileImageUrl&filters=years,1&limit=3"
+               template="roster-year"></div>
+          <div class="roster-row"
+          source="$endpoint/catalog/artist?fields=name,websiteDetailsId,vanityUri,profileImageBlobId,profileImageUrl&filters=years,1&limit=3&skip=3"
+               template="roster-year"></div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 article-details">
+          <div class="article-wrapper">
+              <h2 class="line-top">Roster</h2>
+              <p class="description">We work on a track-by-track basis with our writers, working only the catalogue they've licensed to Monstercat.</p>
+              <a class="button button--black button--icon" href="/artists">
+                View Roster
+                <i class="fa fa-chevron-right"></i>
+              </a>
+          </div>
+      </div>
+    </article>
+  </div>
+{{/data}}
+</script>
