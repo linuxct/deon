@@ -82,6 +82,11 @@ function transformSyncTracks (result, done) {
     trackIds.push(track._id);
     return true;
   });
+  //Fix indexes after removing dupes
+  result.results = result.results.map(function (track, index) {
+    track.index = index;
+    return track;
+  })
   return done(null, result);
 }
 
