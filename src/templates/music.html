@@ -403,11 +403,10 @@
         {{/about}}
         {{#contact}}
         <div class="panel">
-            <h2>Booking & Management</h2>
+            <h2>Booking &amp; Management</h2>
             <br/>
-            <p>{{booking}}</p>
-            <br/>
-            <p>{{management}}</p>
+            {{{booking}}}
+            {{{management}}}
         </div>
         {{/contact}}
         <div source="$endpoint/catalog/artist/{{_id}}/releases"

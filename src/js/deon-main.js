@@ -662,8 +662,8 @@ function transformWebsiteDetails (o) {
     o.imagePositionY = 60
   if (o.bookings || o.managementDetail) {
     o.contact = {
-      booking: o.bookings,
-      management: o.managementDetail
+      booking: marked(o.bookings),
+      management: marked(o.managementDetail)
     }
   }
   if (o.urls) {
