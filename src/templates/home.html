@@ -111,13 +111,24 @@
 </script>
 
 <script type="text/template"
+        template-name="home-page-tracks"
+        transform="transformHomeTracks"
+        >
+{{#data}}
+    {{#results}}
+        {{>playSong}}
+    {{/results}}
+{{/data}}
+</script>
+
+<script type="text/template"
         template-name="home-play-button"
         mustache-name="home-play-button"
 >
 <input type="hidden" role="release-id" release-id="{{_id}}" />
 <div style="display: none;"
-    source="$endpoint/catalog/release/{{_id}}/tracks"
-    template="release-tracks">
+    source="$endpoint/catalog/browse?types=Single,EP,Album"
+    template="home-page-tracks">
 </div>
 <a class="button button--cta button--icon button--icon button--home-play {{#inEarlyAccess}}early-access{{/inEarlyAccess}}"
         action="playSongs"

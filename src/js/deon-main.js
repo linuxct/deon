@@ -476,25 +476,35 @@ function updatePlayerPlaylist (playlistId, ptracks) {
   loadCache(url, function(err, obj) {
     if (err) return window.alert(err) // TODO handle this error better
     var tracks = obj.results.map(function (item, index) {
-      var track = mapReleaseTrack(item, index)
+      var track = mapTrack(item)
+      track.index = index;
       track.playlistId = playlistId
       return track
     })
   }, true)
 }
 
-// TODO rename to getTrackArtistsByAtlas
-function mapTrackArtists (track, atlas) {
-  return (track.artists || []).filter(function (obj) {
+function mapTrackArtists (track) {
+  var artistDetails = (track.artistDetails || []).filter(function (obj) {
     return !!obj
-  }).map(function (artist) {
-    var o = atlas[artist.artistId]
-    if (!o) return {}
-    return {
-      uri: o.vanityUri || o.websiteDetailsId || o._id,
-      name: o.name
+  }).map(function (details) {
+    details.uri = details.vanityUri || details.websiteDetailsId || details._id;
+    details.public = !!details.public
+    details.artistPageUrl = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/artist/' + details.uri
+    return details;
+  });
+
+  var detailsAtlas = toAtlas(artistDetails, '_id');
+
+  var artists = track.artistUsers.map(function (artistUser) {
+    if (artistUser.websiteDetailsId && detailsAtlas[artistUser.websiteDetailsId]) {
+      return detailsAtlas[artistUser.websiteDetailsId];
     }
+
+    return artistUser;
   })
+
+  return artists
 }
 
 function getSocials (urls) {
@@ -604,53 +614,58 @@ function youTubeIdParser(url){
  * Should conform to the array map method parameters.
  */
 
-function mapReleaseTrack (o, index, trackNumber) {
-  if (!o) {
+function mapTrack (track) {
+  if(!track) {
     return {}
   }
-  if (arguments.length < 3) {
-    trackNumber = index + 1
-  }
-  o.trackNumber = trackNumber
-  o.index       = index
-  o.canPlaylist = isSignedIn() && !o.inEarlyAccess && o.streamable ? { _id: o._id } : null
-  o.bpm         = Math.round(o.bpm)
-  o.licensable  = o.licensable === false ? false : true
-  o.showDownloadLink = (o.downloadable && o.streamable) || o.freeDownloadForUsers
+  track.releaseId         = track.release._id
+  track.genresList        = track.genres.filter(function (i) { return i !== track.genre }).join(", ")
+  track.genreBonus        = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
+  track.genreLink         = encodeURIComponent(track.genre)
+  track.releaseId         = track.release._id
+  track.canPlaylist       = isSignedIn() && !track.inEarlyAccess && track.streamable ? { _id: track._id } : null
+  track.bpm               = Math.round(track.bpm)
+  track.licensable        = track.licensable === false ? false : true
+  track.showDownloadLink  = (track.downloadable && track.streamable) || track.freeDownloadForUsers
+  track.time              = formatDuration(track.duration)
+  track.artistsList       = mapTrackArtists(track);
+  track.releaseDate       = formatDateJSON(track.release.releaseDate)
+  track.playUrl           = getPlayUrl(track.albums, track.releaseId)
+  track.downloadLink      = getDownloadLink(track.release._id, track._id)
 
-  return o
+  return track
 }
 
-function mapRelease (o) {
-  var pdate = typeof o.preReleaseDate != 'undefined' ? new Date(o.preReleaseDate) : undefined
-  var rdate = new Date(o.releaseDate)
+function mapRelease (release) {
+  var pdate = typeof release.preReleaseDate != 'undefined' ? new Date(release.preReleaseDate) : undefined
+  var rdate = new Date(release.releaseDate)
   var now = new Date()
-  o.releaseDateObj = new Date(rdate)
-  if (pdate && ((o.inEarlyAccess && now < pdate) || (!o.inEarlyAccess && now < rdate))) {
-    o.preReleaseDateObj = new Date(pdate)
-    o.preReleaseDate = formatDate(o.preReleaseDateObj)
-    o.releaseDate = null
-    o.releaseDateObj = null
+  release.releaseDateObj = new Date(rdate)
+  if(pdate && ((release.inEarlyAccess && now < pdate) || (!release.inEarlyAccess && now < rdate))) {
+    release.preReleaseDateObj = new Date(pdate)
+    release.preReleaseDate = formatDate(release.preReleaseDateObj)
+    release.releaseDate = null
+    release.releaseDateObj = null
   } else {
-    o.releaseDate = formatDate(o.releaseDateObj)
-    o.preReleaseDate = null
-    o.preReleaseDateObj = null
+    release.releaseDate = formatDate(release.releaseDateObj)
+    release.preReleaseDate = null
+    release.preReleaseDateObj = null
   }
-  o.artists = o.renderedArtists
-  o.cover = o.coverUrl + '?image_width=512';
-  o.coverBig = o.coverUrl + '?image_width=1024';
-  if (o.urls instanceof Array) {
-    o.copycredit = createCopycredit(o.title + ' by ' + o.artists, o.urls)
-    o.share = getReleaseShareLink(o.urls)
-    o.purchaseLinks = getReleasePurchaseLinks(o.urls)
-    o.purchase = !!o.purchaseLinks.length
+  release.artists = release.renderedArtists
+  release.cover = release.coverUrl + '?image_width=512';
+  release.coverBig = release.coverUrl + '?image_width=1024';
+  if (release.urls instanceof Array) {
+    release.copycredit = createCopycredit(release.title + ' by ' + release.artists, release.urls)
+    release.share = getReleaseShareLink(release.urls)
+    release.purchaseLinks = getReleasePurchaseLinks(release.urls)
+    release.purchase = !!release.purchaseLinks.length
   }
-  o.copycreditOther = createCopycreditOther(o)
-  o.downloadLink = getDownloadLink(o._id)
+  release.copycreditOther = createCopycreditOther(release)
+  release.downloadLink = getDownloadLink(release._id)
   // Since we use catalogId for links, if not present fallback to id
   // If causes problems just create new variable to use for the URI piece
-  if (!o.catalogId) o.catalogId = o._id
-  return o
+  if (!release.catalogId) release.catalogId = release._id
+  return release
 }
 
 function transformWebsiteDetails (o) {
@@ -691,6 +706,13 @@ function transformHome (obj) {
     obj.goldThankYou = thankyous[randomChooser(thankyous.length)-1]
   }
   return obj
+}
+
+function transformHomeTracks (obj, done) {
+  obj = obj || {}
+  transformTracks(obj, function (err, data) {
+    done(err, data);
+  });
 }
 
 function transformPodcast (obj) {
@@ -944,64 +966,28 @@ function transformReleaseTracks (obj, done) {
   var input = document.querySelector('input[role=release-id][release-id]')
   var releaseId = input ? input.getAttribute('release-id') : ''
 
-  getArtistsAtlas(obj.results, function (err, atlas) {
-    if (!atlas) atlas = {}
-    var trackIndex = 0;
-    obj.results.forEach(function (track, index, arr) {
-      track.playUrl = getPlayUrl(track.albums, releaseId)
-      mapReleaseTrack(track, trackIndex, index+1)
-      if (track.playUrl) {
-        trackIndex++
-      }
-      track.releaseId = releaseId
-      track.artists = mapTrackArtists(track, atlas)
-      track.downloadLink = getDownloadLink(releaseId, track._id)
-      track.time = formatDuration(track.duration)
-    })
-    obj.hasGoldAccess = hasGoldAccess()
-    obj.shopifyEmbeds = []
-    var artistsCount = 0
-
-    for(var k in atlas) {
-      var artist = atlas[k]
-      // prevent Monstercat counting as Artist on Podcasts
-      if (artist.name !== "Monstercat" && artist.shopifyCollectionId) {
-        obj.shopifyEmbeds.push({
-          name: artist.name,
-          shopifyCollectionId: artist.shopifyCollectionId
-        })
-      }
-      artistsCount++
+  var trackIndex = 0;
+  obj.results.forEach(function (track, index, arr) {
+    mapTrack(track)
+    track.index = trackIndex
+    track.trackNumber = trackIndex + 1
+    if(track.playUrl) {
+      trackIndex++
     }
-
-    //Limit number of embeds to 1
-    if (artistsCount > 1) {
-      obj.shopifyEmbeds = []
-    }
-
-    done(null, obj)
   })
+  obj.hasGoldAccess = hasGoldAccess()
+
+  done(null, obj)
 }
 
 // TODO Refactor
 function transformTracks (obj, done) {
-  getArtistsAtlas(obj.results, function (err, atlas) {
-    if (!atlas) atlas = {}
-    var num = -1;
-    obj.results.forEach(function (track, index, arr) {
-      var releaseId = track.albums[0].albumId
-      track.playUrl = getPlayUrl(track.albums, releaseId)
-      if (track.playUrl) {
-        num++;
-      }
-      mapReleaseTrack(track, num, arr)
-      track.releaseId = releaseId
-      track.artists = mapTrackArtists(track, atlas)
-      track.downloadLink = getDownloadLink(releaseId, track._id)
-      track.time = formatDuration(track.duration)
-    })
-    done(null, obj)
+  obj.results.map(function (track, index, arr) {
+    mapTrack(track)
+    track.index = index
+    return track
   })
+  done(null, obj)
 }
 
 function appendSongMetaData (tracks) {
@@ -1061,12 +1047,14 @@ function completedReleaseTracks (source, obj) {
     return
   }
   appendSongMetaData(obj.data.results)
-  var artistLinks = [];
-  getArtistsAtlas(obj.data.results, function (err, atlas) {
-    for(var i in atlas) {
-      artistLinks.push('https://' + window.location.host + '/artist/' + i)
-    }
-  })
+  var artistLinks = obj.data.results.reduce(function (links, track) {
+    track.artistDetails.forEach(function (ad) {
+      if(links.indexOf(ad.artistPageUrl) == -1) {
+        links.push(ad.artistPageUrl);
+      }
+    });
+    return links
+  }, [])
   appendMetaData({
     'music:musician': artistLinks
   })

@@ -153,7 +153,7 @@
     </div>
     <div class="release container" >
         <div
-            source="$endpoint/catalog/release/{{_id}}/tracks"
+            source="$endpoint/catalog/browse?albumId={{_id}}"
             template="release-tracks">
         </div>
     </div>
@@ -202,21 +202,29 @@
 <td class="longer-width">
   <div class="scroll-container"
        onmouseover="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
-    <a href="/release/{{releaseId}}" class="scroll-title">{{releaseTitle}}</a>
+    <a href="/release/{{releaseId}}" class="scroll-title">{{release.title}}</a>
   </div>
 </td>
 {{/playlistId}}
 <td class="longer-width">
-    {{^artists}}
-    Id
-    {{/artists}}
-    {{#artists}}
-    <a href="/artist/{{uri}}">{{name}}</a>
-    {{/artists}}
+    {{>track-artists}}
 </td>
 <td class="col-xs-hidden col-md-visible genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
 <td class="col-xs-hidden col-md-visible">{{time}}</td>
 <td class="col-xs-hidden col-md-visible">{{bpm}}</td>
+</script>
+
+
+<script type="text/template"
+        mustache-name="track-artists">
+{{#artistsList.length}}
+    <span class="artists comma-list">
+    {{#artistsList}}<span class="artist">{{#public}}<a href="{{artistPageUrl}}">{{name}}</a>{{/public}}{{^public}}{{name}}{{/public}}</span>{{/artistsList}}
+    </span>
+{{/artistsList.length}}
+{{^artistsList.length}}
+    {{artistsTitle}}
+{{/artistsList.length}}
 </script>
 
 <script type="text/template"
@@ -226,12 +234,7 @@
 <td><a href="/release/{{releaseId}}">{{releaseTitle}}</a></td>
 {{/playlistId}}
 <td>
-    {{^artists}}
-    Id
-    {{/artists}}
-    {{#artists}}
-    <a href="/artist/{{uri}}">{{name}}</a>
-    {{/artists}}
+    {{>track-artists}}
 </td>
 <td class="col-xs-hidden col-md-visible genre">{{#genre}}<span>{{.}}</span>{{/genre}}</td>
 <td class="col-xs-hidden col-md-visible">{{time}}</td>

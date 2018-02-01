@@ -46,24 +46,15 @@ function openCatalogPage (q) {
 }
 
 function transformMusicCatalogResults (obj, done){
-	if (obj.total > 1) obj.showPagination = true
+  if (obj.total > 1) obj.showPagination = true
   setPagination(obj, obj.limit)
   var streamableIndex = 0
   obj.results = obj.results.map(function (item, index, arr) {
-    var track = mapReleaseTrack(item, index, arr)
-
+    var track = mapTrack(item)
     track.index = streamableIndex
-    track.artist = track.artistsTitle
-    track.releaseId = track.release._id
-    track.releaseDate = formatDateJSON(track.release.releaseDate)
-    track.playUrl = getPlayUrl(track.albums, track.releaseId)
-    track.downloadLink = getDownloadLink(track.release._id, track._id)
-    track.time = formatDuration(track.duration)
-
     if(track.streamable) {
       streamableIndex++
     }
-
     return track
   })
 
@@ -75,11 +66,11 @@ function transformMusicCatalogResults (obj, done){
 function getSortableHeaders (sortBy, direction) {
   var qo = queryStringToObject(window.location.search)
 
-  var headers = 
+  var headers =
   [ { label: 'Track'
     , field: 'title'
     , xsHidden: false
-    } , 
+    } ,
     { label: 'Artists'
     , field: 'artists'
     , xsHidden: false

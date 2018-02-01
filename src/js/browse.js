@@ -62,49 +62,38 @@ function transformMusicBrowseResults (obj, done) {
   var tracks = obj.results
   var playIndexOffset = obj.skip || 0
 
-  getArtistsAtlas(tracks, function (err, atlas) {
-    if (!atlas) atlas = {}
-    var rmap = {}
-    tracks.forEach(function (track, index, arr) {
-      var release = track.release
-      if(release) {
-        release.inEarlyAccess = track.inEarlyAccess
-        if (!rmap[release._id]) {
-          rmap[release._id] = track.release
-        }
-        delete track.release
-        release = rmap[release._id]
-        if (!release.tracks) release.tracks = []
-        release.tracks.push(track)
+  //Here we're taking all the tracks and putting them under a release object
+  var rmap = {}
+  tracks.forEach(function (track, index, arr) {
+    var release = track.release
+    if(release) {
+      release.inEarlyAccess = track.inEarlyAccess
+      if (!rmap[release._id]) {
+        rmap[release._id] = track.release
+      }
+      release = rmap[release._id]
+      if (!release.tracks) release.tracks = []
+      release.tracks.push(track)
+    }
+  })
+  var releases = Object.keys(rmap).map(function (key) { return rmap[key] }).sort(sortRelease)
+  releases.forEach(function(release) {
+    mapRelease(release)
+    release.tracks.forEach(function (track, index, arr) {
+      mapTrack(track)
+      if(track.streamable) {
+        track.index = playIndexOffset
+        track.trackNumber = index + 1
+        playIndexOffset++
       }
     })
-    var releases = Object.keys(rmap).map(function (key) { return rmap[key] }).sort(sortRelease)
-    releases.forEach(function(release) {
-      mapRelease(release)
-      release.tracks.forEach(function (track, index, arr) {
-        mapReleaseTrack(track)
-        track.releaseId    = release._id
-        track.trackNumber  = getTrackNumber(track, release._id)
-        track.playUrl      = getPlayUrl(track.albums, release._id)
-        track.artists      = mapTrackArtists(track, atlas)
-        track.downloadLink = getDownloadLink(release._id, track._id)
-        track.genresList   = track.genres.filter(function (i) { return i !== track.genre }).join(", ")
-        track.genreBonus   = track.genres.length > 1 ? ('+' + (track.genres.length - 1)) : ''
-        track.genreLink    = encodeURIComponent(track.genre)
-        track.time         = formatDuration(track.duration)
-        if(track.streamable) {
-          track.index        = playIndexOffset
-          playIndexOffset++
-        }
-      })
-      release.tracks.sort(sortTracks)
-    })
-
-    obj.results = releases
-    obj.total = obj.total
-    obj.hasGoldAccess = hasGoldAccess()
-    done(null, obj)
+    release.tracks.sort(sortTracks)
   })
+
+  obj.results = releases
+  obj.total = obj.total
+  obj.hasGoldAccess = hasGoldAccess()
+  done(null, obj)
 }
 
 function getBrowseMoreButton () {

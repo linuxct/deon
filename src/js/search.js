@@ -57,7 +57,6 @@ function getSearchTypes () {
       url: '/search'
     },
     tracks: {
-      fuzzyFields: ['title', 'artistsTitle'],
       q: {},
       perPage: 25,
       title: 'Search Songs',
@@ -67,7 +66,8 @@ function getSearchTypes () {
       },
       url: '/search/songs',
       searchPrefix: 'songs:',
-      searchPrefixAliases: ['song:', 'track:', 'tracks:']
+      searchPrefixAliases: ['song:', 'track:', 'tracks:'],
+      queryField: 'search'
     },
     artists: {
       fuzzyFields: ['name'],
@@ -112,17 +112,23 @@ function transformSearch () {
   q.fields = []
   if (!q.term) return {}
   var searches = getSearchTypes()
-  for(var type in searches) {
+  Object.keys(searches).forEach(function (type) {
     var search = searches[type]
     var sq = {}
     for (var x in q) {
       sq[x] = !search.hasOwnProperty(x) ? q[x] : search[x]
     }
+
+    //Some searches use the &fuzzyOr={{field}},{{value}},{{field2}},{{value}} thing
+    //Otherwse just do &{{field}}={{value}}
     if (q.term && search.fuzzyFields) {
       sq.fuzzyOr = searchToFuzzy(q.term, search.fuzzyFields)
     }
+    else if (q.term && search.queryField) {
+      sq[search.queryField] = q.term;
+    }
     search.query = objectToQueryString(sq)
-  }
+  });
   var searchForm = {
     placeholder: 'Search anything...',
     search: q.term,
@@ -143,6 +149,9 @@ function transformSearchPage (obj, type) {
   objSetPageQuery(query, q.page, {perPage: searchType.perPage})
   if(q.term && searchType.fuzzyFields) {
     query.fuzzyOr = searchToFuzzy(q.term, searchType.fuzzyFields)
+  }
+  else if (q.term && searchType.queryField) {
+    query[searchType.queryField] = q.term
   }
   obj.query = objectToQueryString(query)
   obj.searchForm = searchType.searchForm

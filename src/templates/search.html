@@ -61,7 +61,7 @@
         </div>
         {{/error}}
         {{#data}}
-        <div source="$endpoint/catalog/track?{{query}}"
+        <div source="$endpoint/catalog/browse?{{query}}"
              template="search-tracks">
         </div>
         {{/data}}
@@ -149,7 +149,7 @@
         {{#searches}}
         <div class="panel panel--mobile">
             <h2>Songs</h2>
-            <div source="$endpoint/catalog/track?{{tracks.query}}"
+            <div source="$endpoint/catalog/browse?{{tracks.query}}"
                  template="search-snippet-tracks">
             </div>
         </div>

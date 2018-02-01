@@ -120,52 +120,37 @@ function transformPlaylistTracks (obj, done) {
   var id = document.querySelector('[playlist-id]').getAttribute('playlist-id')
   var url = endpoint + '/playlist/' + id + '?fields=name,public,userId'
   var playlist = cache(url)
-  var ids = uniqueArray(obj.results.map(function (item) {
-    return item.release._id
-  }))
-  var url = endpoint + '/catalog/release?fields=title&ids=' + ids.join(',')
-  loadCache(url, function(err, aobj) {
-    if (err) return done(err)
-    var releaseAtlas = toAtlas(aobj.results, '_id')
-    var trackAtlas = toAtlas(obj.results, '_id')
-    getArtistsAtlas(obj.results, function (err, artistAtlas) {
-      if (!artistAtlas) artistAtlas = {}
-      obj.results = obj.results.map(function (item, index, arr) {
-        var track = mapReleaseTrack(trackAtlas[item._id] || {}, index, index + 1)
-        var release = releaseAtlas[item.release._id] || {}
-        track.releaseTitle = release.title
-        track.releaseId = release._id
-        track.artists = mapTrackArtists(track, artistAtlas)
-        track.playlistId = id
-        track.playUrl = getPlayUrl(track.albums, track.releaseId)
-        track.canRemove = isMyPlaylist(playlist) ? { index: track.index } : undefined
-        track.downloadLink = getDownloadLink(release._id, track._id)
-        track.time = formatDuration(track.duration)
-        if (isMyPlaylist(playlist)) {
-          track.edit = {
-            releaseId: release._id,
-            _id: track._id,
-            title: track.title,
-            trackNumber: track.trackNumber,
-            index: track.index
-          }
-        } else {
-          track.noEdit = {
-            trackNumber: track.trackNumber
-          }
-        }
 
-        return track
-      })
-      done(null, obj)
-    })
+  var trackAtlas = toAtlas(obj.results, '_id')
+  obj.results = obj.results.map(function (item, index, arr) {
+    var track = mapTrack(item)
+    track.index = index
+    track.trackNumber = index+1
+    track.playlistId = id
+    track.canRemove = isMyPlaylist(playlist) ? { index: track.index } : undefined
+    if (isMyPlaylist(playlist)) {
+      track.edit = {
+        releaseId: track.releaseId,
+        _id: track._id,
+        title: track.title,
+        trackNumber: track.trackNumber,
+        index: track.index
+      }
+    } else {
+      track.noEdit = {
+        trackNumber: track.trackNumber
+      }
+    }
+
+    return track
   })
+  done(null, obj)
 }
 
 function completedPlaylist (source, obj) {
   if(obj.error) return
   var pl = obj.data
-  setPageTitle(pl.name + pageTitleGlue + 'Playlist')  
+  setPageTitle(pl.name + pageTitleGlue + 'Playlist')
   setMetaData({
     'og:type': 'music.playlist',
     'og:title': pl.name,
