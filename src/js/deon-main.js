@@ -1262,9 +1262,9 @@ function setPagination (obj, perPage) {
   if (q.page > 1) {
     obj.previous = objectToQueryString(pq)
   }
-  obj.showingFrom = Math.max((q.page - 1) * perPage, 1)
+  obj.showingFrom = (q.page - 1) * perPage + 1
   if (obj.next) {
-    obj.showingTo = q.page == 1 ? perPage : obj.showingFrom + perPage - 1
+    obj.showingTo = obj.showingFrom + perPage - 1
   }
   else {
     obj.showingTo = obj.total
