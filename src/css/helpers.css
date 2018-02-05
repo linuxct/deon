@@ -299,6 +299,8 @@ a.cl-white {
 }
 
 .cl-white p,
+.cl-white ul,
+.cl-white ol,
 .cl-white p span {
   color: #ccc;
 }
