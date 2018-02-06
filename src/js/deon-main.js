@@ -342,15 +342,16 @@ function createCopycreditOther (track) {
   return credit + artists.join(', ')
 }
 
-function createCopycredit (title, urls) {
+function createCopycredit (title, links) {
   var credit = 'Title: ' + title + "\n";
   var prefixes = {
     'youtube' : 'Video Link: ',
     'itunes' : 'iTunes Download Link: ',
     'spotify': 'Listen on Spotify: '
   };
-  urls = urls || []
-  urls.forEach(function (url) {
+  links = links || []
+  links.forEach(function (link) {
+    var url = link.original
     if (!url) return
     for(var site in prefixes) {
       if (url.indexOf(site) > 0) {
@@ -515,7 +516,8 @@ function getSocials (urls) {
     "youtube-play": /youtube\.com/
   }
   var arr = []
-  urls.forEach(function (url) {
+  urls.forEach(function (link) {
+    var url = link.original
     for (var tag in socials) {
       if (socials[tag].test(url)) {
         arr.push({
@@ -655,6 +657,16 @@ function mapRelease (release) {
   release.cover = release.coverUrl + '?image_width=512';
   release.coverBig = release.coverUrl + '?image_width=1024';
   if (release.urls instanceof Array) {
+    release.urls = release.urls.reduce(function (urls, link) {
+      if (typeof(link) == 'string') {
+        urls.push(link)
+      }
+      else if(link && link.original) {
+        urls.push(link.original)
+      }
+
+      return urls
+    }, [])
     release.copycredit = createCopycredit(release.title + ' by ' + release.artists, release.urls)
     release.share = getReleaseShareLink(release.urls)
     release.purchaseLinks = getReleasePurchaseLinks(release.urls)
