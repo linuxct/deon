@@ -1,5 +1,5 @@
 var MusicPlayer = (function () {
-
+  
   function createEvent(event, props) {
     if (typeof CustomEvent === 'function') {
       return new CustomEvent(event, props)
@@ -21,6 +21,8 @@ var MusicPlayer = (function () {
     else {
       this.audio = new Audio()
     }
+
+    this.shouldUseMediaSession = 'mediaSession' in navigator
     this.audio.addEventListener('error', onError.bind(this))
     this.audio.addEventListener('stalled', onStalled.bind(this))
     this.audio.addEventListener('ended', onEnded.bind(this))
@@ -35,6 +37,15 @@ var MusicPlayer = (function () {
     this.repeatMode = 'none'
     this.shuffle = false
     this.clear()
+
+    if (this.shouldUseMediaSession) {
+      var self = this
+
+      // The `pause` event actually handles both playing and pausing -- so no need to define both
+      navigator.mediaSession.setActionHandler('pause', () => self.pause())
+      navigator.mediaSession.setActionHandler('previoustrack', () => self.previous())
+      navigator.mediaSession.setActionHandler('nexttrack', () => self.next())
+    }
   }
 
   MusicPlayer.prototype.add = function (item) {
@@ -76,6 +87,24 @@ var MusicPlayer = (function () {
     this.audio.play()
     this.index = index
 
+    if (this.shouldUseMediaSession) {
+      // Set up media session metadata
+      var track = this.items[index]
+      
+      // This `if` is here to prevent the MediaSession from
+      // abruptly disappearing from the device and then
+      // reappearing
+      if (navigator.mediaSession.metadata === null) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track.title,
+          artist: track.artistTitle
+        })
+      } else {
+        navigator.mediaSession.metadata.title = track.title
+        navigator.mediaSession.metadata.artist = track.artistTitle
+      }
+    }
+
     this.trigger('play')
   }
 
@@ -106,6 +135,8 @@ var MusicPlayer = (function () {
   }
 
   MusicPlayer.prototype.stop = function () {
+    if (this.shouldUseMediaSession)
+      navigator.mediaSession.metadata = null
     this.audio.pause()
     this.seek(0)
     this.trigger('stop')
