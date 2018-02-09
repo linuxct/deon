@@ -60,7 +60,7 @@ function transformSyncPage () {
 
 function transformSyncTracks (result, done) {
   result.results = result.results.map(function (track, index) {
-    track = mapReleaseTrack(track, index);
+    track = mapTrack(track, index);
     track.release = mapRelease(track.release);
     track.playUrl = getPlayUrl(track.albums, track.release._id);
     track.index = index;
