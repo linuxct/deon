@@ -666,3 +666,11 @@ ul.errors li {
     line-height: 1.5;
   }
 }
+
+.actionier.on .actionier-off,
+.actionier .actionier-on {
+  display: none;
+}
+.actionier.on .actionier-on {
+  display: initial;
+}
