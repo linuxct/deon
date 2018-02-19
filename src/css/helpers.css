@@ -575,6 +575,7 @@ ul.errors li {
   top: 0px;
   z-index: 999;
   width: 100%;
+  margin-top: 5px;
 }
 
 #site-notices .notice-container.hide {

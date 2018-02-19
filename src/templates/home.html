@@ -23,7 +23,7 @@
     <div class="top-banner">
         {{#featured}}
         <div class="banner banner--scaled">
-            <div class="banner" style="background-image:url('{{coverBig}}')">
+            <div class="banner" style='background-image:url("{{coverBig}}")'>
                 <div class="banner-shade"></div>
                 <div class="gradient"></div>
             </div>
@@ -64,9 +64,9 @@
                         Get Gold to Listen Early
                         <i class="fa fa-chevron-right"></i>
                     </a>
-                    <div class="early-access-message">
+                    <p class="early-access-message cl-white">
                         <a href="/gold">Monstercat Gold</a> members can stream releases 20hrs early.
-                    </div>
+                    </p>
                     {{/hasGoldAccess}}
                 {{/inEarlyAccess}}
                 {{^inEarlyAccess}}
