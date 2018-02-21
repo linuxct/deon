@@ -1,20 +1,40 @@
-function createPlaylist (e, el) {
-  var name = window.prompt(strings.createPlaylist)
+function createPlaylist (e, el, name, tracks, cb) {
+  if (!name) name = window.prompt(strings.createPlaylist)
   if (!name) return
   create('playlist', {
     name: name,
-    public: session.settings ? session.settings.playlistPublicByDefault : false
-  }, simpleUpdate)
+    public: session.settings ? session.settings.playlistPublicByDefault : false,
+    tracks: tracks
+  }, cb ? cb : simpleUpdate)
+}
+
+function createAndAddToPlaylist (e, el) {
+  var data = getTargetDataSet(el, false, true)
+  if (!data) {
+    return
+  }
+  var tracks = [{trackId: el.getAttribute('track-id'), releaseId: el.getAttribute('release-id')}]
+  createPlaylist(e, el, data.name, tracks, function (err, obj, xhr) {
+    if (err) {
+      return toasty(new Error(err))
+    }
+    closeModal()
+    toasty(strings.addedToPlaylist)
+  })
 }
 
 function renamePlaylist (e, el) {
   var name = window.prompt(strings.renamePlaylist)
-  if (!name) return
+  if (!name) {
+    return
+  }
   update('playlist', el.getAttribute('playlist-id'), { name: name }, simpleUpdate)
 }
 
 function destroyPlaylist (e, el) {
-  if (!window.confirm(strings.destroyPlaylist)) return
+  if (!window.confirm(strings.destroyPlaylist)) {
+    return
+  }
   destroy('playlist', el.getAttribute('playlist-id'), simpleUpdate)
 }
 
@@ -23,42 +43,80 @@ function removeFromPlaylist (e, el) {
   var id    = pel ? pel.getAttribute('playlist-id') : ""
   var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
   var index = parseInt(el.getAttribute('playlist-position'))
-  if (!id) return window.alert(strings.error)
+  if (!id) {
+    return toasty(new Error(strings.error))
+  }
   loadCache(url, function (err, obj) {
-    if (err) return window.alert(err.message)
+    if (err) {
+      return toasty(new Error(err.message))
+    }
     var tracks = obj.tracks
     tracks.splice(index, 1)
     update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
-      if (err) return toasty(err)
+      if (err) {
+        return toasty(new Error(err))
+      }
       cache(url, obj)
       loadSubSources(document.querySelector('[role="content"]'), true)
-      updatePlayerPlaylist(id, tracks)
     })
   })
 }
 
+function openAddToPlaylist (e, el) {
+  openModal('add-to-playlist-modal', {
+    trackId:   el.getAttribute('track-id'),
+    releaseId: el.getAttribute('release-id'),
+  })
+}
+
+function transformAddToPlaylist (obj, done) {
+  loadCache(endpoint + '/playlist', function(err, playlists) {
+    if (err) {
+      return done(err);
+    }
+    done(null, {
+      trackId: obj.trackId,
+      releaseId: obj.releaseId,
+      results: playlists.results
+    })
+  }, true)
+}
+
 function addToPlaylist (e, el) {
-  var id    = el.value
-  if (!id) return
-  var url   = endpoint + '/playlist/' + id
-  var index = parseInt(el.getAttribute('playlist-position'))
-  var item  = {
+  el = findParentWith(el, '[action=addToPlaylist]')
+  var id = el.getAttribute('playlist-id')
+  if (!id) {
+    return
+  }
+
+  if (actionier.isOn(el)) {
+    return
+  }
+
+  var url = endpoint + '/playlist/' + id
+  var item = {
     trackId: el.getAttribute('track-id'),
     releaseId: el.getAttribute('release-id')
   }
-  if (!item.releaseId || !item.trackId) return window.alert(strings.error)
-  el.disabled = true
+  if (!item.releaseId || !item.trackId) {
+    return toasty(new Error(strings.error))
+  }
+  actionier.on(el);
   loadCache(url, function (err, obj) {
-    if (err) return window.alert(err.message)
+    if (err) {
+      actionier.off(el)
+      return toasty(new Error(err.message))
+    }
     var tracks = obj.tracks
-    if (isNaN(index)) index = tracks.length
+    index = tracks.length
     tracks.splice(index, 0, item)
     update('playlist', id, {tracks: tracks}, function (err, obj, xhr) {
-      el.disabled = false
-      el.selectedIndex = 0
-      if (err) return toasty(err)
+      actionier.off(el)
+      if (err) {
+        return toasty(new Error(err))
+      }
       cache(url, obj)
-      updatePlayerPlaylist(id, tracks)
+      closeModal()
       toasty(strings.addedToPlaylist)
     })
   })
@@ -70,14 +128,18 @@ function togglePlaylistPublic (e, el) {
     public: !!el.checked
   }, function (err, obj) {
     el.disabled = false
-    if (!err) return
-    window.alert(err.message)
+    if (!err) {
+      return
+    }
+    toasty(new Error(err.message))
     el.checked = !el.checked
   })
 }
 
 function isMyPlaylist (playlist) {
-  if (!isSignedIn()) return false
+  if (!isSignedIn()) {
+    return false
+  }
   return playlist.userId == session.user._id
 }
 
@@ -235,7 +297,9 @@ function savePlaylistOrder() {
   }
   var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
   update('playlist', id, {tracks: trackSaves}, function (err, obj, xhr) {
-    if (err) return toasty(err)
+    if (err) {
+      return toasty(new Error(err))
+    }
     cache(url, obj)
     simpleUpdate()
     toasty(strings.reorderedPlaylist)
@@ -315,7 +379,9 @@ function savePlaylistOrder() {
   }
   var url   = endpoint + '/playlist/' + id + '?fields=name,public,tracks,userId'
   update('playlist', id, {tracks: trackSaves}, function (err, obj, xhr) {
-    if (err) return toasty(err)
+    if (err) {
+      return toasty(new Error(err))
+    }
     cache(url, obj)
     simpleUpdate()
     toasty(strings.reorderedPlaylist)

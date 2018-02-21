@@ -472,19 +472,6 @@ function getGetGoldLink () {
   return '/gold/get'
 }
 
-function updatePlayerPlaylist (playlistId, ptracks) {
-  var url = endpoint + "/playlist/" + playlistId + "/tracks"
-  loadCache(url, function(err, obj) {
-    if (err) return window.alert(err) // TODO handle this error better
-    var tracks = obj.results.map(function (item, index) {
-      var track = mapTrack(item)
-      track.index = index;
-      track.playlistId = playlistId
-      return track
-    })
-  }, true)
-}
-
 function mapTrackArtists (track) {
   var artistDetails = (track.artistDetails || []).filter(function (obj) {
     return !!obj

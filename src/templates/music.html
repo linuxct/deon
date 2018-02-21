@@ -294,6 +294,17 @@
     <span class="col-xs-hidden">License</span>
 </a>
 {{/streamable}}
+{{#canPlaylist}}
+<a class="silent button--mobile"
+   target="_blank"
+    action="openAddToPlaylist"
+    release-id="{{releaseId}}"
+    title="Add to Playlist"
+    track-id="{{_id}}">
+    <i class="fa fa-plus"></i>
+    <span class="col-xs-hidden">Add to Playlist</span>
+</a>
+{{/canPlaylist}}
 </script>
 
 <script type="text/template"
@@ -331,16 +342,6 @@
                     {{>trackCells}}
                     <td class="push-right">
                         {{>trackButtons}}
-                        {{#canPlaylist}}
-                        <select
-                            onchange="addToPlaylist(null, this)"
-                            source="$endpoint/playlist"
-                            class="col-xs-hidden col-md-visible inline"
-                            template="select-playlist"
-                            release-id="{{releaseId}}"
-                            track-id="{{_id}}">
-                        </select>
-                        {{/canPlaylist}}
                     </td>
                 </tr>
                 {{/results}}

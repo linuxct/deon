@@ -134,16 +134,6 @@
                     {{>trackCells}}
                     <td class="push-right">
                         {{>trackButtons}}
-                        {{#canPlaylist}}
-                        <select
-                            onchange="addToPlaylist(null, this)"
-                            class="col-xs-hidden col-md-visible inline"
-                            source="$endpoint/playlist"
-                            template="select-playlist"
-                            release-id="{{releaseId}}"
-                            track-id="{{_id}}">
-                        </select>
-                        {{/canPlaylist}}
                     </td>
                 </tr>
                 {{/tracks}}

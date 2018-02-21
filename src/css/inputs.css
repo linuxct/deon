@@ -304,6 +304,13 @@ input.round:focus{
   border-color: dodgerblue;
 }
 
+input[type="text"].input--big {
+  height: 51px;
+  background: #eee;
+  padding: 1rem;
+  font-size: 1rem;
+}
+
 label {
   display: inline-block;
   font-size: 1rem;

@@ -344,17 +344,6 @@ function youTubeUserToChannelID (user, done) {
   })
 }
 
-function findParentWith (el, match) {
-  var parent = el;
-  while(parent) {
-    parent = parent.parentElement;
-    if(elMatches(parent, match)) {
-      return parent;
-    }
-  }
-  return false
-}
-
 function copyToClipboard (e) {
   var parent = findParentWith(e.target, 'div');
   var input = parent.querySelector('textarea,input[type=text]');
@@ -396,4 +385,18 @@ function hookValueSelects (selects) {
       selected.setAttribute('selected', true)
     }
   })
+}
+
+var actionier = {
+  on: function (el) {
+    el.disabled = true
+    el.classList.toggle('on', true)
+  },
+  off: function (el) {
+    el.disabled = true
+    el.classList.toggle('on', false)
+  },
+  isOn: function (el) {
+    return el.disabled
+  }
 }

@@ -14,6 +14,67 @@
 </script>
 
 <script type="text/template"
+        template-name="add-to-playlist-modal"
+        transform="transformAddToPlaylist">
+    <div class="modal">
+        <div class="panel pointer-events">
+            <h2 class="mv-0">Add to Playlist</h2>
+            {{#loading}}
+            {{>loading-inner-view}}
+            {{/loading}}
+            {{#error}}
+            <p>{{message}}</p>
+            {{/error}}
+            {{#data}}
+            <div class="playlists">
+                <h5 class="mt-2">Add to New Playlist</h5>
+                <div data-set="playlist" trigger-target="createAndAddToPlaylist">
+                    <input name="name"
+                        class="mv-1 mh-0 input--big xs-expando xs-expando-m"
+                        type="text"
+                        size="30"
+                        placeholder="Playlist Name"
+                        autocomplete="off">
+                    <button action="createAndAddToPlaylist"
+                        class="mv-1 mh-0 xs-expando xs-expando-m"
+                        trigger="createAndAddToPlaylist"
+                        data-set-target="playlist"
+                        track-id="{{trackId}}"
+                        release-id="{{releaseId}}">
+                        Create and Add
+                    </button>
+                </div>
+                <h5 class="mt-1 mb-1">Add to Existing Playlist</h5>
+                <table>
+                    <tbody>
+                        {{#results}}
+                        <tr action="addToPlaylist"
+                            class="actionier"
+                            playlist-id="{{_id}}"
+                            track-id="{{trackId}}"
+                            release-id="{{releaseId}}">
+                            <td>{{name}}</td>
+                            <td class="text right">
+                                <i class="fa fa-plus actionier-off"></i>
+                                <span class="actionier-on"><i class="fa fa-spin fa-refresh"></i></span>
+                            </td>
+                        </tr>
+                        {{/results}}
+                        {{^results}}
+                        <tr><td colspan="2">No Playlists.</td></tr>
+                        {{/results}}
+                    </tbody>
+                </table>
+            </div>
+            {{/data}}
+            <button class="button--close faux" action="closeModal">
+                <i class="fa fa-remove"></i>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template"
         page-title="My Playlists"
         route="^playlists">
     <div class="container">
@@ -67,7 +128,7 @@
     </tr>
     {{/results}}
     {{^results}}
-    <tr><td colspan="2">No Results.</td></tr>
+    <tr><td colspan="2">No Playlists.</td></tr>
     {{/results}}
     {{/data}}
 </script>
@@ -97,9 +158,9 @@
                         {{#public}}checked{{/public}} />
                     Public
                 </label>
-                <button action="reorderPlaylistFromInputs" 
+                <button action="reorderPlaylistFromInputs"
                         trigger="reorderPlaylistFromInputs">
-                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i> 
+                        <i class="fa fa-fw fa-save" role="save-playlist-order"></i>
                         Save Order</button>
                 {{/canPublic}}
                  <button class="faux button--mobile">
