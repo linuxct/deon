@@ -6,16 +6,23 @@
     "start": "./scripts/serve",
     "start-prod": "./scripts/serve-bin",
     "build": "./scripts/build",
-    "test": "./scripts/build && ./scripts/test-phantom"
+    "test": "echo \"Not implemented.\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/monstercat/deon.git"
   },
   "author": "tmathews",
-  "contributors": ["lostlevels", "Vindexus", "juanferreras"],
+  "contributors": [
+    "lostlevels",
+    "Vindexus",
+    "juanferreras"
+  ],
   "license": "ISC",
   "dependencies": {
     "web-build": "git+https://github.com/monstercat/web-build.git"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.1"
   }
 }
