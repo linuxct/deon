@@ -25,13 +25,13 @@ function transformShopCode (code) {
   }
   code.discountText = (parseInt(code.value) * -1) + '% off';
   if(code.rewardFor == '1month') {
-    code.rewardForText = 'Being Gold'
-  }
-  else if(code.rewardFor == '6months') {
-    code.rewardForText = '6 Months of Gold';
+    code.rewardForText = 'being Gold'
   }
   else if (code.rewardFor == '1year') {
-    code.rewardForText = '1 Year of Gold'
+    code.rewardForText = '1+ year of Gold'
+  }
+  else if (code.rewardFor == '2years') {
+    code.rewardForText = '2+ years of Gold'
   }
   return code
 }

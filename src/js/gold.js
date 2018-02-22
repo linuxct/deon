@@ -270,7 +270,7 @@ function transformGoldLanding (obj, done) {
     id: 'download-access',
     title: 'Download Access',
     description: 'Download tracks in MP3, FLAC, and WAV format.',
-    image: '1-DownloadAccess-v2.jpg',
+    image: '/img/gold-landing/1-DownloadAccess-v2.jpg',
     cta: 'Download Music',
     download: true
   }, {
@@ -278,26 +278,32 @@ function transformGoldLanding (obj, done) {
     title: 'Early Streaming Access',
     description: 'Listen to releases on Monstercat.com 20 hours before they are released to everyone else.',
     cta: 'Listen Early',
-    image: '2-StreamingAccess.jpg',
+    image: '/img/gold-landing/2-StreamingAccess.jpg',
   }, {
     id: 'support-the-artists',
     title: 'Support the Artists',
     description: 'Artists are paid out from Gold subscriptions based on how much people listen to their songs.',
     cta: 'Support the Artists',
-    image: '3-SupportArtists.jpg',
+    image: '/img/gold-landing/3-SupportArtists.jpg',
+  }, {
+    id: 'shop-discounts',
+    title: 'Discounts in the Shop',
+    description: 'Every month you have Gold you get a discount code for 10% off in <a href="https://shop.monstercat.com">the shop</a>. Goes up to 15% off after a year and 20% off after two years.',
+    cta: 'Get Discounts',
+    image: 'https://assets.monstercat.com/monstercat.com/merch40.jpg?image_width=1024'
   }, {
     id: 'discord',
     title: 'Gold-only Discord Chat',
     description: 'Come chat with us and other superfans in our Discord server.',
     cta: 'Join the Chat',
-    image: '5-Discord.jpg',
+    image: '/img/gold-landing/5-Discord.jpg',
     discord: true
   }, {
     id: 'reddit',
     title: 'Subreddit Flair on /r/Monstercat',
     description: 'Show your bling off in the Monstercat subreddit.',
     cta: 'Get Your Flair',
-    image: '6-Reddit.png',
+    image: '/img/gold-landing/6-Reddit.png',
     reddit: true
   })
   featureBlocks = featureBlocks.map(function (i, index) {

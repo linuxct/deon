@@ -587,7 +587,8 @@ ul.errors li {
   bottom: 0px;
 }
 
-#site-notices .notice--blue {
+#site-notices .notice--blue,
+#site-notices .notice--blue-link {
   height: auto;
   background: dodgerblue;
   color: #fff;
@@ -600,12 +601,27 @@ ul.errors li {
   border-top: none;
 }
 
+#site-notices .notice--blue-link {
+  padding: 0em;
+}
+
 #site-notices .notice-container {
   height: auto;
   top: 0px;
   z-index: 999;
   width: 100%;
   margin-top: 5px;
+}
+
+#site-notices a.notification-link {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 1em;
+}
+
+#site-notices a.notification-link:hover {
+  text-decoration: underline;
 }
 
 #site-notices .notice-container.hide {

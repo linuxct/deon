@@ -184,7 +184,9 @@ function clickCompleteProfile (e) {
   initLocationAutoComplete()
 }
 
-/*======*/
+/*========================================
+=            INSTINCT NOTICE            =
+========================================*/
 var instinctNotice = new SiteNotice({
   hideForDays: 7,
   name: 'instinct-video',
@@ -197,4 +199,38 @@ function clickCloseInstinctVideoNotice (e) {
 
 function clickInstinctVideoNotice (e) {
   instinctNotice.setHideUntilByDays(instinctNotice.hideForDays * 2)
+}
+
+/*==========================================
+=            GOLD DISCOUNT CODE            =
+==========================================*/
+var goldShopNextCodeDate = ''
+var goldShopCodeNotice = new SiteNotice({
+  hideForDays: 40,
+  name: 'gold-discount',
+  template: 'notice-gold-shop-code',
+  transform: function (done) {
+    requestSelfShopCodes(function (err, result) {
+      if (err) {
+        return done(err)
+      }
+      var lastCode = getCookie('last-gold-shop-code')
+
+      this.currentCode = result.currentCode
+
+      goldShopNextCodeDate = new Date(result.nextCodeDate).toISOString()
+      done(null, result)
+    }.bind(this))
+  },
+  shouldOpen: function () {
+    return isSignedIn() && hasGoldAccess()
+  }
+})
+
+function closeGoldShopDiscountNotice () {
+  var cookieName = goldShopCodeNotice.getCookieName()
+
+  goldShopCodeNotice.close()
+  setCookie('last-gold-shop-code', goldShopCodeNotice.currentCode.code)
+  setCookie(cookieName, goldShopNextCodeDate)
 }

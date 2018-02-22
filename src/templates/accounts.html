@@ -425,10 +425,33 @@
             {{#hasGoldAccess}}
             <div class="container">
                 <div class="flex flex-pt {{#hasGoldAccess}}{{/hasGoldAccess}}">
+                    {{#hasGoldAccess}}
+                    <div class="panel panel--daxrk rewards col-md-6 col-sm-12 col-xs-12">
+                        <h2>Shop Discounts</h2>
+                        <p>Each month you have Gold you get a new shop discount code. Stay subscribed for bigger discounts.</p>
+                        <table class="mt-2 col-md-8 col-xs-12 table-striped">
+                            <tr>
+                                <th>Subscribe For</th>
+                                <th>Discount</th>
+                            </tr>
+                            <tr>
+                                <td>1+ months</td>
+                                <td>10% off</td>
+                            </tr>
+                            <tr>
+                                <td>1+ years</td>
+                                <td>15% off</td>
+                            </tr>
+                            <tr>
+                                <td>2+ years</td>
+                                <td>20% off</td>
+                            </tr>
+                        </table>
+                    </div>
+                    {{/hasGoldAccess}}
                     <div class="col-xs-12 {{#hasGoldAccess}}col-md-6{{/hasGoldAccess}}{{^hasGoldAccess}}col-md-12{{/hasGoldAccess}} panel" id="shop-codes">
-                        <h2>Shop Code</h2>
+                        <h2>Current Code</h2>
                         {{#hasGoldAccess}}
-                            {{#codes}}
                                 {{#currentCode}}
                                 <p class="code-description">
                                     <input class="code" size="32" type="text" value="{{code}}" role="clipboard" />{{>copy-clipboard-button}}
@@ -448,7 +471,6 @@
                                         <i class="fa fa-external-link"></i>
                                     </a>
                                 </div>
-                            {{/codes}}
                         {{/hasGoldAccess}}
                         {{^hasGoldAccess}}
                         <p>Get a discount code in the <a href="https://shop.monstercat.com">Monstercat Shop</a> every month that you have <a href="/gold">Gold</a>.</p>
@@ -457,16 +479,7 @@
                         </div>
                         {{/hasGoldAccess}}
                     </div>
-                    {{#hasGoldAccess}}
-                    <div class="panel panel--dark rewards col-md-6 col-sm-12 col-xs-12">
-                        <h2>Shop Code Beta</h2>
-                        <p>This system is currently in <strong>beta</strong>. Please <a action="showFront">send us your feedback</a>.</p>
-                        <br />
-                        <p>What shop rewards would you like to see for being subscribed to Monstercat Gold for longer?</p>
-                        <br />
-                        <button type="button" action="showFront" class="button">Submit Feedback</button>
-                    </div>
-                    {{/hasGoldAccess}}
+
                 </div>
                 <div class="flex sign-split">
                     <div class="col-xs-12 col-md-6 panel" id="reddit">

@@ -9,6 +9,7 @@
         <li>Directly support the artists</li>
         <li>Download songs in your preferred format</li>
         <li>Early streaming access to new releases</li>
+        <li>Discounts on <a href="https://shop.monstercat.com">Monstercat merch</a></li>
         <li><a href="https://www.reddit.com/r/monstercat" target="_blank">/r/Monstercat</a> subreddit flair</li>
         <li>Gold-only Discord chat</li>
       </ul>
@@ -181,6 +182,7 @@
             <li><a href="#download-access" action="anchorScrollTo">Download Monstercat songs in your preferred format</a></li>
             <li><a href="#early-streaming" action="anchorScrollTo">Early streaming access to new releases</a></li>
             <li><a href="#support-the-artists" action="anchorScrollTo">Directly support the artists</a></li>
+            <li><a href="#shop-discounts" action="anchorScrollTo">Discounts on Monstercat merch</a></li>
             <li><a href="#discord" action="anchorScrollTo">and more!</a></li>
           </ul>
           <br />
@@ -198,12 +200,12 @@
     {{#featureBlocks}}
       <section class="flex gold-feature-section" id="{{id}}">
           <div class="col-xs-12 col-sm-12 col-md-6 {{^isOdd}}col-md-last {{/isOdd}} article-banner">
-              <div class="side-banner" style="background-image: url(/img/gold-landing/{{image}});"></div>
+              <div class="side-banner" style="background-image: url({{image}});"></div>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6 article-details">
               <div class="article-wrapper">
                 <h2>{{title}}</h2>
-                <p class="description">{{description}}</p>
+                <p class="description">{{{description}}}</p>
                 {{#discord}}
                   {{#hasGoldAccess}}
                     {{>joinGoldDiscord}}

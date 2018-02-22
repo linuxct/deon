@@ -74,5 +74,21 @@
     </div>
 </script>
 
+<script type="text/template"
+        template-name="notice-gold-shop-code">
+<div class="notice--blue-link">
+  <button
+    onclick="closeGoldShopDiscountNotice()"
+    class="button button-sm button--cta button--transparent pull-right"
+    style="margin-top: 7px;">
+    Close
+  </button>
+  <a href="/account/gold" class="notification-link" onclick="closeGoldShopDiscountNotice()">
+    <div class="container">
+      <p><strong><span class="fa fa-shopping-bag"></span> Get  {{currentCode.discountText}} in the Monstercat shop for having {{currentCode.rewardForText}}!</strong></p>
+    </div>
+  </a>
+</div>
+</script>
 
 

@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     stateChange(location.pathname + location.search)
     stickyPlayer()
     completeProfileNotice.start();
+    goldShopCodeNotice.start()
   });
   document.querySelector('.credit [role=year]').innerText = new Date().getFullYear();
 })
@@ -914,12 +915,15 @@ function scrollToEl (el, opts) {
   opts = opts || {}
   var padding = opts.padding || -20
   var top = el.getBoundingClientRect().top
-  window.scrollTo(0, top+padding);
+  //Yes, this timeout is necessary. No, I'm not proud of this.
+  setTimeout(function () {
+    window.scrollTo(0, parseInt(top+padding))
+  }, 2)
 }
 
 function anchorScrollTo (e, el) {
   e.preventDefault()
-  scrollToAnimated(document.querySelector(el.getAttribute('href')))
+  scrollToEl(document.querySelector(el.getAttribute('href')))
   return false
 }
 
