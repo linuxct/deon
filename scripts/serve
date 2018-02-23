@@ -12,4 +12,4 @@ web-build $HTML/begin.html \
 	$HTML/body.html \
 	$TEMPLATES \
 	$HTML/end.html \
-	serve -vm --static $SRC --port ${2:-8080}
+	serve -m -v --static $SRC --port ${2:-8080}

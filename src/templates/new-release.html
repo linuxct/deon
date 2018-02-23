@@ -1,0 +1,377 @@
+<script type="text/template"
+        route="^release\/(.*)"
+        transform="transformReleasePageSplit">
+{{#data}}
+{{#activeAlts.new}}
+<div source="$endpoint/catalog/release/{{releaseId}}"
+     template="new-release-page">
+</div>
+{{/activeAlts.new}}
+{{#activeAlts.old}}
+<div source="$endpoint/catalog/release/{{releaseId}}"
+     template="old-release-page">
+</div>
+{{/activeAlts.old}}
+{{/data}}
+</script>
+
+<script type="text/template"
+        template-name="new-release-page"
+        transform="transformReleasePage"
+        completed="completedReleasePage">
+{{#loading}}
+{{> loading-view-black}}
+{{/loading}}
+{{#error}}
+{{> error}}
+{{/error}}
+{{#data}}
+{{#release}}
+<div class="top-banner">
+    <div class="banner banner--scaled">
+        <div class="banner" style='background-image:url("{{coverBig}}")'>
+            <div class="banner-shade"></div>
+            <div class="gradient"></div>
+        </div>
+    </div>
+    <div class="container flex">
+        <div class="col-xs-12 col-sm-12 col-md-4 featured-artwork">
+            <img src="{{cover}}"
+            class="shadow responsive"
+            style="cursor: pointer;"
+            action="openReleaseArt"
+            big-src="{{coverUrl}}"/>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-8 cl-white featured-details">
+            <h1 class="title uppercase">{{title}}</h1>
+            <h3>{{artists}}</h3>
+            <p class="date">
+            {{> albumReleaseDates}}
+            </p>
+            <ul class="list--inline list--tool-tip">
+            {{#releaseArtistsLimited}}<li class="mr-2">
+                    <div class="artist-circle">
+                        <a href="{{artistPageUrl}}"
+                        label="Artist Image"
+                        click-action="Click Artist Profile"
+                        click-category="Artist Image"
+                        ab-test="{{activeTest}}"
+                        kpi="artist">
+                            <img src="{{imageSmall}}" title="{{name}}"/>
+                        </a>
+                    </div>
+                    <div class="tool-tip tool-tip--artist">
+                        <h6><a href="{{artistPageUrl}}"
+                        class="text nowrap decoration-none"
+                        click-action="Click Artist Profile"
+                        click-label="Artist Name"
+                        click-category="Artist Links"
+                        ab-test="{{activeTest}}"
+                        kpi="artist">
+                            {{name}}
+                        </a></h6>
+                        <ul class="mt-1 text nowrap list--inline{{^socials}} hide{{/socials}}">
+                            {{#socials}}<li class="mr-2">
+                                <a href="{{link}}"
+                                target="_blank"
+                                title="{{label}}"
+                                click-action="Click Artist {{name}}"
+                                click-label="{{artistName}} {{name}}"
+                                click-category="Artist Links"
+                                ab-test="{{activeTest}}"
+                                kpi="artist-{{platform}}">
+                                    <i class="fa fa-{{icon}}"></i>
+                                </a>
+                            </li>{{/socials}}
+                        </ul>
+                    </div>
+                </li>{{/releaseArtistsLimited}}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="bg-black pb-4 top-banner">
+    <div class="container">
+        <div class="flex">
+            <div class="col-xs-12 col-sm-12 col-md-4 featured-artwork">
+                <ul class="list--inline list--expander">
+                    {{#streamable}}
+                    <li class="mb-1 mr-1">
+                        <button class="button button--icon button--icon-rg button--{{#inEarlyAccess}}gold{{/inEarlyAccess}}{{^inEarlyAccess}}white{{/inEarlyAccess}} mb-0"
+                        ab-test="{{activeTest}}"
+                        kpi="play-release"
+                        action="playSongs"
+                        role="play-release"
+                        release-id="{{_id}}">
+                        {{#inEarlyAccess}}
+                        Listen Early
+                        {{/inEarlyAccess}}
+                        {{^inEarlyAccess}}
+                        Play
+                        {{/inEarlyAccess}}
+                        <i class="fa fa-play inactive"></i>
+                        <i class="fa fa-pause active"></i>
+                        </button>
+                    </li>
+                    {{/streamable}}
+                    {{^inEarlyAccess}}
+                    <li class="mb-1">
+                        <a href="{{downloadLink}}"
+                        target="_blank"
+                        class="button button--icon button--icon-rg button--gold mb-0"
+                        action="accessDownloadOrModal"
+                        title="Download Track"
+                        track-title="{{title}}"
+                        click-action="Click Download Gold"
+                        click-category="Release Links"
+                        ab-test="{{activeTest}}"
+                        kpi="download-gold">
+                        Download with Gold
+                        <i class="fa fa-cloud-download"></i>
+                        </a>
+                    </li>
+                    {{/inEarlyAccess}}
+                    {{#inEarlyAccess}}
+                    {{^hasGoldAccess}}
+                    <li class="mb-1">
+                        <a href="/gold/get"
+                        class="button button--icon button--icon-rg button--gold mb-0"
+                        click-action="Click Get Gold"
+                        click-category="Release Links"
+                        ab-test="{{activeTest}}"
+                        kpi="get-gold">
+                        Get Gold to Listen Early
+                        <i class="fa fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {{/hasGoldAccess}}
+                    {{/inEarlyAccess}}
+                </ul>
+                {{#purchaseLinks.length}}
+                <span class="cl-white"><h5 class="mb-2 mt-1">Stream It Your Way</h5></span>
+                <ul class="list--inline list--expander icon mb-1">
+                    {{#purchaseLinks}}<li class="mr-2 mb-1">
+                        <a href="{{original}}"
+                        target="_blank"
+                        class="button button--icon button--icon-lg button--white button--icon-no-offset mb-0"
+                        click-action="Click Release Purchase"
+                        click-category="Release Links"
+                        click-label="{{label}}"
+                        title="{{label}}"
+                        ab-test="{{activeTest}}"
+                        kpi="purchase-{{platform}}">
+                            <span class="mr-1 icon-expander-text">{{label}}</span>
+                            <i class="fa fa-fw fa-{{icon}}"></i>
+                        </a>
+                    </li>{{/purchaseLinks}}
+                </ul>
+                {{/purchaseLinks.length}}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8 flex-strong featured-artwork">
+                <span class="cl-white"><h5 class="mb-2">Track List</h5></span>
+                <div class="bg-white">
+                    <table>
+                        <thead class="col-xs-hidden">
+                            <tr>
+                                <th class="shrink col-xs-hidden col-md-visible">#</th>
+                                <th class="shrink nohpad"></th>
+                                <th class="col-xs-hidden col-md-visible">Title</th>
+                                <th class="col-xs-hidden col-md-visible">Artists</th>
+                                <th class="col-xs-hidden col-md-visible">Time</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#tracks}}
+                            <tr dblc-action="playSongDblC">
+                                <td class="shrink col-xs-hidden col-md-visible">{{trackNumber}}.</td>
+                                <td class="shrink nohpad">
+                                  {{>playSong}}
+                                </td>
+                                <td class="longer-width">
+                                  <div class="scroll-container"
+                                       onmouseenter="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+                                    <span class="scroll-title artists">{{title}}</span>
+                                  </div>
+                                  <div class="scroll-container col-xs-visible col-md-hidden"
+                                       onmouseenter="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+                                      {{>artists-csv-list}}
+                                  </div>
+                                  {{>unlicensable}}
+                                </td>
+                                <td class="longer-width artists col-xs-hidden col-md-visible"">
+                                    <div class="scroll-container"
+                                       onmouseenter="scrollTrackTitle(this)" onmouseleave="removeScrollTrackTitle(this)">
+                                    <span class="scroll-title">
+                                      {{>artists-csv-list}}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td class="col-xs-hidden col-md-visible">{{time}}</td>
+                                <td class="push-right">
+                                    {{>trackButtons}}
+                                </td>
+                            </tr>
+                            {{/tracks}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#feature.moreFromArtists}}
+<div template="more-from-artists"
+     source="{{moreReleasesFetchUrl}}">
+{{>loading-view}}
+</div>
+{{/feature.moreFromArtists}}
+
+{{#feature.artistsEvents}}
+{{#artistIds}}
+<div template="release-events"
+     source="$endpoint/events/upcoming?websiteDetailsIds={{artistIds}}">
+</div>
+{{/artistIds}}
+{{/feature.artistsEvents}}
+
+{{#feature.merch}}
+<div template="release-merch"
+     class="mt-4 mb-2"
+     source="https://shop.monstercat.com/collections/website-featured/products.json">
+</div>
+{{/feature.merch}}
+
+{{#feature.gold}}
+<div class="container mt-2 position-relative">
+{{> gold-panel}}
+</div>
+{{/feature.gold}}
+
+{{/release}}
+{{/data}}
+</script>
+
+<script type="text/template"
+        template-name="release-events"
+        transform="transformReleaseEvents">
+{{#data}}
+{{#results.length}}
+<div class="container mt-2 mb-2">
+    <h2 class="mb-1">Upcoming Artist Events</h3>
+    <table class="events">
+    {{#results}}
+        {{>upcoming-event-tr}}
+    {{/results}}
+    </table>
+</h2>
+{{/results.length}}
+{{/data}}
+</script>
+
+<script type="text/template"
+        template-name="release-merch"
+        transform="transformMerch">
+{{#loading}}
+{{>loading-view}}
+{{/loading}}
+{{#error}}
+<p>{{message}}</p>
+{{/error}}
+{{#data}}
+<div class="merch">
+    <div class="container latest">
+        <header class="flex top-cta">
+            <div class="col-xs-6">
+                <h2>Monstercat Merchandise</h2>
+            </div>
+            <div class="col-xs-6 text right">
+                <a href="https://shop.monstercat.com" class="button button--black button--icon button--transparent">
+                    View all
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </header>
+        {{> merch-list}}
+    </div>
+</div>
+{{/data}}
+</script>
+
+<script type="text/template" mustache-name="gold-panel">
+<div class="banner" style="background-image:url(/img/banner.jpg)">
+  <div class="banner-shade"></div>
+  <div class="gradient gradient--inverted"></div>
+</div>
+<div class="panel panel--padded pointer-events cl-white bg-transparent">
+    <h1>Get Gold!</h1>
+    <div class="modal-content">
+      <h2 class="pricing">$5/month</h2>
+      <ul>
+          <li>Download Monstercat songs in your preferred format</li>
+          <li>Early streaming access to new releases</li>
+          <li>Directly support the artists</li>
+          <li>and more!</li>
+      </ul>
+    </div>
+    {{^hasGold}}
+        {{#signedIn}}
+            <a class="button button--gold" href="/gold/get" action="closeModal">Get your Gold membership!</a>
+        {{/signedIn}}
+    {{/hasGold}}
+    {{^signedIn}}
+        <a class="button button--gold" href="/gold/get" action="closeModal">Sign up for Gold account!</a>
+    {{/signedIn}}
+    <span class="or">or</span>
+    <a href="/gold">learn more</a>
+</div>
+</script>
+
+<script type="text/template"
+        template-name="more-from-artists"
+        transform="transformMoreReleases">
+{{#data}}
+<div class="container mt-4 mb-4">
+    <h2 class="mb-1">Related Releases</h2>
+    <ul class="tracks art-list">
+        {{#results}}<li class="track">
+            <a class="silent"
+               href="/release/{{release.catalogId}}"
+               title="{{title}} by {{artistsTitle}}">
+                <div class="image-wrapper">
+                    <img src="/img/artwork.jpg" alt="" class="preload">
+                    <img src="{{release.coverUrl}}?image_width=512" alt="">
+                </div>
+                <label class="title one-line-ellipsis">{{title}}</label>
+                <br>
+                <label class="artist one-line-ellipsis">{{artistsTitle}}</label>
+            </a>
+        </li>{{/results}}
+    </ul>
+</div>
+{{/data}}
+</script>
+
+<script type="text/template"
+        mustache-name="release-tweet">
+<div class="release-twitter">
+    <div class="official-tweet">
+        <div id="release-official-tweet"></div>
+    </div>
+    {{>release-twitter-follow-buttons}}
+</div>
+</script>
+
+<script type="text/template"
+        mustache-name="release-twitter-follow-buttons"
+        >
+<h3>Follow On Twitter</h3>
+<div class="follow-buttons">
+    <div twitter-follow="Monstercat"><div class="load"></div></div>
+    {{#artistTwitters}}
+        <div twitter-follow="{{handle}}"><div class="load"></div></div>
+    {{/artistTwitters}}
+</div>
+</script>

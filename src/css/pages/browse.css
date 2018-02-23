@@ -144,19 +144,6 @@
   padding: 1em;
 }
 
-.comma-list span:before {
-  content: ", ";
-}
-
-.comma-list span:nth-child(1):before,
-.comma-list span:nth-last-child(1):nth-child(1):before {
-  content: "";
-}
-
-.comma-list span:nth-last-child(1):before {
-  content: " & ";
-}
-
 .browse-fieldsets > fieldset {
   flex: 1 auto;
 }

@@ -25,6 +25,18 @@ function SplitTest (opts) {
     this.dontCheckStarter = true;
   }
 
+  //This split test can take in an array of strings
+  //In this case the alts aren't modifying any data, that's handle outsite
+  //this object
+  if (this.modifiers instanceof Array) {
+    this.modifiers = this.modifiers.reduce(function (alts, key) {
+      alts[key] = function () {
+        return {}
+      }
+      return alts
+    }, {})
+  }
+
   for(var key in this.modifiers) {
     this.alts.push(key)
   }

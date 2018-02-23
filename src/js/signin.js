@@ -72,7 +72,7 @@ function onSignIn(done) {
     renderHeader()
     renderHeaderMobile()
     completeProfileNotice.start();
-    goldShopCodeNotice.start()
+    //goldShopCodeNotice.start()
     done();
   })
 }

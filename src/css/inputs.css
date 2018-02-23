@@ -240,7 +240,7 @@ button:hover,
   transition: left 0.5s;
   transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
 }
-.button--icon:focus > i, 
+.button--icon:focus > i,
 .button--icon:hover > i {
   left: 5px;
 }
@@ -248,9 +248,18 @@ button:hover,
   margin-left: 0;
   margin-right: 5px;
 }
-.button--icon-left:focus > i, 
+.button--icon-left:focus > i,
 .button--icon-left:hover > i {
   left: -5px;
+}
+.button--icon-rg i {
+  font-size: 0.75rem;
+}
+.button--icon-lg i {
+  font-size: 1rem;
+}
+.button--icon-no-offset > i {
+  margin: 0;
 }
 .button--transparent,
 .button--transparent:active,
@@ -325,12 +334,12 @@ label[for] {
 }
 
 [type="radio"] {
-  border: 0; 
-  clip: rect(0 0 0 0); 
-  height: 1px; margin: -1px; 
-  overflow: hidden; 
-  padding: 0; 
-  position: absolute; 
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px; margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
   width: 1px;
 }
 

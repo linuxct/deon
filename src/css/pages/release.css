@@ -274,7 +274,7 @@ button > i.active,
 }
 .scroll-title{
   text-indent: 0px;
-  transition: text-indent 0.7s ease;
+  transition: text-indent 0.35s ease;
   white-space: nowrap;
   display: inline-block;
 }

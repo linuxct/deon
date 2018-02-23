@@ -179,7 +179,8 @@ tr.featured a.external .fa-external-link{
   margin-bottom: 1rem;
 }
 
-td.title .name {
+td.title .name,
+td.title .name a {
   font-weight: bold;
   font-size: 1.2rem;
 }

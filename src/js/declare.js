@@ -213,8 +213,11 @@ function interceptClick (e) {
   if (!isAnchor || !t.hasAttribute('href')) return
   if(e.ctrlKey) return
   var url = t.getAttribute("href")
-  if (url.indexOf('http') == 0)
-    return
+  if (url.indexOf('http') == 0) {
+    var ourUrl = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+    if (url.substr(0, ourUrl.length) != ourUrl)
+      return
+  }
   e.preventDefault()
   go(url)
 }
@@ -309,8 +312,10 @@ function openRoute (target, container, matches) {
     container: container,
     transform: getMethod(target, 'transform'),
     template:  target.textContent,
-    sourceType: target.getAttribute('source-type')
+    sourceType: target.getAttribute('source-type'),
+    matches: matches
   }
+  window.dispatchEvent(new Event('openroute'))
   opts.completed = function () {
     var fn = getMethod(target, 'completed')
     if (fn) {
@@ -391,9 +396,9 @@ function getElementSourceOptions (el) {
   }
 }
 
-function applyTransform (transform, data, done) {
+function applyTransform (transform, data, done, matches) {
   if (typeof transform == 'function') {
-    data = transform(data, done)
+    data = transform(data, done, matches)
     if (!data) {
       return
     }
@@ -418,7 +423,7 @@ function renderTemplateOptions (opts) {
       data: obj
     })
   }
-  if (transform) return applyTransform(transform, data, fn)
+  if (transform) return applyTransform(transform, data, fn, opts.matches)
   render(container, template, data)
   completed(opts.source, data)
 }

@@ -312,7 +312,7 @@ function scrollTrackTitle(elementContainer){
   var scrollingElement = elementContainer.querySelector('.scroll-title')
   if (!elementContainer || !scrollingElement) return
   if (scrollingElement.offsetWidth>elementContainer.offsetWidth){
-    var scrollDistance = scrollingElement.offsetWidth - elementContainer.offsetWidth
+    var scrollDistance = scrollingElement.offsetWidth - elementContainer.offsetWidth + 1
     scrollingElement.style.textIndent = -scrollDistance + 'px';
   }
 }

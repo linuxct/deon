@@ -182,12 +182,13 @@ function transformSearchSnippetArtists (obj) {
 }
 
 function transformSearchSnippetTracks (obj, done) {
-  transformTracks(obj, function (err, res) {
-    res = transformSearchSnippet (res, 'song')
-    if(res.more) {
-      res.more.message = 'View All Songs Results';
+  transformTracks(obj.results, function (err, tracks) {
+    obj.results = tracks
+    obj = transformSearchSnippet (obj, 'song')
+    if(obj.more) {
+      obj.more.message = 'View All Songs Results';
     }
-    done(null, res)
+    done(null, obj)
   });
 }
 
@@ -212,7 +213,8 @@ function transformSearchReleaseResults (obj) {
 function transformSearchTrackResults (obj, done) {
   var type = getSearchType('tracks')
   setPagination(obj, type.perPage)
-  transformTracks(obj, function (err, res) {
+  transformTracks(obj.results, function (err, tracks) {
+    var res = Object.assign(obj, {tracks: tracks})
     done(null, res)
   })
 }

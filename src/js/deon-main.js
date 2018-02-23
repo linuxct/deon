@@ -7,6 +7,38 @@ var pageTitleGlue   = ' - '
 var lstore          = window.localStorage
 var sixPackSession  = null
 
+var SOCIAL_LINKS_MAP = {
+  facebook: {
+    icon: 'facebook',
+    cta: 'Like on Facebook',
+    name: 'Facebook',
+  },
+  twitter: {
+    icon: 'twitter',
+    cta: 'Follow on Twitter',
+    name: 'Twitter'
+  },
+  instagram: {
+    icon: 'instagram',
+    cta: 'Follow on Instagram',
+    name: 'Instagram'
+  },
+  youtube: {
+    icon: 'youtube-play',
+    cta: 'Subscribe on YouTube',
+    name: 'YouTube'
+  },
+  soundcloud: {
+    icon: 'soundcloud',
+    cta: 'Follow on SoundCloud',
+    name: 'SoundCloud'
+  }
+}
+
+Object.keys(SOCIAL_LINKS_MAP).forEach(function (key) {
+  SOCIAL_LINKS_MAP[key].platform = key;
+})
+
 preLoadImage('/img/artwork.jpg')
 preLoadImage('/img/artwork-merch.jpg')
 preLoadImage('/img/artist.jpg')
@@ -43,11 +75,30 @@ document.addEventListener("DOMContentLoaded", function (e) {
         }
         recordEvent(action, opts);
       }
+
+      var testEl = findParentWith(t, "[ab-test]")
+      if (testEl) {
+        var testName = testEl.getAttribute("ab-test")
+        var test = window[testName]
+        console.log('test',test);
+        if (test) {
+          var kpi = testEl.getAttribute('kpi');
+          if (kpi) {
+            if (kpi.indexOf('click') != 0) {
+              kpi = 'click-' + kpi;
+            }
+            test.convertKpi(kpi);
+          }
+          else {
+            test.convert();
+          }
+        }
+      }
     });
     stateChange(location.pathname + location.search)
     stickyPlayer()
-    completeProfileNotice.start();
-    goldShopCodeNotice.start()
+    //completeProfileNotice.start();
+    //goldShopCodeNotice.start()
   });
   document.querySelector('.credit [role=year]').innerText = new Date().getFullYear();
 })
@@ -397,19 +448,29 @@ function getArtistTwitterMention (artist) {
   if (artist.urls) {
     var socials = getSocialsAtlas(artist.urls);
     if (socials.twitter) {
-      var matches = socials.twitter.link.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?([^\/]+)(\/\w+)*$/);
-      var username;
-      if (matches && matches[3]) {
-        var username = matches[3]
-        if (username.substr(0, 1) != '@') {
-          username = '@' + username;
-        }
-        return username;
+      var username = getTwitterLinkUsername(socials.twitter);
+
+      if (username) {
+        return username
       }
     }
   }
 
   return artist.name
+}
+
+function getTwitterLinkUsername (url) {
+  var matches = url.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?([^\/]+)(\/\w+)*$/);
+  var username;
+  if (matches && matches[3]) {
+    var username = matches[3]
+    if (username.substr(0, 1) != '@') {
+      username = '@' + username;
+    }
+    return username;
+  }
+
+  return false
 }
 
 /* Loads the required release and track data specified by the object.
@@ -480,6 +541,7 @@ function mapTrackArtists (track) {
     details.uri = details.vanityUri || details.websiteDetailsId || details._id;
     details.public = !!details.public
     details.artistPageUrl = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/artist/' + details.uri
+    details.aboutMD = marked(details.about || "")
     return details;
   });
 
@@ -496,26 +558,41 @@ function mapTrackArtists (track) {
   return artists
 }
 
-function getSocials (urls) {
-  var socials = {
-    twitter: /twitter\.com/,
-    facebook: /facebook\.com/,
-    soundcloud: /soundcloud\.com/,
-    "youtube-play": /youtube\.com/
-  }
+function getSocials (linkObjs) {
   var arr = []
-  urls.forEach(function (link) {
-    var url = link.original
-    for (var tag in socials) {
-      if (socials[tag].test(url)) {
-        arr.push({
-          link: url,
-          icon: tag
-        })
+  var socials = linkObjs.map(function (link) {
+    var social = {
+      link: link.original
+    }
+
+    var platform = SOCIAL_LINKS_MAP[link.platform]
+    if (platform) {
+      social = Object.assign(social, platform);
+
+      if (link.platform == 'website') {
+        social.cta = link.original
+      }
+      else if (link.platform == 'twitter') {
+        social.label = getTwitterLinkUsername(link.original)
       }
     }
+
+    if (!social.icon) {
+      social.icon = 'link';
+      social.cta = link.original
+      social.label = link.original;
+      social.name = 'Website'
+      social.platform = 'link'
+    }
+
+    if (!social.label) {
+      social.label = social.name
+    }
+
+    return social;
   })
-  return arr
+
+  return socials
 }
 
 function getSocialsAtlas (urls) {
@@ -539,20 +616,35 @@ function getReleaseShareLink (urls) {
 }
 
 function getReleasePurchaseLinks (urls) {
-  var storemap = {
-    'Buy from Bandcamp': /bandcamp\.com/,
-    'Download On iTunes': /apple\.com/,
-    'Get From Beatport': /beatport\.com/,
-    'Get on Google Play': /play\.google\.com/
-  }
-  var links = urls.reduce(function (v, url) {
-    for (var key in storemap) {
-      if (storemap[key].test(url)) {
-        v.push({name: key, url: url})
-      }
+  var links = urls.reduce(function (links, linkObj) {
+    var extra = RELEASE_LINK_MAP[linkObj.platform]
+    if(extra) {
+      var link = Object.assign(linkObj, extra)
+      links.push(link)
     }
-    return v
-  }, [])
+    else {
+      var link = Object.assign(linkObj, {platform: 'unknown'})
+      links.push(link)
+    }
+    return links
+  }, []).sort(function (a, b) {
+    if (a.priority == b.priority) {
+      return 0
+    }
+
+    return a.priority > b.priority ? -1 : 1;
+  })
+
+  links = links.map(function (link) {
+    if (!link.icon) {
+      link.icon = 'link';
+    }
+    if (!link.label) {
+      link.label = link.original
+    }
+    return link
+  })
+
   return links
 }
 
@@ -639,6 +731,12 @@ function mapTrack (track) {
   return track
 }
 
+function mapReleasePage (release) {
+  var obj = mapRelease(release);
+  obj.activeTest = 'newReleasePageTest'
+  return obj
+}
+
 function mapRelease (release) {
   var pdate = typeof release.preReleaseDate != 'undefined' ? new Date(release.preReleaseDate) : undefined
   var rdate = new Date(release.releaseDate)
@@ -658,7 +756,7 @@ function mapRelease (release) {
   release.cover = release.coverUrl + '?image_width=512';
   release.coverBig = release.coverUrl + '?image_width=1024';
   if (release.urls instanceof Array) {
-    release.urls = release.urls.reduce(function (urls, link) {
+    release.originalUrls = release.urls.reduce(function (urls, link) {
       if (typeof(link) == 'string') {
         urls.push(link)
       }
@@ -681,23 +779,27 @@ function mapRelease (release) {
   return release
 }
 
-function transformWebsiteDetails (o) {
-  if (o.profileImageUrl) {
-    o.image = o.profileImageUrl
-    o.imageSmall = o.profileImageUrl + "?image_width=256"
+function transformWebsiteDetails (wd) {
+  if (wd.profileImageUrl) {
+    wd.image = wd.profileImageUrl
+    wd.imageSmall = wd.profileImageUrl + "?image_width=256"
+    wd.imageTiny = wd.profileImageUrl + "?image_width=128"
   }
-  if (isNaN(o.imagePositionY))
-    o.imagePositionY = 60
-  if (o.bookings || o.managementDetail) {
-    o.contact = {
-      booking: marked(o.bookings),
-      management: marked(o.managementDetail)
+  if (isNaN(wd.imagePositionY))
+    wd.imagePositionY = 60
+  if (wd.bookings || wd.managementDetail) {
+    wd.contact = {
+      booking: marked(wd.bookings),
+      management: marked(wd.managementDetail)
     }
   }
-  if (o.urls) {
-    o.socials = getSocials(o.urls)
+  if (wd.urls) {
+    wd.socials = getSocials(wd.urls)
+    Object.keys(wd.socials).forEach(function (key) {
+      wd.socials[key].artistName = wd.name
+    })
   }
-  return o
+  return wd
 }
 
 /* Transform Methods */
@@ -723,7 +825,7 @@ function transformHome (obj) {
 
 function transformHomeTracks (obj, done) {
   obj = obj || {}
-  transformTracks(obj, function (err, data) {
+  transformTracks(obj.results, function (err, data) {
     done(err, data);
   });
 }
@@ -907,8 +1009,7 @@ function scrollToAnimated (el, opts) {
   opts = opts || {}
   var duration = opts.duration || 1000
   var padding = opts.padding || -20
-  var top = el.getBoundingClientRect().top
-  animatedScrollTo(document.body, top + padding, duration)
+  EPPZScrollTo.scrollTo(el, padding, duration)
 }
 
 function scrollToEl (el, opts) {
@@ -991,19 +1092,19 @@ function transformReleaseTracks (obj, done) {
       trackIndex++
     }
   })
+  obj.activeTest = 'newReleasePageTest'
   obj.hasGoldAccess = hasGoldAccess()
 
   done(null, obj)
 }
 
-// TODO Refactor
-function transformTracks (obj, done) {
-  obj.results.map(function (track, index, arr) {
+function transformTracks (results, done) {
+  var tracks = results.map(function (track, index, arr) {
     mapTrack(track)
     track.index = index
     return track
   })
-  done(null, obj)
+  done(null, tracks)
 }
 
 function appendSongMetaData (tracks) {

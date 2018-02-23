@@ -988,7 +988,7 @@ td.genres span:first-of-type:before {
   margin-top: 0;
 }
 .md-container h3{
-  font-size: 22px; 
+  font-size: 22px;
   margin-bottom: .5rem;
 }
 .md-container p + h1,
@@ -1146,5 +1146,177 @@ footer .footer-items li:first-child button::before{
   }
   footer .icon-list{
     margin-top: 0;
+  }
+}
+
+/* FrontApp Form */
+
+#front-form {
+  position: fixed;
+  right: 1vw;
+  bottom: -90vh;
+  width: 400px;
+  z-index: 0;
+  padding: 1em 1.25em 0em;
+  background: #fff;
+  overflow: auto;
+  max-height: 90vh;
+  transition: bottom 0.5s ease;
+  box-shadow: 0 0 35px rgba(0,0,0,0.45);
+  text-align: left;
+}
+
+#front-form .button--close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+}
+
+#front-form h3 {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+#front-form label {
+  display: block;
+  font-size: 16px;
+  margin: 0.25em 0;
+}
+
+#front-form .form-group {
+  margin-bottom: 1.5em;
+}
+
+#front-form  .form-group-inline.row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+#front-form  .form-group-inline label {
+  font-weight: bold;
+  padding: 1rem 0;
+  margin: 0px;
+}
+
+#front-form input,
+#front-form textarea {
+  width: 100%;
+  font-size: 14px;
+}
+
+#front-form.show {
+  bottom: 0px;
+}
+
+/* Site Notices */
+
+#site-notices .notice--blue {
+  height: auto;
+  background: dodgerblue;
+  color: #fff;
+  padding: 1em 0;
+  border-top: 1px solid #fff;
+  text-align: center;
+}
+
+#site-notices .notice-container:nth-of-type(1) .notice--blue {
+  border-top: none;
+}
+
+#site-notices .notice-container {
+  height: auto;
+  top: 0px;
+  z-index: 999;
+  width: 100%;
+  margin-top: 5px;
+}
+
+#site-notices .notice-container.hide {
+  height: 0px;
+  overflow: hidden;
+}
+
+#site-notices .button--close-notice {
+  float: right;
+  color: black;
+  font-size: 18px;
+  background: #fff;
+  padding: 5px 8px 5px 10px;
+  margin: 5px 5px 0 0;
+  text-align: center;
+}
+
+#site-notices .button--close-notice:hover {
+  background: #F0F0F0;
+}
+
+#site-notices.complete-profile {
+  text-align: center;
+  cursor: pointer;
+  padding: 0px;
+}
+
+#notice-complete-profile {
+  cursor: pointer;
+}
+
+#notice-instinct-video {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  padding: 1em;
+}
+
+#notice-instinct-video:hover {
+  text-decoration: underline;
+}
+
+#site-notices .notice-container.instinct-video .notice--blue {
+  padding: 0px;
+}
+
+#complete-profile-modal label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.25em;
+}
+
+#complete-profile-modal button.button--cta {
+  width: 100%;
+  margin-top: 2em;
+}
+
+#complete-profile-modal .checkbox label {
+  font-weight: normal;
+  margin-bottom: 0px;
+}
+
+#complete-profile-modal .complete-section {
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.modal.modal--complete-profile {
+  max-width: 550px;
+}
+
+.modal.modal--complete-profile .modal-content {
+  margin-bottom: 0px;
+}
+
+@media screen and (min-width: 992px) {
+  #complete-profile-modal .form-group label {
+    line-height: 40px;
+    margin-bottom: 0px;
+  }
+
+  #complete-profile-modal .form-group .checkbox label {
+    line-height: 1.4;
+  }
+
+  #complete-profile-modal .complete-profile-subscribe label {
+    line-height: 1.5;
   }
 }

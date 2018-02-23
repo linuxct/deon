@@ -239,48 +239,19 @@ function getCookie(cname) {
     return "";
 }
 
-var requestAnimFrame = (function(){return window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||function(callback){window.setTimeout(callback,1000/60);};})();
-
-var easeInOutQuad = function (t, b, c, d) {
-    t /= d/2;
-    if (t < 1) return c/2*t*t + b;
-    t--;
-    return -c/2 * (t*(t-2) - 1) + b;
-};
-
-var animatedScrollTo = function (element, to, duration, callback) {
-    var start = element.scrollTop,
-    change = to - start,
-    animationStart = +new Date();
-    var animating = true;
-    var lastpos = null;
-
-    var animateScroll = function() {
-        if (!animating) {
-            return;
-        }
-        requestAnimFrame(animateScroll);
-        var now = +new Date();
-        var val = Math.floor(easeInOutQuad(now - animationStart, start, change, duration));
-        if (lastpos) {
-            if (lastpos === element.scrollTop) {
-                lastpos = val;
-                element.scrollTop = val;
-            } else {
-                animating = false;
-            }
-        } else {
-            lastpos = val;
-            element.scrollTop = val;
-        }
-        if (now > animationStart + duration) {
-            element.scrollTop = to;
-            animating = false;
-            if (callback) { callback(); }
-        }
-    };
-    requestAnimFrame(animateScroll);
-};
+/**
+ * Shuffles array in place.
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+}
 
 function randomChooser(n){
   return Math.floor(Math.random() * n+1);
@@ -400,3 +371,118 @@ var actionier = {
     return el.disabled
   }
 }
+
+function getTextWidth(text, font) {
+  // re-use canvas object for better performance
+  var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+  var context = canvas.getContext("2d");
+  context.font = font;
+  var metrics = context.measureText(text);
+  return metrics.width;
+}
+
+/**
+ *
+ * Created by Borbás Geri on 12/17/13
+ * Copyright (c) 2013 eppz! development, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
+
+
+/*
+Created by Borbás Geri on 12/17/13
+Modified by Colin "Vindexus" Kierans 2018/02/16
+*/
+var EPPZScrollTo =
+{
+  /**
+   * Helpers.
+   */
+  documentVerticalScrollPosition: function()
+  {
+    if (self.pageYOffset) {
+      return self.pageYOffset; // Firefox, Chrome, Opera, Safari.
+    }
+    if (document.documentElement && document.documentElement.scrollTop) {
+      return document.documentElement.scrollTop; // Internet Explorer 6 (standards mode).
+    }
+    if (document.body.scrollTop) {
+      return document.body.scrollTop; // Internet Explorer 6, 7 and 8.
+    }
+    return 0;
+  },
+
+  viewportHeight: function () {
+    return (document.compatMode === "CSS1Compat") ? document.documentElement.clientHeight : document.body.clientHeight;
+  },
+  documentHeight: function () {
+    return (document.height !== undefined) ? document.height : document.body.offsetHeight;
+  },
+  documentMaximumScrollPosition: function () {
+    return this.documentHeight() - this.viewportHeight();
+  },
+  elementVerticalClientPosition: function (element) {
+    var rectangle = element.getBoundingClientRect();
+    return rectangle.top;
+  },
+  /**
+   * Animation tick.
+   */
+  scrollVerticalTickToPosition: function (currentPosition, targetPosition, duration) {
+    duration = duration || 1000
+    var filter = 0.2;
+    var fps = 60;
+    var difference = parseFloat(targetPosition) - parseFloat(currentPosition);
+
+    // Snap, then stop if arrived.
+    var arrived = (Math.abs(difference) <= 0.5);
+    if (arrived) {
+      scrollTo(0.0, targetPosition);
+      return;
+    }
+
+    // Filtered position.
+    currentPosition = (parseFloat(currentPosition) * (1.0 - filter)) + (parseFloat(targetPosition) * filter);
+
+    // Apply target.
+    scrollTo(0.0, Math.round(currentPosition));
+
+    // Schedule next tick.
+    setTimeout(function () {
+      EPPZScrollTo.scrollVerticalTickToPosition(currentPosition, targetPosition, duration)
+    }, (duration / fps));
+  },
+
+  /**
+   * For public use.
+   *
+   * @param id The id of the element to scroll to.
+   * @param padding Top padding to apply above element.
+   * @param duration How long to scroll for
+   */
+  scrollTo: function(element, padding, duration)
+  {
+    padding = padding || 0
+    if (element == null) {
+      console.warn('Cannot find element with id \''+id+'\'.');
+      return;
+    }
+
+    var targetPosition = this.documentVerticalScrollPosition() + this.elementVerticalClientPosition(element) - padding;
+    var currentPosition = this.documentVerticalScrollPosition();
+
+    // Clamp.
+    var maximumScrollPosition = this.documentMaximumScrollPosition();
+    if (targetPosition > maximumScrollPosition) {
+      targetPosition = maximumScrollPosition;
+    }
+
+    // Start animation.
+    this.scrollVerticalTickToPosition(currentPosition, targetPosition, duration);
+  }
+};

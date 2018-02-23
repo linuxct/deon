@@ -184,7 +184,12 @@
     <td class="title">
       <div>
         <span class="name">
-          <a class="silent{{#externalUrl}} external{{/externalUrl}}" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>{{name}}{{#externalUrl}} <small class="fa fa-external-link"></small>{{/externalUrl}}</a>
+          {{#url}}
+          <a ab-test="{{activeTest}}" kpi="{{#externalUrl}}event-external{{/externalUrl}}{{^externalUrl}}event-internal{{/externalUrl}}" class="silent{{#externalUrl}} external{{/externalUrl}}" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
+            {{name}}{{#externalUrl}} <small class="fa fa-external-link"></small>{{/externalUrl}}
+          </a>
+          {{/url}}
+          {{^url}}{{name}}{{/url}}
         </span>
         <span class="time">{{localWeekdayLong}}</span>
       </div>
@@ -198,7 +203,7 @@
     <td class="push-right">
       <div>
           {{#url}}
-            <a class="faux silent button--mobile buy-tickets" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
+            <a ab-test="{{activeTest}}" kpi="{{#externalUrl}}event-external{{/externalUrl}}{{^externalUrl}}event-internal{{/externalUrl}}" class="faux silent button--mobile buy-tickets" href="{{url}}" {{#externalUrl}} target="_blank" {{/externalUrl}}>
                 <i class="fa fa-shopping-cart"></i>
                 <span>
                   {{ctaLabel}}
@@ -208,7 +213,7 @@
                 </span>
             </a>
           {{/url}}
-          <a class="faux button--mobile" action="addToCalendar" title="Download iCal" target="_blank" href="{{icalDownloadLink}}">
+          <a ab-test="{{activeTest}}" kpi="{{#externalUrl}}event-external{{/externalUrl}}{{^externalUrl}}event-ical{{/externalUrl}}" class="faux button--mobile" action="addToCalendar" title="Download iCal" target="_blank" href="{{icalDownloadLink}}">
               <i class="fa fa-calendar-plus-o"></i>
           </a>
       </div>

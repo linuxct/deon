@@ -13,7 +13,14 @@
             {{#data}}
             <ul>
                 {{#purchaseLinks}}
-                <li><a target="_blank" class="button" href="{{url}}">{{name}}</a></li>
+                    {{#oldLabel}}
+                        <li><a target="_blank"
+                                class="button"
+                                href="{{original}}"
+                                ab-test="newReleasePageTest"
+                                kpi="purchase-{{platform}}"
+                                >{{oldLabel}}</a></li>
+                    {{/oldLabel}}
                 {{/purchaseLinks}}
             </ul>
             {{/data}}
