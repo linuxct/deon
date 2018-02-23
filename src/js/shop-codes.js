@@ -25,7 +25,7 @@ function transformShopCode (code) {
   }
   code.discountText = (parseInt(code.value) * -1) + '% off';
   if(code.rewardFor == '1month') {
-    code.rewardForText = 'being Gold'
+    code.rewardForText = 'Gold'
   }
   else if (code.rewardFor == '1year') {
     code.rewardForText = '1+ year of Gold'
