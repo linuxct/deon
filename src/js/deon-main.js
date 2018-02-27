@@ -541,6 +541,7 @@ function mapTrackArtists (track) {
     details.uri = details.vanityUri || details.websiteDetailsId || details._id;
     details.public = !!details.public
     details.artistPageUrl = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/artist/' + details.uri
+    details.artistPageLink = '/artist/' + details.uri
     details.aboutMD = marked(details.about || "")
     return details;
   });

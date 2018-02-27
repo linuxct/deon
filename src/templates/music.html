@@ -226,7 +226,7 @@
         mustache-name="artists-csv-list">
 {{#artistsList.length}}
     <span class="artists comma-list{{#or}} or{{/or}}">
-    {{#artistsList}}<span class="artist">{{#public}}<a href="{{artistPageUrl}}">{{name}}</a>{{/public}}{{^public}}{{name}}{{/public}}</span>{{/artistsList}}
+    {{#artistsList}}<span class="artist">{{#public}}<a href="{{artistPageLink}}">{{name}}</a>{{/public}}{{^public}}{{name}}{{/public}}</span>{{/artistsList}}
     </span>
 {{/artistsList.length}}
 {{^artistsList.length}}
