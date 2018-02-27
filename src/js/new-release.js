@@ -164,13 +164,15 @@ var releasePageLayoutTest;
 
 function getArtistsTwitters (artists) {
   artists.reduce(function (handles, artist) {
-    artist.socials.forEach(function (social) {
-      if(social.platform == 'twitter') {
-        handles.push({
-          handle: getTwitterLinkUsername(social.link).substr(1)
-        })
-      }
-    })
+    if (artist.socials) {
+      artist.socials.forEach(function (social) {
+        if(social.platform == 'twitter') {
+          handles.push({
+            handle: getTwitterLinkUsername(social.link).substr(1)
+          })
+        }
+      })
+    }
     return handles
   }, [])
 }
