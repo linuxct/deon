@@ -710,7 +710,7 @@ ul.errors li {
   padding: 1em;
 }
 
-#site-notices a.notification-link:hover {
+#site-notices a.notification-link:hover .text {
   text-decoration: underline;
 }
 

@@ -49,7 +49,7 @@ function saveAccount (e, el) {
       if (wasLegacy && !isLegacyLocation()) {
         reloadPage()
       }
-      completeProfileNotice.start();
+      siteNotices.completeProfileNotice.start();
     })
   })
 }

@@ -1,12 +1,21 @@
+var siteNotices = {}
+
 function SiteNotice (args) {
   this.template = ''
   this.hideForDays = 7
+  this.hideOnClick = false
   for(var k in args) {
     this[k] = args[k]
   }
   if (!this.transform) {
     this.transform = function (done) {
       done(null, {})
+    }
+  }
+  else if (typeof this.transform == 'object') {
+    var data = Object.assign({}, this.transform)
+    this.transform = function (done) {
+      done(null, data)
     }
   }
 
@@ -101,6 +110,16 @@ SiteNotice.prototype.expireCookie = function () {
   setCookie(this.getCookieName(), new Date().toISOString())
 }
 
+function clickCloseLinkNotice (e, name) {
+  siteNotices[name].closeByUser()
+}
+
+function clickLinkNoticeLink (e, name) {
+  if (siteNotices[name].hideOnClick) {
+    siteNotices[name].setHideUntilByDays(siteNotices[name].hideForDays * 2)
+  }
+}
+
 /*========================================
 =            COMPLETE PROFILE            =
 ========================================*/
@@ -187,25 +206,38 @@ function clickCompleteProfile (e) {
 /*========================================
 =            INSTINCT NOTICE            =
 ========================================*/
-var instinctNotice = new SiteNotice({
+siteNotices.instinctNotice = new SiteNotice({
   hideForDays: 7,
   name: 'instinct-video',
-  template: 'notice-instinct-video'
+  template: 'notice-link',
+  transform: {
+    label: 'Click to become a Founding Subscriber of Monstercat: Instinct',
+    url: 'https://www.youtube.com/watch?v=AQESv7O73eY',
+    name: 'instinctNotice',
+    hideOnClick: true
+  }
 })
 
-function clickCloseInstinctVideoNotice (e) {
-  instinctNotice.closeByUser()
-}
-
-function clickInstinctVideoNotice (e) {
-  instinctNotice.setHideUntilByDays(instinctNotice.hideForDays * 2)
-}
+/*========================================
+=       UNCAGED VOL 4 NOTICE            =
+========================================*/
+siteNotices.uncagedVol4 = new SiteNotice({
+  hideForDays: 30,
+  name: 'uncagedVol4',
+  template: 'notice-link',
+  transform: {
+    label: 'Uncaged Vol. 4 Merch Available Now!',
+    name: 'uncagedVol4',
+    icon: 'shopping-bag',
+    url: 'https://shop.monstercat.com/collections/uncaged-04?utm_source=website_banner'
+  }
+})
 
 /*==========================================
 =            GOLD DISCOUNT CODE            =
 ==========================================*/
 var goldShopNextCodeDate = ''
-var goldShopCodeNotice = new SiteNotice({
+siteNotices.goldShopCodeNotice = new SiteNotice({
   hideForDays: 40,
   name: 'gold-discount',
   template: 'notice-gold-shop-code',

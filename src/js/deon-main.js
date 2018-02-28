@@ -46,7 +46,7 @@ preLoadImage('/img/artist.jpg')
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
   renderHeader()
-  instinctNotice.start();
+  siteNotices.uncagedVol4.start();
   loadSession(function (err, obj) {
     sixPackSession  = new sixpack.Session();
     trackUser()
@@ -97,8 +97,8 @@ document.addEventListener("DOMContentLoaded", function (e) {
     });
     stateChange(location.pathname + location.search)
     stickyPlayer()
-    //completeProfileNotice.start();
-    //goldShopCodeNotice.start()
+    //siteNotices.completeProfileNotice.start();
+    //siteNotices.goldShopCodeNotice.start()
   });
   document.querySelector('.credit [role=year]').innerText = new Date().getFullYear();
 })

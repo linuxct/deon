@@ -71,8 +71,8 @@ function onSignIn(done) {
     trackUser()
     renderHeader()
     renderHeaderMobile()
-    completeProfileNotice.start();
-    //goldShopCodeNotice.start()
+    siteNotices.completeProfileNotice.start();
+    //siteNotices.goldShopCodeNotice.start()
     done();
   })
 }

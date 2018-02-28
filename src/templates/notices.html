@@ -10,20 +10,21 @@
 </script>
 
 <script type="text/template"
-        template-name="notice-instinct-video">
-<div class="notice--blue">
-  <button
-    onclick="clickCloseInstinctVideoNotice()"
-    class="button button-sm button--cta button--transparent pull-right"
-    style="margin-top: 7px;">
-    Close
-  </button>
-  <p class="text-center">
-    <a id="notice-instinct-video" href="https://www.youtube.com/watch?v=AQESv7O73eY" onclick="clickInstinctVideoNotice(event)">
-      <strong>Click to become a Founding Subscriber of Monstercat: Instinct</strong>
-    </a>
-  </p>
-</div>
+        template-name="notice-link">
+<button
+  onclick="clickCloseLinkNotice(event, '{{name}}')"
+  class="button button-sm button--cta button--transparent pull-right"
+  style="margin-top: 7px;">
+  Close
+</button>
+<a class="notification-link notice--blue-link" href="{{url}}" onclick="clickLinkNoticeLink(event, '{{name}}')">
+  <strong>
+    {{#icon}}
+      <span class="fa fa-{{icon}}"></span>
+    {{/icon}}
+    <span class='text'>{{label}}</span>
+  </strong>
+</a>
 </script>
 
 <script type="text/template" template-name="complete-profile-modal">
