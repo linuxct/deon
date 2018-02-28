@@ -733,6 +733,7 @@ ul.errors li {
 .list--tool-tip > li:hover .tool-tip {
   display: block;
   opacity: 100;
+  z-index: 999;
 }
 
 .list--expander.icon > li .button--icon:hover > i,
