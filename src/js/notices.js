@@ -124,7 +124,7 @@ function clickLinkNoticeLink (e, name) {
 =            COMPLETE PROFILE            =
 ========================================*/
 
-var completeProfileNotice = new SiteNotice({
+siteNotices.completeProfileNotice = new SiteNotice({
   hideForDays: 0,
   name: 'complete-profile',
   template: 'notice-complete-profile',
