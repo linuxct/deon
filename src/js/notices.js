@@ -140,7 +140,7 @@ siteNotices.completeProfileNotice = new SiteNotice({
 })
 
 function closeCompleteProfileNotice (e) {
-  completeProfileNotice.closeByUser()
+  siteNotices.completeProfileNotice.closeByUser()
 }
 
 function submitCompleteProfile (e) {

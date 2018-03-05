@@ -531,7 +531,7 @@ function getDownloadLink (releaseId, trackId) {
 }
 
 function getGetGoldLink () {
-  return '/gold/get'
+  return '/gold/buy'
 }
 
 function mapTrackArtists (track) {
@@ -722,7 +722,7 @@ function mapTrack (track) {
   track.canPlaylist       = isSignedIn() && !track.inEarlyAccess && track.streamable ? { _id: track._id } : null
   track.bpm               = Math.round(track.bpm)
   track.licensable        = track.licensable === false ? false : true
-  track.showDownloadLink  = (track.downloadable && track.streamable) || track.freeDownloadForUsers
+  track.showDownloadLink  = !track.inEarlyAccess && track.streamable //(track.downloadable && track.streamable) || track.freeDownloadForUsers
   track.time              = formatDuration(track.duration)
   track.artistsList       = mapTrackArtists(track);
   track.releaseDate       = formatDateJSON(track.release.releaseDate)

@@ -135,7 +135,7 @@
                     {{#inEarlyAccess}}
                     {{^hasGoldAccess}}
                     <li class="mb-1">
-                        <a href="/gold/get"
+                        <a href="/gold/buy"
                         class="button button--icon button--icon-rg button--gold mb-0"
                         click-action="Click Get Gold"
                         click-category="Release Links"
@@ -318,11 +318,11 @@
     </div>
     {{^hasGold}}
         {{#signedIn}}
-            <a class="button button--gold" href="/gold/get" action="closeModal">Get your Gold membership!</a>
+            <a class="button button--gold" href="/gold/buy" action="closeModal">Get your Gold membership!</a>
         {{/signedIn}}
     {{/hasGold}}
     {{^signedIn}}
-        <a class="button button--gold" href="/gold/get" action="closeModal">Sign up for Gold account!</a>
+        <a class="button button--gold" href="/gold/buy" action="closeModal">Sign up for Gold account!</a>
     {{/signedIn}}
     <span class="or">or</span>
     <a href="/gold">learn more</a>

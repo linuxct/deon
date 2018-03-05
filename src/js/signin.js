@@ -88,7 +88,7 @@ function signOut (e, el) {
     untrackUser()
     renderHeader()
     renderHeaderMobile()
-    completeProfileNotice.close();
+    siteNotices.completeProfileNotice.close();
     go("/")
   })
 }

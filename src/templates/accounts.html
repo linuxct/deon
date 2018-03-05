@@ -402,7 +402,7 @@
                                     {{/hasFreeGold}}</p>
                             {{/hasGoldAccess}}
                             {{^hasGoldAccess}}
-                                <p>Hey {{displayName}}, to use these features you'll need to <a href="/gold/get">get Gold</a>.</p>
+                                <p>Hey {{displayName}}, to use these features you'll need to <a href="/gold/buy">get Gold</a>.</p>
                             {{/hasGoldAccess}}
                         {{/isSignedIn}}
                         {{^isSignedIn}}
@@ -412,7 +412,7 @@
                         {{/isSignedIn}}
 
                         {{^hasGoldAccess}}
-                            <br /><a href="/gold/get" class="button button--gold button--icon">Get Gold  <i class="fa fa-chevron-right"></i></a>
+                            <br /><a href="/gold/buy" class="button button--gold button--icon">Get Gold  <i class="fa fa-chevron-right"></i></a>
                             {{^isSignedIn}}
                                 <span class="or">or</span>
                                 <a href="/sign-in?redirect=%2Faccount%2Fgold" class="button button--cta-outline">Sign In</a>
@@ -475,7 +475,7 @@
                         {{^hasGoldAccess}}
                         <p>Get a discount code in the <a href="https://shop.monstercat.com">Monstercat Shop</a> every month that you have <a href="/gold">Gold</a>.</p>
                         <div class="button-group">
-                            <a href="/gold/get" class="button">Get Monstercat Gold</a>
+                            <a href="/gold/buy" class="button">Get Monstercat Gold</a>
                         </div>
                         {{/hasGoldAccess}}
                     </div>
@@ -503,7 +503,7 @@
                         {{^hasGoldAccess}}
                         <p>Get an exclusive <strong>Monstercat Gold</strong> flair on the <a href="https://www.reddit.com/r/monstercat">Monstercat Subreddit</a>.</p>
                         <div class="button-group">
-                            <a href="/gold/get" class="button">Get Monstercat Gold</a>
+                            <a href="/gold/buy" class="button">Get Monstercat Gold</a>
                         </div>
                         {{/hasGoldAccess}}
                     </div>
@@ -513,7 +513,7 @@
                         {{>joinGoldDiscord}}
                         {{^hasGoldAccess}}
                         <div class="button-group">
-                            <a href="/gold/get" class="button">Get Monstercat Gold</a>
+                            <a href="/gold/buy" class="button">Get Monstercat Gold</a>
                         </div>
                         {{/hasGoldAccess}}
                     </div>
@@ -540,7 +540,7 @@
                 </a>
             {{/hasGoldAccess}}
             {{^hasGoldAccess}}
-                <a href="/gold/get" class="button button--gold-dark pull-right">Upgrade to Gold</a>
+                <a href="/gold/buy" class="button button--gold-dark pull-right">Upgrade to Gold</a>
             {{/hasGoldAccess}}
         {{/data}}
         <h1>My Account</h1>
