@@ -41,6 +41,7 @@ function openModal (name, data) {
   else {
     renderTemplateOptions(opts)
   }
+  document.querySelector('body').classList.add('showing-modal')
   container.classList.add('open')
 }
 
@@ -48,6 +49,7 @@ function closeModal () {
   var container = document.querySelector('[role="modals"]')
   if(container != null) {
     container.classList.remove('open')
+    document.querySelector('body').classList.remove('showing-modal')
     var x = container.querySelector('[role="container"]').firstElementChild
     if(x != null) {
       x.parentElement.removeChild(x)

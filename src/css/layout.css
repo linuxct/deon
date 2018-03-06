@@ -811,6 +811,9 @@ span.note a {
 }
 
 /* Modals */
+body.showing-modal {
+  overflow: hidden;
+}
 
 .modal-layer {
   display: none;
@@ -828,6 +831,7 @@ span.note a {
   position: fixed;
   top: 0;
   left: 0;
+  overflow: scroll;
 }
 
 .modal-escape-layer{
