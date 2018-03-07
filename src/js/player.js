@@ -80,6 +80,12 @@ var MusicPlayer = (function () {
     var pi = this.index
     index = index == undefined ? +this.index : +index
     this.index = index
+
+    if (this.items[index].block) {
+      this.trigger('trackBlocked')
+      return
+    }
+
     if (this.audio.src != this.items[index].source || pi != index) {
       this.audio.src = this.items[index].source
     }
@@ -90,7 +96,7 @@ var MusicPlayer = (function () {
     if (this.shouldUseMediaSession) {
       // Set up media session metadata
       var track = this.items[index]
-      
+
       // This `if` is here to prevent the MediaSession from
       // abruptly disappearing from the device and then
       // reappearing

@@ -739,6 +739,17 @@
                 <th colspan="2">
                     <label>
                         <input type="checkbox"
+                               name="blockNonLicensableTracks"
+                               initial-value="{{blockNonLicensableTracks}}"
+                            {{#blockNonLicensableTracks}}checked{{/blockNonLicensableTracks}}/>
+                        Block Non-licensable Tracks
+                    </label>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <label>
+                        <input type="checkbox"
                                name="playlistPublicByDefault"
                                initial-value="{{playlistPublicByDefault}}"
                             {{#playlistPublicByDefault}}checked{{/playlistPublicByDefault}}/>

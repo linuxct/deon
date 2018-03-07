@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', function(e) {
     player.addEventListener(name, recordPlayerEvent)
   })
   player.addEventListener('error', recordPlayerError)
+  player.addEventListener('trackBlocked', function () {
+    toasty(new Error('Track blocked by your settings because it is not eligible for content creator licensing.'))
+  })
+
   player.addEventListener('play', recordPlayerPlayLegacy)
   requestAnimationFrame(updatePlayerProgress)
   var volume = getCookie('volume')
@@ -381,6 +385,7 @@ function mapTrackElToPlayer (el) {
   return {
     source:     el.getAttribute('play-link'),
     skip:       isSignedIn() && !el.hasAttribute('licensable') && (session.settings || {}).hideNonLicensableTracks,
+    block:       isSignedIn() && !el.hasAttribute('licensable') && (session.settings || {}).blockNonLicensableTracks,
     title:      el.getAttribute('title'),
     index:      el.getAttribute('index'),
     artist:      el.getAttribute('artist'),
