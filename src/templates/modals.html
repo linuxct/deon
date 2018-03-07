@@ -1,36 +1,3 @@
-
-<script type="text/template"
-        template-name="release-shopping-modal">
-    <div class="modal modal--release">
-        <div class="panel pointer-events">
-            <h1>Support this Release</h1>
-            {{#loading}}
-            {{>loading-inner-view}}
-            {{/loading}}
-            {{#error}}
-            <p>{{message}}</p>
-            {{/error}}
-            {{#data}}
-            <ul>
-                {{#purchaseLinks}}
-                    {{#oldLabel}}
-                        <li><a target="_blank"
-                                class="button"
-                                href="{{original}}"
-                                ab-test="newReleasePageTest"
-                                kpi="purchase-{{platform}}"
-                                >{{oldLabel}}</a></li>
-                    {{/oldLabel}}
-                {{/purchaseLinks}}
-            </ul>
-            {{/data}}
-            <button class="button--close faux" action="closeModal">
-                <i class="fa fa-remove"></i>
-            </button>
-        </div>
-    </div>
-</script>
-
 <script type="text/template"
         template-name="release-art-modal">
     <div class="modal modal--artwork">

@@ -1,21 +1,6 @@
 <script type="text/template"
         route="^release\/(.*)"
-        transform="transformReleasePageSplit">
-{{#data}}
-{{#activeAlts.new}}
-<div source="$endpoint/catalog/release/{{releaseId}}"
-     template="new-release-page">
-</div>
-{{/activeAlts.new}}
-{{#activeAlts.old}}
-<div source="$endpoint/catalog/release/{{releaseId}}"
-     template="old-release-page">
-</div>
-{{/activeAlts.old}}
-{{/data}}
-</script>
-
-<script type="text/template"
+        source="$endpoint/catalog/release/$1"
         template-name="new-release-page"
         transform="transformReleasePage"
         completed="completedReleasePage">

@@ -126,41 +126,9 @@ function transformReleaseEvents (obj) {
   obj.results = obj.results.slice(0, 10)
   obj.artistsList = scope.releaseArtists
   obj.listArtists = scope.releaseArtists.length <= 4;
-  obj.activeTest= 'newReleasePageTest';
 
   return obj;
 }
-
-var newReleasePageTest;
-/**
- * Handles requests to the /release/ page and split tests
- * it to either the old or the new page
- *
- * @param {Object} obj Scope
- * @param {Function} done Callback
- * @param {Matches} matches URL matches
- */
-function transformReleasePageSplit (obj, done, matches) {
-  obj = {}
-  obj.releaseId = matches[1]
-
-  newReleasePageTest = new SplitTest({
-    name: 'new-release-page',
-    checkStart: false,
-    //force: 'new',
-    onStarted: function (alt) {
-      obj.activeAlts = {}
-      obj.activeAlts[alt] = true; //For easy reference in the template
-      obj.activeAlt = alt
-      obj.activeTest = 'newReleasePageTest'
-      return done(null, obj);
-    },
-    modifiers: ['old', 'new']
-  });
-  newReleasePageTest.start();
-}
-
-var releasePageLayoutTest;
 
 function getArtistsTwitters (artists) {
   artists.reduce(function (handles, artist) {
@@ -217,7 +185,6 @@ function transformReleasePage (obj, done) {
       scope.coverImage = scope.release.cover;
       scope.tracks = tracks;
       scope.hasGoldAccess = hasGoldAccess()
-      scope.activeTest = 'newReleasePageTest'
       scope.artistIds = scope.releaseArtists.map(wd => wd._id).join(',')
       setPageTitle(scope.release.title + ' by ' + scope.release.renderedArtists)
 

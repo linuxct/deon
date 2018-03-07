@@ -80,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
       if (testEl) {
         var testName = testEl.getAttribute("ab-test")
         var test = window[testName]
-        console.log('test',test);
         if (test) {
           var kpi = testEl.getAttribute('kpi');
           if (kpi) {
@@ -649,17 +648,6 @@ function getReleasePurchaseLinks (urls) {
   return links
 }
 
-function openPurchaseRelease (e, el) {
-  var el = document.querySelector('h1[release-id]')
-  var id = el.getAttribute('catalog-id') || el.getAttribute('release-id')
-  var url = endpoint + '/catalog/release/' + id
-  loadCache(url, function (err, res) {
-    openModal('release-shopping-modal', {
-      data: mapRelease(res)
-    })
-  })
-}
-
 function removeYouTubeClaim (e, el) {
   var data = getTargetDataSet(el)
   var videoIdInput = document.querySelector('input[name="videoId"]');
@@ -730,12 +718,6 @@ function mapTrack (track) {
   track.downloadLink      = getDownloadLink(track.release._id, track._id)
 
   return track
-}
-
-function mapReleasePage (release) {
-  var obj = mapRelease(release);
-  obj.activeTest = 'newReleasePageTest'
-  return obj
 }
 
 function mapRelease (release) {
