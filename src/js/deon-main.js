@@ -616,11 +616,15 @@ function getReleaseShareLink (urls) {
 }
 
 function getReleasePurchaseLinks (urls) {
+  var hasAppleMusic = false
   var links = urls.reduce(function (links, linkObj) {
     var extra = RELEASE_LINK_MAP[linkObj.platform]
     if(extra) {
       var link = Object.assign(linkObj, extra)
       links.push(link)
+      if (linkObj.platform == 'applemusic') {
+        hasAppleMusic = true
+      }
     }
     else {
       var link = Object.assign(linkObj, {platform: 'unknown'})
@@ -634,6 +638,12 @@ function getReleasePurchaseLinks (urls) {
 
     return a.priority > b.priority ? -1 : 1;
   })
+
+  if (hasAppleMusic) {
+    links = links.filter(function (link) {
+      return link.platform != 'itunes'
+    })
+  }
 
   links = links.map(function (link) {
     if (!link.icon) {
