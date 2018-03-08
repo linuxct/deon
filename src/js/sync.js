@@ -124,10 +124,7 @@ function submitSyncContactForm (e, el) {
         return
       }
       else {
-        ef.classList.remove('shown')
-        document.querySelector('#submitBtn').value = 'Success!'
-        document.querySelector('#submitBtn').classList.add('submitted')
-        toasty.success('Sent!')
+        go('/sync/thank-you')
       }
 
     })
