@@ -207,33 +207,38 @@
     </div>
 </div>
 
-{{#feature.moreFromArtists}}
-<div template="more-from-artists"
-     source="{{moreReleasesFetchUrl}}">
-{{>loading-view}}
-</div>
-{{/feature.moreFromArtists}}
 
-{{#feature.artistsEvents}}
-{{#artistIds}}
-<div template="release-events"
-     source="$endpoint/events/upcoming?websiteDetailsIds={{artistIds}}">
-</div>
-{{/artistIds}}
-{{/feature.artistsEvents}}
+{{#features}}
+    {{#moreFromArtists}}
+    <div template="more-from-artists"
+         source="{{moreReleasesFetchUrl}}">
+    {{>loading-view}}
+    </div>
+    {{/moreFromArtists}}
 
-{{#feature.merch}}
-<div template="release-merch"
-     class="mt-4 mb-2"
-     source="https://shop.monstercat.com/collections/website-featured/products.json">
-</div>
-{{/feature.merch}}
+    {{#artistsEvents}}
+    {{#artistIds}}
+    <div template="release-events"
+         source="$endpoint/events/upcoming?websiteDetailsIds={{artistIds}}">
+    </div>
+    {{/artistIds}}
+    {{/artistsEvents}}
 
-{{#feature.gold}}
-<div class="container mt-2 position-relative">
-{{> gold-panel}}
-</div>
-{{/feature.gold}}
+    {{#merch}}
+    <div template="release-merch"
+         class="mt-4 mb-2"
+         source="https://shop.monstercat.com/collections/website-featured/products.json">
+    </div>
+    {{/merch}}
+
+    {{^hasGoldAccess}}
+    {{#gold}}
+        <div class="container mt-2 position-relative">
+        {{> gold-panel}}
+        </div>
+    {{/gold}}
+    {{/hasGoldAccess}}
+{{/features}}
 
 {{/release}}
 {{/data}}
@@ -258,7 +263,7 @@
 
 <script type="text/template"
         template-name="release-merch"
-        transform="transformMerch">
+        transform="transformReleaseMerch">
 {{#loading}}
 {{>loading-view}}
 {{/loading}}
@@ -273,13 +278,13 @@
                 <h2>Monstercat Merchandise</h2>
             </div>
             <div class="col-xs-6 text right">
-                <a href="https://shop.monstercat.com" class="button button--black button--icon button--transparent">
+                <a href="https://shop.monstercat.com?utm_source=website&utm_medium=release_page" class="button button--black button--icon button--transparent" ab-test="{{activeTest}}" kpi="merch-view-all">
                     View all
                     <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
         </header>
-        {{> merch-list}}
+        {{>merch-list}}
     </div>
 </div>
 {{/data}}
@@ -293,24 +298,25 @@
 <div class="panel panel--padded pointer-events cl-white bg-transparent">
     <h1>Get Gold!</h1>
     <div class="modal-content">
-      <h2 class="pricing">$5/month</h2>
-      <ul>
-          <li>Download Monstercat songs in your preferred format</li>
-          <li>Early streaming access to new releases</li>
-          <li>Directly support the artists</li>
-          <li>and more!</li>
-      </ul>
+        <h2 class="pricing">$5/month</h2>
+        <ul>
+            <li>Download Monstercat songs in your preferred format</li>
+            <li>Early streaming access to new releases</li>
+            <li>Directly support the artists</li>
+            <li>Discounts on <a href="https://shop.monstercat.com?utm_source=website&utm_medium=gold_feature_list">Monstercat merch</a></li>
+            <li>and more!</li>
+        </ul>
     </div>
     {{^hasGold}}
         {{#signedIn}}
-            <a class="button button--gold" href="/gold/buy" action="closeModal">Get your Gold membership!</a>
+            <a class="button button--gold" href="/gold/buy" ab-test="{{activeTest}}" kpi="gold-buy">Get your Gold membership!</a>
         {{/signedIn}}
     {{/hasGold}}
     {{^signedIn}}
-        <a class="button button--gold" href="/gold/buy" action="closeModal">Sign up for Gold account!</a>
+        <a class="button button--gold" href="/gold/buy" ab-test="{{activeTest}}" kpi="gold-buy">Sign up for Gold account!</a>
     {{/signedIn}}
     <span class="or">or</span>
-    <a href="/gold">learn more</a>
+    <a href="/gold" ab-test="{{activeTest}}" kpi="gold-learn">learn more</a>
 </div>
 </script>
 
@@ -319,12 +325,22 @@
         transform="transformMoreReleases">
 {{#data}}
 <div class="container mt-4 mb-4">
-    <h2 class="mb-1">Related Releases</h2>
+    <h2 class="mb-1">
+        More From
+        {{#showArtistsList}}
+            {{>artists-csv-list}}
+        {{/showArtistsList}}
+        {{^showArtistsList}}
+            These Artists
+        {{/showArtistsList}}
+    </h2>
     <ul class="tracks art-list">
         {{#results}}<li class="track">
             <a class="silent"
-               href="/release/{{release.catalogId}}"
-               title="{{title}} by {{artistsTitle}}">
+                ab-test="{{activeTest}}"
+                kpi="more-from-release"
+                href="/release/{{release.catalogId}}"
+                title="{{title}} by {{artistsTitle}}">
                 <div class="image-wrapper">
                     <img src="/img/artwork.jpg" alt="" class="preload">
                     <img src="{{release.coverUrl}}?image_width=512" alt="">

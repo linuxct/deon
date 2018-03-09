@@ -1,4 +1,5 @@
 window.splittestlog = [];
+window.splittests = {}
 window.testlogs = function () {
   console.log(' ');
   console.log('='.repeat(40));

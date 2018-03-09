@@ -179,7 +179,7 @@
 
 <script type="text/template"
         template-name="home-merch"
-        transform="transformMerch">
+        transform="transformHomeMerch">
     {{#loading}}
     {{>loading-view}}
     {{/loading}}
@@ -210,7 +210,7 @@
         mustache-name="merch-list">
 <ul class="art-list art-list--full-width">
     {{#products}}<li>
-        <a class="silent" href="https://shop.monstercat.com/products/{{handle}}" target="_BLANK" title="{{title}}">
+        <a class="silent" href="https://shop.monstercat.com/products/{{handle}}{{utm}}" ab-test="{{activeTest}}" kpi="merch-product" target="_BLANK" title="{{title}}">
             <div class="image-wrapper">
                 <img src="/img/artwork-merch.jpg" class="preload" />
                 <img src="{{ images.0.src }}"/>

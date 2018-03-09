@@ -110,6 +110,11 @@ function getAllTracksArtistsUsers (tracks) {
 function transformReleaseMerch (obj) {
   shuffle(obj.products)
   obj.products = obj.products.slice(0,8)
+  obj.products = obj.products.map(function (prod) {
+    prod.utm = '?utm_source=website&utm_medium=release_page'
+    return prod
+  })
+  obj.activeTest = transformReleasePage.scope.activeTest
   return obj
 }
 
@@ -206,8 +211,56 @@ function transformReleasePage (obj, done) {
       else {
         scope.feature = false
       }*/
-      transformReleasePage.scope = scope;
-      done(null, scope);
+      splittests.release1FeatureOrder = new SplitTest({
+        name: 'release-1-featuresorder',
+        dontCheckStarter: true,
+        modifiers: {
+          'gold-merch-more': function (_this) {
+            scope.features = [{
+              gold: true
+            }, {
+              merch: true
+            }, {
+              moreFromArtists: true
+            }]
+          },
+          'merch-gold-more' : function (_this) {
+            scope.features = [{
+              merch: true
+            }, {
+              gold: true
+            }, {
+              moreFromArtists: true
+            }]
+          },
+          'more-merch-gold' : function (_this) {
+            scope.features = [{
+              moreFromArtists: true
+            }, {
+              merch: true
+            }, {
+              gold: true
+            }]
+          }
+          ,
+          'more-gold-merch' : function (_this) {
+            scope.features = [{
+              moreFromArtists: true
+            }, {
+              gold: true
+            }, {
+              merch: true
+            }]
+          }
+        },
+        onStarted: function () {
+          scope.activeTest = 'release1FeatureOrder'
+          transformReleasePage.scope = scope;
+          done(null, scope)
+        }
+      })
+      splittests.release1FeatureOrder.start()
+      //done(null, scope);
     });
   });
 }
@@ -252,7 +305,8 @@ function transformMoreReleases (obj, done) {
     }).splice(0, tracks.length >= 8 ? 8 : 6)
     var scope = {
       results: tracks,
-      listArtists: pageScope.releaseArtistUsers.length <= 4,
+      activeTest: pageScope.activeTest,
+      showArtistsList: pageScope.releaseArtistUsers.length <= 4,
       artistsList: pageScope.releaseArtists
     }
     done(null, scope)

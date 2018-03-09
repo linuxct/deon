@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
       var testEl = findParentWith(t, "[ab-test]")
       if (testEl) {
         var testName = testEl.getAttribute("ab-test")
-        var test = window[testName]
+        var test = window.splittests[testName]
         if (test) {
           var kpi = testEl.getAttribute('kpi');
           if (kpi) {
@@ -832,8 +832,12 @@ function transformPodcast (obj) {
   return obj
 }
 
-function transformMerch (obj) {
+function transformHomeMerch (obj) {
   obj.products = obj.products.slice(0,8)
+  obj.products = obj.products.map(function (prod) {
+    prod.utm = '?utm_source=website&utm_medium=home_page'
+    return prod
+  })
   return obj
 }
 
