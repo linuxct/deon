@@ -145,48 +145,19 @@ p.description{
   background: #000;
 }
 
-.spotify-playlists > li .spotify-title{
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  padding: 0;
-  height: 3.5rem;
-  text-align: center;
-  transform: perspective(1px) scale(.85);
-  transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.spotify-playlists > li .spotify-artwork{
+.spotify-playlists > li .spotify-artwork {
   height: 150px;
   background-color: #222;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  opacity: 0.65;
-  transform: perspective(1px) scale(1.25);
+  transform: perspective(1px) scale(1.05);
   transition: opacity .8s ease, transform 2.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.spotify-playlists > li .spotify-title h2{
-  font-size: 2rem;
-  display: inline-block;
-  padding: .35rem 1rem;
-  letter-spacing: -1px;
-}
-.spotify-playlists > li .spotify-title h3 {
-  font-size: 16px;
-  letter-spacing: 1px;
-}
 .spotify-playlists > li a:hover .spotify-artwork{
   opacity: 1;
   transform: perspective(1px) scale(1);
-}
-.spotify-playlists > li a:hover .spotify-title{
-  transform: perspective(1px) scale(.95);
 }
 ul.social-grid {
   width: 100%;
@@ -342,6 +313,7 @@ ul.social-grid {
 @media screen and (min-width:768px){
   .spotify-playlists > li .spotify-artwork{
     height: 173px;
+    background-position: top center;
   }
   .social-grid .social-grid-wrapper{
     height: 145px;
