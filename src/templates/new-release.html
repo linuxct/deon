@@ -324,34 +324,36 @@
         template-name="more-from-artists"
         transform="transformMoreReleases">
 {{#data}}
-<div class="container mt-4 mb-4">
-    <h2 class="mb-1">
-        More From
-        {{#showArtistsList}}
-            {{>artists-csv-list}}
-        {{/showArtistsList}}
-        {{^showArtistsList}}
-            These Artists
-        {{/showArtistsList}}
-    </h2>
-    <ul class="tracks art-list">
-        {{#results}}<li class="track">
-            <a class="silent"
-                ab-test="{{activeTest}}"
-                kpi="more-from-release"
-                href="/release/{{release.catalogId}}"
-                title="{{title}} by {{artistsTitle}}">
-                <div class="image-wrapper">
-                    <img src="/img/artwork.jpg" alt="" class="preload">
-                    <img src="{{release.coverUrl}}?image_width=512" alt="">
-                </div>
-                <label class="title one-line-ellipsis">{{title}}</label>
-                <br>
-                <label class="artist one-line-ellipsis">{{artistsTitle}}</label>
-            </a>
-        </li>{{/results}}
-    </ul>
-</div>
+    {{#results.length}}
+    <div class="container mt-4 mb-4">
+        <h2 class="mb-1">
+            More From
+            {{#showArtistsList}}
+                {{>artists-csv-list}}
+            {{/showArtistsList}}
+            {{^showArtistsList}}
+                These Artists
+            {{/showArtistsList}}
+        </h2>
+        <ul class="tracks art-list">
+            {{#results}}<li class="track">
+                <a class="silent"
+                    ab-test="{{activeTest}}"
+                    kpi="more-from-release"
+                    href="/release/{{catalogId}}"
+                    title="{{title}} by {{renderedArtists}}">
+                    <div class="image-wrapper">
+                        <img src="/img/artwork.jpg" alt="" class="preload">
+                        <img src="{{coverUrl}}?image_width=512" alt="">
+                    </div>
+                    <label class="title one-line-ellipsis">{{title}}</label>
+                    <br>
+                    <label class="artist one-line-ellipsis">{{renderedArtists}}</label>
+                </a>
+            </li>{{/results}}
+        </ul>
+    </div>
+    {{/results.length}}
 {{/data}}
 </script>
 

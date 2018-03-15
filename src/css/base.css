@@ -46,6 +46,8 @@ h2 a,
 h3 a,
 h4 a{
   font-size: inherit;
+  color: dodgerblue;
+  text-decoration: none;
 }
 
 a:hover {

@@ -1,5 +1,11 @@
 //Links from higher priority platforms will appear higher on the page
 var RELEASE_LINK_MAP = {
+  youtube: {
+    cta: 'Watch',
+    label: 'Watch on YouTube',
+    icon: 'social-y',
+    priority: 110
+  },
   spotify: {
     label: 'Listen on Spotify',
     icon: 'spotify',
@@ -39,12 +45,7 @@ var RELEASE_LINK_MAP = {
     icon: 'soundcloud',
     priority: 50
   },
-  youtube: {
-    cta: 'Watch',
-    label: 'Watch on YouTube',
-    icon: 'social-y',
-    priority: 40
-  },
+
   beatport: {
     cta: 'Get',
     icon: 'link',
@@ -181,8 +182,7 @@ function transformReleasePage (obj, done) {
       scope.releaseArtistUsers = getAllTracksArtistsUsers(tracks)
       scope.releaseArtistsLimited = scope.releaseArtists.length <= 6 ? scope.releaseArtists.slice() : []
       scope.moreReleasesFetchUrl = endpoint +
-        '/catalog/browse?types=Single,EP,Album&limit=10&artistIds=' +
-        scope.releaseArtistUsers.map(x => x._id)
+        '/catalog/release/' + scope.release._id + '/related'
 
       //All of the twitter handles of the artists, so we can create Twitter follow buttons
       scope.artistTwitters = getArtistsTwitters(scope.releaseArtists)
@@ -294,21 +294,14 @@ function completedReleasePage () {
 
 function transformMoreReleases (obj, done) {
   var pageScope = transformReleasePage.scope
-  transformTracks(obj.results, function (err, tracks) {
-    if (err) {
-      done(err)
-      return
-    }
-    shuffle(tracks)
-    tracks = tracks.filter((x) => {
-      return x.release._id != pageScope.release._id
-    }).splice(0, tracks.length >= 8 ? 8 : 6)
-    var scope = {
-      results: tracks,
-      activeTest: pageScope.activeTest,
-      showArtistsList: pageScope.releaseArtistUsers.length <= 4,
-      artistsList: pageScope.releaseArtists
-    }
-    done(null, scope)
-  })
+  var releases = obj.results.map(mapRelease)
+  shuffle(releases)
+  releases = releases.splice(0, releases.length >= 8 ? 8 : 6)
+  var scope = {
+    results: releases,
+    activeTest: pageScope.activeTest,
+    showArtistsList: pageScope.releaseArtistUsers.length <= 4,
+    artistsList: pageScope.releaseArtists
+  }
+  return scope
 }
