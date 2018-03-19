@@ -380,6 +380,15 @@ label[for] {
   color: dodgerblue;
 }
 
+.radio-list [type="radio"] + span {
+  display: inline-block;
+}
+
+.radio-list label.radio {
+  padding: 0.5em 0;
+  display: block;
+}
+
 .toggle-label {
   display: inline-block;
   margin: 0 .5rem;

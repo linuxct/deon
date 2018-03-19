@@ -590,10 +590,51 @@ function completedProcessing () {
   })
 }
 
-function unsubscribeGold (e, el) {
-  if (!window.confirm(strings.unsubscribeGold))
-    return
+function clickUnsubscribeGold (e, el) {
   recordGoldEvent('Click Unsubscribe');
+
+  var reasons = [
+    'Too expensive',
+    "Didn't use it enough",
+    "Not enough features",
+    "Wasn't what I thought it was"
+  ]
+
+  openModal('unsubscribe-gold-modal', {
+    reasons: reasons
+  })
+  var otherInput = document.querySelector('[name=other]')
+  var otherRadio = document.querySelector('[name=reason][value="other"]')
+  otherInput.addEventListener('focus', () => {
+    otherRadio.checked = true
+  })
+  otherRadio.addEventListener('change', () => {
+    if (otherRadio.checked) {
+      otherInput.focus()
+    }
+  })
+
+}
+
+function submitUnsubscribeGold (e, el) {
+  e.preventDefault()
+
+  var data = formToObject(e.target)
+
+  if (!data.reason) {
+    data.reason = 'none'
+  }
+
+  data.type = "gold_unsubscribe_reason"
+  data.date = new Date().toISOString()
+  data.userId = session.user._id
+
+  requestWithFormData({
+    url: 'https://submit.monstercat.com',
+    method: 'POST',
+    data: data
+  })
+
   requestJSON({
     url: endpoint + '/self/subscription/gold/cancel',
     withCredentials: true,

@@ -851,6 +851,11 @@ body.showing-modal {
   margin: 50px auto;
 }
 
+.modal.modal-sm {
+  width: 60%;
+  max-width: 600px;
+}
+
 .modal > .panel:first-of-type {
   margin-top: 0px;
 }

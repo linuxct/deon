@@ -1,4 +1,4 @@
-<script type="text/template"
+  <script type="text/template"
         template-name="release-art-modal">
     <div class="modal modal--artwork">
         <div class="pointer-events">
@@ -52,6 +52,39 @@
     </div>
 </script>
 
+<script type="text/template" template-name="unsubscribe-gold-modal">
+  <div class="modal modal-sm">
+    <div class="panel pointer-events">
+      <form onsubmit="submitUnsubscribeGold(event)">
+        <h1 class="mb-0">Care To Tell Us Why?</h1>
+        <div class="modal-content">
+          <p>Your feedback can help us improve Gold.</p>
+          <div class="radio-list ml-2 mt-1">
+          {{#reasons}}
+              <label class="radio">
+                <input value="{{.}}" type="radio" name="reason" />
+                <span></span>
+                {{.}}
+              </label>
+          {{/reasons}}
+              <label>
+                <input value="other" type="radio" name="reason" />
+                <span></span>
+                Other:
+              </label>
+              <input type="text" class="ml-1 mb-0" size="40" name="other" />
+          </div>
+        </div>
+        <button class="button--close faux" action="closeModal">
+          <i class="fa fa-remove"></i>
+        </button>
+        <button class="button button--cta">Unsubscribe</button>
+        <span class="or">or</span>
+        <a action="closeModal">cancel</a>
+      </form>
+    </div>
+  </div>
+</script>
 
 <script type="text/template" template-name="freedownload-for-users-modal">
     <div class="modal">
