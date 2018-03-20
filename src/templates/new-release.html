@@ -147,7 +147,14 @@
                         ab-test="{{activeTest}}"
                         kpi="purchase-{{platform}}">
                             <span class="mr-1 icon-expander-text">{{label}}</span>
+                            {{^noIcon}}
                             <i class="fa fa-fw fa-{{icon}}"></i>
+                            {{/noIcon}}
+                            {{#noIcon}}
+                                {{#name}}
+                                    <span class="icon-name">{{name}}</span>
+                                {{/name}}
+                            {{/noIcon}}
                         </a>
                     </li>{{/purchaseLinks}}
                 </ul>

@@ -16,21 +16,32 @@ var RELEASE_LINK_MAP = {
     cta: 'Download',
     label: 'Download on iTunes',
     icon: 'apple',
-    priority: 90,
-    oldLabel: 'Download On iTunes'
+    priority: 90
   },
   applemusic: {
     cta: 'Play',
     icon: 'apple',
     label: 'Apple Music',
-    priority: 80
+    priority: 90
   },
   googleplay: {
     cta: 'Download',
     label: 'Get on Google Play',
-    oldLabel: 'Get on Google Play',
     icon: 'google',
+    priority: 80
+  },
+  amazon: {
+    cta: 'Download',
+    label: 'Get on Amazon',
+    icon: 'amazon',
     priority: 70
+  },
+  deezer: {
+    cta: 'Listen',
+    label: 'Listen on Deezer',
+    name: 'D',
+    noIcon: true,
+    priority: 65
   },
   bandcamp: {
     cta: 'Download',
@@ -43,19 +54,18 @@ var RELEASE_LINK_MAP = {
     cta: 'Listen',
     label: 'Listen on SoundCloud',
     icon: 'soundcloud',
-    priority: 50
+    priority: 50,
   },
-
   beatport: {
     cta: 'Get',
     icon: 'link',
     label: 'Get on Beatport',
     oldLabel: 'Get From Beatport',
-    priority: 30
+    priority: 30,
   },
   mixcloud: {
     cta: 'Get',
-    icon: 'link',
+    icon: 'mixcloud',
     label: 'Get on Mixcloud',
     priority: 20
   }

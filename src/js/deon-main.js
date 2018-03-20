@@ -619,7 +619,8 @@ function getReleasePurchaseLinks (urls) {
   var hasAppleMusic = false
   var links = urls.reduce(function (links, linkObj) {
     var extra = RELEASE_LINK_MAP[linkObj.platform]
-    if(extra) {
+
+    if (extra) {
       var link = Object.assign(linkObj, extra)
       links.push(link)
       if (linkObj.platform == 'applemusic') {
@@ -654,6 +655,8 @@ function getReleasePurchaseLinks (urls) {
     }
     return link
   })
+
+  links = links.splice(0, 5)
 
   return links
 }
