@@ -46,7 +46,6 @@ preLoadImage('/img/artist.jpg')
 document.addEventListener("DOMContentLoaded", function (e) {
   initSocials()
   renderHeader()
-  siteNotices.uncagedVol4.start();
   loadSession(function (err, obj) {
     sixPackSession  = new sixpack.Session();
     trackUser()

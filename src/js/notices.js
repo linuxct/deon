@@ -218,21 +218,6 @@ siteNotices.instinctNotice = new SiteNotice({
   }
 })
 
-/*========================================
-=       UNCAGED VOL 4 NOTICE            =
-========================================*/
-siteNotices.uncagedVol4 = new SiteNotice({
-  hideForDays: 30,
-  name: 'uncagedVol4',
-  template: 'notice-link',
-  transform: {
-    label: 'Uncaged Vol. 4 Merch Available Now!',
-    name: 'uncagedVol4',
-    icon: 'shopping-bag',
-    url: 'https://shop.monstercat.com/collections/uncaged-04?utm_source=website_banner'
-  }
-})
-
 /*==========================================
 =            GOLD DISCOUNT CODE            =
 ==========================================*/
