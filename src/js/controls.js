@@ -52,6 +52,28 @@ document.addEventListener('DOMContentLoaded', function(e) {
   player.setVolume(volume)
   bindVolumeEvents()
   setVolumeDisplay()
+  document.addEventListener('keydown', (e) => {
+    if (e.keyCode == 32) {
+      const spaceFields = ['INPUT', 'TEXTAREA', 'BUTTON']
+
+      if (spaceFields.indexOf(e.target.tagName) != -1) {
+        return
+      }
+
+      e.preventDefault()
+
+      if (player.items.length) {
+        togglePlay()
+      }
+      else {
+        const playButton = document.querySelector('[action="playSongs"],[action="playSong"]')
+
+        if (playButton) {
+          playButton.click()
+        }
+      }
+    }
+  })
 })
 
 function recordPlayerEvent (e) {
