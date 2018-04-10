@@ -66,7 +66,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
         togglePlay()
       }
       else {
-        const playButton = document.querySelector('[action="playSongs"],[action="playSong"]')
+        let playButton = document.querySelector('[space-play]')
+
+        if (!playButton) {
+          playButton = document.querySelector('[action="playSongs"],[action="playSong"]')
+        }
 
         if (playButton) {
           playButton.click()
